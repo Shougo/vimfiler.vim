@@ -78,6 +78,18 @@ CHANGELOG					*vimfiler-changelog*
 
     1.00 :
     - Initial version.
+    - Implemented move to other drive.
+    - Implemented filetype colors.
+    - Implemented execute new gvim key-mapping.
+    - Implemented execute external filer key-mapping.
+    - Implemented execute external command key-mapping.
+    - Fixed file execution bug.
+    - Implemented visible dot file.
+    - Added popup shell key-mapping.
+    - Added presentation file.
+    - Improved cd internal command.
+    - Implemented functions like dual screen filer.
+    - Implemented loop cursor.
     
 ChangeLog x.x-1.00{{{
      1.0:

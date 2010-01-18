@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 15 Jun 2010
+" Last Modified: 16 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -22,9 +22,12 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 1.0, for Vim 7.0
+" Version: 1.1, for Vim 7.0
 "-----------------------------------------------------------------------------
 " ChangeLog: "{{{
+"   1.1:
+"     - Added filetypes.
+"
 "   1.0:
 "     - Initial version.
 ""}}}
@@ -36,19 +39,41 @@ elseif exists("b:current_syntax")
   finish
 endif
 
+syn match   VimFilerReadOnly          '^-'
 syn match   VimFilerMarkedFile        '^\* .*$'
-syn match   VimFilerDirectory         '\%(\f\s\?\)\+[/\\]'
 syn match   VimFilerDirectory         '^..$'
 syn match   VimFilerPrompt            '^Current directory: .*$'
-syn match   VimFilerDate              ' \~.*$'
+syn match   VimFilerTypeText          '\%(\f\s\?\)\+\s\+\[TXT\]\s'
+syn match   VimFilerTypeImage         '\%(\f\s\?\)\+\s\+\[IMG\]\s'
+syn match   VimFilerTypeArchive       '\%(\f\s\?\)\+\s\+\[ARC\]\s'
+syn match   VimFilerTypeExecute       '\%(\f\s\?\)\+\s\+\[EXE\]\s'
+syn match   VimFilerTypeMultimedia    '\%(\f\s\?\)\+\s\+\[MUL\]\s'
+syn match   VimFilerTypeDirectory     '\%(\f\s\?\)\+\s\+\[DIR\]\s'
+syn match   VimFilerTypeSystem        '\%(\f\s\?\)\+\s\+\[SYS\]\s'
+syn match   VimFilerSize              '\s[0-9.]\a*\s'
+syn match   VimFilerDate              '\s\~.*$'
+syn match   VimFilerDateToday         '\s\!.*$'
+syn match   VimFilerDateWeek          '\s\#.*$'
 
 if has('gui_running')
     hi VimFilerPrompt  gui=UNDERLINE guifg=#80ffff guibg=NONE
 else
     hi def link FilerPrompt Identifier
 endif
+hi def link VimFilerReadOnly Special
 hi def link VimFilerMarkedFile Statement
 hi def link VimFilerDirectory Preproc
-hi def link VimFilerDate Special
+hi def link VimFilerSize Constant
+hi def link VimFilerDateToday Statement
+hi def link VimFilerDateWeek Special
+hi def link VimFilerDate Identifier
+
+hi def link VimFilerTypeText Constant
+hi def link VimFilerTypeImage Type
+hi def link VimFilerTypeArchive Special
+hi def link VimFilerTypeExecute Statement
+hi def link VimFilerTypeMultimedia Identifier
+hi def link VimFilerTypeDirectory Preproc
+hi def link VimFilerTypeSystem Comment
 
 let b:current_syntax = "vimfiler"

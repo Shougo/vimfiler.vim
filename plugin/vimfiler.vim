@@ -43,13 +43,6 @@ nnoremap <silent> <Plug>(vimfiler_split_switch)  :<C-u>call vimfiler#switch_file
 nnoremap <silent> <Plug>(vimfiler_split_create)  :<C-u>call vimfiler#create_filer(1, '')<CR>
 nnoremap <silent> <Plug>(vimfiler_switch)  :<C-u>call vimfiler#switch_filer(0, '')<CR>
 nnoremap <silent> <Plug>(vimfiler_create)  :<C-u>call vimfiler#create_filer(0, '')<CR>
-
-if !(exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings)
-    silent! nmap <unique> <Leader>sp     <Plug>(vimshell_split_switch)
-    silent! nmap <unique> <Leader>sn     <Plug>(vimshell_split_create)
-    silent! nmap <unique> <Leader>sh     <Plug>(vimshell_switch)
-    silent! nmap <unique> <Leader>sc     <Plug>(vimshell_create)
-endif
 "}}}
 
 command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(0, <q-args>)
