@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 17 Jun 2010
+" Last Modified: 20 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,7 +47,7 @@ function! vimfiler#mappings#toggle_mark_current_line()"{{{
     endif
     setlocal modifiable
     
-    call setline('.', (l:line[0] == '*'? vimfiler#get_filemark(vimfiler#get_filename(line('.'))) : '*') . l:line[1:])
+    call setline('.', (l:line[0] == '*'? '-' : '*') . l:line[1:])
     
     setlocal nomodifiable
 endfunction"}}}
@@ -61,7 +61,7 @@ function! vimfiler#mappings#toggle_mark_all_lines()"{{{
         if l:line != '..' && vimfiler#check_filename_line(l:line)
             " Toggle mark.
             
-            call setline(l:cnt, (l:line[0] == '*'? vimfiler#get_filemark(vimfiler#get_filename(l:cnt)) : '*') . l:line[1:])
+            call setline(l:cnt, (l:line[0] == '*'? '-' : '*') . l:line[1:])
         endif
 
         let l:cnt += 1
@@ -79,7 +79,7 @@ function! vimfiler#mappings#clear_mark_all_lines()"{{{
         if l:line != '..' && vimfiler#check_filename_line(l:line)
             " Clear mark.
             
-            call setline(l:cnt, vimfiler#get_filemark(vimfiler#get_filename(l:cnt)) . l:line[1:])
+            call setline(l:cnt, '-' . l:line[1:])
         endif
 
         let l:cnt += 1
@@ -166,10 +166,11 @@ function! vimfiler#mappings#move_to_drive()"{{{
         echo printf('[%s] %s', l:key, l:drive)
     endfor
 
-    echo 'Please input drive alphabet:'
-    let l:key = tolower(nr2char(getchar()))
+    let l:key = tolower(input('Please input drive alphabet or other directory:', '', 'dir'))
     if l:key != '' && has_key(s:drives, l:key)
         call vimfiler#internal_commands#cd(s:drives[l:key])
+    elseif isdirectory(expand(l:key))
+        call vimfiler#internal_commands#cd(expand(l:key))
     endif
 endfunction"}}}
 function! vimfiler#mappings#toggle_visible_dot_files()"{{{

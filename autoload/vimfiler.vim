@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jun 2010
+" Last Modified: 21 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -22,7 +22,7 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 1.00, for Vim 7.0
+" Version: 1.01, for Vim 7.0
 "=============================================================================
 
 " Check vimproc.
@@ -30,8 +30,9 @@ let s:is_vimproc = exists('*vimproc#system')
 
 augroup VimFilerAutoCmd"{{{
     autocmd!
-    autocmd BufWinEnter * if &filetype == 'vimfiler' | call s:event_bufwin_enter()
-    autocmd BufWinLeave * if &filetype == 'vimfiler' | call s:event_bufwin_leave()
+    autocmd BufWinEnter \[*]vimfiler call s:event_bufwin_enter()
+    autocmd BufWinLeave \[*]vimfiler call s:event_bufwin_leave()
+    autocmd VimResized \[*]vimfiler call vimfiler#redraw_all_vimfiler()
 augroup end"}}}
 
 " Plugin keymappings"{{{
@@ -52,6 +53,7 @@ nnoremap <silent> <Plug>(vimfiler_popup_shell)  :<C-u>call vimfiler#mappings#pop
 nnoremap <silent> <Plug>(vimfiler_edit_file)  :<C-u>call vimfiler#mappings#edit_file()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_external_filer)  :<C-u>call vimfiler#internal_commands#open(b:vimfiler.current_dir)<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_external_command)  :<C-u>call vimfiler#mappings#execute_external_command()<CR>
+nnoremap <silent> <Plug>(vimfiler_hide)  :<C-u>buffer #<CR>
 "}}}
 
 " User utility functions."{{{
@@ -89,6 +91,8 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> e <Plug>(vimfiler_edit_file)
     nmap <buffer> E <Plug>(vimfiler_execute_external_filer)
     nmap <buffer> t <Plug>(vimfiler_execute_external_command)
+    nmap <buffer> gf <Plug>(vimfiler_split_create)
+    nmap <buffer> q <Plug>(vimfiler_hide)
     "}}}
 endfunction"}}}
 "}}}
@@ -123,7 +127,11 @@ function! vimfiler#create_filer(split_flag, directory)"{{{
     endif
     let b:vimfiler.is_visible_dot_files = 0
     
-    call vimfiler#redraw_screen()
+    if a:split_flag
+        call vimfiler#redraw_all_vimfiler()
+    else
+        call vimfiler#redraw_screen()
+    endif
 endfunction"}}}
 function! vimfiler#switch_filer(split_flag, directory)"{{{
     if &filetype == 'vimfiler'
@@ -141,7 +149,11 @@ function! vimfiler#switch_filer(split_flag, directory)"{{{
             endif
         endif
 
-        call vimfiler#redraw_screen()
+        if a:split_flag
+            call vimfiler#redraw_all_vimfiler()
+        else
+            call vimfiler#redraw_screen()
+        endif
         return
     endif
 
@@ -160,7 +172,11 @@ function! vimfiler#switch_filer(split_flag, directory)"{{{
                 endif
             endif
             
-            call vimfiler#redraw_screen()
+            if a:split_flag
+                call vimfiler#redraw_all_vimfiler()
+            else
+                call vimfiler#redraw_screen()
+            endif
             return
         endif
 
@@ -185,7 +201,11 @@ function! vimfiler#switch_filer(split_flag, directory)"{{{
                 endif
             endif
             
-            call vimfiler#redraw_screen()
+            if a:split_flag
+                call vimfiler#redraw_all_vimfiler()
+            else
+                call vimfiler#redraw_screen()
+            endif
             return
         endif
 
@@ -214,22 +234,34 @@ function! vimfiler#redraw_screen()"{{{
         let b:vimfiler.filename_list += filter(split(glob(b:vimfiler.current_dir . '/.*'), '\n'), 
                     \'v:val !~ ''[/\\]\.\.\?$''')
     endif
+    let l:max_len = winwidth(winnr()) - 35
+    if l:max_len > 50
+        let l:max_len = 50
+    endif
     for l:file in b:vimfiler.filename_list
-        let l:filename = fnamemodify(l:file, ':p')
-        if isdirectory(l:filename)
-            call append('$', printf('%s  %s  %s ',
-                        \ vimfiler#get_filemark(l:filename), 
-                        \ vimfiler#smart_omit_filename(fnamemodify(l:file, ':t').'/', 50), 
-                        \ vimfiler#get_filetype(l:filename)
+        let l:filename = fnamemodify(l:file, ':t')
+        if isdirectory(l:file)
+            let l:filename .= '/'
+        endif
+        if l:filename =~ '[^[:print:]]'
+            " Multibyte.
+            let l:filename = vimfiler#smart_omit_filename(l:filename, l:max_len)
+        elseif len(l:filename) > l:max_len
+            let l:filename = l:filename[: l:max_len - 4] . '...'
+        else
+            let l:filename .= repeat(' ', l:max_len - len(l:filename))
+        endif
+        
+        if isdirectory(l:file)
+            call append('$', printf('-  %s  [DIR] ',
+                        \ l:filename
                         \))
         else
-            call append('$', printf('%s  %s  %s  %-10s  %s%s',
-                        \ vimfiler#get_filemark(l:filename), 
-                        \ vimfiler#smart_omit_filename(fnamemodify(l:file, ':t'), 50), 
-                        \ vimfiler#get_filetype(l:filename), 
-                        \ getfsize(l:filename), 
-                        \ vimfiler#get_datemark(l:filename), 
-                        \ strftime('%y/%m/%d %H:%M', getftime(l:filename))
+            call append('$', printf('-  %s  %s  %s  %s',
+                        \ l:filename, 
+                        \ vimfiler#get_filetype(l:file), 
+                        \ vimfiler#get_filesize(l:file), 
+                        \ vimfiler#get_datemark(l:file). strftime('%y/%m/%d %H:%M', getftime(l:file))
                         \))
         endif
     endfor
@@ -260,7 +292,7 @@ function! vimfiler#get_marked_files()"{{{
     return l:files
 endfunction"}}}
 function! vimfiler#check_filename_line(line)"{{{
-    return a:line == '..' || a:line =~ '^[*+-]\s'
+    return a:line == '..' || a:line =~ '^[*-]\s'
 endfunction"}}}
 function! vimfiler#get_filename(line_num)"{{{
     return getline(a:line_num) == '..'? '..' : b:vimfiler.filename_list[a:line_num - 3]
@@ -300,11 +332,24 @@ function! vimfiler#redraw_alternate_vimfiler()"{{{
         execute winnr('#') . 'wincmd w'
     endif
 endfunction"}}}
+function! vimfiler#redraw_all_vimfiler()"{{{
+    let l:current_nr = winnr()
+    let l:bufnr = 1
+    while l:bufnr <= winnr('$')
+        " Search vimfiler window.
+        if getwinvar(l:bufnr, '&filetype') == 'vimfiler'
+
+            execute l:bufnr . 'wincmd w'
+            call vimfiler#redraw_screen()
+        endif
+
+        let l:bufnr += 1
+    endwhile
+    
+    execute l:current_nr . 'wincmd w'
+endfunction"}}}
 function! vimfiler#smart_omit_filename(filename, length)"{{{
     let l:len = len(a:filename)
-    if a:filename !~ '[^[:print:]]'
-        return printf('%.' . a:length . 's%s', a:filename, repeat(' ', a:length - l:len))
-    endif
 
     " For multibyte.
     let l:pos = 0
@@ -346,15 +391,10 @@ function! vimfiler#smart_omit_filename(filename, length)"{{{
         let l:fchar = char2nr(a:filename[l:pos])
     endwhile
     
-    return printf('%.' . l:pos . 's%s', a:filename, repeat(' ', a:length - l:pos+l:display_diff))
-endfunction"}}}
-function! vimfiler#get_filemark(filename)"{{{
-    if !filewritable(a:filename)
-        " Read only.
-        return '-'
+    if l:pos > a:length
+        return a:filename[: l:pos] . '...'
     else
-        " Others.
-        return '+'
+        return a:filename[: l:pos] . repeat(' ', a:length - l:pos+l:display_diff)
     endif
 endfunction"}}}
 function! vimfiler#get_filetype(filename)"{{{
@@ -380,9 +420,6 @@ function! vimfiler#get_filetype(filename)"{{{
                 \'^\%(avi\|asf\|wmv\|mpg\|flv\|swf\|divx\|mov\|mpa\|m1a\|m2p\|m2a\|mpeg\|m1v\|m2v\|mp2v\|mp4\|qt\|ra\|rm\|ram\|rmvb\|rpm\|smi\|mkv\|mid\|wav\|mp3\|ogg\|wma\|au\)$'
         " Multimedia.
         return '[MUL]'
-    elseif isdirectory(a:filename)
-        " Directiory.
-        return '[DIR]'
     elseif a:filename =~ '^\.' || l:ext =~? 
                 \'^\%(inf\|sys\|reg\|dat\|spi\|a\|so\|lib\)$'
         " System.
@@ -390,6 +427,23 @@ function! vimfiler#get_filetype(filename)"{{{
     else
         " Others filetype.
         return '     '
+    endif
+endfunction"}}}
+function! vimfiler#get_filesize(filename)"{{{
+    " Get human file size.
+    let l:size = getfsize(a:filename)
+    if l:size >= 1000000000
+        " GB.
+        return printf('%5.5sG', (l:size / 1000000000) . '.' .  (l:size % 1000000000))
+    elseif l:size >= 1000000
+        " MB.
+        return printf('%5.5sM', (l:size / 1000000) . '.' . (l:size % 1000000))
+    elseif l:size >= 1000
+        " KB.
+        return printf('%5.5sK', (l:size / 1000) . '.' . (l:size % 1000))
+    else
+        " B.
+        return printf('%5.5sB', l:size)
     endif
 endfunction"}}}
 function! vimfiler#get_datemark(filename)"{{{
@@ -408,11 +462,19 @@ endfunction"}}}
 
 " Event functions.
 function! s:event_bufwin_enter()"{{{
+    if !exists('b:vimfiler')
+        return
+    endif
+    
     let b:vimfiler.save_current_dir = getcwd()
-    lcd `b:vimfiler.current_dir`
+    lcd `=b:vimfiler.current_dir`
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
-    lcd `b:vimfiler.save_current_dir`
+    if !exists('b:vimfiler')
+        return
+    endif
+
+    lcd `=b:vimfiler.save_current_dir`
 endfunction"}}}
 
 " vim: foldmethod=marker

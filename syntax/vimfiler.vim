@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 16 Jun 2010
+" Last Modified: 20 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,6 +27,7 @@
 " ChangeLog: "{{{
 "   1.1:
 "     - Added filetypes.
+"     - Improved non marked files.
 "
 "   1.0:
 "     - Initial version.
@@ -39,7 +40,7 @@ elseif exists("b:current_syntax")
   finish
 endif
 
-syn match   VimFilerReadOnly          '^-'
+syn match   VimFilerNonMarkedFile     '^-'
 syn match   VimFilerMarkedFile        '^\* .*$'
 syn match   VimFilerDirectory         '^..$'
 syn match   VimFilerPrompt            '^Current directory: .*$'
@@ -60,7 +61,7 @@ if has('gui_running')
 else
     hi def link FilerPrompt Identifier
 endif
-hi def link VimFilerReadOnly Special
+hi def link VimFilerNonMarkedFile Special
 hi def link VimFilerMarkedFile Statement
 hi def link VimFilerDirectory Preproc
 hi def link VimFilerSize Constant
