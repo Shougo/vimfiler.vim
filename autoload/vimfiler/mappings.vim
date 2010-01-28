@@ -166,7 +166,7 @@ function! vimfiler#mappings#move_to_drive()"{{{
         echo printf('[%s] %s', l:key, l:drive)
     endfor
 
-    let l:key = tolower(input('Please input drive alphabet or other directory:', '', 'dir'))
+    let l:key = tolower(input('Please input drive alphabet or other directory: ', '', 'dir'))
     if l:key != '' && has_key(s:drives, l:key)
         call vimfiler#internal_commands#cd(s:drives[l:key])
     elseif isdirectory(expand(l:key))
@@ -200,6 +200,17 @@ function! vimfiler#mappings#edit_file()"{{{
 
     try
         edit `=vimfiler#get_filename(line('.'))`
+    catch
+        echohl Error | echomsg v:errmsg | echohl None
+    endtry
+endfunction"}}}
+function! vimfiler#mappings#preview_file()"{{{
+    if !vimfiler#check_filename_line(getline('.'))
+        return
+    endif
+
+    try
+        pedit `=vimfiler#get_filename(line('.'))`
     catch
         echohl Error | echomsg v:errmsg | echohl None
     endtry

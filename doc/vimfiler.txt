@@ -1,6 +1,6 @@
 *vimfiler.txt*	Powerful filer implemented by VimScript
 
-Version: 1.00
+Version: 1.01
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -65,8 +65,6 @@ KEY MAPPINGS 					*vimfiler-key-mappings*
 ==============================================================================
 EXAMPLES					*vimfiler-examples*
 >
-	" Initialize execute file list.
-<
 ==============================================================================
 TODO						*vimfiler-todo*
 
@@ -81,6 +79,9 @@ CHANGELOG					*vimfiler-changelog*
     - Improved window size.
     - Fixed restore current directory bug.
     - Improved display file size.
+    - Changed execute file keymapping.
+    - Added help and preview keymappings.
+    - Added g:vimfiler_no_default_key_mappings variable.
     
 ChangeLog 1.x-1.00{{{
     1.00 :

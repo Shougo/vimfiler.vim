@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Jun 2010
+" Last Modified: 28 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,6 +54,8 @@ nnoremap <silent> <Plug>(vimfiler_edit_file)  :<C-u>call vimfiler#mappings#edit_
 nnoremap <silent> <Plug>(vimfiler_execute_external_filer)  :<C-u>call vimfiler#internal_commands#open(b:vimfiler.current_dir)<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_external_command)  :<C-u>call vimfiler#mappings#execute_external_command()<CR>
 nnoremap <silent> <Plug>(vimfiler_hide)  :<C-u>buffer #<CR>
+nnoremap <silent> <Plug>(vimfiler_help)  :<C-u>nnoremap <buffer><CR>
+nnoremap <silent> <Plug>(vimfiler_preview_file)  :<C-u>call vimfiler#mappings#preview_file()<CR>
 "}}}
 
 " User utility functions."{{{
@@ -65,34 +67,38 @@ function! vimfiler#default_settings()"{{{
     setlocal nowrap
     setlocal cursorline
 
-    " Normal mode key-mappings."{{{
-    nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
-    nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
-    " Toggle mark.
-    nmap <buffer> <C-l> <Plug>(vimfiler_redraw_screen)
-    nmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_current_line)
-    " Toggle mark in all lines.
-    nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
-    " Copy.
-    nmap <buffer> c <Plug>(vimfiler_copy)
-    nmap <buffer> C <Plug>(vimfiler_copy)
-    " Execute or change directory.
-    nmap <buffer> <Enter> <Plug>(vimfiler_execute_file)
-    nmap <buffer> ' <Plug>(vimfiler_execute_file)
-    nmap <buffer> o <Plug>(vimfiler_execute_file)
-    nmap <buffer> h <Plug>(vimfiler_move_to_up_directory)
-    nmap <buffer> L <Plug>(vimfiler_move_to_drive)
-    nmap <buffer> <C-h> <Plug>(vimfiler_move_to_up_directory)
-    nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
-    nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
-    nmap <buffer> V <Plug>(vimfiler_execute_new_gvim)
-    nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
-    nmap <buffer> H <Plug>(vimfiler_popup_shell)
-    nmap <buffer> e <Plug>(vimfiler_edit_file)
-    nmap <buffer> E <Plug>(vimfiler_execute_external_filer)
-    nmap <buffer> t <Plug>(vimfiler_execute_external_command)
-    nmap <buffer> gf <Plug>(vimfiler_split_create)
-    nmap <buffer> q <Plug>(vimfiler_hide)
+    " Define key-mappings."{{{
+    if !(exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings)
+        nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
+        nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
+        " Toggle mark.
+        nmap <buffer> <C-l> <Plug>(vimfiler_redraw_screen)
+        nmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_current_line)
+        " Toggle mark in all lines.
+        nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
+        " Copy.
+        nmap <buffer> c <Plug>(vimfiler_copy)
+        nmap <buffer> C <Plug>(vimfiler_copy)
+        " Execute or change directory.
+        nmap <buffer> <Enter> <Plug>(vimfiler_execute_file)
+        nmap <buffer> l <Plug>(vimfiler_execute_file)
+        nmap <buffer> o <Plug>(vimfiler_execute_file)
+        nmap <buffer> h <Plug>(vimfiler_move_to_up_directory)
+        nmap <buffer> L <Plug>(vimfiler_move_to_drive)
+        nmap <buffer> <C-h> <Plug>(vimfiler_move_to_up_directory)
+        nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
+        nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
+        nmap <buffer> V <Plug>(vimfiler_execute_new_gvim)
+        nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
+        nmap <buffer> H <Plug>(vimfiler_popup_shell)
+        nmap <buffer> e <Plug>(vimfiler_edit_file)
+        nmap <buffer> E <Plug>(vimfiler_execute_external_filer)
+        nmap <buffer> t <Plug>(vimfiler_execute_external_command)
+        nmap <buffer> gf <Plug>(vimfiler_split_create)
+        nmap <buffer> q <Plug>(vimfiler_hide)
+        nmap <buffer> ? <Plug>(vimfiler_help)
+        nmap <buffer> p <Plug>(vimfiler_preview_file)
+    endif
     "}}}
 endfunction"}}}
 "}}}
@@ -234,6 +240,58 @@ function! vimfiler#redraw_screen()"{{{
         let b:vimfiler.filename_list += filter(split(glob(b:vimfiler.current_dir . '/.*'), '\n'), 
                     \'v:val !~ ''[/\\]\.\.\?$''')
     endif
+    let l:max_len = winwidth(winnr()) - 35
+    if l:max_len > 50
+        let l:max_len = 50
+    endif
+    for l:file in b:vimfiler.filename_list
+        let l:filename = fnamemodify(l:file, ':t')
+        if isdirectory(l:file)
+            let l:filename .= '/'
+        endif
+        if l:filename =~ '[^[:print:]]'
+            " Multibyte.
+            let l:filename = vimfiler#smart_omit_filename(l:filename, l:max_len)
+        elseif len(l:filename) > l:max_len
+            let l:filename = l:filename[: l:max_len - 4] . '...'
+        else
+            let l:filename .= repeat(' ', l:max_len - len(l:filename))
+        endif
+        
+        if isdirectory(l:file)
+            call append('$', printf('-  %s  [DIR] ',
+                        \ l:filename
+                        \))
+        else
+            call append('$', printf('-  %s  %s  %s  %s',
+                        \ l:filename, 
+                        \ vimfiler#get_filetype(l:file), 
+                        \ vimfiler#get_filesize(l:file), 
+                        \ vimfiler#get_datemark(l:file). strftime('%y/%m/%d %H:%M', getftime(l:file))
+                        \))
+        endif
+    endfor
+    
+    setlocal nomodifiable
+endfunction"}}}
+function! vimfiler#resize_screen()"{{{
+    if !has_key(b:vimfiler, 'filename_list')
+        return
+    endif
+
+    setlocal modifiable
+    
+    " Clean up the screen.
+    % delete _
+    
+    " Print current directory.
+    let l:mask = '/*'
+    call setline(1, 'Current directory: ' . b:vimfiler.current_dir . l:mask)
+    
+    " Append up directory.
+    call append('$', '..')
+
+    " Print files.
     let l:max_len = winwidth(winnr()) - 35
     if l:max_len > 50
         let l:max_len = 50
@@ -468,6 +526,7 @@ function! s:event_bufwin_enter()"{{{
     
     let b:vimfiler.save_current_dir = getcwd()
     lcd `=b:vimfiler.current_dir`
+    call vimfiler#resize_screen()
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
     if !exists('b:vimfiler')
