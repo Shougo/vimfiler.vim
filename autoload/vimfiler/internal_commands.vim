@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 20 Jun 2010
+" Last Modified: 01 Feb 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -83,14 +83,23 @@ function! vimfiler#internal_commands#cd(dir)"{{{
         return
     endif
     
-    let b:vimfiler.current_dir = l:dir
-    if b:vimfiler.current_dir[-1:] == '/' || b:vimfiler.current_dir[-1:] == '\'
-        let b:vimfiler.current_dir = b:vimfiler.current_dir[: -2]
+    if l:dir[-1:] == '/' || l:dir[-1:] == '\'
+        " Delete last '/'.
+        let l:dir = l:dir[: -2]
     endif
+
+    " Save current pos.
+    let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = getpos('.')
+    let b:vimfiler.current_dir = l:dir
     lcd `=l:dir`
 
     " Redraw.
     call vimfiler#redraw_screen()
+    
+    if has_key(b:vimfiler.directory_cursor_pos, l:dir)
+        " Restore cursor pos.
+        call setpos('.', b:vimfiler.directory_cursor_pos[l:dir])
+    endif
 endfunction"}}}
 function! vimfiler#internal_commands#open(filename)"{{{
     if &termencoding != '' && &encoding != &termencoding

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 20 Jun 2010
+" Last Modified: 02 Feb 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@
 " }}}
 "=============================================================================
 
-" vimfiler key-mappings functions."{{{
+" vimfiler key-mappings functions.
 function! vimfiler#mappings#loop_cursor_down()"{{{
     if line('.') == line('$')
         0
@@ -110,9 +110,17 @@ function! vimfiler#mappings#copy()"{{{
     call vimfiler#mappings#clear_mark_all_lines()
     call vimfiler#redraw_alternate_vimfiler()
 endfunction"}}}
-function! vimfiler#mappings#execute_file()"{{{
+function! vimfiler#mappings#execute()"{{{
     let l:line = getline('.')
     if !vimfiler#check_filename_line(l:line)
+        let l:cursor_line = matchstr(l:line[: col('.') - 1], '^Current directory: \zs.*')
+        if l:cursor_line != ''
+            " Change current directory.
+            let l:cursor_next = matchstr(l:line[col('.') :], '.\{-}\ze[/\\]')
+            
+            call vimfiler#internal_commands#cd(l:cursor_line . l:cursor_next)
+        endif
+        
         return
     endif
 
@@ -120,10 +128,17 @@ function! vimfiler#mappings#execute_file()"{{{
     if isdirectory(l:filename)
         " Change directory.
         call vimfiler#internal_commands#cd(l:filename)
-    else
-        " Execute cursor file.
-        call vimfiler#internal_commands#open(l:filename)
     endif
+endfunction"}}}
+function! vimfiler#mappings#execute_file()"{{{
+    let l:line = getline('.')
+    if !vimfiler#check_filename_line(l:line)
+        return
+    endif
+
+    let l:filename = vimfiler#get_filename(line('.'))
+    " Execute cursor file.
+    call vimfiler#internal_commands#open(l:filename)
 endfunction"}}}
 function! vimfiler#mappings#move_to_drive()"{{{
     if !exists('s:drives')
@@ -172,6 +187,9 @@ function! vimfiler#mappings#move_to_drive()"{{{
     elseif isdirectory(expand(l:key))
         call vimfiler#internal_commands#cd(expand(l:key))
     endif
+endfunction"}}}
+function! vimfiler#mappings#move_to_current_directory()"{{{
+    let b:vimfiler.save_current_dir = b:vimfiler.current_dir
 endfunction"}}}
 function! vimfiler#mappings#toggle_visible_dot_files()"{{{
     let b:vimfiler.is_visible_dot_files = !b:vimfiler.is_visible_dot_files
@@ -225,5 +243,4 @@ function! vimfiler#mappings#execute_external_command()"{{{
     call vimfiler#internal_commands#gexe(l:command)
 endfunction"}}}
 
-"}}}
 " vim: foldmethod=marker

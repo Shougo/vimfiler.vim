@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jun 2010
+" Last Modified: 01 Feb 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -22,7 +22,7 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 1.01, for Vim 7.0
+" Version: 1.02, for Vim 7.0
 "=============================================================================
 
 " Check vimproc.
@@ -42,6 +42,7 @@ nnoremap <silent> <Plug>(vimfiler_redraw_screen)  :<C-u>call vimfiler#redraw_scr
 nnoremap <silent> <Plug>(vimfiler_toggle_mark_current_line)  :<C-u>call vimfiler#mappings#toggle_mark_current_line()<CR>j
 nnoremap <silent> <Plug>(vimfiler_toggle_mark_all_lines)  :<C-u>call vimfiler#mappings#toggle_mark_all_lines()<CR>
 nnoremap <silent> <Plug>(vimfiler_copy)  :<C-u>call vimfiler#mappings#copy()<CR>
+nnoremap <silent> <Plug>(vimfiler_execute)  :<C-u>call vimfiler#mappings#execute()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_file)  :<C-u>call vimfiler#mappings#execute_file()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_up_directory)  :<C-u>call vimfiler#internal_commands#cd('..')<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call vimfiler#internal_commands#cd('~')<CR>
@@ -56,6 +57,7 @@ nnoremap <silent> <Plug>(vimfiler_execute_external_command)  :<C-u>call vimfiler
 nnoremap <silent> <Plug>(vimfiler_hide)  :<C-u>buffer #<CR>
 nnoremap <silent> <Plug>(vimfiler_help)  :<C-u>nnoremap <buffer><CR>
 nnoremap <silent> <Plug>(vimfiler_preview_file)  :<C-u>call vimfiler#mappings#preview_file()<CR>
+nnoremap <silent> <Plug>(vimfiler_move_to_current_directory)  :<C-u>call vimfiler#mappings#move_to_current_directory()<CR>
 "}}}
 
 " User utility functions."{{{
@@ -69,20 +71,26 @@ function! vimfiler#default_settings()"{{{
 
     " Define key-mappings."{{{
     if !(exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings)
+        nmap <buffer> <TAB> <C-w>w
         nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
         nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
+        
         " Toggle mark.
         nmap <buffer> <C-l> <Plug>(vimfiler_redraw_screen)
         nmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_current_line)
+        
         " Toggle mark in all lines.
         nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
+        
         " Copy.
         nmap <buffer> c <Plug>(vimfiler_copy)
         nmap <buffer> C <Plug>(vimfiler_copy)
+        
         " Execute or change directory.
-        nmap <buffer> <Enter> <Plug>(vimfiler_execute_file)
-        nmap <buffer> l <Plug>(vimfiler_execute_file)
-        nmap <buffer> o <Plug>(vimfiler_execute_file)
+        nmap <buffer> <Enter> <Plug>(vimfiler_execute)
+        nmap <buffer> l <Plug>(vimfiler_execute)
+        
+        nmap <buffer> x <Plug>(vimfiler_execute_file)
         nmap <buffer> h <Plug>(vimfiler_move_to_up_directory)
         nmap <buffer> L <Plug>(vimfiler_move_to_drive)
         nmap <buffer> <C-h> <Plug>(vimfiler_move_to_up_directory)
@@ -95,9 +103,11 @@ function! vimfiler#default_settings()"{{{
         nmap <buffer> E <Plug>(vimfiler_execute_external_filer)
         nmap <buffer> t <Plug>(vimfiler_execute_external_command)
         nmap <buffer> gf <Plug>(vimfiler_split_create)
+        nmap <buffer> gs <Plug>(vimfiler_split_switch)
         nmap <buffer> q <Plug>(vimfiler_hide)
         nmap <buffer> ? <Plug>(vimfiler_help)
         nmap <buffer> p <Plug>(vimfiler_preview_file)
+        nmap <buffer> gd <Plug>(vimfiler_move_to_current_directory)
     endif
     "}}}
 endfunction"}}}
@@ -132,6 +142,7 @@ function! vimfiler#create_filer(split_flag, directory)"{{{
         let b:vimfiler.current_dir = b:vimfiler.current_dir[: -2]
     endif
     let b:vimfiler.is_visible_dot_files = 0
+    let b:vimfiler.directory_cursor_pos = {}
     
     if a:split_flag
         call vimfiler#redraw_all_vimfiler()
@@ -222,6 +233,9 @@ function! vimfiler#switch_filer(split_flag, directory)"{{{
     call vimfiler#create_filer(a:split_flag, a:directory)
 endfunction"}}}
 function! vimfiler#redraw_screen()"{{{
+    " Save cursor pos.
+    let l:pos = getpos('.')
+    
     setlocal modifiable
     
     " Clean up the screen.
@@ -273,6 +287,9 @@ function! vimfiler#redraw_screen()"{{{
     endfor
     
     setlocal nomodifiable
+    
+    " Restore cursor pos.
+    call setpos('.', l:pos)
 endfunction"}}}
 function! vimfiler#resize_screen()"{{{
     if !has_key(b:vimfiler, 'filename_list')
