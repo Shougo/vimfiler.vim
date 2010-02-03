@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 02 Feb 2010
+" Last Modified: 03 Feb 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -117,7 +117,7 @@ function! vimfiler#internal_commands#open(filename)"{{{
         else
             execute printf('silent ! start "" "%s"', a:filename)
         endif
-    elseif has('mac')
+    elseif executable('open')
         call system('open ''' . a:filename . ''' &')
     elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
         " KDE.

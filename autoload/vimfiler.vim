@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Feb 2010
+" Last Modified: 03 Feb 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,6 +27,12 @@
 
 " Check vimproc.
 let s:is_vimproc = exists('*vimproc#system')
+
+" Global options definition."{{{
+if !exists('g:vimfiler_execute_file_list')
+    let g:vimfiler_execute_file_list = {}
+endif
+"}}}
 
 augroup VimFilerAutoCmd"{{{
     autocmd!
@@ -103,7 +109,6 @@ function! vimfiler#default_settings()"{{{
         nmap <buffer> E <Plug>(vimfiler_execute_external_filer)
         nmap <buffer> t <Plug>(vimfiler_execute_external_command)
         nmap <buffer> gf <Plug>(vimfiler_split_create)
-        nmap <buffer> gs <Plug>(vimfiler_split_switch)
         nmap <buffer> q <Plug>(vimfiler_hide)
         nmap <buffer> ? <Plug>(vimfiler_help)
         nmap <buffer> p <Plug>(vimfiler_preview_file)
@@ -111,13 +116,18 @@ function! vimfiler#default_settings()"{{{
     endif
     "}}}
 endfunction"}}}
+function! vimfiler#set_execute_file(exts, program)"{{{
+    for ext in split(a:exts, ',')
+        let g:vimfiler_execute_file_list[ext] = a:program
+    endfor
+endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions."{{{
 function! vimfiler#create_filer(split_flag, directory)"{{{
     let l:bufname = '[1]vimfiler'
     let l:cnt = 2
-    while bufexists(l:bufname)
+    while buflisted(l:bufname)
         let l:bufname = printf('[%d]vimfiler', l:cnt)
         let l:cnt += 1
     endwhile

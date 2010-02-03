@@ -53,8 +53,18 @@ INTERFACE					*vimfiler-interface*
 ------------------------------------------------------------------------------
 COMMANDS 					*vimfiler-commands*
 
-:VimFiler                                       *:vimfiler*
-		Run vimfiler.
+:VimFiler					*:VimFiler*
+		Run vimfiler. This command reuse buffer if another vimfiler buffer
+		exists.
+
+:VimFilerCreate					*:VimFilerCreate*
+		Create new vimfiler buffer.
+
+------------------------------------------------------------------------------
+VARIABLES 					*vimfiler-variables*
+
+g:vimfiler_execute_file_list			*:vimfiler*
+		This variable controls vimfiler execute.
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
@@ -78,6 +88,9 @@ CHANGELOG					*vimfiler-changelog*
     - Added <Plug>(vimfiler_execute) and <Plug>(vimfiler_move_to_current_directory) mappings.
     - Save cursor position when redraw and cd.
     - Analyse "Current directory: " line when <Plug>(vimfiler_execute).
+    - Improved buffer search in <Plug>(vimfiler_split_create).
+    - Improved detect for mac.
+    - Added g:vimfiler_execute_file_list option.
 
 ChangeLog 1.x-1.00{{{
     1.01 :

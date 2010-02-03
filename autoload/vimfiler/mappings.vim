@@ -128,6 +128,18 @@ function! vimfiler#mappings#execute()"{{{
     if isdirectory(l:filename)
         " Change directory.
         call vimfiler#internal_commands#cd(l:filename)
+    else
+        " User execute file.
+        let l:ext = fnamemodify(l:filename, ':e')
+        if has_key(g:vimfiler_execute_file_list, l:ext)
+            let l:command = g:vimfiler_execute_file_list[l:ext]
+            if l:command == 'vim'
+                " Edit with vim.
+                call vimfiler#mappings#edit_file()
+            else
+                call vimfiler#internal_commands#gexe(printf('%s %s%s%s', g:vimfiler_execute_file_list[l:ext], &shellquote, l:filename, &shellquote))
+            endif
+        endif
     endif
 endfunction"}}}
 function! vimfiler#mappings#execute_file()"{{{

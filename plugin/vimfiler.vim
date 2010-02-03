@@ -36,6 +36,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Global options definition."{{{
+if !exists('g:vimfiler_execute_file_list')
+    let g:vimfiler_execute_file_list = {}
+endif
 "}}}
 
 " Plugin keymappings"{{{
