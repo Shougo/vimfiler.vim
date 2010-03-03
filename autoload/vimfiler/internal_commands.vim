@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 03 Feb 2010
+" Last Modified: 03 Mar 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -25,128 +25,132 @@
 "=============================================================================
 
 function! vimfiler#internal_commands#cp(dest_dir, src_files)"{{{
-    let l:dest_dir = fnamemodify(a:dest_dir, ':p')
-    if !isdirectory(l:dest_dir)
-        " Create directory.
-        call mkdir(l:dest_dir, 'p')
-    endif
-    if l:dest_dir !~ '/$'
-        let l:dest_dir .= '/'
-    endif
-    
-    let l:current_len = len(b:vimfiler.current_dir . '/')
-    for l:file in a:src_files
-        let l:filename = l:file
-        if isdirectory(l:filename)
-            if !isdirectory(l:dest_dir . l:filename[l:current_len :])
-                call mkdir(l:dest_dir . l:filename[l:current_len :], 'p')
-            endif
-            
-            for l:src_file in split(globpath(b:vimfiler.current_dir, l:file . '/**'), '\n')
-                let l:dest_file = l:src_file[l:current_len :]
-                if isdirectory(l:src_file)
-                    call mkdir(l:dest_dir . l:dest_file, 'p')
-                else
-                    call writefile(readfile(l:src_file, 'b'), l:dest_dir . l:dest_file, 'b')
-                endif
-            endfor
+  let l:dest_dir = fnamemodify(a:dest_dir, ':p')
+  if !isdirectory(l:dest_dir)
+    " Create directory.
+    call mkdir(l:dest_dir, 'p')
+  endif
+  if l:dest_dir !~ '/$'
+    let l:dest_dir .= '/'
+  endif
+
+  let l:current_len = len(b:vimfiler.current_dir . '/')
+  for l:file in a:src_files
+    let l:filename = l:file
+    if isdirectory(l:filename)
+      if !isdirectory(l:dest_dir . l:filename[l:current_len :])
+        call mkdir(l:dest_dir . l:filename[l:current_len :], 'p')
+      endif
+
+      for l:src_file in split(globpath(b:vimfiler.current_dir, l:file . '/**'), '\n')
+        let l:dest_file = l:src_file[l:current_len :]
+        if isdirectory(l:src_file)
+          call mkdir(l:dest_dir . l:dest_file, 'p')
         else
-            let l:dest_file = l:filename[l:current_len :]
-            call writefile(readfile(l:filename, 'b'), l:dest_dir . l:dest_file, 'b')
+          call writefile(readfile(l:src_file, 'b'), l:dest_dir . l:dest_file, 'b')
         endif
-    endfor
+      endfor
+    else
+      let l:dest_file = l:filename[l:current_len :]
+      call writefile(readfile(l:filename, 'b'), l:dest_dir . l:dest_file, 'b')
+    endif
+  endfor
 endfunction"}}}
 function! vimfiler#internal_commands#rm(files)"{{{
 endfunction"}}}
 function! vimfiler#internal_commands#cd(dir)"{{{
-    if a:dir == '..'
-        if b:vimfiler.current_dir =~ '^\a\+:$\|^/$'
-            " Select drive.
-            call vimfiler#mappings#move_to_drive()
-            return
-        endif
-        
-        let l:dir = simplify(b:vimfiler.current_dir . '/' . a:dir)
-    elseif a:dir == '/'
-        " Root.
-        let l:dir = vimfiler#iswin() ? 
-                    \matchstr(fnamemodify(b:vimfiler.current_dir, ':p'), '^\a\+:/') : a:dir
-    elseif a:dir == '~'
-        " Home.
-        let l:dir = expand('~')
-    else
-        let l:dir = a:dir
-    endif
-    
-    if !isdirectory(l:dir)
-        " Ignore.
-        return
-    endif
-    
-    if l:dir[-1:] == '/' || l:dir[-1:] == '\'
-        " Delete last '/'.
-        let l:dir = l:dir[: -2]
+  if a:dir == '..'
+    if b:vimfiler.current_dir =~ '^\a\+:$\|^/$'
+      " Select drive.
+      call vimfiler#mappings#move_to_drive()
+      return
     endif
 
-    " Save current pos.
-    let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = getpos('.')
-    let b:vimfiler.current_dir = l:dir
-    lcd `=l:dir`
+    let l:dir = simplify(b:vimfiler.current_dir . '/' . a:dir)
+  elseif a:dir == '/'
+    " Root.
+    let l:dir = vimfiler#iswin() ? 
+          \matchstr(fnamemodify(b:vimfiler.current_dir, ':p'), '^\a\+:[/\\]') : a:dir
+  elseif a:dir == '~'
+    " Home.
+    let l:dir = expand('~')
+  elseif (vimfiler#iswin() && a:dir =~ '^\a\+:[/\\]\|^\a\+:$')
+        \ || (!vimfiler#iswin() && a:dir =~ '^/')
+    let l:dir = a:dir
+  else
+    " Relative path.
+    let l:dir = simplify(b:vimfiler.current_dir . '/' . a:dir)
+  endif
 
-    " Redraw.
-    call vimfiler#redraw_screen()
-    
-    if has_key(b:vimfiler.directory_cursor_pos, l:dir)
-        " Restore cursor pos.
-        call setpos('.', b:vimfiler.directory_cursor_pos[l:dir])
-    endif
+  if !isdirectory(l:dir)
+    " Ignore.
+    return
+  endif
+
+  lcd `=l:dir`
+  if l:dir[-1:] == '/' || l:dir[-1:] == '\'
+    " Delete last '/'.
+    let l:dir = l:dir[: -2]
+  endif
+
+  " Save current pos.
+  let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = getpos('.')
+  let b:vimfiler.current_dir = l:dir
+
+  " Redraw.
+  call vimfiler#force_redraw_screen()
+
+  if has_key(b:vimfiler.directory_cursor_pos, l:dir)
+    " Restore cursor pos.
+    call setpos('.', b:vimfiler.directory_cursor_pos[l:dir])
+  endif
 endfunction"}}}
 function! vimfiler#internal_commands#open(filename)"{{{
-    if &termencoding != '' && &encoding != &termencoding
-        " Convert encoding.
-        let l:filename = iconv(a:filename, &encoding, &termencoding)
-    else
-        let l:filename = a:filename
-    endif
+  if &termencoding != '' && &encoding != &termencoding
+    " Convert encoding.
+    let l:filename = iconv(a:filename, &encoding, &termencoding)
+  else
+    let l:filename = a:filename
+  endif
 
-    " Detect desktop environment.
-    if vimfiler#iswin()
-        if executable('cmdproxy.exe') && exists('*vimproc#system')
-            " Use vimproc.
-            call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\""', a:filename))
-        else
-            execute printf('silent ! start "" "%s"', a:filename)
-        endif
-    elseif executable('open')
-        call system('open ''' . a:filename . ''' &')
-    elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
-        " KDE.
-        call system('kfmclient exec ''' . a:filename . ''' &')
-    elseif exists('$GNOME_DESKTOP_SESSION_ID')
-        " GNOME.
-        call system('gnome-open ''' . a:filename . ''' &')
-    elseif executable('exo-open')
-        " Xfce.
-        call system('exo-open ''' . a:filename . ''' &')
+  " Detect desktop environment.
+  if vimfiler#iswin()
+    if executable('cmdproxy.exe') && exists('*vimproc#system')
+      " Use vimproc.
+      call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\""', a:filename))
     else
-        throw 'Not supported.'
+      execute printf('silent ! start "" "%s"', a:filename)
     endif
+  elseif executable('open')
+    call system('open ''' . a:filename . ''' &')
+  elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
+    " KDE.
+    call system('kfmclient exec ''' . a:filename . ''' &')
+  elseif exists('$GNOME_DESKTOP_SESSION_ID')
+    " GNOME.
+    call system('gnome-open ''' . a:filename . ''' &')
+  elseif executable('exo-open')
+    " Xfce.
+    call system('exo-open ''' . a:filename . ''' &')
+  else
+    throw 'Not supported.'
+  endif
 endfunction"}}}
 function! vimfiler#internal_commands#gexe(filename)"{{{
-    if vimfiler#iswin()
-        if a:filename !=# 'gvim' && executable('cmdproxy.exe') && exists('*vimproc#system')
-            " Use vimproc.
-            let l:commands = split(a:filename)
-            call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\" %s"', l:commands[0], join(l:commands[1:])))
-        else
-            execute 'silent ! start ' a:filename
-        endif
+  if vimfiler#iswin()
+    if a:filename !=# 'gvim' && executable('cmdproxy.exe') && exists('*vimproc#system')
+      " Use vimproc.
+      let l:commands = split(a:filename)
+      call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\" %s"', l:commands[0], join(l:commands[1:])))
     else
-        " For *nix.
-
-        " Background execute.
-        call system(a:filename . '&')
+      execute 'silent ! start ' a:filename
     endif
+  else
+    " For *nix.
+
+    " Background execute.
+    call system(a:filename . '&')
+  endif
 endfunction"}}}
 
 " vim: foldmethod=marker

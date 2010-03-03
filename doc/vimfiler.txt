@@ -1,6 +1,6 @@
 *vimfiler.txt*	Powerful filer implemented by VimScript
 
-Version: 1.02
+Version: 1.50
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -84,6 +84,13 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-03-03
+    * Improved restore current directory.
+    * Caching current files.
+    * Improved marks.
+    * Improved cd.
+
+ChangeLog 1.x-1.00{{{
     1.02 :
     - Added <Plug>(vimfiler_execute) and <Plug>(vimfiler_move_to_current_directory) mappings.
     - Save cursor position when redraw and cd.
@@ -92,7 +99,6 @@ CHANGELOG					*vimfiler-changelog*
     - Improved detect for mac.
     - Added g:vimfiler_execute_file_list option.
 
-ChangeLog 1.x-1.00{{{
     1.01 :
     - Optimized speed.
     - Improved window size.
