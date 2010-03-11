@@ -62,7 +62,7 @@ nnoremap <silent> <Plug>(vimfiler_execute_external_command)  :<C-u>call vimfiler
 nnoremap <silent> <Plug>(vimfiler_hide)  :<C-u>buffer #<CR>
 nnoremap <silent> <Plug>(vimfiler_help)  :<C-u>nnoremap <buffer><CR>
 nnoremap <silent> <Plug>(vimfiler_preview_file)  :<C-u>call vimfiler#mappings#preview_file()<CR>
-nnoremap <silent> <Plug>(vimfiler_move_to_current_directory)  :<C-u>call vimfiler#mappings#move_to_current_directory()<CR>
+nnoremap <silent> <Plug>(vimfiler_delete)  :<C-u>call vimfiler#mappings#delete()<CR>
 "}}}
 
 " User utility functions."{{{
@@ -98,7 +98,6 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> x <Plug>(vimfiler_execute_file)
     nmap <buffer> h <Plug>(vimfiler_move_to_up_directory)
     nmap <buffer> L <Plug>(vimfiler_move_to_drive)
-    nmap <buffer> <C-h> <Plug>(vimfiler_move_to_up_directory)
     nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
     nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
     nmap <buffer> V <Plug>(vimfiler_execute_new_gvim)
@@ -111,7 +110,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> q <Plug>(vimfiler_hide)
     nmap <buffer> ? <Plug>(vimfiler_help)
     nmap <buffer> p <Plug>(vimfiler_preview_file)
-    nmap <buffer> gd <Plug>(vimfiler_move_to_current_directory)
+    nmap <buffer> d <Plug>(vimfiler_delete)
   endif
   "}}}
 endfunction"}}}
@@ -381,6 +380,22 @@ function! vimfiler#input_directory(message)"{{{
   endwhile
 
   return l:dir
+endfunction"}}}
+function! vimfiler#input_yesno(message)"{{{
+  let l:yesno = input(a:message . ' [yes/no] :   ')
+  while l:yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
+    redraw
+    if l:yesno == ''
+      echo 'Canceled.'
+      break
+    endif
+
+    " Retry.
+    echohl WarningMsg | echo 'Invalid input.' | echohl None
+    let l:yesno = input(a:message . ' [yes/no] :   ')
+  endwhile
+
+  return l:yesno
 endfunction"}}}
 function! vimfiler#get_alternate_directory()"{{{
   let l:filetype = getbufvar(bufnr('#'), '&filetype')

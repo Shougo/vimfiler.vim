@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 03 Mar 2010
+" Last Modified: 11 Mar 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,6 +57,12 @@ function! vimfiler#internal_commands#cp(dest_dir, src_files)"{{{
   endfor
 endfunction"}}}
 function! vimfiler#internal_commands#rm(files)"{{{
+  for l:file in a:files
+    if isdirectory(l:file)
+      call vimfiler#internal_commands#rm(split(globpath(l:file, '*'), '\n'))
+    endif
+    call delete(l:file)
+  endfor
 endfunction"}}}
 function! vimfiler#internal_commands#cd(dir)"{{{
   if a:dir == '..'

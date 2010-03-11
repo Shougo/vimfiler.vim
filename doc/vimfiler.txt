@@ -84,6 +84,10 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-03-11
+    * Deleted <Plug>(vimfiler_move_to_current_directory) mapping.
+    * Added <Plug>(vimfiler_delete) mapping.
+
 2010-03-03
     * Improved restore current directory.
     * Caching current files.

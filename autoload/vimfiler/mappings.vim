@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 03 Mar 2010
+" Last Modified: 11 Mar 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -116,6 +116,21 @@ function! vimfiler#mappings#copy()"{{{
   call vimfiler#mappings#clear_mark_all_lines()
   call vimfiler#redraw_alternate_vimfiler()
 endfunction"}}}
+function! vimfiler#mappings#delete()"{{{
+  let l:marked_files = vimfiler#get_marked_files()
+  if empty(l:marked_files)
+    " Mark current line.
+    call vimfiler#mappings#toggle_mark_current_line()
+    return
+  endif
+  let l:yesno = vimfiler#input_yesno('Really delete marked files?')
+
+  if l:yesno =~? 'y\%[es]'
+    " Execute delete.
+    call vimfiler#internal_commands#rm(l:marked_files)
+    call vimfiler#force_redraw_screen()
+  endif
+endfunction"}}}
 function! vimfiler#mappings#execute()"{{{
   let l:line = getline('.')
   if !vimfiler#check_filename_line(l:line)
@@ -205,9 +220,6 @@ function! vimfiler#mappings#move_to_drive()"{{{
   elseif isdirectory(expand(l:key))
     call vimfiler#internal_commands#cd(expand(l:key))
   endif
-endfunction"}}}
-function! vimfiler#mappings#move_to_current_directory()"{{{
-  let b:vimfiler.save_current_dir = b:vimfiler.current_dir
 endfunction"}}}
 function! vimfiler#mappings#toggle_visible_dot_files()"{{{
   let b:vimfiler.is_visible_dot_files = !b:vimfiler.is_visible_dot_files
