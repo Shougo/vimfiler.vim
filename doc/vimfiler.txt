@@ -103,6 +103,7 @@ CHANGELOG					*vimfiler-changelog*
     * Set noautochdir.
     * Added g:vimfiler_split_command and g:vimfiler_edit_command options.
     * Added g:vimfiler_pedit_command option.
+    * Added <Plug>(vimfiler_exit) mapping.
 
 2010-03-11
     * Deleted <Plug>(vimfiler_move_to_current_directory) mapping.

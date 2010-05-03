@@ -59,7 +59,7 @@ nnoremap <silent> <Plug>(vimfiler_popup_shell)  :<C-u>call vimfiler#mappings#pop
 nnoremap <silent> <Plug>(vimfiler_edit_file)  :<C-u>call vimfiler#mappings#edit_file()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_external_filer)  :<C-u>call vimfiler#internal_commands#open(b:vimfiler.current_dir)<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_external_command)  :<C-u>call vimfiler#mappings#execute_external_command()<CR>
-nnoremap <silent> <Plug>(vimfiler_hide)  :<C-u>buffer #<CR>
+nnoremap <silent> <Plug>(vimfiler_exit)  :<C-u>call vimfiler#mappings#exit()<CR>
 nnoremap <silent> <Plug>(vimfiler_help)  :<C-u>nnoremap <buffer><CR>
 nnoremap <silent> <Plug>(vimfiler_preview_file)  :<C-u>call vimfiler#mappings#preview_file()<CR>
 nnoremap <silent> <Plug>(vimfiler_delete)  :<C-u>call vimfiler#mappings#delete()<CR>
@@ -108,7 +108,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> E <Plug>(vimfiler_execute_external_filer)
     nmap <buffer> t <Plug>(vimfiler_execute_external_command)
     nmap <buffer> gf <Plug>(vimfiler_split_create)
-    nmap <buffer> q <Plug>(vimfiler_hide)
+    nmap <buffer> q <Plug>(vimfiler_exit)
     nmap <buffer> ? <Plug>(vimfiler_help)
     nmap <buffer> p <Plug>(vimfiler_preview_file)
     nmap <buffer> d <Plug>(vimfiler_delete)

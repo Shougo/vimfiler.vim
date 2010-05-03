@@ -257,5 +257,15 @@ function! vimfiler#mappings#execute_external_command()"{{{
 
   call vimfiler#internal_commands#gexe(l:command)
 endfunction"}}}
+function! vimfiler#mappings#exit()"{{{
+  let l:vimfiler_buf = bufnr('%')
+  " Switch buffer.
+  if winnr('$') != 1
+    close
+  else
+    buffer #
+  endif
+  execute 'bdelete!'. l:vimfiler_buf
+endfunction"}}}
 
 " vim: foldmethod=marker
