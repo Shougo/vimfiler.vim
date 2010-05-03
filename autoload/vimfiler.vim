@@ -360,6 +360,22 @@ function! vimfiler#get_marked_files()"{{{
 
   return l:files
 endfunction"}}}
+function! vimfiler#get_escaped_marked_files()"{{{
+  let l:files = []
+  let l:max = line('$')
+  let l:cnt = 1
+  while l:cnt <= l:max
+    let l:line = getline(l:cnt)
+    if l:line =~ '^[*] '
+      " Marked.
+      call add(l:files, '"' . vimfiler#get_filename(l:cnt) . '"')
+    endif
+
+    let l:cnt += 1
+  endwhile
+
+  return l:files
+endfunction"}}}
 function! vimfiler#check_filename_line(line)"{{{
   return a:line == '..' || a:line =~ '^[*-]\s'
 endfunction"}}}

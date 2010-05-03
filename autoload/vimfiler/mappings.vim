@@ -227,7 +227,14 @@ function! vimfiler#mappings#toggle_visible_dot_files()"{{{
 endfunction"}}}
 function! vimfiler#mappings#popup_shell()"{{{
   if exists(':VimShellPop')
+    let l:files = join(vimfiler#get_escaped_marked_files())
+    
     VimShellPop `=b:vimfiler.current_dir`
+    
+    if l:files != ''
+      call setline(line('.'), getline('.') . ' ' . l:files)
+      normal! l
+    endif
   else
     " Run shell.
     let l:save_currnet_dir = getcwd()
@@ -265,7 +272,7 @@ function! vimfiler#mappings#execute_shell_command()"{{{
   endif
 
   let l:command = substitute(l:command, 
-        \'\s\+\zs\*\ze\%([;|[:space:]]\|$\)', join(vimfiler#get_marked_files()), 'g')
+        \'\s\+\zs\*\ze\%([;|[:space:]]\|$\)', join(vimfiler#get_escaped_marked_files()), 'g')
   echo vimfiler#system(l:command)
 endfunction"}}}
 function! vimfiler#mappings#exit()"{{{
