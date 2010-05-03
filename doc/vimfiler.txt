@@ -99,6 +99,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-05-04
+    * Improved system().
+
 2010-05-03
     * Set noautochdir.
     * Added g:vimfiler_split_command and g:vimfiler_edit_command options.

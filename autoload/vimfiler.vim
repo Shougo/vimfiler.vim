@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Mar 2010
+" Last Modified: 04 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -361,8 +361,13 @@ function! vimfiler#is_vimproc()"{{{
   return s:is_vimproc
 endfunction"}}}
 function! vimfiler#system(str, ...)"{{{
-  return vimfiler#is_vimproc() ? (a:0 == 0 ? vimproc#system(a:str) : vimproc#system(a:str, join(a:000)))
+  let l:output = vimfiler#is_vimproc() ? (a:0 == 0 ? vimproc#system(a:str) : vimproc#system(a:str, join(a:000)))
         \: (a:0 == 0 ? system(a:str) : system(a:str, join(a:000)))
+  
+  if &termencoding != '' && &termencoding != &encoding
+    let l:output = iconv(l:output, &termencoding, &encoding)
+  endif
+  return l:output
 endfunction"}}}
 function! vimfiler#get_marked_files()"{{{
   let l:files = []
