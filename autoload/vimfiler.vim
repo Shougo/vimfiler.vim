@@ -401,7 +401,7 @@ function! vimfiler#get_escaped_files(list)"{{{
 endfunction"}}}
 function! vimfiler#check_filename_line(...)"{{{
   let l:line = (a:0 == 0)? getline('.') : a:1
-  return l:line == '..' || l:line =~ '^[*-]\s'
+  return l:line =~ '^[*-]\s'
 endfunction"}}}
 function! vimfiler#get_filename(line_num)"{{{
   return getline(a:line_num) == '..'? '..' : b:vimfiler.current_files[a:line_num - 3].name

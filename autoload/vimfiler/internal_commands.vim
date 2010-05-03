@@ -30,7 +30,17 @@ function! vimfiler#internal_commands#mv(dest_dir, src_files)"{{{
   endfor
 endfunction"}}}
 function! vimfiler#internal_commands#cp(dest_dir, src_files)"{{{
-  call s:external('copy', a:dest_dir, a:src_files)
+  for l:file in a:src_files
+    if isdirectory(l:file)
+      if g:vimfiler_external_copy_directory_command == ''
+        echohl Error | echoerr "Recursive copy is not supported in this platform. Please install cp.exe." | echohl None
+      else
+        call s:external('copy_directory', a:dest_dir, [l:file])
+      endif
+    else
+      call s:external('copy_file', a:dest_dir, [l:file])
+    endif
+  endfor
 endfunction"}}}
 function! vimfiler#internal_commands#rm(files)"{{{
   for l:file in a:files
@@ -44,24 +54,17 @@ endfunction"}}}
 function! s:external(command, dest_dir, src_files)"{{{
   let l:command_line = g:vimfiler_external_{a:command}_command
 
-  if l:command_line =~# '$src\>'
+  if l:command_line =~# '\$src\>'
     for l:src in a:src_files
       let l:command_line = g:vimfiler_external_{a:command}_command
-      if isdirectory(l:src)
-        let l:command_line = substitute(l:command_line, 
-              \'\$dest$srcdir\>', '"'.a:dest_dir.l:src.'"', 'g') 
-      else
-        let l:command_line = substitute(l:command_line, 
-              \'\$dest$srcdir\>', '"'.a:dest_dir.'"', 'g') 
-      endif
       
       let l:command_line = substitute(l:command_line, 
             \'\$src\>', '"'.l:src.'"', 'g') 
       let l:command_line = substitute(l:command_line, 
             \'\$dest\>', '"'.a:dest_dir.'"', 'g')
       
-      if vimfiler#iswin() && l:command_line =~? '^\%(xcopy\|rmdir\)\%(\.exe\)\? '
-        let l:output = system(l:command_line)
+      if vimfiler#iswin() && l:command_line =~# '^system '
+        let l:output = system(l:command_line[7:])
         if &termencoding != '' && &termencoding != &encoding
           let l:output = iconv(l:output, &termencoding, &encoding)
         endif
@@ -69,6 +72,7 @@ function! s:external(command, dest_dir, src_files)"{{{
         let l:output = vimfiler#system(l:command_line)
       endif
       
+      echomsg l:command_line
       echon l:output
     endfor
   else
@@ -77,8 +81,8 @@ function! s:external(command, dest_dir, src_files)"{{{
     let l:command_line = substitute(l:command_line, 
           \'\$dest\>', '"'.a:dest_dir.'"', 'g')
 
-    if vimfiler#iswin() && l:command_line =~? '^\%(xcopy\|rmdir\)\%(\.exe\)\? '
-      let l:output = system(l:command_line)
+    if vimfiler#iswin() && l:command_line =~# '^system '
+      let l:output = system(l:command_line[7:])
       if &termencoding != '' && &termencoding != &encoding
         let l:output = iconv(l:output, &termencoding, &encoding)
       endif

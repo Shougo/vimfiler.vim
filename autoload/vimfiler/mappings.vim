@@ -61,7 +61,6 @@ function! vimfiler#mappings#toggle_mark_all_lines()"{{{
     let l:line = getline(l:cnt)
     if vimfiler#check_filename_line(l:line)
       " Toggle mark.
-
       let l:file = vimfiler#get_file(l:cnt)
       let l:file.is_marked = !l:file.is_marked
     endif
@@ -93,7 +92,8 @@ function! vimfiler#mappings#clear_mark_all_lines()"{{{
   setlocal nomodifiable
 endfunction"}}}
 function! vimfiler#mappings#execute()"{{{
-  if !vimfiler#check_filename_line()
+  let l:line = getline('.')
+  if l:line != '..' && !vimfiler#check_filename_line()
     let l:cursor_line = matchstr(l:line[: col('.') - 1], '^Current directory: \zs.*')
     if l:cursor_line != ''
       " Change current directory.
@@ -337,9 +337,12 @@ function! vimfiler#mappings#make_directory()"{{{
 
   if l:dirname == ''
     echo 'Canceled.'
+  elseif isdirectory(l:dirname) || filereadable(l:dirname)
+    echo 'File exists.'
   else
     call mkdir(l:dirname, 'p')
     call vimfiler#redraw_all_vimfiler()
+    call vimfiler#internal_commands#cd(l:dirname)
   endif
 endfunction"}}}
 function! vimfiler#mappings#new_file()"{{{

@@ -50,21 +50,29 @@ if !exists('g:vimfiler_pedit_command')
 endif
 if !exists('g:vimfiler_external_delete_command')
   if s:iswin
-    let g:vimfiler_external_delete_command = 'rmdir /Q /S $srcs'
+    let g:vimfiler_external_delete_command = 'system rmdir /Q /S $srcs'
   else
-    let g:vimfiler_external_delete_command = 'rm -R $srcs'
+    let g:vimfiler_external_delete_command = 'rm -r $srcs'
   endif
 endif
-if !exists('g:vimfiler_external_copy_command')
+if !exists('g:vimfiler_external_copy_file_command')
   if s:iswin
-    let g:vimfiler_external_copy_command = 'xcopy /G /H /R /K /Y /I /Q $src $dest$srcdir'
+    let g:vimfiler_external_copy_file_command = 'system copy $src $dest'
   else
-    let g:vimfiler_external_copy_command = 'cp -R $srcs $dest'
+    let g:vimfiler_external_copy_file_command = 'cp $src $dest'
+  endif
+endif
+if !exists('g:vimfiler_external_copy_directory_command')
+  if s:iswin
+    " Can't support.
+    let g:vimfiler_external_copy_directory_command = ''
+  else
+    let g:vimfiler_external_copy_directory_command = 'cp -r $src $dest'
   endif
 endif
 if !exists('g:vimfiler_external_move_command')
   if s:iswin
-    let g:vimfiler_external_move_command = 'move $src $dest'
+    let g:vimfiler_external_move_command = 'system move $src $dest'
   else
     let g:vimfiler_external_move_command = 'mv $srcs $dest'
   endif
