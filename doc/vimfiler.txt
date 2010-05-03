@@ -106,6 +106,8 @@ CHANGELOG					*vimfiler-changelog*
     * Added <Plug>(vimfiler_exit) mapping.
     * Added <Plug>(vimfiler_execute_shell_command) mapping.
     * Improved <Plug>(vimfiler_popup_shell) mapping.
+    * Fixed some bugs.
+    * Implemented file operations.
 
 2010-03-11
     * Deleted <Plug>(vimfiler_move_to_current_directory) mapping.

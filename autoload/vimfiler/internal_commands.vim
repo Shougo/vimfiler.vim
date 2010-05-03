@@ -24,46 +24,72 @@
 " }}}
 "=============================================================================
 
-function! vimfiler#internal_commands#cp(dest_dir, src_files)"{{{
-  let l:dest_dir = fnamemodify(a:dest_dir, ':p')
-  if !isdirectory(l:dest_dir)
-    " Create directory.
-    call mkdir(l:dest_dir, 'p')
-  endif
-  if l:dest_dir !~ '/$'
-    let l:dest_dir .= '/'
-  endif
-
-  let l:current_len = len(b:vimfiler.current_dir . '/')
-  for l:file in a:src_files
-    let l:filename = l:file
-    if isdirectory(l:filename)
-      if !isdirectory(l:dest_dir . l:filename[l:current_len :])
-        call mkdir(l:dest_dir . l:filename[l:current_len :], 'p')
-      endif
-
-      for l:src_file in split(globpath(b:vimfiler.current_dir, l:file . '/**'), '\n')
-        let l:dest_file = l:src_file[l:current_len :]
-        if isdirectory(l:src_file)
-          call mkdir(l:dest_dir . l:dest_file, 'p')
-        else
-          call writefile(readfile(l:src_file, 'b'), l:dest_dir . l:dest_file, 'b')
-        endif
-      endfor
-    else
-      let l:dest_file = l:filename[l:current_len :]
-      call writefile(readfile(l:filename, 'b'), l:dest_dir . l:dest_file, 'b')
-    endif
+function! vimfiler#internal_commands#mv(dest_dir, src_files)"{{{
+  for l:src in a:src_files
+    call rename(l:src, a:dest_dir . l:src)
   endfor
+endfunction"}}}
+function! vimfiler#internal_commands#cp(dest_dir, src_files)"{{{
+  call s:external('copy', a:dest_dir, a:src_files)
 endfunction"}}}
 function! vimfiler#internal_commands#rm(files)"{{{
   for l:file in a:files
     if isdirectory(l:file)
-      call vimfiler#internal_commands#rm(split(globpath(l:file, '*'), '\n'))
+      call s:external('delete', '', [l:file])
+    else
+      call delete(l:file)
     endif
-    call delete(l:file)
   endfor
 endfunction"}}}
+function! s:external(command, dest_dir, src_files)"{{{
+  let l:command_line = g:vimfiler_external_{a:command}_command
+
+  if l:command_line =~# '$src\>'
+    for l:src in a:src_files
+      let l:command_line = g:vimfiler_external_{a:command}_command
+      if isdirectory(l:src)
+        let l:command_line = substitute(l:command_line, 
+              \'\$srcdir\>', '"'.l:src.'"', 'g') 
+      else
+        let l:command_line = substitute(l:command_line, 
+              \'\$srcdir\>', '', 'g') 
+      endif
+      
+      let l:command_line = substitute(l:command_line, 
+            \'\$src\>', '"'.l:src.'"', 'g') 
+      let l:command_line = substitute(l:command_line, 
+            \'\$dest\>', '"'.a:dest_dir.'"', 'g')
+      
+      if vimfiler#iswin()
+        let l:output = system(l:command_line)
+        if &termencoding != '' && &termencoding != &encoding
+          let l:output = iconv(l:output, &termencoding, &encoding)
+        endif
+      else
+        let l:output = vimfiler#system(l:command_line)
+      endif
+      
+      echon l:output
+    endfor
+  else
+    let l:command_line = substitute(l:command_line, 
+          \'\$srcs\>', join(map(a:src_files, '''"''.v:val.''"''')), 'g') 
+    let l:command_line = substitute(l:command_line, 
+          \'\$dest\>', '"'.a:dest_dir.'"', 'g')
+
+    if vimfiler#iswin()
+      let l:output = system(l:command_line)
+      if &termencoding != '' && &termencoding != &encoding
+        let l:output = iconv(l:output, &termencoding, &encoding)
+      endif
+    else
+      let l:output = vimfiler#system(l:command_line)
+    endif
+    
+    echon l:output
+  endif
+endfunction"}}}
+
 function! vimfiler#internal_commands#cd(dir)"{{{
   if a:dir == '..'
     if b:vimfiler.current_dir =~ '^\a\+:$\|^/$'

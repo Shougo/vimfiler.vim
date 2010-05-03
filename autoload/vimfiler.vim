@@ -46,7 +46,6 @@ nnoremap <silent> <Plug>(vimfiler_loop_cursor_up)  :<C-u>call vimfiler#mappings#
 nnoremap <silent> <Plug>(vimfiler_redraw_screen)  :<C-u>call vimfiler#force_redraw_screen()<CR>
 nnoremap <silent> <Plug>(vimfiler_toggle_mark_current_line)  :<C-u>call vimfiler#mappings#toggle_mark_current_line()<CR>j
 nnoremap <silent> <Plug>(vimfiler_toggle_mark_all_lines)  :<C-u>call vimfiler#mappings#toggle_mark_all_lines()<CR>
-nnoremap <silent> <Plug>(vimfiler_copy)  :<C-u>call vimfiler#mappings#copy()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute)  :<C-u>call vimfiler#mappings#execute()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_file)  :<C-u>call vimfiler#mappings#execute_file()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_up_directory)  :<C-u>call vimfiler#internal_commands#cd('..')<CR>
@@ -63,7 +62,14 @@ nnoremap <silent> <Plug>(vimfiler_execute_shell_command)  :<C-u>call vimfiler#ma
 nnoremap <silent> <Plug>(vimfiler_exit)  :<C-u>call vimfiler#mappings#exit()<CR>
 nnoremap <silent> <Plug>(vimfiler_help)  :<C-u>nnoremap <buffer><CR>
 nnoremap <silent> <Plug>(vimfiler_preview_file)  :<C-u>call vimfiler#mappings#preview_file()<CR>
-nnoremap <silent> <Plug>(vimfiler_delete)  :<C-u>call vimfiler#mappings#delete()<CR>
+nnoremap <silent> <Plug>(vimfiler_open_another_vimfiler)  :<C-u>call vimfiler#mappings#open_another_vimfiler()<CR>
+
+nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call vimfiler#mappings#copy()<CR>
+nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call vimfiler#mappings#move()<CR>
+nnoremap <silent> <Plug>(vimfiler_delete_file)  :<C-u>call vimfiler#mappings#delete()<CR>
+nnoremap <silent> <Plug>(vimfiler_rename_file)  :<C-u>call vimfiler#mappings#rename()<CR>
+nnoremap <silent> <Plug>(vimfiler_make_directory)  :<C-u>call vimfiler#mappings#make_directory()<CR>
+nnoremap <silent> <Plug>(vimfiler_new_file)  :<C-u>call vimfiler#mappings#new_file()<CR>
 "}}}
 
 " User utility functions."{{{
@@ -90,9 +96,23 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
 
     " Copy.
-    nmap <buffer> c <Plug>(vimfiler_copy)
-    nmap <buffer> C <Plug>(vimfiler_copy)
+    nmap <buffer> c <Plug>(vimfiler_copy_file)
+    
+    " Move.
+    nmap <buffer> m <Plug>(vimfiler_move_file)
+    
+    " Delete.
+    nmap <buffer> d <Plug>(vimfiler_delete_file)
+    
+    " Rename.
+    nmap <buffer> r <Plug>(vimfiler_rename_file)
 
+    " Make directory.
+    nmap <buffer> K <Plug>(vimfiler_make_directory)
+    
+    " New file.
+    nmap <buffer> N <Plug>(vimfiler_new_file)
+    
     " Execute or change directory.
     nmap <buffer> <Enter> <Plug>(vimfiler_execute)
     nmap <buffer> l <Plug>(vimfiler_execute)
@@ -113,7 +133,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> q <Plug>(vimfiler_exit)
     nmap <buffer> ? <Plug>(vimfiler_help)
     nmap <buffer> p <Plug>(vimfiler_preview_file)
-    nmap <buffer> d <Plug>(vimfiler_delete)
+    nmap <buffer> o <Plug>(vimfiler_open_another_vimfiler)
   endif
   "}}}
 endfunction"}}}
@@ -376,8 +396,12 @@ function! vimfiler#get_escaped_marked_files()"{{{
 
   return l:files
 endfunction"}}}
-function! vimfiler#check_filename_line(line)"{{{
-  return a:line == '..' || a:line =~ '^[*-]\s'
+function! vimfiler#get_escaped_files(list)"{{{
+  return 
+endfunction"}}}
+function! vimfiler#check_filename_line(...)"{{{
+  let l:line = (a:0 == 0)? getline('.') : a:1
+  return l:line == '..' || l:line =~ '^[*-]\s'
 endfunction"}}}
 function! vimfiler#get_filename(line_num)"{{{
   return getline(a:line_num) == '..'? '..' : b:vimfiler.current_files[a:line_num - 3].name
@@ -420,20 +444,10 @@ function! vimfiler#input_yesno(message)"{{{
   return l:yesno
 endfunction"}}}
 function! vimfiler#get_alternate_directory()"{{{
-  let l:filetype = getbufvar(bufnr('#'), '&filetype')
-  if l:filetype != 'vimfiler'
+  if winnr('$') == 1 || getbufvar(bufnr('#'), '&filetype') != 'vimfiler'
     return ''
   else
     return getbufvar(bufnr('#'), 'vimfiler').current_dir
-  endif
-endfunction"}}}
-function! vimfiler#redraw_alternate_vimfiler()"{{{
-  " Search vimfiler window.
-  if getwinvar(winnr('#'), '&filetype') == 'vimfiler'
-
-    execute winnr('#') . 'wincmd w'
-    call vimfiler#redraw_screen()
-    execute winnr('#') . 'wincmd w'
   endif
 endfunction"}}}
 function! vimfiler#redraw_all_vimfiler()"{{{
@@ -444,7 +458,7 @@ function! vimfiler#redraw_all_vimfiler()"{{{
     if getwinvar(l:bufnr, '&filetype') == 'vimfiler'
 
       execute l:bufnr . 'wincmd w'
-      call vimfiler#redraw_screen()
+      call vimfiler#force_redraw_screen()
     endif
 
     let l:bufnr += 1

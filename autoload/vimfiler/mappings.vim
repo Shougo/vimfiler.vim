@@ -40,8 +40,7 @@ function! vimfiler#mappings#loop_cursor_up()"{{{
   endif
 endfunction"}}}
 function! vimfiler#mappings#toggle_mark_current_line()"{{{
-  let l:line = getline('.')
-  if l:line == '..' || !vimfiler#check_filename_line(l:line)
+  if !vimfiler#check_filename_line()
     " Don't toggle.
     return
   endif
@@ -60,7 +59,7 @@ function! vimfiler#mappings#toggle_mark_all_lines()"{{{
   let l:cnt = 1
   while l:cnt <= l:max
     let l:line = getline(l:cnt)
-    if l:line != '..' && vimfiler#check_filename_line(l:line)
+    if vimfiler#check_filename_line(l:line)
       " Toggle mark.
 
       let l:file = vimfiler#get_file(l:cnt)
@@ -80,7 +79,7 @@ function! vimfiler#mappings#clear_mark_all_lines()"{{{
   let l:cnt = 1
   while l:cnt <= l:max
     let l:line = getline(l:cnt)
-    if l:line != '..' && vimfiler#check_filename_line(l:line)
+    if vimfiler#check_filename_line(l:line)
       " Clear mark.
 
       let l:file = vimfiler#get_file(l:cnt)
@@ -93,47 +92,8 @@ function! vimfiler#mappings#clear_mark_all_lines()"{{{
 
   setlocal nomodifiable
 endfunction"}}}
-function! vimfiler#mappings#copy()"{{{
-  let l:marked_files = vimfiler#get_marked_files()
-  if empty(l:marked_files)
-    " Mark current line.
-    call vimfiler#mappings#toggle_mark_current_line()
-    return
-  endif
-
-  " Get destination directory.
-  let l:dest_dir = vimfiler#get_alternate_directory()
-  if l:dest_dir == ''
-    let l:dest_dir = vimfiler#input_directory('Please input destination directory:')
-    if l:dest_dir == ''
-      " Cancel.
-      return
-    endif
-  endif
-
-  " Execute copy.
-  call vimfiler#internal_commands#cp(l:dest_dir, l:marked_files)
-  call vimfiler#mappings#clear_mark_all_lines()
-  call vimfiler#redraw_alternate_vimfiler()
-endfunction"}}}
-function! vimfiler#mappings#delete()"{{{
-  let l:marked_files = vimfiler#get_marked_files()
-  if empty(l:marked_files)
-    " Mark current line.
-    call vimfiler#mappings#toggle_mark_current_line()
-    return
-  endif
-  let l:yesno = vimfiler#input_yesno('Really delete marked files?')
-
-  if l:yesno =~? 'y\%[es]'
-    " Execute delete.
-    call vimfiler#internal_commands#rm(l:marked_files)
-    call vimfiler#force_redraw_screen()
-  endif
-endfunction"}}}
 function! vimfiler#mappings#execute()"{{{
-  let l:line = getline('.')
-  if !vimfiler#check_filename_line(l:line)
+  if !vimfiler#check_filename_line()
     let l:cursor_line = matchstr(l:line[: col('.') - 1], '^Current directory: \zs.*')
     if l:cursor_line != ''
       " Change current directory.
@@ -164,8 +124,7 @@ function! vimfiler#mappings#execute()"{{{
   endif
 endfunction"}}}
 function! vimfiler#mappings#execute_file()"{{{
-  let l:line = getline('.')
-  if !vimfiler#check_filename_line(l:line)
+  if !vimfiler#check_filename_line()
     return
   endif
 
@@ -223,7 +182,7 @@ function! vimfiler#mappings#move_to_drive()"{{{
 endfunction"}}}
 function! vimfiler#mappings#toggle_visible_dot_files()"{{{
   let b:vimfiler.is_visible_dot_files = !b:vimfiler.is_visible_dot_files
-  call vimfiler#redraw_screen()
+  call vimfiler#force_redraw_screen()
 endfunction"}}}
 function! vimfiler#mappings#popup_shell()"{{{
   if exists(':VimShellPop')
@@ -242,14 +201,14 @@ function! vimfiler#mappings#popup_shell()"{{{
   endif
 endfunction"}}}
 function! vimfiler#mappings#edit_file()"{{{
-  if !vimfiler#check_filename_line(getline('.'))
+  if !vimfiler#check_filename_line()
     return
   endif
 
   call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')))
 endfunction"}}}
 function! vimfiler#mappings#preview_file()"{{{
-  if !vimfiler#check_filename_line(getline('.'))
+  if !vimfiler#check_filename_line()
     return
   endif
 
@@ -285,5 +244,115 @@ function! vimfiler#mappings#exit()"{{{
   endif
   execute 'bdelete!'. l:vimfiler_buf
 endfunction"}}}
+function! vimfiler#mappings#open_another_vimfiler()"{{{
+  " Search vimfiler window.
+  if winnr('$') == 1 || getwinvar(winnr('#'), '&filetype') != 'vimfiler'
+    call vimfiler#create_filer(1, b:vimfiler.current_dir)
+    execute winnr('#') . 'wincmd w'
+  endif
+endfunction"}}}
 
+function! vimfiler#mappings#move()"{{{
+  let l:marked_files = vimfiler#get_marked_files()
+  if empty(l:marked_files)
+    " Mark current line.
+    call vimfiler#mappings#toggle_mark_current_line()
+    return
+  endif
+
+  " Get destination directory.
+  let l:dest_dir = vimfiler#get_alternate_directory()
+  if l:dest_dir == ''
+    let l:dest_dir = vimfiler#input_directory('Please input destination directory:')
+    if l:dest_dir == ''
+      " Cancel.
+      return
+    endif
+  endif
+
+  let l:yesno = vimfiler#input_yesno('Really move marked files?')
+
+  if l:yesno =~? 'y\%[es]'
+    " Execute move.
+    call vimfiler#internal_commands#mv(l:dest_dir . '/', l:marked_files)
+    call vimfiler#mappings#clear_mark_all_lines()
+    call vimfiler#redraw_all_vimfiler()
+  endif
+endfunction"}}}
+function! vimfiler#mappings#copy()"{{{
+  let l:marked_files = vimfiler#get_marked_files()
+  if empty(l:marked_files)
+    " Mark current line.
+    call vimfiler#mappings#toggle_mark_current_line()
+    return
+  endif
+
+  " Get destination directory.
+  let l:dest_dir = vimfiler#get_alternate_directory()
+  if l:dest_dir == ''
+    let l:dest_dir = vimfiler#input_directory('Please input destination directory:')
+    if l:dest_dir == ''
+      " Cancel.
+      return
+    endif
+  endif
+
+  " Execute copy.
+  call vimfiler#internal_commands#cp(l:dest_dir . '/', l:marked_files)
+  call vimfiler#mappings#clear_mark_all_lines()
+  call vimfiler#redraw_all_vimfiler()
+endfunction"}}}
+function! vimfiler#mappings#delete()"{{{
+  let l:marked_files = vimfiler#get_marked_files()
+  if empty(l:marked_files)
+    " Mark current line.
+    call vimfiler#mappings#toggle_mark_current_line()
+    return
+  endif
+  let l:yesno = vimfiler#input_yesno('Really delete marked files?')
+
+  if l:yesno =~? 'y\%[es]'
+    " Execute delete.
+    call vimfiler#internal_commands#rm(l:marked_files)
+    call vimfiler#redraw_all_vimfiler()
+  endif
+endfunction"}}}
+function! vimfiler#mappings#rename()"{{{
+  if !vimfiler#check_filename_line()
+    return
+  endif
+
+  let l:oldfilename = vimfiler#get_filename(line('.'))
+  let l:filename = input(printf('New filename: %s -> ', l:oldfilename), '', 'file')
+
+  if l:filename == ''
+    echo 'Canceled.'
+  else
+    call rename(l:oldfilename, l:filename)
+    call vimfiler#redraw_all_vimfiler()
+  endif
+endfunction"}}}
+function! vimfiler#mappings#make_directory()"{{{
+  let l:dirname = input('New directory name: ', '', 'dir')
+
+  if l:dirname == ''
+    echo 'Canceled.'
+  else
+    call mkdir(l:dirname, 'p')
+    call vimfiler#redraw_all_vimfiler()
+  endif
+endfunction"}}}
+function! vimfiler#mappings#new_file()"{{{
+  let l:filename = input('New file name: ', '', 'file')
+
+  if l:filename == ''
+    echo 'Canceled.'
+  elseif filereadable(l:filename)
+    echo 'File exists.'
+  else
+    call writefile([], l:filename)
+    call vimfiler#redraw_all_vimfiler()
+    call vimfiler#internal_commands#edit(l:filename)
+  endif
+endfunction"}}}
 " vim: foldmethod=marker
