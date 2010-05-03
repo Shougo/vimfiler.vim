@@ -257,6 +257,17 @@ function! vimfiler#mappings#execute_external_command()"{{{
 
   call vimfiler#internal_commands#gexe(l:command)
 endfunction"}}}
+function! vimfiler#mappings#execute_shell_command()"{{{
+  let l:command = input('Input shell command: ', '', 'shellcmd')
+  if l:command == ''
+    echo 'Canceled.'
+    return
+  endif
+
+  let l:command = substitute(l:command, 
+        \'\s\+\zs\*\ze\%([;|[:space:]]\|$\)', join(vimfiler#get_marked_files()), 'g')
+  echo vimfiler#system(l:command)
+endfunction"}}}
 function! vimfiler#mappings#exit()"{{{
   let l:vimfiler_buf = bufnr('%')
   " Switch buffer.

@@ -144,7 +144,7 @@ function! vimfiler#internal_commands#open(filename)"{{{
 endfunction"}}}
 function! vimfiler#internal_commands#gexe(filename)"{{{
   if vimfiler#iswin()
-    if a:filename !=# 'gvim' && executable('cmdproxy.exe') && exists('*vimproc#system')
+    if a:filename !=# 'gvim' && executable('cmdproxy.exe') && vimfiler#is_vimproc()
       " Use vimproc.
       let l:commands = split(a:filename)
       call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\" %s"', l:commands[0], join(l:commands[1:])))
