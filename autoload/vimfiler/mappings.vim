@@ -239,8 +239,6 @@ function! vimfiler#mappings#edit_file()"{{{
     return
   endif
 
-  call vimfiler#internal_commands#split()
-
   call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')))
 endfunction"}}}
 function! vimfiler#mappings#preview_file()"{{{
@@ -248,11 +246,7 @@ function! vimfiler#mappings#preview_file()"{{{
     return
   endif
 
-  try
-    pedit `=vimfiler#get_filename(line('.'))`
-  catch
-    echohl Error | echomsg v:errmsg | echohl None
-  endtry
+  call vimfiler#internal_commands#pedit(vimfiler#get_filename(line('.')))
 endfunction"}}}
 function! vimfiler#mappings#execute_external_command()"{{{
   let l:command = input('Input external command: ', '', 'shellcmd')

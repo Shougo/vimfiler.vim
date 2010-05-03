@@ -172,7 +172,22 @@ function! vimfiler#internal_commands#split()"{{{
 endfunction"}}}
 function! vimfiler#internal_commands#edit(filename)"{{{
   try
-    execute g:vimfiler_edit_command a:filename
+    if g:vimfiler_edit_command == 'edit_nicely'
+      if winheight(0) > &winheight
+        new `=a:filename`
+      else
+        vnew `=a:filename`
+      endif
+    else
+      execute g:vimfiler_edit_command a:filename
+    endif
+  catch
+    echohl Error | echomsg v:errmsg | echohl None
+  endtry
+endfunction"}}}
+function! vimfiler#internal_commands#pedit(filename)"{{{
+  try
+    execute g:vimfiler_pedit_command a:filename
   catch
     echohl Error | echomsg v:errmsg | echohl None
   endtry

@@ -42,7 +42,10 @@ if !exists('g:vimfiler_split_command')
   let g:vimfiler_split_command = 'split_nicely'
 endif
 if !exists('g:vimfiler_edit_command')
-  let g:vimfiler_edit_command = 'edit'
+  let g:vimfiler_edit_command = 'edit_nicely'
+endif
+if !exists('g:vimfiler_pedit_command')
+  let g:vimfiler_edit_command = 'pedit'
 endif
 "}}}
 

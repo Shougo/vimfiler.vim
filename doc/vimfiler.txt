@@ -68,9 +68,18 @@ g:vimfiler_execute_file_list			*g:vimfiler_execute_file_list*
 
 g:vimfiler_split_command			*g:vimfiler_split_command*
 		This variable controls vimfiler split command.
+		
+		Default value is 'split_nicely'.
 
 g:vimfiler_edit_command			*g:vimfiler_edit_command*
 		This variable controls vimfiler edit command.
+		
+		Default value is 'edit_nicely'.
+
+g:vimfiler_edit_command			*g:vimfiler_edit_command*
+		This variable controls vimfiler preview edit command.
+		
+		Default value is 'pedit'.
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
@@ -93,6 +102,7 @@ CHANGELOG					*vimfiler-changelog*
 2010-05-03
     * Set noautochdir.
     * Added g:vimfiler_split_command and g:vimfiler_edit_command options.
+    * Added g:vimfiler_pedit_command option.
 
 2010-03-11
     * Deleted <Plug>(vimfiler_move_to_current_directory) mapping.
