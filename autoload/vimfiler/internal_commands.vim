@@ -49,10 +49,10 @@ function! s:external(command, dest_dir, src_files)"{{{
       let l:command_line = g:vimfiler_external_{a:command}_command
       if isdirectory(l:src)
         let l:command_line = substitute(l:command_line, 
-              \'\$srcdir\>', '"'.l:src.'"', 'g') 
+              \'\$dest$srcdir\>', '"'.a:dest_dir.l:src.'"', 'g') 
       else
         let l:command_line = substitute(l:command_line, 
-              \'\$srcdir\>', '', 'g') 
+              \'\$dest$srcdir\>', '"'.a:dest_dir.'"', 'g') 
       endif
       
       let l:command_line = substitute(l:command_line, 
@@ -60,7 +60,7 @@ function! s:external(command, dest_dir, src_files)"{{{
       let l:command_line = substitute(l:command_line, 
             \'\$dest\>', '"'.a:dest_dir.'"', 'g')
       
-      if vimfiler#iswin()
+      if vimfiler#iswin() && l:command_line =~? '^\%(xcopy\|rmdir\)\%(\.exe\)\? '
         let l:output = system(l:command_line)
         if &termencoding != '' && &termencoding != &encoding
           let l:output = iconv(l:output, &termencoding, &encoding)
@@ -77,7 +77,7 @@ function! s:external(command, dest_dir, src_files)"{{{
     let l:command_line = substitute(l:command_line, 
           \'\$dest\>', '"'.a:dest_dir.'"', 'g')
 
-    if vimfiler#iswin()
+    if vimfiler#iswin() && l:command_line =~? '^\%(xcopy\|rmdir\)\%(\.exe\)\? '
       let l:output = system(l:command_line)
       if &termencoding != '' && &termencoding != &encoding
         let l:output = iconv(l:output, &termencoding, &encoding)

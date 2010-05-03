@@ -57,7 +57,7 @@ if !exists('g:vimfiler_external_delete_command')
 endif
 if !exists('g:vimfiler_external_copy_command')
   if s:iswin
-    let g:vimfiler_external_copy_command = 'xcopy /S /E /G /H /R /K /Y /I /Q $src $dest$srcdir'
+    let g:vimfiler_external_copy_command = 'xcopy /G /H /R /K /Y /I /Q $src $dest$srcdir'
   else
     let g:vimfiler_external_copy_command = 'cp -R $srcs $dest'
   endif
