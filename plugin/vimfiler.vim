@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2010
+" Last Modified: 03 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -22,14 +22,13 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 1.02, for Vim 7.0
 "=============================================================================
 
 if v:version < 700
-    echoerr 'vimfiler does not work this version of Vim "' . v:version . '".'
-    finish
+  echoerr 'vimfiler does not work this version of Vim "' . v:version . '".'
+  finish
 elseif exists('g:loaded_vimfiler')
-    finish
+  finish
 endif
 
 let s:save_cpo = &cpo
@@ -37,7 +36,13 @@ set cpo&vim
 
 " Global options definition."{{{
 if !exists('g:vimfiler_execute_file_list')
-    let g:vimfiler_execute_file_list = {}
+  let g:vimfiler_execute_file_list = {}
+endif
+if !exists('g:vimfiler_split_command')
+  let g:vimfiler_split_command = 'split_nicely'
+endif
+if !exists('g:vimfiler_edit_command')
+  let g:vimfiler_edit_command = 'edit'
 endif
 "}}}
 

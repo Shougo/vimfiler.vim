@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 11 Mar 2010
+" Last Modified: 03 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -239,18 +239,9 @@ function! vimfiler#mappings#edit_file()"{{{
     return
   endif
 
-  " Split nicely.
-  if winheight(0) > &winheight
-    split
-  else
-    vsplit
-  endif
+  call vimfiler#internal_commands#split()
 
-  try
-    edit `=vimfiler#get_filename(line('.'))`
-  catch
-    echohl Error | echomsg v:errmsg | echohl None
-  endtry
+  call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')))
 endfunction"}}}
 function! vimfiler#mappings#preview_file()"{{{
   if !vimfiler#check_filename_line(getline('.'))

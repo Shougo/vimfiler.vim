@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 11 Mar 2010
+" Last Modified: 03 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -157,6 +157,25 @@ function! vimfiler#internal_commands#gexe(filename)"{{{
     " Background execute.
     call system(a:filename . '&')
   endif
+endfunction"}}}
+function! vimfiler#internal_commands#split()"{{{
+  if g:vimfiler_split_command == 'split_nicely'
+    " Split nicely.
+    if winheight(0) > &winheight
+      split
+    else
+      vsplit
+    endif
+  else
+    execute g:vimfiler_split_command
+  endif
+endfunction"}}}
+function! vimfiler#internal_commands#edit(filename)"{{{
+  try
+    execute g:vimfiler_edit_command a:filename
+  catch
+    echohl Error | echomsg v:errmsg | echohl None
+  endtry
 endfunction"}}}
 
 " vim: foldmethod=marker

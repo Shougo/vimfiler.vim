@@ -73,6 +73,7 @@ function! vimfiler#default_settings()"{{{
   setlocal nomodifiable
   setlocal nowrap
   setlocal cursorline
+  setlocal noautochdir
 
   " Define key-mappings."{{{
   if !(exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings)
