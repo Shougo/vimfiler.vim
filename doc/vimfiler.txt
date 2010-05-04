@@ -99,6 +99,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-05-05
+* Improved encoding.
+
 2010-05-04
 * Improved system().
 * Fixed depulicated tags.

@@ -323,9 +323,9 @@ function! vimfiler#mappings#rename()"{{{
   endif
 
   let l:oldfilename = vimfiler#get_filename(line('.'))
-  let l:filename = input(printf('New filename: %s -> ', l:oldfilename), '', 'file')
+  let l:filename = input(printf('New filename: %s -> ', l:oldfilename), l:oldfilename, 'file')
 
-  if l:filename == ''
+  if l:filename == '' || l:filename ==# l:oldfilename
     echo 'Canceled.'
   else
     call rename(l:oldfilename, l:filename)
@@ -340,6 +340,10 @@ function! vimfiler#mappings#make_directory()"{{{
   elseif isdirectory(l:dirname) || filereadable(l:dirname)
     echo 'File exists.'
   else
+    if &termencoding != '' && &termencoding != &encoding
+      let l:dirname = iconv(l:dirname, &encoding, &termencoding)
+    endif
+    
     call mkdir(l:dirname, 'p')
     call vimfiler#redraw_all_vimfiler()
     call vimfiler#internal_commands#cd(l:dirname)

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 03 May 2010
+" Last Modified: 05 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -64,15 +64,11 @@ function! s:external(command, dest_dir, src_files)"{{{
             \'\$dest\>', '"'.a:dest_dir.'"', 'g')
       
       if vimfiler#iswin() && l:command_line =~# '^system '
-        let l:output = system(l:command_line[7:])
-        if &termencoding != '' && &termencoding != &encoding
-          let l:output = iconv(l:output, &termencoding, &encoding)
-        endif
+        let l:output = vimfiler#force_system(l:command_line[7:])
       else
         let l:output = vimfiler#system(l:command_line)
       endif
       
-      echomsg l:command_line
       echon l:output
     endfor
   else
@@ -82,10 +78,7 @@ function! s:external(command, dest_dir, src_files)"{{{
           \'\$dest\>', '"'.a:dest_dir.'"', 'g')
 
     if vimfiler#iswin() && l:command_line =~# '^system '
-      let l:output = system(l:command_line[7:])
-      if &termencoding != '' && &termencoding != &encoding
-        let l:output = iconv(l:output, &termencoding, &encoding)
-      endif
+      let l:output = vimfiler#force_system(l:command_line[7:])
     else
       let l:output = vimfiler#system(l:command_line)
     endif
@@ -155,37 +148,44 @@ function! vimfiler#internal_commands#open(filename)"{{{
       " Use vimproc.
       call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\""', a:filename))
     else
-      execute printf('silent ! start "" "%s"', a:filename)
+      execute printf('silent ! start "" "%s"', l:filename)
     endif
   elseif executable('open')
-    call system('open ''' . a:filename . ''' &')
+    call system('open ''' . l:filename . ''' &')
   elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
     " KDE.
-    call system('kfmclient exec ''' . a:filename . ''' &')
+    call system('kfmclient exec ''' . l:filename . ''' &')
   elseif exists('$GNOME_DESKTOP_SESSION_ID')
     " GNOME.
-    call system('gnome-open ''' . a:filename . ''' &')
+    call system('gnome-open ''' . l:filename . ''' &')
   elseif executable('exo-open')
     " Xfce.
-    call system('exo-open ''' . a:filename . ''' &')
+    call system('exo-open ''' . l:filename . ''' &')
   else
     throw 'Not supported.'
   endif
 endfunction"}}}
 function! vimfiler#internal_commands#gexe(filename)"{{{
+  if &termencoding != '' && &encoding != &termencoding
+    " Convert encoding.
+    let l:filename = iconv(a:filename, &encoding, &termencoding)
+  else
+    let l:filename = a:filename
+  endif
+  
   if vimfiler#iswin()
     if a:filename !=# 'gvim' && executable('cmdproxy.exe') && vimfiler#is_vimproc()
       " Use vimproc.
       let l:commands = split(a:filename)
       call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\" %s"', l:commands[0], join(l:commands[1:])))
     else
-      execute 'silent ! start ' a:filename
+      execute 'silent ! start ' l:filename
     endif
   else
     " For *nix.
 
     " Background execute.
-    call system(a:filename . '&')
+    call system(l:filename . '&')
   endif
 endfunction"}}}
 function! vimfiler#internal_commands#split()"{{{
