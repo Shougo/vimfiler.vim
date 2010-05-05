@@ -108,7 +108,7 @@ function! vimfiler#internal_commands#cd(dir)"{{{
     let l:dir = a:dir
   else
     " Relative path.
-    let l:dir = simplify(b:vimfiler.current_dir . '/' . a:dir)
+    let l:dir = simplify(b:vimfiler.current_dir . a:dir)
   endif
 
   if !isdirectory(l:dir)
@@ -117,9 +117,8 @@ function! vimfiler#internal_commands#cd(dir)"{{{
   endif
 
   lcd `=l:dir`
-  if l:dir[-1:] == '/' || l:dir[-1:] == '\'
-    " Delete last '/'.
-    let l:dir = l:dir[: -2]
+  if l:dir !~ '/$'
+    let l:dir .= '/'
   endif
 
   " Save current pos.
@@ -150,8 +149,6 @@ function! vimfiler#internal_commands#open(filename)"{{{
     else
       execute printf('silent ! start "" "%s"', l:filename)
     endif
-  elseif executable('open')
-    call system('open ''' . l:filename . ''' &')
   elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
     " KDE.
     call system('kfmclient exec ''' . l:filename . ''' &')
@@ -161,6 +158,8 @@ function! vimfiler#internal_commands#open(filename)"{{{
   elseif executable('exo-open')
     " Xfce.
     call system('exo-open ''' . l:filename . ''' &')
+  elseif executable('open')
+    call system('open ''' . l:filename . ''' &')
   else
     throw 'Not supported.'
   endif

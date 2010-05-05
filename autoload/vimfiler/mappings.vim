@@ -240,7 +240,7 @@ function! vimfiler#mappings#exit()"{{{
   if winnr('$') != 1
     close
   else
-    buffer #
+    call s:custom_alternate_buffer()
   endif
   execute 'bdelete!'. l:vimfiler_buf
 endfunction"}}}
@@ -360,6 +360,33 @@ function! vimfiler#mappings#new_file()"{{{
     call writefile([], l:filename)
     call vimfiler#redraw_all_vimfiler()
     call vimfiler#internal_commands#edit(l:filename)
+  endif
+endfunction"}}}
+
+function! s:custom_alternate_buffer()"{{{
+  if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
+    buffer #
+  else
+    let l:cnt = 0
+    let l:pos = 1
+    let l:current = 0
+    while l:pos <= bufnr('$')
+      if buflisted(l:pos)
+        if l:pos == bufnr('%')
+          let l:current = l:cnt
+        endif
+
+        let l:cnt += 1
+      endif
+
+      let l:pos += 1
+    endwhile
+
+    if l:current > l:cnt / 2
+      bprevious
+    else
+      bnext
+    endif
   endif
 endfunction"}}}
 " vim: foldmethod=marker

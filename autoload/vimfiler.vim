@@ -176,13 +176,13 @@ function! vimfiler#create_filer(directory, split_flag, overwrite_buffer_flag)"{{
   let l:current = (a:directory != '')? a:directory : getcwd()
   lcd `=l:current`
   let b:vimfiler.current_dir = l:current
-  if b:vimfiler.current_dir =~ '/$'
-    let b:vimfiler.current_dir = b:vimfiler.current_dir[: -2]
+  if b:vimfiler.current_dir !~ '/$'
+    let b:vimfiler.current_dir .= '/'
   endif
   let b:vimfiler.is_visible_dot_files = 0
   let b:vimfiler.directory_cursor_pos = {}
   " Set mask.
-  let b:vimfiler.current_mask = '/*'
+  let b:vimfiler.current_mask = '*'
 
   call vimfiler#force_redraw_screen()
   if a:split_flag
@@ -205,8 +205,8 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
     if a:directory != ''
       " Change current directory.
       let b:vimfiler.current_dir = a:directory
-      if b:vimfiler.current_dir =~ '/$'
-        let b:vimfiler.current_dir = b:vimfiler.current_dir[: -2]
+      if b:vimfiler.current_dir !~ '/$'
+        let b:vimfiler.current_dir .= '/'
       endif
     endif
 
@@ -227,8 +227,8 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
       if a:directory != ''
         " Change current directory.
         let b:vimfiler.current_dir = a:directory
-        if b:vimfiler.current_dir =~ '/$'
-          let b:vimfiler.current_dir = b:vimfiler.current_dir[: -2]
+        if b:vimfiler.current_dir !~ '/$'
+          let b:vimfiler.current_dir .= '/'
         endif
       endif
 
@@ -255,8 +255,8 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
       if a:directory != ''
         " Change current directory.
         let b:vimfiler.current_dir = a:directory
-        if b:vimfiler.current_dir =~ '/$'
-          let b:vimfiler.current_dir = b:vimfiler.current_dir[: -2]
+        if b:vimfiler.current_dir !~ '/$'
+          let b:vimfiler.current_dir .= '/'
         endif
       endif
 
@@ -277,7 +277,7 @@ function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
   let l:current_files = split(glob(b:vimfiler.current_dir . b:vimfiler.current_mask), '\n')
   if b:vimfiler.is_visible_dot_files
-    let l:current_files += filter(split(glob(b:vimfiler.current_dir . '/.*'), '\n'), 
+    let l:current_files += filter(split(glob(b:vimfiler.current_dir . '.*'), '\n'), 
           \'v:val !~ ''[/\\]\.\.\?$''')
   endif
   
