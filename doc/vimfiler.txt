@@ -63,6 +63,12 @@ COMMANDS 					*vimfiler-commands*
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
 
+g:vimfiler_use_default_explorer			*g:vimfiler_use_default_explorer*
+		If this variable is true, Vim use vimfiler as file manager
+		instead of |netrw|. Note: This variable disables |netrw|.
+		
+		Default value is 0.
+
 g:vimfiler_execute_file_list			*g:vimfiler_execute_file_list*
 		This variable controls vimfiler execute.
 
@@ -90,6 +96,17 @@ KEY MAPPINGS 					*vimfiler-key-mappings*
 ==============================================================================
 EXAMPLES					*vimfiler-examples*
 >
+	call vimfiler#set_execute_file('vim', 'vim')
+	call vimfiler#set_execute_file('txt', 'notepad')
+	"let g:vimfiler_split_command = ''
+	"let g:vimfiler_edit_command = 'tabedit'
+	"let g:vimfiler_pedit_command = 'vnew'
+	let g:vimfiler_external_copy_directory_command = 'cp -r $src $dest'
+	let g:vimfiler_external_copy_file_command = 'cp $src $dest'
+	let g:vimfiler_external_delete_command = 'rm -r $srcs'
+	let g:vimfiler_external_move_command = 'mv $srcs $dest'
+	let g:vimfiler_use_default_explorer = 1
+>
 ==============================================================================
 TODO						*vimfiler-todo*
 
@@ -101,6 +118,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2010-05-05
 * Improved encoding.
+* Added g:vimfiler_use_default_explorer option.
 
 2010-05-04
 * Improved system().

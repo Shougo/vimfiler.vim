@@ -145,18 +145,26 @@ endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions."{{{
-function! vimfiler#create_filer(split_flag, directory)"{{{
-  let l:bufname = '[1]vimfiler'
-  let l:cnt = 2
-  while buflisted(l:bufname)
-    let l:bufname = printf('[%d]vimfiler', l:cnt)
-    let l:cnt += 1
-  endwhile
+function! vimfiler#create_filer(directory, split_flag, overwrite_buffer_flag)"{{{
+  if a:directory != '' && !isdirectory(a:directory)
+    echohl Error | echomsg 'Invalid directory name: ' . a:directory | echohl None
+    return
+  endif
+  
+  if !a:overwrite_buffer_flag
+    " Create new buffer.
+    let l:bufname = '[1]vimfiler'
+    let l:cnt = 2
+    while buflisted(l:bufname)
+      let l:bufname = printf('[%d]vimfiler', l:cnt)
+      let l:cnt += 1
+    endwhile
 
-  if a:split_flag
-    vsplit `=l:bufname`
-  else
-    edit `=l:bufname`
+    if a:split_flag
+      vsplit `=l:bufname`
+    else
+      edit `=l:bufname`
+    endif
   endif
 
   call vimfiler#default_settings()
@@ -181,7 +189,12 @@ function! vimfiler#create_filer(split_flag, directory)"{{{
     call vimfiler#redraw_all_vimfiler()
   endif
 endfunction"}}}
-function! vimfiler#switch_filer(split_flag, directory)"{{{
+function! vimfiler#switch_filer(directory, split_flag)"{{{
+  if a:directory != '' && !isdirectory(a:directory)
+    echohl Error | echomsg 'Invalid directory name: ' . a:directory | echohl None
+    return
+  endif
+  
   if &filetype == 'vimfiler'
     if winnr('$') != 1
       close

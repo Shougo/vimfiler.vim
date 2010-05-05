@@ -36,6 +36,9 @@ set cpo&vim
 let s:iswin = has('win32') || has('win64')
 
 " Global options definition."{{{
+if !exists('g:vimfiler_use_default_explorer')
+  let g:vimfiler_use_default_explorer = 0
+endif
 if !exists('g:vimfiler_execute_file_list')
   let g:vimfiler_execute_file_list = {}
 endif
@@ -80,14 +83,33 @@ endif
 "}}}
 
 " Plugin keymappings"{{{
-nnoremap <silent> <Plug>(vimfiler_split_switch)  :<C-u>call vimfiler#switch_filer(1, '')<CR>
-nnoremap <silent> <Plug>(vimfiler_split_create)  :<C-u>call vimfiler#create_filer(1, '')<CR>
-nnoremap <silent> <Plug>(vimfiler_switch)  :<C-u>call vimfiler#switch_filer(0, '')<CR>
-nnoremap <silent> <Plug>(vimfiler_create)  :<C-u>call vimfiler#create_filer(0, '')<CR>
+nnoremap <silent> <Plug>(vimfiler_split_switch)  :<C-u>call vimfiler#switch_filer('', 1)<CR>
+nnoremap <silent> <Plug>(vimfiler_split_create)  :<C-u>call vimfiler#create_filer('', 1, 0)<CR>
+nnoremap <silent> <Plug>(vimfiler_switch)  :<C-u>call vimfiler#switch_filer('', 0)<CR>
+nnoremap <silent> <Plug>(vimfiler_create)  :<C-u>call vimfiler#create_filer('', 0, 0)<CR>
 "}}}
 
-command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(0, <q-args>)
-command! -nargs=? -complete=dir VimFilerCreate call vimfiler#create_filer(0, <q-args>)
+command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(<q-args>, 0)
+command! -nargs=? -complete=dir VimFilerCreate call vimfiler#create_filer(<q-args>, 0, 1)
+
+if g:vimfiler_use_default_explorer
+  " Disable netrw.
+  let g:loaded_netrwPlugin = 1
+  augroup FileExplorer
+    autocmd!
+    autocmd BufEnter * call s:browse_check(expand('<amatch>'))
+  augroup END
+  
+  augroup Network
+    autocmd!
+  augroup END
+endif
+
+function! s:browse_check(directory)
+  if a:directory != '' && &filetype != 'vimfiler' && isdirectory(a:directory)
+    silent! call vimfiler#create_filer(a:directory, 0, 1)
+  endif
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
