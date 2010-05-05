@@ -149,7 +149,7 @@ function! vimfiler#mappings#move_to_drive()"{{{
     else
       let l:drive_key = 'abcdefghijklmnopqrstuvwxyz'
 
-      if has('mac')
+      if has('macunix') || system('uname') =~? '^darwin'
         let l:drive_list = split(glob('/Volumes/*'), '\n')
       else
         let l:drive_list = split(glob('/mnt/*'), '\n') + split(glob('/media/*'), '\n')

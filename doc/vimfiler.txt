@@ -124,6 +124,7 @@ CHANGELOG					*vimfiler-changelog*
 * Improved syntax highlight.
 * Calculate directory date.
 * Fixed file size view.
+* Detect Mac.
 
 2010-05-04
 * Improved system().
