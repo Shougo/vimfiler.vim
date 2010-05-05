@@ -271,7 +271,7 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
   endwhile
 
   " Create window.
-  call vimfiler#create_filer(a:split_flag, a:directory)
+  call vimfiler#create_filer(a:directory, a:split_flag, 0)
 endfunction"}}}
 function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
