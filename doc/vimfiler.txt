@@ -121,6 +121,9 @@ CHANGELOG					*vimfiler-changelog*
 * Added g:vimfiler_use_default_explorer option.
 * Fixed current directory bugs.
 * Improved execute file.
+* Improved syntax highlight.
+* Calculate directory date.
+* Fixed file size view.
 
 2010-05-04
 * Improved system().
