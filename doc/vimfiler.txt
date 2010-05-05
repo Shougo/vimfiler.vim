@@ -120,6 +120,7 @@ CHANGELOG					*vimfiler-changelog*
 * Improved encoding.
 * Added g:vimfiler_use_default_explorer option.
 * Fixed current directory bugs.
+* Improved execute file.
 
 2010-05-04
 * Improved system().
