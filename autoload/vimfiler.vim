@@ -589,15 +589,15 @@ function! vimfiler#get_filesize(size)"{{{
   if a:size >= 1000000000
     " GB.
     let l:suffix = 'G'
-    let l:pattern = printf('%d.%d', a:size / 1000000000, a:size % 1000000000)
+    let l:pattern = printf('%d.%09d', a:size / 1000000000, a:size % 1000000000)
   elseif a:size >= 1000000
     " MB.
     let l:suffix = 'M'
-    let l:pattern = printf('%d.%d', a:size / 1000000, a:size % 1000000)
+    let l:pattern = printf('%d.%06d', a:size / 1000000, a:size % 1000000)
   elseif a:size >= 1000
     " KB.
     let l:suffix = 'K'
-    let l:pattern = printf('%d.%d', a:size / 1000, a:size % 1000)
+    let l:pattern = printf('%d.%03d', a:size / 1000, a:size % 1000)
   else
     " B.
     let l:suffix = 'B'
