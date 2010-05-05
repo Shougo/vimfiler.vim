@@ -125,6 +125,7 @@ CHANGELOG					*vimfiler-changelog*
 * Calculate directory date.
 * Fixed file size view.
 * Detect Mac.
+* Check autochdir.
 
 2010-05-04
 * Improved system().

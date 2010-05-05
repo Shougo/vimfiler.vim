@@ -80,7 +80,9 @@ function! vimfiler#default_settings()"{{{
   setlocal nomodifiable
   setlocal nowrap
   setlocal cursorline
-  setlocal noautochdir
+  if has('netbeans_intg') || has('sun_workshop')
+    setlocal noautochdir
+  endif
 
   " Define key-mappings."{{{
   if !(exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings)
