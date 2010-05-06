@@ -92,7 +92,7 @@ nnoremap <silent> <Plug>(vimfiler_create)  :<C-u>call vimfiler#create_filer('', 
 command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(<q-args>, 0)
 command! -nargs=? -complete=dir VimFilerCreate call vimfiler#create_filer(<q-args>, 0, 1)
 
-if g:vimfiler_use_default_explorer
+if g:vimfiler_as_default_explorer
   " Disable netrw.
   let g:loaded_netrwPlugin = 1
   augroup FileExplorer
