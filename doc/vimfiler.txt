@@ -63,7 +63,7 @@ COMMANDS 					*vimfiler-commands*
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
 
-g:vimfiler_use_default_explorer			*g:vimfiler_use_default_explorer*
+g:vimfiler_as_default_explorer			*g:vimfiler_as_default_explorer*
 		If this variable is true, Vim use vimfiler as file manager
 		instead of |netrw|. Note: This variable disables |netrw|.
 		
@@ -105,7 +105,7 @@ EXAMPLES					*vimfiler-examples*
 	let g:vimfiler_external_copy_file_command = 'cp $src $dest'
 	let g:vimfiler_external_delete_command = 'rm -r $srcs'
 	let g:vimfiler_external_move_command = 'mv $srcs $dest'
-	let g:vimfiler_use_default_explorer = 1
+	let g:vimfiler_as_default_explorer = 1
 >
 ==============================================================================
 TODO						*vimfiler-todo*
@@ -115,6 +115,11 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-05-06
+* Renamed g:vimfiler_use_default_explorer as g:vimfiler_as_default_explorer.
+* Fixed g:vimfiler_edit_command bug.
+* Fixed compare string.
 
 2010-05-05
 * Improved encoding.

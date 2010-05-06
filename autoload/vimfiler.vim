@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 May 2010
+" Last Modified: 06 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -197,7 +197,7 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
     return
   endif
   
-  if &filetype == 'vimfiler'
+  if &filetype ==# 'vimfiler'
     if winnr('$') != 1
       close
     else
@@ -222,7 +222,7 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
   " Search vimfiler window.
   let l:cnt = 1
   while l:cnt <= winnr('$')
-    if getwinvar(l:cnt, '&filetype') == 'vimfiler'
+    if getwinvar(l:cnt, '&filetype') ==# 'vimfiler'
 
       execute l:cnt . 'wincmd w'
 
@@ -247,7 +247,7 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
   " Search vimfiler buffer.
   let l:cnt = 1
   while l:cnt <= bufnr('$')
-    if getbufvar(l:cnt, '&filetype') == 'vimfiler'
+    if getbufvar(l:cnt, '&filetype') ==# 'vimfiler'
       if a:split_flag
         execute 'sbuffer' . l:cnt
       else
@@ -494,7 +494,7 @@ function! vimfiler#redraw_all_vimfiler()"{{{
   let l:bufnr = 1
   while l:bufnr <= winnr('$')
     " Search vimfiler window.
-    if getwinvar(l:bufnr, '&filetype') == 'vimfiler'
+    if getwinvar(l:bufnr, '&filetype') ==# 'vimfiler'
 
       execute l:bufnr . 'wincmd w'
       call vimfiler#force_redraw_screen()

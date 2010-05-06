@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 May 2010
+" Last Modified: 06 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,8 +36,8 @@ set cpo&vim
 let s:iswin = has('win32') || has('win64')
 
 " Global options definition."{{{
-if !exists('g:vimfiler_use_default_explorer')
-  let g:vimfiler_use_default_explorer = 0
+if !exists('g:vimfiler_as_default_explorer')
+  let g:vimfiler_as_default_explorer = 0
 endif
 if !exists('g:vimfiler_execute_file_list')
   let g:vimfiler_execute_file_list = {}
@@ -49,7 +49,7 @@ if !exists('g:vimfiler_edit_command')
   let g:vimfiler_edit_command = 'edit_nicely'
 endif
 if !exists('g:vimfiler_pedit_command')
-  let g:vimfiler_edit_command = 'pedit'
+  let g:vimfiler_pedit_command = 'pedit'
 endif
 if !exists('g:vimfiler_external_delete_command')
   if s:iswin

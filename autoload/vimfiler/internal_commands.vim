@@ -188,7 +188,7 @@ function! vimfiler#internal_commands#gexe(filename)"{{{
   endif
 endfunction"}}}
 function! vimfiler#internal_commands#split()"{{{
-  if g:vimfiler_split_command == 'split_nicely'
+  if g:vimfiler_split_command ==# 'split_nicely'
     " Split nicely.
     if winheight(0) > &winheight
       split
@@ -201,7 +201,7 @@ function! vimfiler#internal_commands#split()"{{{
 endfunction"}}}
 function! vimfiler#internal_commands#edit(filename)"{{{
   try
-    if g:vimfiler_edit_command == 'edit_nicely'
+    if g:vimfiler_edit_command ==# 'edit_nicely'
       if winheight(0) > &winheight
         new `=a:filename`
       else

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 May 2010
+" Last Modified: 06 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -246,7 +246,7 @@ function! vimfiler#mappings#exit()"{{{
 endfunction"}}}
 function! vimfiler#mappings#open_another_vimfiler()"{{{
   " Search vimfiler window.
-  if winnr('$') == 1 || getwinvar(winnr('#'), '&filetype') != 'vimfiler'
+  if winnr('$') == 1 || getwinvar(winnr('#'), '&filetype') !=# 'vimfiler'
     call vimfiler#create_filer(b:vimfiler.current_dir, 1, 0)
     execute winnr('#') . 'wincmd w'
   endif
