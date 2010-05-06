@@ -249,6 +249,12 @@ function! vimfiler#mappings#open_another_vimfiler()"{{{
   if winnr('$') == 1 || getwinvar(winnr('#'), '&filetype') !=# 'vimfiler'
     call vimfiler#create_filer(b:vimfiler.current_dir, 1, 0)
     execute winnr('#') . 'wincmd w'
+  else
+    " Change vimfiler directory.
+    let l:current_dir = b:vimfiler.current_dir
+    execute winnr('#') . 'wincmd w'
+    call vimfiler#internal_commands#cd(l:current_dir)
+    execute winnr('#') . 'wincmd w'
   endif
 endfunction"}}}
 
