@@ -97,11 +97,15 @@ if g:vimfiler_as_default_explorer
   let g:loaded_netrwPlugin = 1
   augroup FileExplorer
     autocmd!
-    autocmd BufEnter * call s:browse_check(expand('<amatch>'))
   augroup END
   
   augroup Network
     autocmd!
+  augroup END
+  
+  augroup vimfiler-FileExplorer
+    autocmd!
+    autocmd BufEnter * call s:browse_check(expand('<amatch>'))
   augroup END
 endif
 

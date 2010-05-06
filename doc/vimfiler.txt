@@ -120,6 +120,7 @@ CHANGELOG					*vimfiler-changelog*
 * Renamed g:vimfiler_use_default_explorer as g:vimfiler_as_default_explorer.
 * Fixed g:vimfiler_edit_command bug.
 * Fixed compare string.
+* Improved augroup name.
 
 2010-05-05
 * Improved encoding.
