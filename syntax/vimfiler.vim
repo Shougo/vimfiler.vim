@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 20 Jun 2010
+" Last Modified: 05 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -22,16 +22,6 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 1.1, for Vim 7.0
-"-----------------------------------------------------------------------------
-" ChangeLog: "{{{
-"   1.1:
-"     - Added filetypes.
-"     - Improved non marked files.
-"
-"   1.0:
-"     - Initial version.
-""}}}
 "=============================================================================
 
 if version < 700
@@ -44,17 +34,18 @@ syn match   VimFilerNonMarkedFile     '^-'
 syn match   VimFilerMarkedFile        '^\* .*$'
 syn match   VimFilerDirectory         '^..$'
 syn match   VimFilerPrompt            '^Current directory: .*$'
-syn match   VimFilerTypeText          '\%(\f\s\?\)\+\s\+\[TXT\]\s'
-syn match   VimFilerTypeImage         '\%(\f\s\?\)\+\s\+\[IMG\]\s'
-syn match   VimFilerTypeArchive       '\%(\f\s\?\)\+\s\+\[ARC\]\s'
-syn match   VimFilerTypeExecute       '\%(\f\s\?\)\+\s\+\[EXE\]\s'
-syn match   VimFilerTypeMultimedia    '\%(\f\s\?\)\+\s\+\[MUL\]\s'
-syn match   VimFilerTypeDirectory     '\%(\f\s\?\)\+\s\+\[DIR\]\s'
-syn match   VimFilerTypeSystem        '\%(\f\s\?\)\+\s\+\[SYS\]\s'
-syn match   VimFilerSize              '\s[0-9.]\a*\s'
-syn match   VimFilerDate              '\s\~.*$'
-syn match   VimFilerDateToday         '\s\!.*$'
-syn match   VimFilerDateWeek          '\s\#.*$'
+syn match   VimFilerTypeText          '\%(\f\s\?\)\+\s\+\[TXT\]'
+syn match   VimFilerTypeImage         '\%(\f\s\?\)\+\s\+\[IMG\]'
+syn match   VimFilerTypeArchive       '\%(\f\s\?\)\+\s\+\[ARC\]'
+syn match   VimFilerTypeExecute       '\%(\f\s\?\)\+\s\+\[EXE\]'
+syn match   VimFilerTypeMultimedia    '\%(\f\s\?\)\+\s\+\[MUL\]'
+syn match   VimFilerTypeDirectory     '\%(\f\s\?\)\+\s\+\[DIR\]'
+syn match   VimFilerTypeSystem        '\%(\f\s\?\)\+\s\+\[SYS\]'
+syn match   VimFilerSize              '\s\zs[0-9.]\a*\s'
+syn match   VimFilerDate              '[[:digit:]/]\+\s\+\d\+:\d\+$'
+syn match   VimFilerDateToday         '[[:digit:]/]\+\s\+\d\+:\d\+$'
+syn match   VimFilerDateWeek          '[[:digit:]/]\+\s\+\d\+:\d\+$'
+syn match   VimFilerDateIgnore        '\s\zs[#~!]\ze[[:digit:]/]\+\s\+\d\+:\d\+$'
 
 if has('gui_running')
     hi VimFilerPrompt  gui=UNDERLINE guifg=#80ffff guibg=NONE
@@ -68,6 +59,7 @@ hi def link VimFilerSize Constant
 hi def link VimFilerDateToday Statement
 hi def link VimFilerDateWeek Special
 hi def link VimFilerDate Identifier
+hi def link VimFilerDateIgnore Ignore
 
 hi def link VimFilerTypeText Constant
 hi def link VimFilerTypeImage Type

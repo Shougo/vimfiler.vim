@@ -158,7 +158,7 @@ function! vimfiler#internal_commands#open(filename)"{{{
   elseif executable('exo-open')
     " Xfce.
     call system('exo-open ''' . l:filename . ''' &')
-  elseif executable('open')
+  elseif (has('macunix') || system('uname') =~? '^darwin') && executable('open')
     call system('open ''' . l:filename . ''' &')
   else
     throw 'Not supported.'

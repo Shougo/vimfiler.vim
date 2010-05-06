@@ -80,7 +80,9 @@ function! vimfiler#default_settings()"{{{
   setlocal nomodifiable
   setlocal nowrap
   setlocal cursorline
-  setlocal noautochdir
+  if has('netbeans_intg') || has('sun_workshop')
+    setlocal noautochdir
+  endif
 
   " Define key-mappings."{{{
   if !(exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings)
@@ -291,8 +293,8 @@ function! vimfiler#force_redraw_screen()"{{{
             \ 'extension' : '', 
             \ 'type' : '[DIR]', 
             \ 'size' : 0, 
-            \ 'datemark' : '', 
-            \ 'time' : 0, 
+            \ 'datemark' : vimfiler#get_datemark(l:file), 
+            \ 'time' : getftime(l:file), 
             \ 'is_directory' : 1, 
             \ 'is_marked' : 0, 
             \ })
@@ -350,8 +352,9 @@ function! vimfiler#redraw_screen()"{{{
 
     let l:mark = l:file.is_marked ? '*' : '-'
     if l:file.is_directory
-      call append('$', printf('%s  %s  [DIR] ',
-            \ l:mark, l:filename
+      call append('$', printf('%s  %s  [DIR]           %s',
+            \ l:mark, l:filename, 
+            \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
             \))
     else
       call append('$', printf('%s  %s  %s  %s  %s',
@@ -587,17 +590,23 @@ function! vimfiler#get_filesize(size)"{{{
   " Get human file size.
   if a:size >= 1000000000
     " GB.
-    return printf('%5.5sG', (a:size / 1000000000) . '.' .  (a:size % 1000000000))
+    let l:suffix = 'G'
+    let l:pattern = printf('%d.%09d', a:size / 1000000000, a:size % 1000000000)
   elseif a:size >= 1000000
     " MB.
-    return printf('%5.5sM', (a:size / 1000000) . '.' . (a:size % 1000000))
+    let l:suffix = 'M'
+    let l:pattern = printf('%d.%06d', a:size / 1000000, a:size % 1000000)
   elseif a:size >= 1000
     " KB.
-    return printf('%5.5sK', (a:size / 1000) . '.' . (a:size % 1000))
+    let l:suffix = 'K'
+    let l:pattern = printf('%d.%03d', a:size / 1000, a:size % 1000)
   else
     " B.
-    return printf('%5.5sB', a:size)
+    let l:suffix = 'B'
+    let l:pattern = printf('%d', a:size)
   endif
+
+  return printf('%6.6s%s', l:pattern, l:suffix)
 endfunction"}}}
 function! vimfiler#get_datemark(filename)"{{{
   let l:time = localtime() - getftime(a:filename)
