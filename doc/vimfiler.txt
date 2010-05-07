@@ -137,6 +137,7 @@ CHANGELOG					*vimfiler-changelog*
 * Added <Plug>(vimfiler_print_filename) keymapping.
 * Implemanted delete and force delete.
 * Implemented paste.
+* Implemented set mask patterns.
 
 2010-05-06
 * Renamed g:vimfiler_use_default_explorer as g:vimfiler_as_default_explorer.

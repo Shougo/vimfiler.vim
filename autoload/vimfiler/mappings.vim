@@ -420,6 +420,15 @@ function! vimfiler#mappings#paste_from_clipboard()"{{{
     echoerr 'Invalid command.'
   endif
 endfunction"}}}
+function! vimfiler#mappings#set_current_mask()"{{{
+  let l:mask = input('Please input new mask pattern: ', '')
+  if l:mask == ''
+    let l:mask = '*'
+  endif
+
+  let b:vimfiler.current_mask = l:mask
+  call vimfiler#force_redraw_screen()
+endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))

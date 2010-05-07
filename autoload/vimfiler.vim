@@ -66,6 +66,7 @@ nnoremap <silent> <Plug>(vimfiler_preview_file)  :<C-u>call vimfiler#mappings#pr
 nnoremap <silent> <Plug>(vimfiler_open_another_vimfiler)  :<C-u>call vimfiler#mappings#open_another_vimfiler()<CR>
 nnoremap <silent> <Plug>(vimfiler_print_filename)  :<C-u>echo vimfiler#get_filename(line('.'))<CR>
 nnoremap <silent> <Plug>(vimfiler_paste_from_clipboard)  :<C-u>call vimfiler#mappings#paste_from_clipboard()<CR>
+nnoremap <silent> <Plug>(vimfiler_set_current_mask)  :<C-u>call vimfiler#mappings#set_current_mask()<CR>
 
 nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call vimfiler#mappings#copy()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call vimfiler#mappings#move()<CR>
@@ -145,6 +146,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> P <Plug>(vimfiler_preview_file)
     nmap <buffer> o <Plug>(vimfiler_open_another_vimfiler)
     nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
+    nmap <buffer> M <Plug>(vimfiler_set_current_mask)
   endif
   "}}}
 endfunction"}}}
@@ -297,10 +299,15 @@ function! vimfiler#switch_filer(directory, options)"{{{
 endfunction"}}}
 function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
-  let l:current_files = split(glob(b:vimfiler.current_dir . b:vimfiler.current_mask), '\n')
+  let l:current_files = []
+  for l:mask in split(b:vimfiler.current_mask)
+    let l:current_files += split(glob(b:vimfiler.current_dir . l:mask), '\n')
+  endfor
   if b:vimfiler.is_visible_dot_files
-    let l:current_files += filter(split(glob(b:vimfiler.current_dir . '.*'), '\n'), 
-          \'v:val !~ ''[/\\]\.\.\?$''')
+    for l:mask in split(b:vimfiler.current_mask)
+      let l:current_files += filter(split(glob(b:vimfiler.current_dir . '.' . l:mask), '\n'), 
+            \'v:val != "." && v:val != ".."')
+    endfor
   endif
   
   let b:vimfiler.current_files = []
