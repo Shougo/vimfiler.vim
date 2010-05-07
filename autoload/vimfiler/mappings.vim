@@ -318,12 +318,40 @@ function! vimfiler#mappings#delete()"{{{
     call vimfiler#mappings#toggle_mark_current_line()
     return
   endif
-  let l:yesno = vimfiler#input_yesno('Really delete marked files?')
+  let l:yesno = vimfiler#input_yesno('Really move marked files to trashbox?')
 
   if l:yesno =~? 'y\%[es]'
     " Execute delete.
+    if !isdirectory(g:vimfiler_trashbox_directory)
+      call mkdir(g:vimfiler_trashbox_directory, 'p')
+    endif
+    
+    let l:trashdir = g:vimfiler_trashbox_directory . '/' . substitute(strftime('%Y%m%d/%X'), ':', '_', 'g')
+    if !isdirectory(l:trashdir)
+      call mkdir(l:trashdir, 'p')
+    endif
+    
+    call vimfiler#internal_commands#mv(l:trashdir . '/', l:marked_files)
+    call vimfiler#force_redraw_all_vimfiler()
+  else
+    echo 'Canceled.'
+  endif
+endfunction"}}}
+function! vimfiler#mappings#force_delete()"{{{
+  let l:marked_files = vimfiler#get_marked_files()
+  if empty(l:marked_files)
+    " Mark current line.
+    call vimfiler#mappings#toggle_mark_current_line()
+    return
+  endif
+  let l:yesno = vimfiler#input_yesno('Really force delete marked files?')
+
+  if l:yesno =~? 'y\%[es]'
+    " Execute force delete.
     call vimfiler#internal_commands#rm(l:marked_files)
     call vimfiler#force_redraw_all_vimfiler()
+  else
+    echo 'Canceled.'
   endif
 endfunction"}}}
 function! vimfiler#mappings#rename()"{{{

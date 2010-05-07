@@ -57,6 +57,9 @@ endif
 if !exists('g:vimfiler_max_filename_width')
   let g:vimfiler_max_filename_width = 40
 endif
+if !exists('g:vimfiler_trashbox_directory')
+  let g:vimfiler_trashbox_directory = expand('~/.vimfiler_trashbox')
+endif
 if !exists('g:vimfiler_external_delete_command')
   if s:iswin
     let g:vimfiler_external_delete_command = 'system rmdir /Q /S $srcs'

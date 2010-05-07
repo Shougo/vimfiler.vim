@@ -51,6 +51,7 @@ nnoremap <silent> <Plug>(vimfiler_execute_file)  :<C-u>call vimfiler#mappings#ex
 nnoremap <silent> <Plug>(vimfiler_move_to_up_directory)  :<C-u>call vimfiler#internal_commands#cd('..')<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call vimfiler#internal_commands#cd('~')<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call vimfiler#internal_commands#cd('/')<CR>
+nnoremap <silent> <Plug>(vimfiler_move_to_trashbox_directory)  :<C-u>call vimfiler#internal_commands#cd(g:vimfiler_trashbox_directory)<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call vimfiler#mappings#move_to_drive()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_new_gvim)  :<C-u>call vimfiler#internal_commands#gexe('gvim')<CR>
 nnoremap <silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call vimfiler#mappings#toggle_visible_dot_files()<CR>
@@ -68,6 +69,7 @@ nnoremap <silent> <Plug>(vimfiler_print_filename)  :<C-u>echo vimfiler#get_filen
 nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call vimfiler#mappings#copy()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call vimfiler#mappings#move()<CR>
 nnoremap <silent> <Plug>(vimfiler_delete_file)  :<C-u>call vimfiler#mappings#delete()<CR>
+nnoremap <silent> <Plug>(vimfiler_force_delete_file)  :<C-u>call vimfiler#mappings#force_delete()<CR>
 nnoremap <silent> <Plug>(vimfiler_rename_file)  :<C-u>call vimfiler#mappings#rename()<CR>
 nnoremap <silent> <Plug>(vimfiler_make_directory)  :<C-u>call vimfiler#mappings#make_directory()<CR>
 nnoremap <silent> <Plug>(vimfiler_new_file)  :<C-u>call vimfiler#mappings#new_file()<CR>
@@ -107,6 +109,7 @@ function! vimfiler#default_settings()"{{{
     
     " Delete.
     nmap <buffer> d <Plug>(vimfiler_delete_file)
+    nmap <buffer> D <Plug>(vimfiler_force_delete_file)
     
     " Rename.
     nmap <buffer> r <Plug>(vimfiler_rename_file)
@@ -125,6 +128,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> h <Plug>(vimfiler_move_to_up_directory)
     nmap <buffer> L <Plug>(vimfiler_move_to_drive)
     nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
+    nmap <buffer> $ <Plug>(vimfiler_move_to_trashbox_directory)
     nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
     nmap <buffer> V <Plug>(vimfiler_execute_new_gvim)
     nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)

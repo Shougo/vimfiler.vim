@@ -26,7 +26,7 @@
 
 function! vimfiler#internal_commands#mv(dest_dir, src_files)"{{{
   for l:src in a:src_files
-    call rename(l:src, a:dest_dir . l:src)
+    call rename(l:src, a:dest_dir . fnamemodify(l:src, ':t'))
   endfor
 endfunction"}}}
 function! vimfiler#internal_commands#cp(dest_dir, src_files)"{{{
