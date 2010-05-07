@@ -361,12 +361,12 @@ function! vimfiler#redraw_screen()"{{{
     let l:mark = l:file.is_marked ? '*' : '-'
     if !b:vimfiler.is_simple
       if l:file.is_directory
-        let l:line = printf('%s  %s  [DIR]         %s',
+        let l:line = printf('%s %s [DIR]         %s',
               \ l:mark, l:filename, 
               \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
               \)
       else
-        let l:line = printf('%s  %s  %s %s %s',
+        let l:line = printf('%s %s %s %s %s',
               \ l:mark, 
               \ l:filename, 
               \ l:file.type, 

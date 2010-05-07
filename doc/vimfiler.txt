@@ -133,6 +133,7 @@ CHANGELOG					*vimfiler-changelog*
 * Added VimFilerSimple command.
 * Improved execute file.
 * popup shell clears markes.
+* Optimized display.
 
 2010-05-06
 * Renamed g:vimfiler_use_default_explorer as g:vimfiler_as_default_explorer.
