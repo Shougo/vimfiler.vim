@@ -65,6 +65,7 @@ nnoremap <silent> <Plug>(vimfiler_help)  :<C-u>nnoremap <buffer><CR>
 nnoremap <silent> <Plug>(vimfiler_preview_file)  :<C-u>call vimfiler#mappings#preview_file()<CR>
 nnoremap <silent> <Plug>(vimfiler_open_another_vimfiler)  :<C-u>call vimfiler#mappings#open_another_vimfiler()<CR>
 nnoremap <silent> <Plug>(vimfiler_print_filename)  :<C-u>echo vimfiler#get_filename(line('.'))<CR>
+nnoremap <silent> <Plug>(vimfiler_paste_from_clipboard)  :<C-u>call vimfiler#mappings#paste_from_clipboard()<CR>
 
 nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call vimfiler#mappings#copy()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call vimfiler#mappings#move()<CR>
@@ -140,7 +141,8 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> gf <Plug>(vimfiler_split_create)
     nmap <buffer> q <Plug>(vimfiler_exit)
     nmap <buffer> ? <Plug>(vimfiler_help)
-    nmap <buffer> p <Plug>(vimfiler_preview_file)
+    nmap <buffer> p <Plug>(vimfiler_paste_from_clipboard)
+    nmap <buffer> P <Plug>(vimfiler_preview_file)
     nmap <buffer> o <Plug>(vimfiler_open_another_vimfiler)
     nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
   endif
@@ -202,11 +204,12 @@ function! vimfiler#create_filer(directory, options)"{{{
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
   endif
+  let b:vimfiler.clipboard = {}
   let b:vimfiler.is_visible_dot_files = 0
+  let b:vimfiler.is_simple = l:simple_flag
   let b:vimfiler.directory_cursor_pos = {}
   " Set mask.
   let b:vimfiler.current_mask = '*'
-  let b:vimfiler.is_simple = l:simple_flag
 
   call vimfiler#force_redraw_screen()
 endfunction"}}}

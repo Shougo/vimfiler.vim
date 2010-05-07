@@ -272,11 +272,13 @@ function! vimfiler#mappings#move()"{{{
   " Get destination directory.
   let l:dest_dir = vimfiler#get_alternate_directory()
   if l:dest_dir == ''
-    let l:dest_dir = vimfiler#input_directory('Please input destination directory:')
-    if l:dest_dir == ''
-      " Cancel.
-      return
-    endif
+    " Copy to clipboard.
+    let b:vimfiler.clipboard = {
+          \ 'command' : 'move', 'files' : l:marked_files
+          \}
+    call vimfiler#mappings#clear_mark_all_lines()
+    echo 'Saved to clipboard.'
+    return
   endif
 
   let l:yesno = vimfiler#input_yesno('Really move marked files?')
@@ -299,11 +301,13 @@ function! vimfiler#mappings#copy()"{{{
   " Get destination directory.
   let l:dest_dir = vimfiler#get_alternate_directory()
   if l:dest_dir == ''
-    let l:dest_dir = vimfiler#input_directory('Please input destination directory:')
-    if l:dest_dir == ''
-      " Cancel.
-      return
-    endif
+    " Copy to clipboard.
+    let b:vimfiler.clipboard = {
+          \ 'command' : 'copy', 'files' : l:marked_files
+          \}
+    call vimfiler#mappings#clear_mark_all_lines()
+    echo 'Saved to clipboard.'
+    return
   endif
 
   " Execute copy.
@@ -397,6 +401,24 @@ function! vimfiler#mappings#new_file()"{{{
     call writefile([], l:filename)
     call vimfiler#force_redraw_all_vimfiler()
     call vimfiler#internal_commands#edit(l:filename)
+  endif
+endfunction"}}}
+function! vimfiler#mappings#paste_from_clipboard()"{{{
+  if empty(b:vimfiler.clipboard)
+    echo 'Clipboard is empty.'
+    return
+  endif
+  
+  if b:vimfiler.clipboard.command ==# 'copy'
+    call vimfiler#internal_commands#cp(b:vimfiler.current_dir, b:vimfiler.clipboard.files)
+    call vimfiler#force_redraw_all_vimfiler()
+  elseif b:vimfiler.clipboard.command ==# 'move'
+    call vimfiler#internal_commands#mv(b:vimfiler.current_dir, b:vimfiler.clipboard.files)
+    call vimfiler#force_redraw_all_vimfiler()
+    
+    let b:vimfiler.clipboard = {}
+  else
+    echoerr 'Invalid command.'
   endif
 endfunction"}}}
 
