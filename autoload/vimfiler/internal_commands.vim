@@ -200,6 +200,12 @@ function! vimfiler#internal_commands#split()"{{{
   endif
 endfunction"}}}
 function! vimfiler#internal_commands#edit(filename)"{{{
+  if isdirectory(a:filename)
+    call vimfiler#create_filer(a:filename, 
+          \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+    return
+  endif
+  
   try
     if g:vimfiler_edit_command ==# 'edit_nicely'
       if winheight(0) > &winheight

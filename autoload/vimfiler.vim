@@ -298,7 +298,7 @@ function! vimfiler#force_redraw_screen()"{{{
   for l:file in l:current_files
     let l:list = isdirectory(l:file)?
           \ {
-          \ 'name' : fnamemodify(l:file, ':t'), 
+          \ 'name' : l:file, 
           \ 'extension' : '', 
           \ 'type' : '[DIR]', 
           \ 'size' : 0, 
@@ -306,7 +306,7 @@ function! vimfiler#force_redraw_screen()"{{{
           \ 'time' : getftime(l:file), 
           \ 'is_directory' : 1, 'is_marked' : 0, 
           \ } : {
-          \ 'name' : fnamemodify(l:file, ':t'), 
+          \ 'name' : l:file, 
           \ 'extension' : fnamemodify(l:file, ':e'), 
           \ 'type' : vimfiler#get_filetype(l:file), 
           \ 'size' : getfsize(l:file), 
@@ -345,7 +345,7 @@ function! vimfiler#redraw_screen()"{{{
     let l:max_len = g:vimfiler_max_filename_width
   endif
   for l:file in b:vimfiler.current_files
-    let l:filename = l:file.name
+    let l:filename = fnamemodify(l:file.name, ':t')
     if l:file.is_directory
       let l:filename .= '/'
     endif
@@ -361,12 +361,12 @@ function! vimfiler#redraw_screen()"{{{
     let l:mark = l:file.is_marked ? '*' : '-'
     if !b:vimfiler.is_simple
       if l:file.is_directory
-        let l:line = printf('%s  %s  [DIR]           %s',
+        let l:line = printf('%s  %s  [DIR]         %s',
               \ l:mark, l:filename, 
               \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
               \)
       else
-        let l:line = printf('%s  %s  %s  %s  %s',
+        let l:line = printf('%s  %s  %s %s %s',
               \ l:mark, 
               \ l:filename, 
               \ l:file.type, 

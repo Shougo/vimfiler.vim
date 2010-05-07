@@ -93,7 +93,8 @@ function! vimfiler#mappings#clear_mark_all_lines()"{{{
 endfunction"}}}
 function! vimfiler#mappings#execute()"{{{
   let l:line = getline('.')
-  if l:line != '..' && !vimfiler#check_filename_line()
+  let l:filename = vimfiler#get_filename(line('.'))
+  if l:filename != '..' && !vimfiler#check_filename_line()
     let l:cursor_line = matchstr(l:line[: col('.') - 1], '^Current directory: \zs.*')
     if l:cursor_line != ''
       " Change current directory.
@@ -105,7 +106,6 @@ function! vimfiler#mappings#execute()"{{{
     return
   endif
 
-  let l:filename = vimfiler#get_filename(line('.'))
   if isdirectory(l:filename)
     " Change directory.
     call vimfiler#internal_commands#cd(l:filename)
@@ -124,11 +124,11 @@ function! vimfiler#mappings#execute()"{{{
   endif
 endfunction"}}}
 function! vimfiler#mappings#execute_file()"{{{
-  if !vimfiler#check_filename_line()
+  let l:filename = vimfiler#get_filename(line('.'))
+  if l:filename != '..' && !vimfiler#check_filename_line()
     return
   endif
 
-  let l:filename = vimfiler#get_filename(line('.'))
   " Execute cursor file.
   call vimfiler#internal_commands#open(l:filename)
 endfunction"}}}

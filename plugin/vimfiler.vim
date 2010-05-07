@@ -55,7 +55,7 @@ if !exists('g:vimfiler_min_filename_width')
   let g:vimfiler_min_filename_width = 20
 endif
 if !exists('g:vimfiler_max_filename_width')
-  let g:vimfiler_max_filename_width = 50
+  let g:vimfiler_max_filename_width = 40
 endif
 if !exists('g:vimfiler_external_delete_command')
   if s:iswin
