@@ -187,6 +187,7 @@ endfunction"}}}
 function! vimfiler#mappings#popup_shell()"{{{
   if exists(':VimShellPop')
     let l:files = join(vimfiler#get_escaped_marked_files())
+    call vimfiler#mappings#clear_mark_all_lines()
     
     VimShellPop `=b:vimfiler.current_dir`
     
@@ -199,8 +200,6 @@ function! vimfiler#mappings#popup_shell()"{{{
     let l:save_currnet_dir = getcwd()
     shell
   endif
-  
-  call vimfiler#mappings#clear_mark_all_lines()
 endfunction"}}}
 function! vimfiler#mappings#edit_file()"{{{
   if !vimfiler#check_filename_line()
