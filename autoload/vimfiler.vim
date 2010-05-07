@@ -83,6 +83,7 @@ function! vimfiler#default_settings()"{{{
   if has('netbeans_intg') || has('sun_workshop')
     setlocal noautochdir
   endif
+  let &l:winwidth = g:vimfiler_min_filename_width + 10
 
   " Define key-mappings."{{{
   if !(exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings)
@@ -147,13 +148,27 @@ endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions."{{{
-function! vimfiler#create_filer(directory, split_flag, overwrite_buffer_flag)"{{{
+function! vimfiler#create_filer(directory, options)"{{{
   if a:directory != '' && !isdirectory(a:directory)
     echohl Error | echomsg 'Invalid directory name: ' . a:directory | echohl None
     return
   endif
+
+  " Check options.
+  let l:split_flag = 0
+  let l:overwrite_flag = 0
+  let l:simple_flag = 0
+  for l:option in a:options
+    if l:option ==# 'split'
+      let l:split_flag = 1
+    elseif l:option ==# 'overwrite'
+      let l:overwrite_flag = 1
+    elseif l:option ==# 'simple'
+      let l:simple_flag = 1
+    endif
+  endfor
   
-  if !a:overwrite_buffer_flag
+  if !l:overwrite_flag
     " Create new buffer.
     let l:bufname = '[1]vimfiler'
     let l:cnt = 2
@@ -162,7 +177,7 @@ function! vimfiler#create_filer(directory, split_flag, overwrite_buffer_flag)"{{
       let l:cnt += 1
     endwhile
 
-    if a:split_flag
+    if l:split_flag
       vsplit `=l:bufname`
     else
       edit `=l:bufname`
@@ -185,17 +200,22 @@ function! vimfiler#create_filer(directory, split_flag, overwrite_buffer_flag)"{{
   let b:vimfiler.directory_cursor_pos = {}
   " Set mask.
   let b:vimfiler.current_mask = '*'
+  let b:vimfiler.is_simple = l:simple_flag
 
   call vimfiler#force_redraw_screen()
-  if a:split_flag
-    call vimfiler#redraw_all_vimfiler()
-  endif
 endfunction"}}}
-function! vimfiler#switch_filer(directory, split_flag)"{{{
+function! vimfiler#switch_filer(directory, options)"{{{
   if a:directory != '' && !isdirectory(a:directory)
     echohl Error | echomsg 'Invalid directory name: ' . a:directory | echohl None
     return
   endif
+  
+  let l:split_flag = 0
+  for l:option in a:options
+    if l:option ==# 'split'
+      let l:split_flag = 1
+    endif
+  endfor
   
   if &filetype ==# 'vimfiler'
     if winnr('$') != 1
@@ -213,9 +233,6 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
     endif
 
     call vimfiler#force_redraw_screen()
-    if a:split_flag
-      call vimfiler#redraw_all_vimfiler()
-    endif
     return
   endif
 
@@ -235,9 +252,6 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
       endif
 
       call vimfiler#force_redraw_screen()
-      if a:split_flag
-        call vimfiler#redraw_all_vimfiler()
-      endif
       return
     endif
 
@@ -248,7 +262,7 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
   let l:cnt = 1
   while l:cnt <= bufnr('$')
     if getbufvar(l:cnt, '&filetype') ==# 'vimfiler'
-      if a:split_flag
+      if l:split_flag
         execute 'sbuffer' . l:cnt
       else
         execute 'buffer' . l:cnt
@@ -263,9 +277,6 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
       endif
 
       call vimfiler#force_redraw_screen()
-      if a:split_flag
-        call vimfiler#redraw_all_vimfiler()
-      endif
       return
     endif
 
@@ -273,7 +284,7 @@ function! vimfiler#switch_filer(directory, split_flag)"{{{
   endwhile
 
   " Create window.
-  call vimfiler#create_filer(a:directory, a:split_flag, 0)
+  call vimfiler#create_filer(a:directory, a:options)
 endfunction"}}}
 function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
@@ -285,31 +296,26 @@ function! vimfiler#force_redraw_screen()"{{{
   
   let b:vimfiler.current_files = []
   for l:file in l:current_files
-    let l:filename = fnamemodify(l:file, ':t')
-
-    if isdirectory(l:file)
-      call add(b:vimfiler.current_files, {
-            \ 'name' : l:filename, 
-            \ 'extension' : '', 
-            \ 'type' : '[DIR]', 
-            \ 'size' : 0, 
-            \ 'datemark' : vimfiler#get_datemark(l:file), 
-            \ 'time' : getftime(l:file), 
-            \ 'is_directory' : 1, 
-            \ 'is_marked' : 0, 
-            \ })
-    else
-      call add(b:vimfiler.current_files, {
-            \ 'name' : l:filename, 
-            \ 'extension' : fnamemodify(l:filename, ':e'), 
-            \ 'type' : vimfiler#get_filetype(l:file), 
-            \ 'size' : getfsize(l:file), 
-            \ 'datemark' : vimfiler#get_datemark(l:file), 
-            \ 'time' : getftime(l:file), 
-            \ 'is_directory' : 0, 
-            \ 'is_marked' : 0, 
-            \ })
-    endif
+    let l:list = isdirectory(l:file)?
+          \ {
+          \ 'name' : fnamemodify(l:file, ':t'), 
+          \ 'extension' : '', 
+          \ 'type' : '[DIR]', 
+          \ 'size' : 0, 
+          \ 'datemark' : vimfiler#get_datemark(l:file), 
+          \ 'time' : getftime(l:file), 
+          \ 'is_directory' : 1, 'is_marked' : 0, 
+          \ } : {
+          \ 'name' : fnamemodify(l:file, ':t'), 
+          \ 'extension' : fnamemodify(l:file, ':e'), 
+          \ 'type' : vimfiler#get_filetype(l:file), 
+          \ 'size' : getfsize(l:file), 
+          \ 'datemark' : vimfiler#get_datemark(l:file), 
+          \ 'time' : getftime(l:file), 
+          \ 'is_directory' : 0, 'is_marked' : 0, 
+          \ }
+     
+    call add(b:vimfiler.current_files, l:list)
   endfor
 
   call vimfiler#redraw_screen()
@@ -326,15 +332,17 @@ function! vimfiler#redraw_screen()"{{{
   % delete _
 
   " Print current directory.
-  call setline(1, 'Current directory: ' . b:vimfiler.current_dir . b:vimfiler.current_mask)
+  call setline(1, (b:vimfiler.is_simple ? 'CD: ' : 'Current directory: ')
+        \. b:vimfiler.current_dir . b:vimfiler.current_mask)
 
   " Append up directory.
   call append('$', '..')
 
   " Print files.
-  let l:max_len = winwidth(winnr()) - 35
-  if l:max_len > 50
-    let l:max_len = 50
+  let l:max_len = b:vimfiler.is_simple ? 
+        \ g:vimfiler_min_filename_width : (winwidth(winnr()) - g:vimfiler_min_filename_width)
+  if l:max_len > g:vimfiler_max_filename_width
+    let l:max_len = g:vimfiler_max_filename_width
   endif
   for l:file in b:vimfiler.current_files
     let l:filename = l:file.name
@@ -351,20 +359,28 @@ function! vimfiler#redraw_screen()"{{{
     endif
 
     let l:mark = l:file.is_marked ? '*' : '-'
-    if l:file.is_directory
-      call append('$', printf('%s  %s  [DIR]           %s',
-            \ l:mark, l:filename, 
-            \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
-            \))
+    if !b:vimfiler.is_simple
+      if l:file.is_directory
+        let l:line = printf('%s  %s  [DIR]           %s',
+              \ l:mark, l:filename, 
+              \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
+              \)
+      else
+        let l:line = printf('%s  %s  %s  %s  %s',
+              \ l:mark, 
+              \ l:filename, 
+              \ l:file.type, 
+              \ vimfiler#get_filesize(l:file.size), 
+              \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
+              \)
+      endif
+    elseif l:file.is_directory
+      let l:line = printf('%s %s [DIR]', l:mark, l:filename)
     else
-      call append('$', printf('%s  %s  %s  %s  %s',
-            \ l:mark, 
-            \ l:filename, 
-            \ l:file.type, 
-            \ vimfiler#get_filesize(l:file.size), 
-            \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
-            \))
+      let l:line = printf('%s %s %s', l:mark, l:filename, l:file.type)
     endif
+    
+    call append('$', l:line)
   endfor
   
   call setpos('.', l:pos)
@@ -489,7 +505,7 @@ function! vimfiler#get_alternate_directory()"{{{
     return getbufvar(bufnr('#'), 'vimfiler').current_dir
   endif
 endfunction"}}}
-function! vimfiler#redraw_all_vimfiler()"{{{
+function! vimfiler#force_redraw_all_vimfiler()"{{{
   let l:current_nr = winnr()
   let l:bufnr = 1
   while l:bufnr <= winnr('$')
@@ -498,6 +514,22 @@ function! vimfiler#redraw_all_vimfiler()"{{{
 
       execute l:bufnr . 'wincmd w'
       call vimfiler#force_redraw_screen()
+    endif
+
+    let l:bufnr += 1
+  endwhile
+
+  execute l:current_nr . 'wincmd w'
+endfunction"}}}
+function! vimfiler#redraw_all_vimfiler()"{{{
+  let l:current_nr = winnr()
+  let l:bufnr = 1
+  while l:bufnr <= winnr('$')
+    " Search vimfiler window.
+    if getwinvar(l:bufnr, '&filetype') ==# 'vimfiler'
+
+      execute l:bufnr . 'wincmd w'
+      call vimfiler#redraw_screen()
     endif
 
     let l:bufnr += 1

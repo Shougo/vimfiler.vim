@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 05 May 2010
+" Last Modified: 07 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,7 +33,11 @@ endif
 syn match   VimFilerNonMarkedFile     '^-'
 syn match   VimFilerMarkedFile        '^\* .*$'
 syn match   VimFilerDirectory         '^..$'
-syn match   VimFilerPrompt            '^Current directory: .*$'
+
+syn match   VimFilerPrompt            '^\%(Current directory\|CD\): .*$' contains=VimFilerSpecial,VimFilerCurrentDirectory
+syn match   VimFilerSpecial           '^\%(Current directory\|CD\):' contained
+syn match   VimFilerCurrentDirectory  '\s\zs.*$' contained
+
 syn match   VimFilerTypeText          '\%(\f\s\?\)\+\s\+\[TXT\]'
 syn match   VimFilerTypeImage         '\%(\f\s\?\)\+\s\+\[IMG\]'
 syn match   VimFilerTypeArchive       '\%(\f\s\?\)\+\s\+\[ARC\]'
@@ -41,17 +45,20 @@ syn match   VimFilerTypeExecute       '\%(\f\s\?\)\+\s\+\[EXE\]'
 syn match   VimFilerTypeMultimedia    '\%(\f\s\?\)\+\s\+\[MUL\]'
 syn match   VimFilerTypeDirectory     '\%(\f\s\?\)\+\s\+\[DIR\]'
 syn match   VimFilerTypeSystem        '\%(\f\s\?\)\+\s\+\[SYS\]'
+
 syn match   VimFilerSize              '\s\zs[0-9.]\a*\s'
+
 syn match   VimFilerDate              '[[:digit:]/]\+\s\+\d\+:\d\+$'
 syn match   VimFilerDateToday         '[[:digit:]/]\+\s\+\d\+:\d\+$'
 syn match   VimFilerDateWeek          '[[:digit:]/]\+\s\+\d\+:\d\+$'
 syn match   VimFilerDateIgnore        '\s\zs[#~!]\ze[[:digit:]/]\+\s\+\d\+:\d\+$'
 
 if has('gui_running')
-    hi VimFilerPrompt  gui=UNDERLINE guifg=#80ffff guibg=NONE
+    hi VimFilerCurrentDirectory  gui=UNDERLINE guifg=#80ffff guibg=NONE
 else
-    hi def link FilerPrompt Identifier
+    hi def link VimFilerCurrentDirectory Identifier
 endif
+hi def link VimFilerSpecial Special
 hi def link VimFilerNonMarkedFile Special
 hi def link VimFilerMarkedFile Statement
 hi def link VimFilerDirectory Preproc

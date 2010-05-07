@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 05 May 2010
+" Last Modified: 07 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -151,7 +151,7 @@ function! vimfiler#internal_commands#open(filename)"{{{
     endif
   elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
     " KDE.
-    call system('kfmclient exec ''' . l:filename . ''' &')
+    call system('kioclient exec ''' . l:filename . '''')
   elseif exists('$GNOME_DESKTOP_SESSION_ID')
     " GNOME.
     call system('gnome-open ''' . l:filename . ''' &')

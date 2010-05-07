@@ -51,6 +51,12 @@ endif
 if !exists('g:vimfiler_pedit_command')
   let g:vimfiler_pedit_command = 'pedit'
 endif
+if !exists('g:vimfiler_min_filename_width')
+  let g:vimfiler_min_filename_width = 20
+endif
+if !exists('g:vimfiler_max_filename_width')
+  let g:vimfiler_max_filename_width = 50
+endif
 if !exists('g:vimfiler_external_delete_command')
   if s:iswin
     let g:vimfiler_external_delete_command = 'system rmdir /Q /S $srcs'
@@ -83,14 +89,16 @@ endif
 "}}}
 
 " Plugin keymappings"{{{
-nnoremap <silent> <Plug>(vimfiler_split_switch)  :<C-u>call vimfiler#switch_filer('', 1)<CR>
-nnoremap <silent> <Plug>(vimfiler_split_create)  :<C-u>call vimfiler#create_filer('', 1, 0)<CR>
-nnoremap <silent> <Plug>(vimfiler_switch)  :<C-u>call vimfiler#switch_filer('', 0)<CR>
-nnoremap <silent> <Plug>(vimfiler_create)  :<C-u>call vimfiler#create_filer('', 0, 0)<CR>
+nnoremap <silent> <Plug>(vimfiler_split_switch)  :<C-u>call vimfiler#switch_filer('', ['split'])<CR>
+nnoremap <silent> <Plug>(vimfiler_split_create)  :<C-u>call vimfiler#create_filer('', ['split'])<CR>
+nnoremap <silent> <Plug>(vimfiler_switch)  :<C-u>call vimfiler#switch_filer('', [])<CR>
+nnoremap <silent> <Plug>(vimfiler_create)  :<C-u>call vimfiler#create_filer('', [])<CR>
+nnoremap <silent> <Plug>(vimfiler_simple)  :<C-u>call vimfiler#create_filer('', ['simple', 'split'])<CR>
 "}}}
 
-command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(<q-args>, 0)
-command! -nargs=? -complete=dir VimFilerCreate call vimfiler#create_filer(<q-args>, 0, 1)
+command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(<q-args>, [])
+command! -nargs=? -complete=dir VimFilerSimple call vimfiler#create_filer(<q-args>, ['simple', 'split'])
+command! -nargs=? -complete=dir VimFilerCreate call vimfiler#create_filer(<q-args>, [])
 
 if g:vimfiler_as_default_explorer
   " Disable netrw.
@@ -111,7 +119,7 @@ endif
 
 function! s:browse_check(directory)
   if a:directory != '' && &filetype != 'vimfiler' && isdirectory(a:directory)
-    silent! call vimfiler#create_filer(a:directory, 0, 1)
+    silent! call vimfiler#create_filer(a:directory, ['overwrite'])
   endif
 endfunction
 

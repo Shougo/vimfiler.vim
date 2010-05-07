@@ -87,6 +87,16 @@ g:vimfiler_pedit_command			*g:vimfiler_pedit_command*
 		
 		Default value is 'pedit'.
 
+g:vimfiler_min_filename_width			*g:vimfiler_min_filename_width*
+		This variable controls vimfiler displays min filename width.
+		
+		Default value is 35.
+
+g:vimfiler_max_filename_width			*g:vimfiler_max_filename_width*
+		This variable controls vimfiler displays max filename width.
+		
+		Default value is 50.
+
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
 
@@ -115,6 +125,13 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-05-07
+* Added g:vimfiler_max_filename_width and g:vimfiler_min_filename_width options.
+* Improved redraw.
+* Improved syntax.
+* Added VimFilerSimple command.
+* Improved execute file.
 
 2010-05-06
 * Renamed g:vimfiler_use_default_explorer as g:vimfiler_as_default_explorer.

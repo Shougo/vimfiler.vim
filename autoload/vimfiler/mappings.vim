@@ -247,7 +247,8 @@ endfunction"}}}
 function! vimfiler#mappings#open_another_vimfiler()"{{{
   " Search vimfiler window.
   if winnr('$') == 1 || getwinvar(winnr('#'), '&filetype') !=# 'vimfiler'
-    call vimfiler#create_filer(b:vimfiler.current_dir, 1, 0)
+    call vimfiler#create_filer(b:vimfiler.current_dir, 
+          \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
     execute winnr('#') . 'wincmd w'
   else
     " Change vimfiler directory.
@@ -282,7 +283,7 @@ function! vimfiler#mappings#move()"{{{
     " Execute move.
     call vimfiler#internal_commands#mv(l:dest_dir . '/', l:marked_files)
     call vimfiler#mappings#clear_mark_all_lines()
-    call vimfiler#redraw_all_vimfiler()
+    call vimfiler#force_redraw_all_vimfiler()
   endif
 endfunction"}}}
 function! vimfiler#mappings#copy()"{{{
@@ -306,7 +307,7 @@ function! vimfiler#mappings#copy()"{{{
   " Execute copy.
   call vimfiler#internal_commands#cp(l:dest_dir . '/', l:marked_files)
   call vimfiler#mappings#clear_mark_all_lines()
-  call vimfiler#redraw_all_vimfiler()
+  call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! vimfiler#mappings#delete()"{{{
   let l:marked_files = vimfiler#get_marked_files()
@@ -320,7 +321,7 @@ function! vimfiler#mappings#delete()"{{{
   if l:yesno =~? 'y\%[es]'
     " Execute delete.
     call vimfiler#internal_commands#rm(l:marked_files)
-    call vimfiler#redraw_all_vimfiler()
+    call vimfiler#force_redraw_all_vimfiler()
   endif
 endfunction"}}}
 function! vimfiler#mappings#rename()"{{{
@@ -335,7 +336,7 @@ function! vimfiler#mappings#rename()"{{{
     echo 'Canceled.'
   else
     call rename(l:oldfilename, l:filename)
-    call vimfiler#redraw_all_vimfiler()
+    call vimfiler#force_redraw_all_vimfiler()
   endif
 endfunction"}}}
 function! vimfiler#mappings#make_directory()"{{{
@@ -351,7 +352,7 @@ function! vimfiler#mappings#make_directory()"{{{
     endif
     
     call mkdir(l:dirname, 'p')
-    call vimfiler#redraw_all_vimfiler()
+    call vimfiler#force_redraw_all_vimfiler()
     call vimfiler#internal_commands#cd(l:dirname)
   endif
 endfunction"}}}
@@ -364,7 +365,7 @@ function! vimfiler#mappings#new_file()"{{{
     echo 'File exists.'
   else
     call writefile([], l:filename)
-    call vimfiler#redraw_all_vimfiler()
+    call vimfiler#force_redraw_all_vimfiler()
     call vimfiler#internal_commands#edit(l:filename)
   endif
 endfunction"}}}
@@ -394,5 +395,7 @@ function! s:custom_alternate_buffer()"{{{
       bnext
     endif
   endif
+  
+  call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 " vim: foldmethod=marker
