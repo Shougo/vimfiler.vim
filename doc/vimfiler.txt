@@ -131,6 +131,7 @@ CHANGELOG					*vimfiler-changelog*
 * Renamed open another vimfiler mapping.
 * Added <Plug>(vimfiler_sync_with_another_vimfiler) mapping.
 * Improved vimfiler's cursor position.
+* Added <Plug>(vimfiler_jump_to_directory) mapping.
 
 2010-05-07
 * Added g:vimfiler_max_filename_width and g:vimfiler_min_filename_width options.

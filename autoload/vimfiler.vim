@@ -53,6 +53,7 @@ nnoremap <silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call vimfiler#i
 nnoremap <silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call vimfiler#internal_commands#cd('/')<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_trashbox_directory)  :<C-u>call vimfiler#internal_commands#cd(g:vimfiler_trashbox_directory)<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call vimfiler#mappings#move_to_drive()<CR>
+nnoremap <silent> <Plug>(vimfiler_jump_to_directory)  :<C-u>call vimfiler#mappings#jump_to_directory()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_new_gvim)  :<C-u>call vimfiler#internal_commands#gexe('gvim')<CR>
 nnoremap <silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call vimfiler#mappings#toggle_visible_dot_files()<CR>
 nnoremap <silent> <Plug>(vimfiler_popup_shell)  :<C-u>call vimfiler#mappings#popup_shell()<CR>
@@ -130,6 +131,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> x <Plug>(vimfiler_execute_file)
     nmap <buffer> h <Plug>(vimfiler_move_to_up_directory)
     nmap <buffer> L <Plug>(vimfiler_move_to_drive)
+    nmap <buffer> J <Plug>(vimfiler_jump_to_directory)
     nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
     nmap <buffer> $ <Plug>(vimfiler_move_to_trashbox_directory)
     nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)

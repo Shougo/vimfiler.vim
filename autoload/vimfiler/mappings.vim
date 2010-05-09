@@ -133,7 +133,7 @@ function! vimfiler#mappings#execute_file()"{{{
   call vimfiler#internal_commands#open(l:filename)
 endfunction"}}}
 function! vimfiler#mappings#move_to_drive()"{{{
-  if !exists('s:drives')
+  if !exists('s:drives')"{{{
     " Initialize.
     let s:drives = {}
 
@@ -162,7 +162,7 @@ function! vimfiler#mappings#move_to_drive()"{{{
         let l:cnt += 1
       endfor
     endif
-  endif
+  endif"}}}
 
   if empty(s:drives)
     " No drives.
@@ -174,12 +174,31 @@ function! vimfiler#mappings#move_to_drive()"{{{
   endfor
 
   let l:key = tolower(input('Please input drive alphabet or other directory: ', '', 'dir'))
-  if l:key != '' && has_key(s:drives, l:key)
+  if l:key == ''
+    echo 'Canceled.'
+    return
+  elseif has_key(s:drives, l:key)
     call vimfiler#internal_commands#cd(s:drives[l:key])
   elseif isdirectory(expand(l:key))
     call vimfiler#internal_commands#cd(expand(l:key))
+  else
+    echo 'Invalid directory name.'
+    return
   endif
 endfunction"}}}
+function! vimfiler#mappings#jump_to_directory()"{{{
+  let l:dir = input('Jump to: ', '', 'dir')
+  if l:dir == ''
+    echo 'Canceled.'
+    return
+  elseif isdirectory(expand(l:dir))
+    call vimfiler#internal_commands#cd(expand(l:dir))
+  else
+    echo 'Invalid directory name.'
+    return
+  endif
+endfunction"}}}
+
 function! vimfiler#mappings#toggle_visible_dot_files()"{{{
   let b:vimfiler.is_visible_dot_files = !b:vimfiler.is_visible_dot_files
   call vimfiler#force_redraw_screen()
