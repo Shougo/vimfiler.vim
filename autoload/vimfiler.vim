@@ -63,7 +63,8 @@ nnoremap <silent> <Plug>(vimfiler_execute_shell_command)  :<C-u>call vimfiler#ma
 nnoremap <silent> <Plug>(vimfiler_exit)  :<C-u>call vimfiler#mappings#exit()<CR>
 nnoremap <silent> <Plug>(vimfiler_help)  :<C-u>nnoremap <buffer><CR>
 nnoremap <silent> <Plug>(vimfiler_preview_file)  :<C-u>call vimfiler#mappings#preview_file()<CR>
-nnoremap <silent> <Plug>(vimfiler_open_another_vimfiler)  :<C-u>call vimfiler#mappings#open_another_vimfiler()<CR>
+nnoremap <silent> <Plug>(vimfiler_sync_with_current_vimfiler)  :<C-u>call vimfiler#mappings#sync_with_current_vimfiler()<CR>
+nnoremap <silent> <Plug>(vimfiler_sync_with_another_vimfiler)  :<C-u>call vimfiler#mappings#sync_with_another_vimfiler()<CR>
 nnoremap <silent> <Plug>(vimfiler_print_filename)  :<C-u>echo vimfiler#get_filename(line('.'))<CR>
 nnoremap <silent> <Plug>(vimfiler_paste_from_clipboard)  :<C-u>call vimfiler#mappings#paste_from_clipboard()<CR>
 nnoremap <silent> <Plug>(vimfiler_set_current_mask)  :<C-u>call vimfiler#mappings#set_current_mask()<CR>
@@ -139,12 +140,12 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> E <Plug>(vimfiler_execute_external_filer)
     nmap <buffer> t <Plug>(vimfiler_execute_external_command)
     nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
-    nmap <buffer> gf <Plug>(vimfiler_split_create)
     nmap <buffer> q <Plug>(vimfiler_exit)
     nmap <buffer> ? <Plug>(vimfiler_help)
     nmap <buffer> p <Plug>(vimfiler_paste_from_clipboard)
     nmap <buffer> P <Plug>(vimfiler_preview_file)
-    nmap <buffer> o <Plug>(vimfiler_open_another_vimfiler)
+    nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
+    nmap <buffer> O <Plug>(vimfiler_sync_with_another_vimfiler)
     nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
     nmap <buffer> M <Plug>(vimfiler_set_current_mask)
   endif

@@ -122,16 +122,16 @@ function! vimfiler#internal_commands#cd(dir)"{{{
   endif
 
   " Save current pos.
-  let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = getpos('.')
+  let l:save_pos = getpos('.')
+  let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = l:save_pos
   let b:vimfiler.current_dir = l:dir
 
   " Redraw.
   call vimfiler#force_redraw_screen()
 
-  if has_key(b:vimfiler.directory_cursor_pos, l:dir)
-    " Restore cursor pos.
-    call setpos('.', b:vimfiler.directory_cursor_pos[l:dir])
-  endif
+  " Restore cursor pos.
+  call setpos('.', (has_key(b:vimfiler.directory_cursor_pos, l:dir) ?
+        \ b:vimfiler.directory_cursor_pos[l:dir] : l:save_pos))
 endfunction"}}}
 function! vimfiler#internal_commands#open(filename)"{{{
   if &termencoding != '' && &encoding != &termencoding

@@ -245,18 +245,29 @@ function! vimfiler#mappings#exit()"{{{
   endif
   execute 'bdelete!'. l:vimfiler_buf
 endfunction"}}}
-function! vimfiler#mappings#open_another_vimfiler()"{{{
+function! vimfiler#mappings#sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
   if winnr('$') == 1 || getwinvar(winnr('#'), '&filetype') !=# 'vimfiler'
     call vimfiler#create_filer(b:vimfiler.current_dir, 
           \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
     execute winnr('#') . 'wincmd w'
   else
-    " Change vimfiler directory.
+    " Change another vimfiler directory.
     let l:current_dir = b:vimfiler.current_dir
     execute winnr('#') . 'wincmd w'
     call vimfiler#internal_commands#cd(l:current_dir)
     execute winnr('#') . 'wincmd w'
+  endif
+endfunction"}}}
+function! vimfiler#mappings#sync_with_another_vimfiler()"{{{
+  " Search vimfiler window.
+  if winnr('$') == 1 || getwinvar(winnr('#'), '&filetype') !=# 'vimfiler'
+    call vimfiler#create_filer(b:vimfiler.current_dir, 
+          \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+    execute winnr('#') . 'wincmd w'
+  else
+    " Change current vimfiler directory.
+    call vimfiler#internal_commands#cd(getbufvar(winbufnr(winnr('#')), 'vimfiler').current_dir)
   endif
 endfunction"}}}
 
