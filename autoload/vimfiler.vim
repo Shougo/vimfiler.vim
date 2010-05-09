@@ -309,7 +309,7 @@ function! vimfiler#force_redraw_screen()"{{{
   if b:vimfiler.is_visible_dot_files
     for l:mask in split(b:vimfiler.current_mask)
       let l:current_files += filter(split(glob(b:vimfiler.current_dir . '.' . l:mask), '\n'), 
-            \'v:val != "." && v:val != ".."')
+            \'v:val !~ "[/\\\\]\.\.\\?$"')
     endfor
   endif
   
