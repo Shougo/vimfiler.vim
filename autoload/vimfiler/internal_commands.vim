@@ -143,15 +143,20 @@ function! vimfiler#internal_commands#open(filename)"{{{
 
   " Detect desktop environment.
   if vimfiler#iswin()
-    if executable('cmdproxy.exe') && exists('*vimproc#system')
-      " Use vimproc.
-      call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\""', a:filename))
+    if !isdirectory(a:filename) && executable('fiber.exe')
+      call vimfiler#system('fiber "' . l:filename . '"')
     else
       execute printf('silent ! start "" "%s"', l:filename)
     endif
+  elseif exists('$WINDIR')
+    " Cygwin.
+    call vimfiler#system('cygstart ''' . l:filename . '''')
+  elseif executable('xdg-open')
+    " Linux.
+    call vimfiler#system('xdg-open ''' . l:filename . '''')
   elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
     " KDE.
-    call system('kioclient exec ''' . l:filename . '''')
+    call vimfiler#system('kioclient exec ''' . l:filename . '''')
   elseif exists('$GNOME_DESKTOP_SESSION_ID')
     " GNOME.
     call system('gnome-open ''' . l:filename . ''' &')

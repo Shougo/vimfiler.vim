@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-05-13
+* Improved environment detect.
+
 2010-05-09
 * Deleted duplicated mapping.
 * Renamed open another vimfiler mapping.
