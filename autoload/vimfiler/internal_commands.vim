@@ -221,6 +221,8 @@ function! vimfiler#internal_commands#edit(filename)"{{{
   endif
   
   try
+    let l:vimfiler_save = b:vimfiler
+    
     if g:vimfiler_edit_command ==# 'edit_nicely'
       if winheight(0) > &winheight
         new `=a:filename`
@@ -230,13 +232,34 @@ function! vimfiler#internal_commands#edit(filename)"{{{
     else
       execute g:vimfiler_edit_command a:filename
     endif
+
+    let b:vimfiler = l:vimfiler_save
+
+    " Set local mappings.
+    nmap <buffer> <C-p>       <Plug>(vimfiler_open_previous_file)
+    nmap <buffer> <C-n>       <Plug>(vimfiler_open_next_file)
   catch
     echohl Error | echomsg v:errmsg | echohl None
   endtry
 endfunction"}}}
 function! vimfiler#internal_commands#pedit(filename)"{{{
   try
+    let l:vimfiler_save = b:vimfiler
+    
     execute g:vimfiler_pedit_command a:filename
+    
+    if g:vimfiler_pedit_command == 'pedit'
+      wincmd p
+      let b:vimfiler = l:vimfiler_save
+    endif
+
+    " Set local mappings.
+    nmap <buffer> <C-p>       <Plug>(vimfiler_open_previous_file)
+    nmap <buffer> <C-n>       <Plug>(vimfiler_open_next_file)
+    
+    if g:vimfiler_pedit_command == 'pedit'
+      wincmd p
+    endif
   catch
     echohl Error | echomsg v:errmsg | echohl None
   endtry

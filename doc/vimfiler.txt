@@ -133,6 +133,7 @@ CHANGELOG					*vimfiler-changelog*
 - Implemented restore from trashbox.
 - Fixed move bug in Windows.
 - Added <Plug>(vimfiler_grep) mapping.
+- Added <Plug>(vimfiler_open_next_file) and <Plug>(vimfiler_open_previous_file) mappings.
 
 2010-05-13
 * Improved environment detect.

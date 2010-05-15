@@ -79,6 +79,10 @@ nnoremap <silent> <Plug>(vimfiler_force_delete_file)  :<C-u>call vimfiler#mappin
 nnoremap <silent> <Plug>(vimfiler_rename_file)  :<C-u>call vimfiler#mappings#rename()<CR>
 nnoremap <silent> <Plug>(vimfiler_make_directory)  :<C-u>call vimfiler#mappings#make_directory()<CR>
 nnoremap <silent> <Plug>(vimfiler_new_file)  :<C-u>call vimfiler#mappings#new_file()<CR>
+
+" Edited file only.
+nnoremap <silent> <Plug>(vimfiler_open_previous_file)     :<C-u>call vimfiler#mappings#open_previous_file()<CR>
+nnoremap <silent> <Plug>(vimfiler_open_next_file)     :<C-u>call vimfiler#mappings#open_next_file()<CR>
 "}}}
 
 " User utility functions."{{{
@@ -613,7 +617,9 @@ function! vimfiler#smart_omit_filename(filename, length)"{{{
 endfunction"}}}
 function! vimfiler#get_filetype(filename)"{{{
   let l:ext = fnamemodify(a:filename, ':e')
-  if l:ext =~? 
+  if isdirectory(a:filename)
+    return '[DIR]'
+  elseif l:ext =~? 
         \'^\%(txt\|cfg\|ini\)$'
     " Text.
     return '[TXT]'

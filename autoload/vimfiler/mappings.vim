@@ -482,6 +482,73 @@ function! vimfiler#mappings#grep()"{{{
     if !empty(getqflist()) | copen | endif
   endif
 endfunction"}}}
+function! vimfiler#mappings#open_previous_file()"{{{
+  if !exists('b:vimfiler')
+    return
+  endif
+  
+  let i = 0
+  let l:bufname = fnamemodify(bufname('%'), ':p')
+  for l:file in b:vimfiler.current_files
+    if l:file.name == l:bufname
+      " Get next file.
+      let i -= 1
+      while i >= 0
+        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].name)
+        if l:filetype == '     ' || l:filetype == '[TXT]'
+          let l:vimfiler_save = b:vimfiler
+          edit `=b:vimfiler.current_files[i].name`
+          let b:vimfiler = l:vimfiler_save
+          
+          " Set local mappings.
+          nmap <buffer> <C-p>       <Plug>(vimfiler_open_previous_file)
+          nmap <buffer> <C-n>       <Plug>(vimfiler_open_next_file)
+          return
+        endif
+
+        let i -= 1
+      endwhile
+      
+      break
+    endif
+
+    let i += 1
+  endfor
+endfunction"}}}
+function! vimfiler#mappings#open_next_file()"{{{
+  if !exists('b:vimfiler')
+    return
+  endif
+  
+  let i = 0
+  let max = len(b:vimfiler.current_files)
+  let l:bufname = fnamemodify(bufname('%'), ':p')
+  for l:file in b:vimfiler.current_files
+    if l:file.name == l:bufname
+      " Get next file.
+      let i += 1
+      while i < max
+        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].name)
+        if l:filetype == '     ' || l:filetype == '[TXT]'
+          let l:vimfiler_save = b:vimfiler
+          edit `=b:vimfiler.current_files[i].name`
+          let b:vimfiler = l:vimfiler_save
+          
+          " Set local mappings.
+          nmap <buffer> <C-p>       <Plug>(vimfiler_open_previous_file)
+          nmap <buffer> <C-n>       <Plug>(vimfiler_open_next_file)
+          return
+        endif
+
+        let i += 1
+      endwhile
+
+      break
+    endif
+
+    let i += 1
+  endfor
+endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
