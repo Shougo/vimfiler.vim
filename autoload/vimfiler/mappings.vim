@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 May 2010
+" Last Modified: 15 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -133,52 +133,22 @@ function! vimfiler#mappings#execute_file()"{{{
   call vimfiler#internal_commands#open(l:filename)
 endfunction"}}}
 function! vimfiler#mappings#move_to_drive()"{{{
-  if !exists('s:drives')"{{{
-    " Initialize.
-    let s:drives = {}
+  let l:drives = vimfiler#get_drives()
 
-    if vimfiler#iswin()
-      " Detect drive.
-      for l:drive in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
-            \ 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-            \ 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-        if !empty(glob(l:drive . ':/'))
-          let s:drives[tolower(l:drive)] = l:drive . ':/'
-        endif
-      endfor
-    else
-      let l:drive_key = 'abcdefghijklmnopqrstuvwxyz'
-
-      if has('macunix') || system('uname') =~? '^darwin'
-        let l:drive_list = split(glob('/Volumes/*'), '\n')
-      else
-        let l:drive_list = split(glob('/mnt/*'), '\n') + split(glob('/media/*'), '\n')
-      endif
-      " Detect mounted drive.
-      let l:cnt = 0
-      for l:drive in l:drive_list[:25]
-        let s:drives[l:drive_key[l:cnt]] = l:drive
-
-        let l:cnt += 1
-      endfor
-    endif
-  endif"}}}
-
-  if empty(s:drives)
+  if empty(l:drives)
     " No drives.
     return
   endif
 
-  for [l:key, l:drive] in items(s:drives)
+  for [l:key, l:drive] in items(l:drives)
     echo printf('[%s] %s', l:key, l:drive)
   endfor
 
   let l:key = tolower(input('Please input drive alphabet or other directory: ', '', 'dir'))
   if l:key == ''
-    echo 'Canceled.'
     return
-  elseif has_key(s:drives, l:key)
-    call vimfiler#internal_commands#cd(s:drives[l:key])
+  elseif has_key(l:drives, l:key)
+    call vimfiler#internal_commands#cd(l:drives[l:key])
   elseif isdirectory(expand(l:key))
     call vimfiler#internal_commands#cd(expand(l:key))
   else
@@ -359,12 +329,16 @@ function! vimfiler#mappings#delete()"{{{
       call mkdir(g:vimfiler_trashbox_directory, 'p')
     endif
     
-    let l:trashdir = g:vimfiler_trashbox_directory . '/' . substitute(strftime('%Y%m%d/%X'), ':', '_', 'g')
+    let l:trashdir = s:encode_trash_path(b:vimfiler.current_dir[: -2])
     if !isdirectory(l:trashdir)
       call mkdir(l:trashdir, 'p')
     endif
+
+    if l:trashdir !~ '[/\\]$'
+      let l:trashdir .= '/'
+    endif
     
-    call vimfiler#internal_commands#mv(l:trashdir . '/', l:marked_files)
+    call vimfiler#internal_commands#mv(l:trashdir, l:marked_files)
     call vimfiler#force_redraw_all_vimfiler()
   else
     echo 'Canceled.'
@@ -459,6 +433,38 @@ function! vimfiler#mappings#set_current_mask()"{{{
   let b:vimfiler.current_mask = l:mask
   call vimfiler#force_redraw_screen()
 endfunction"}}}
+function! vimfiler#mappings#restore_from_trashbox()"{{{
+  if !vimfiler#head_match(b:vimfiler.current_dir, g:vimfiler_trashbox_directory . '/')
+    echo 'This command is valid in trashbox directory.'
+    return
+  elseif s:decode_trash_path(b:vimfiler.current_dir) == ''
+    echo 'Invalid restore path.'
+    return
+  endif
+  
+  let l:marked_files = vimfiler#get_marked_files()
+  if empty(l:marked_files)
+    " Mark current line.
+    call vimfiler#mappings#toggle_mark_current_line()
+    return
+  endif
+  let l:yesno = vimfiler#input_yesno('Restore marked files in trashbox?')
+
+  if l:yesno =~? 'y\%[es]'
+    " Execute restore.
+    let l:restoredir = fnamemodify(s:decode_trash_path(l:marked_files[0]), ':h')
+    if l:restoredir !~ '[/\\]$'
+      let l:restoredir .= '/'
+    endif
+
+    echomsg s:decode_trash_path(l:marked_files[0])
+    echomsg l:restoredir
+    call vimfiler#internal_commands#mv(l:restoredir, l:marked_files)
+    call vimfiler#force_redraw_all_vimfiler()
+  else
+    echo 'Canceled.'
+  endif
+endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
@@ -487,5 +493,15 @@ function! s:custom_alternate_buffer()"{{{
   endif
   
   call vimfiler#force_redraw_all_vimfiler()
+endfunction"}}}
+
+function! s:encode_trash_path(path)"{{{
+  return printf('%s/%s/%s', g:vimfiler_trashbox_directory,
+        \ substitute(strftime('%Y%m%d/%X'), ':', '_', 'g'),
+        \ substitute(substitute(a:path, ':[/\\]\?', '++', 'g'), '[/\\]', '=', 'g'))
+endfunction"}}}
+function! s:decode_trash_path(path)"{{{
+  let l:path = matchstr(a:path[len(g:vimfiler_trashbox_directory)+1 :], '^[^/]\+/[^/]\+/\zs.*')
+  return substitute(substitute(l:path, '++/\?', ':/', 'g'), '+/\?', '/', 'g')
 endfunction"}}}
 " vim: foldmethod=marker

@@ -26,7 +26,17 @@
 
 function! vimfiler#internal_commands#mv(dest_dir, src_files)"{{{
   for l:src in a:src_files
-    call rename(l:src, a:dest_dir . fnamemodify(l:src, ':t'))
+    if isdirectory(l:src) && vimfiler#iswin() && l:src[0] !=? a:dest_dir[0]
+      " rename() doesn't supported directory move in Windows.
+      if g:vimfiler_external_copy_directory_command == ''
+        echohl Error | echoerr "Directory move is not supported in this platform. Please install cp.exe." | echohl None
+      else
+        call s:external('copy_directory', a:dest_dir, [l:src])
+        call s:external('delete', '', [l:src])
+      endif
+    else
+      call rename(l:src, a:dest_dir . fnamemodify(l:src, ':t'))
+    endif
   endfor
 endfunction"}}}
 function! vimfiler#internal_commands#cp(dest_dir, src_files)"{{{
@@ -68,8 +78,6 @@ function! s:external(command, dest_dir, src_files)"{{{
       else
         let l:output = vimfiler#system(l:command_line)
       endif
-      
-      echon l:output
     endfor
   else
     let l:command_line = substitute(l:command_line, 
@@ -89,7 +97,7 @@ endfunction"}}}
 
 function! vimfiler#internal_commands#cd(dir)"{{{
   if a:dir == '..'
-    if b:vimfiler.current_dir =~ '^\a\+:$\|^/$'
+    if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
       " Select drive.
       call vimfiler#mappings#move_to_drive()
       return

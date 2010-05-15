@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 May 2010
+" Last Modified: 15 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -69,6 +69,7 @@ nnoremap <silent> <Plug>(vimfiler_sync_with_another_vimfiler)  :<C-u>call vimfil
 nnoremap <silent> <Plug>(vimfiler_print_filename)  :<C-u>echo vimfiler#get_filename(line('.'))<CR>
 nnoremap <silent> <Plug>(vimfiler_paste_from_clipboard)  :<C-u>call vimfiler#mappings#paste_from_clipboard()<CR>
 nnoremap <silent> <Plug>(vimfiler_set_current_mask)  :<C-u>call vimfiler#mappings#set_current_mask()<CR>
+nnoremap <silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call vimfiler#mappings#restore_from_trashbox()<CR>
 
 nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call vimfiler#mappings#copy()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call vimfiler#mappings#move()<CR>
@@ -114,6 +115,9 @@ function! vimfiler#default_settings()"{{{
     " Delete.
     nmap <buffer> d <Plug>(vimfiler_delete_file)
     nmap <buffer> D <Plug>(vimfiler_force_delete_file)
+    
+    " Restore.
+    nmap <buffer> u <Plug>(vimfiler_restore_from_trashbox)
     
     " Rename.
     nmap <buffer> r <Plug>(vimfiler_rename_file)
@@ -671,7 +675,49 @@ function! vimfiler#get_datemark(filename)"{{{
     return '~'
   endif
 endfunction"}}}
+function! vimfiler#head_match(checkstr, headstr)"{{{
+  return a:headstr == '' || a:checkstr ==# a:headstr
+        \|| a:checkstr[: len(a:headstr)-1] ==# a:headstr
+endfunction"}}}
+
 "}}}
+
+" Detect drives.
+function! vimfiler#detect_drives()"{{{
+  " Initialize.
+  let s:drives = {}
+
+  if vimfiler#iswin()
+    " Detect drive.
+    for l:drive in g:vimfiler_detect_drives
+      if isdirectory(l:drive . ':/')
+        let s:drives[tolower(l:drive)] = l:drive . ':/'
+      endif
+    endfor
+  else
+    let l:drive_key = 'abcdefghijklmnopqrstuvwxyz'
+
+    if has('macunix') || system('uname') =~? '^darwin'
+      let l:drive_list = split(glob('/Volumes/*'), '\n')
+    else
+      let l:drive_list = split(glob('/mnt/*'), '\n') + split(glob('/media/*'), '\n')
+    endif
+    " Detect mounted drive.
+    let l:cnt = 0
+    for l:drive in l:drive_list[:25]
+      let s:drives[l:drive_key[l:cnt]] = l:drive
+
+      let l:cnt += 1
+    endfor
+  endif
+endfunction"}}}
+function! vimfiler#get_drives()"{{{
+  if !exists('s:drives')
+    call vimfiler#detect_drives()
+  endif
+
+  return s:drives
+endfunction"}}}
 
 " Event functions.
 function! s:event_bufwin_enter()"{{{

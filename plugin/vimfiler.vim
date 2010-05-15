@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 May 2010
+" Last Modified: 15 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,22 +60,27 @@ endif
 if !exists('g:vimfiler_trashbox_directory')
   let g:vimfiler_trashbox_directory = expand('~/.vimfiler_trashbox')
 endif
+if !exists('g:vimfiler_detect_drives')
+  let g:vimfiler_detect_drives = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
+            \ 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+            \ 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+endif
 if !exists('g:vimfiler_external_delete_command')
-  if s:iswin
+  if s:iswin && !executable('rm')
     let g:vimfiler_external_delete_command = 'system rmdir /Q /S $srcs'
   else
     let g:vimfiler_external_delete_command = 'rm -r $srcs'
   endif
 endif
 if !exists('g:vimfiler_external_copy_file_command')
-  if s:iswin
+  if s:iswin && !executable('cp')
     let g:vimfiler_external_copy_file_command = 'system copy $src $dest'
   else
     let g:vimfiler_external_copy_file_command = 'cp $src $dest'
   endif
 endif
 if !exists('g:vimfiler_external_copy_directory_command')
-  if s:iswin
+  if s:iswin && !executable('cp')
     " Can't support.
     let g:vimfiler_external_copy_directory_command = ''
   else
@@ -83,8 +88,8 @@ if !exists('g:vimfiler_external_copy_directory_command')
   endif
 endif
 if !exists('g:vimfiler_external_move_command')
-  if s:iswin
-    let g:vimfiler_external_move_command = 'system move $src $dest'
+  if s:iswin && !executable('mv')
+    let g:vimfiler_external_move_command = 'move /Y $srcs $dest'
   else
     let g:vimfiler_external_move_command = 'mv $srcs $dest'
   endif
@@ -102,6 +107,7 @@ nnoremap <silent> <Plug>(vimfiler_simple)  :<C-u>call vimfiler#create_filer('', 
 command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(<q-args>, [])
 command! -nargs=? -complete=dir VimFilerSimple call vimfiler#create_filer(<q-args>, ['simple', 'split'])
 command! -nargs=? -complete=dir VimFilerCreate call vimfiler#create_filer(<q-args>, [])
+command! VimFilerDetectDrives call vimfiler#detect_drives()
 
 if g:vimfiler_as_default_explorer
   " Disable netrw.
