@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 May 2010
+" Last Modified: 16 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,6 +56,12 @@ if !exists('g:vimfiler_min_filename_width')
 endif
 if !exists('g:vimfiler_max_filename_width')
   let g:vimfiler_max_filename_width = 40
+endif
+if !exists('g:vimfiler_sort_type')
+  let g:vimfiler_sort_type = 'none'
+endif
+if !exists('g:vimfiler_directory_display_top')
+  let g:vimfiler_directory_display_top = 1
 endif
 if !exists('g:vimfiler_trashbox_directory')
   let g:vimfiler_trashbox_directory = expand('~/.vimfiler_trashbox')

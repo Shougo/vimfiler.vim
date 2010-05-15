@@ -126,6 +126,10 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-05-16
+- Added g:vimfiler_sort_type and g:vimfiler_directory_display_top options.
+- Implemented sort.
+
 2010-05-15
 - Improved cygwin detect.
 - Added VimFilerDetectDrives command.

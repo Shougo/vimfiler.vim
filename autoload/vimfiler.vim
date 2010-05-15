@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 May 2010
+" Last Modified: 16 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,6 +71,7 @@ nnoremap <silent> <Plug>(vimfiler_paste_from_clipboard)  :<C-u>call vimfiler#map
 nnoremap <silent> <Plug>(vimfiler_set_current_mask)  :<C-u>call vimfiler#mappings#set_current_mask()<CR>
 nnoremap <silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call vimfiler#mappings#restore_from_trashbox()<CR>
 nnoremap <silent> <Plug>(vimfiler_grep)  :<C-u>call vimfiler#mappings#grep()<CR>
+nnoremap <silent> <Plug>(vimfiler_select_sort_type)  :<C-u>call vimfiler#mappings#select_sort_type()<CR>
 
 nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call vimfiler#mappings#copy()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call vimfiler#mappings#move()<CR>
@@ -160,6 +161,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
     nmap <buffer> M <Plug>(vimfiler_set_current_mask)
     nmap <buffer> gr <Plug>(vimfiler_grep)
+    nmap <buffer> s <Plug>(vimfiler_select_sort_type)
   endif
   "}}}
 endfunction"}}}
@@ -225,6 +227,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   let b:vimfiler.directory_cursor_pos = {}
   " Set mask.
   let b:vimfiler.current_mask = '*'
+  let b:vimfiler.sort_type = g:vimfiler_sort_type
 
   call vimfiler#force_redraw_screen()
 endfunction"}}}
@@ -323,10 +326,11 @@ function! vimfiler#force_redraw_screen()"{{{
     endfor
   endif
   
-  let b:vimfiler.current_files = []
+  let l:dirs = []
+  let l:files = []
   for l:file in l:current_files
-    let l:list = isdirectory(l:file)?
-          \ {
+    if isdirectory(l:file)
+      call add(l:dirs, {
           \ 'name' : l:file, 
           \ 'extension' : '', 
           \ 'type' : '[DIR]', 
@@ -334,7 +338,9 @@ function! vimfiler#force_redraw_screen()"{{{
           \ 'datemark' : vimfiler#get_datemark(l:file), 
           \ 'time' : getftime(l:file), 
           \ 'is_directory' : 1, 'is_marked' : 0, 
-          \ } : {
+          \ })
+    else
+      call add(l:files, {
           \ 'name' : l:file, 
           \ 'extension' : fnamemodify(l:file, ':e'), 
           \ 'type' : vimfiler#get_filetype(l:file), 
@@ -342,10 +348,15 @@ function! vimfiler#force_redraw_screen()"{{{
           \ 'datemark' : vimfiler#get_datemark(l:file), 
           \ 'time' : getftime(l:file), 
           \ 'is_directory' : 0, 'is_marked' : 0, 
-          \ }
-     
-    call add(b:vimfiler.current_files, l:list)
+          \ })
+    endif
   endfor
+  if g:vimfiler_directory_display_top
+    let b:vimfiler.current_files = vimfiler#sort(l:dirs, b:vimfiler.sort_type)
+          \+ vimfiler#sort(l:files, b:vimfiler.sort_type)
+  else
+    let b:vimfiler.current_files = vimfiler#sort(l:files + l:dirs, b:vimfiler.sort_type)
+  endif
 
   call vimfiler#redraw_screen()
 endfunction"}}}
@@ -687,7 +698,6 @@ function! vimfiler#head_match(checkstr, headstr)"{{{
   return a:headstr == '' || a:checkstr ==# a:headstr
         \|| a:checkstr[: len(a:headstr)-1] ==# a:headstr
 endfunction"}}}
-
 "}}}
 
 " Detect drives.
@@ -725,6 +735,46 @@ function! vimfiler#get_drives()"{{{
   endif
 
   return s:drives
+endfunction"}}}
+
+" Sort.
+function! vimfiler#sort(files, type)"{{{
+  if a:type =~? '^n\%[one]$'
+    " Ignore.
+    let l:files = a:files
+  elseif a:type =~? '^s\%[ize]$'
+    let l:files = sort(a:files, 's:compare_size')
+  elseif a:type =~? '^e\%[xtension]$'
+    let l:files = sort(a:files, 's:compare_extension')
+  elseif a:type =~? '^f\%[ilename]$'
+    let l:files = sort(a:files, 's:compare_name')
+  elseif a:type =~? '^t\%[ime]$'
+    let l:files = sort(a:files, 's:compare_time')
+  elseif a:type =~? '^m\%[anual]$'
+    " Not implemented.
+    let l:files = a:files
+  else
+    throw 'Invalid sort type.'
+  endif
+
+  if a:type =~ '^\u'
+    " Reverse order.
+    let l:files = reverse(l:files)
+  endif
+
+  return l:files
+endfunction"}}}
+function! s:compare_size(i1, i2)"{{{
+  return a:i1.size > a:i2.size ? 1 : a:i1.size == a:i2.size ? 0 : -1
+endfunction"}}}
+function! s:compare_extension(i1, i2)"{{{
+  return a:i1.extension > a:i2.extension ? 1 : a:i1.extension == a:i2.extension ? 0 : -1
+endfunction"}}}
+function! s:compare_name(i1, i2)"{{{
+  return a:i1.name > a:i2.name ? 1 : a:i1.name == a:i2.name ? 0 : -1
+endfunction"}}}
+function! s:compare_time(i1, i2)"{{{
+  return a:i1.time > a:i2.time ? 1 : a:i1.time == a:i2.time ? 0 : -1
 endfunction"}}}
 
 " Event functions.

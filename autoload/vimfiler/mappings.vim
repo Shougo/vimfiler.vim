@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 May 2010
+" Last Modified: 16 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -548,6 +548,22 @@ function! vimfiler#mappings#open_next_file()"{{{
 
     let i += 1
   endfor
+endfunction"}}}
+function! vimfiler#mappings#select_sort_type()"{{{
+  for l:type in ['n[one]', 's[ize]', 'e[xtension]', 'f[ilename]', 't[ime]', 'm[anual]']
+    echo l:type
+  endfor
+  let l:sort_type = input('Select sort type(Upper case is descending order): ', b:vimfiler.sort_type)
+
+  if l:sort_type == ''
+    echo 'Canceled.'
+  elseif l:sort_type =~? 
+        \'^\%(n\%[one]\|s\%[ize]\|e\%[xtension]\|f\%[ilename]\|t\%[ime]\|m\%[anual]\)$'
+    let b:vimfiler.sort_type = l:sort_type
+    call vimfiler#force_redraw_screen()
+  else
+    echoerr 'Invalid sort type.'
+  endif
 endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{
