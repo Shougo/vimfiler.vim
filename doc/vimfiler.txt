@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-05-15
+- Improved cygwin detect.
+
 2010-05-13
 * Improved environment detect.
 

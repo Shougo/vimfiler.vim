@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 07 May 2010
+" Last Modified: 15 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -148,7 +148,7 @@ function! vimfiler#internal_commands#open(filename)"{{{
     else
       execute printf('silent ! start "" "%s"', l:filename)
     endif
-  elseif exists('$WINDIR')
+  elseif has('win32unix')
     " Cygwin.
     call vimfiler#system('cygstart ''' . l:filename . '''')
   elseif executable('xdg-open')
