@@ -70,6 +70,7 @@ nnoremap <silent> <Plug>(vimfiler_print_filename)  :<C-u>echo vimfiler#get_filen
 nnoremap <silent> <Plug>(vimfiler_paste_from_clipboard)  :<C-u>call vimfiler#mappings#paste_from_clipboard()<CR>
 nnoremap <silent> <Plug>(vimfiler_set_current_mask)  :<C-u>call vimfiler#mappings#set_current_mask()<CR>
 nnoremap <silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call vimfiler#mappings#restore_from_trashbox()<CR>
+nnoremap <silent> <Plug>(vimfiler_grep)  :<C-u>call vimfiler#mappings#grep()<CR>
 
 nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call vimfiler#mappings#copy()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call vimfiler#mappings#move()<CR>
@@ -154,6 +155,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> O <Plug>(vimfiler_sync_with_another_vimfiler)
     nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
     nmap <buffer> M <Plug>(vimfiler_set_current_mask)
+    nmap <buffer> gr <Plug>(vimfiler_grep)
   endif
   "}}}
 endfunction"}}}

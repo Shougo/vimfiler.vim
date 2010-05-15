@@ -132,6 +132,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added g:vimfiler_detect_drives option.
 - Implemented restore from trashbox.
 - Fixed move bug in Windows.
+- Added <Plug>(vimfiler_grep) mapping.
 
 2010-05-13
 * Improved environment detect.

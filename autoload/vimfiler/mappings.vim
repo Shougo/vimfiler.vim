@@ -465,6 +465,23 @@ function! vimfiler#mappings#restore_from_trashbox()"{{{
     echo 'Canceled.'
   endif
 endfunction"}}}
+function! vimfiler#mappings#grep()"{{{
+  let l:marked_files = vimfiler#get_marked_files()
+  if empty(l:marked_files)
+    let l:target = '**/*'
+  else
+    let l:target = join(map(l:marked_files, 'isdirectory(v:val)? v:val."/*" : v:val'))
+  endif
+
+  let l:pattern = input('Input search pattern: ')
+  if l:pattern == ''
+    echo 'Canceled.'
+  else
+    call vimfiler#mappings#clear_mark_all_lines()
+    silent! execute 'vimgrep' '/' . escape(l:pattern, '\&/') . '/j ' . l:target
+    if !empty(getqflist()) | copen | endif
+  endif
+endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
@@ -502,6 +519,6 @@ function! s:encode_trash_path(path)"{{{
 endfunction"}}}
 function! s:decode_trash_path(path)"{{{
   let l:path = matchstr(a:path[len(g:vimfiler_trashbox_directory)+1 :], '^[^/]\+/[^/]\+/\zs.*')
-  return substitute(substitute(l:path, '++/\?', ':/', 'g'), '+/\?', '/', 'g')
+  return substitute(substitute(l:path, '++/\?', ':/', 'g'), '/\?+/\?', '/', 'g')
 endfunction"}}}
 " vim: foldmethod=marker

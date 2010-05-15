@@ -25,9 +25,10 @@
 "=============================================================================
 
 function! vimfiler#internal_commands#mv(dest_dir, src_files)"{{{
+  let l:dest_drive = matchstr(a:dest_dir, '^\a\+\ze:')
   for l:src in a:src_files
-    if isdirectory(l:src) && vimfiler#iswin() && l:src[0] !=? a:dest_dir[0]
-      " rename() doesn't supported directory move in Windows.
+    if isdirectory(l:src) && vimfiler#iswin() && matchstr(l:src, '^\a\+\ze:') !=? l:dest_drive
+      " rename() doesn't supported directory over drive move in Windows.
       if g:vimfiler_external_copy_directory_command == ''
         echohl Error | echoerr "Directory move is not supported in this platform. Please install cp.exe." | echohl None
       else
