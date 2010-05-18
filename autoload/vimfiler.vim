@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 May 2010
+" Last Modified: 18 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -662,25 +662,37 @@ function! vimfiler#get_filetype(filename)"{{{
 endfunction"}}}
 function! vimfiler#get_filesize(size)"{{{
   " Get human file size.
-  if a:size >= 1000000000
+  if a:size < 0
+    " Above 2GB.
+    let l:suffix = 'G'
+    let l:mega = (a:size+1073741824+1073741824) / 1024 / 1024
+    let l:float = (l:mega%1024)*100/1024
+    let l:pattern = printf('%d.%d', 2+l:mega/1024, l:float)
+  elseif a:size >= 1073741824
     " GB.
     let l:suffix = 'G'
-    let l:pattern = printf('%d.%09d', a:size / 1000000000, a:size % 1000000000)
-  elseif a:size >= 1000000
+    let l:mega = a:size / 1024 / 1024
+    let l:float = (l:mega%1024)*100/1024
+    let l:pattern = printf('%d.%d', l:mega/1024, l:float)
+  elseif a:size >= 1048576
     " MB.
     let l:suffix = 'M'
-    let l:pattern = printf('%d.%06d', a:size / 1000000, a:size % 1000000)
-  elseif a:size >= 1000
+    let l:kilo = a:size / 1024
+    let l:float = (l:kilo%1024)*100/1024
+    let l:pattern = printf('%d.%d', l:kilo/1024, l:float)
+  elseif a:size >= 1024
     " KB.
     let l:suffix = 'K'
-    let l:pattern = printf('%d.%03d', a:size / 1000, a:size % 1000)
+    let l:float = (a:size%1024)*100/1024
+    let l:pattern = printf('%d.%d', a:size/1024, l:float)
   else
     " B.
     let l:suffix = 'B'
-    let l:pattern = printf('%d', a:size)
+    let l:float = ''
+    let l:pattern = printf('%6d', a:size)
   endif
 
-  return printf('%6.6s%s', l:pattern, l:suffix)
+  return printf('%s%s%s', l:pattern[:5], repeat(' ', 6-len(l:pattern)), l:suffix)
 endfunction"}}}
 function! vimfiler#get_datemark(filename)"{{{
   let l:time = localtime() - getftime(a:filename)
