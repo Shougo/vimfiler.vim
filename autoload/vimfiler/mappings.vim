@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 May 2010
+" Last Modified: 18 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -236,27 +236,29 @@ function! vimfiler#mappings#exit()"{{{
 endfunction"}}}
 function! vimfiler#mappings#sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
-  if winnr('$') == 1 || getwinvar(winnr('#'), '&filetype') !=# 'vimfiler'
+  if !vimfiler#exists_another_vimfiler()
     call vimfiler#create_filer(b:vimfiler.current_dir, 
           \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+    let s:last_vimfiler_bufnr = bufnr('%')
     execute winnr('#') . 'wincmd w'
   else
     " Change another vimfiler directory.
     let l:current_dir = b:vimfiler.current_dir
-    execute winnr('#') . 'wincmd w'
+    execute vimfiler#winnr_another_vimfiler() . 'wincmd w'
     call vimfiler#internal_commands#cd(l:current_dir)
     execute winnr('#') . 'wincmd w'
   endif
 endfunction"}}}
 function! vimfiler#mappings#sync_with_another_vimfiler()"{{{
   " Search vimfiler window.
-  if winnr('$') == 1 || getwinvar(winnr('#'), '&filetype') !=# 'vimfiler'
+  if  !vimfiler#exists_another_vimfiler()
     call vimfiler#create_filer(b:vimfiler.current_dir, 
           \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+    let s:last_vimfiler_bufnr = bufnr('%')
     execute winnr('#') . 'wincmd w'
   else
     " Change current vimfiler directory.
-    call vimfiler#internal_commands#cd(getbufvar(winbufnr(winnr('#')), 'vimfiler').current_dir)
+    call vimfiler#internal_commands#cd(vimfiler#get_another_vimfiler().current_dir)
   endif
 endfunction"}}}
 
@@ -268,9 +270,7 @@ function! vimfiler#mappings#move()"{{{
     return
   endif
 
-  " Get destination directory.
-  let l:dest_dir = vimfiler#get_alternate_directory()
-  if l:dest_dir == ''
+  if !vimfiler#exists_another_vimfiler()
     " Copy to clipboard.
     let b:vimfiler.clipboard = {
           \ 'command' : 'move', 'files' : l:marked_files
@@ -279,6 +279,9 @@ function! vimfiler#mappings#move()"{{{
     echo 'Saved to clipboard.'
     return
   endif
+  
+  " Get destination directory.
+  let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
 
   let l:yesno = vimfiler#input_yesno('Really move marked files?')
 
@@ -297,9 +300,7 @@ function! vimfiler#mappings#copy()"{{{
     return
   endif
 
-  " Get destination directory.
-  let l:dest_dir = vimfiler#get_alternate_directory()
-  if l:dest_dir == ''
+  if !vimfiler#exists_another_vimfiler()
     " Copy to clipboard.
     let b:vimfiler.clipboard = {
           \ 'command' : 'copy', 'files' : l:marked_files
@@ -308,6 +309,9 @@ function! vimfiler#mappings#copy()"{{{
     echo 'Saved to clipboard.'
     return
   endif
+  
+  " Get destination directory.
+  let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
 
   " Execute copy.
   call vimfiler#internal_commands#cp(l:dest_dir . '/', l:marked_files)
@@ -499,10 +503,6 @@ function! vimfiler#mappings#open_previous_file()"{{{
           let l:vimfiler_save = b:vimfiler
           edit `=b:vimfiler.current_files[i].name`
           let b:vimfiler = l:vimfiler_save
-          
-          " Set local mappings.
-          nmap <buffer> <C-p>       <Plug>(vimfiler_open_previous_file)
-          nmap <buffer> <C-n>       <Plug>(vimfiler_open_next_file)
           return
         endif
 
@@ -533,10 +533,6 @@ function! vimfiler#mappings#open_next_file()"{{{
           let l:vimfiler_save = b:vimfiler
           edit `=b:vimfiler.current_files[i].name`
           let b:vimfiler = l:vimfiler_save
-          
-          " Set local mappings.
-          nmap <buffer> <C-p>       <Plug>(vimfiler_open_previous_file)
-          nmap <buffer> <C-n>       <Plug>(vimfiler_open_next_file)
           return
         endif
 
@@ -553,7 +549,7 @@ function! vimfiler#mappings#select_sort_type()"{{{
   for l:type in ['n[one]', 's[ize]', 'e[xtension]', 'f[ilename]', 't[ime]', 'm[anual]']
     echo l:type
   endfor
-  let l:sort_type = input('Select sort type(Upper case is descending order): ', b:vimfiler.sort_type)
+  let l:sort_type = input(printf('Select sort type(Upper case is descending order) %s -> ', b:vimfiler.sort_type), '')
 
   if l:sort_type == ''
     echo 'Canceled.'

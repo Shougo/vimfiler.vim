@@ -28,17 +28,13 @@
 " Check vimproc.
 let s:is_vimproc = exists('*vimproc#system')
 
+let s:last_vimfiler_bufnr = bufnr('%')
+
 " Global options definition."{{{
 if !exists('g:vimfiler_execute_file_list')
   let g:vimfiler_execute_file_list = {}
 endif
 "}}}
-
-augroup VimFilerAutoCmd"{{{
-  autocmd!
-  autocmd BufWinEnter \[*]vimfiler call s:event_bufwin_enter()
-  autocmd VimResized \[*]vimfiler call vimfiler#redraw_all_vimfiler()
-augroup end"}}}
 
 " Plugin keymappings"{{{
 nnoremap <silent> <Plug>(vimfiler_loop_cursor_down)  :<C-u>call vimfiler#mappings#loop_cursor_down()<CR>
@@ -80,11 +76,11 @@ nnoremap <silent> <Plug>(vimfiler_force_delete_file)  :<C-u>call vimfiler#mappin
 nnoremap <silent> <Plug>(vimfiler_rename_file)  :<C-u>call vimfiler#mappings#rename()<CR>
 nnoremap <silent> <Plug>(vimfiler_make_directory)  :<C-u>call vimfiler#mappings#make_directory()<CR>
 nnoremap <silent> <Plug>(vimfiler_new_file)  :<C-u>call vimfiler#mappings#new_file()<CR>
-
-" Edited file only.
-nnoremap <silent> <Plug>(vimfiler_open_previous_file)     :<C-u>call vimfiler#mappings#open_previous_file()<CR>
-nnoremap <silent> <Plug>(vimfiler_open_next_file)     :<C-u>call vimfiler#mappings#open_next_file()<CR>
 "}}}
+
+augroup vimfiler"{{{
+  autocmd!
+augroup end"}}}
 
 " User utility functions."{{{
 function! vimfiler#default_settings()"{{{
@@ -98,6 +94,13 @@ function! vimfiler#default_settings()"{{{
     setlocal noautochdir
   endif
   let &l:winwidth = g:vimfiler_min_filename_width + 10
+
+  " Set autocommands.
+  augroup vimfiler"{{{
+    autocmd WinEnter <buffer> call s:event_bufwin_enter()
+    autocmd WinLeave <buffer> let s:last_vimfiler_bufnr = expand('<afile>')
+    autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
+  augroup end"}}}
 
   " Define key-mappings."{{{
   if !(exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings)
@@ -145,7 +148,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
     nmap <buffer> $ <Plug>(vimfiler_move_to_trashbox_directory)
     nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
-    nmap <buffer> V <Plug>(vimfiler_execute_new_gvim)
+    nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
     nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
     nmap <buffer> H <Plug>(vimfiler_popup_shell)
     nmap <buffer> e <Plug>(vimfiler_edit_file)
@@ -155,7 +158,7 @@ function! vimfiler#default_settings()"{{{
     nmap <buffer> q <Plug>(vimfiler_exit)
     nmap <buffer> ? <Plug>(vimfiler_help)
     nmap <buffer> p <Plug>(vimfiler_paste_from_clipboard)
-    nmap <buffer> P <Plug>(vimfiler_preview_file)
+    nmap <buffer> v <Plug>(vimfiler_preview_file)
     nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
     nmap <buffer> O <Plug>(vimfiler_sync_with_another_vimfiler)
     nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
@@ -538,13 +541,6 @@ function! vimfiler#input_yesno(message)"{{{
 
   return l:yesno
 endfunction"}}}
-function! vimfiler#get_alternate_directory()"{{{
-  if winnr('$') == 1 || getbufvar(bufnr('#'), '&filetype') != 'vimfiler'
-    return ''
-  else
-    return getbufvar(bufnr('#'), 'vimfiler').current_dir
-  endif
-endfunction"}}}
 function! vimfiler#force_redraw_all_vimfiler()"{{{
   let l:current_nr = winnr()
   let l:bufnr = 1
@@ -709,6 +705,23 @@ endfunction"}}}
 function! vimfiler#head_match(checkstr, headstr)"{{{
   return a:headstr == '' || a:checkstr ==# a:headstr
         \|| a:checkstr[: len(a:headstr)-1] ==# a:headstr
+endfunction"}}}
+function! vimfiler#exists_another_vimfiler()"{{{
+  let l:winnr = bufwinnr(s:last_vimfiler_bufnr)
+  echomsg l:winnr
+  return l:winnr > 0 && winnr() != l:winnr && getwinvar(l:winnr, '&filetype') ==# 'vimfiler'
+endfunction"}}}
+function! vimfiler#bufnr_another_vimfiler()"{{{
+  return vimfiler#exists_another_vimfiler() ?
+        \ s:last_vimfiler_bufnr : -1
+endfunction"}}}
+function! vimfiler#winnr_another_vimfiler()"{{{
+  return vimfiler#exists_another_vimfiler() ?
+        \ bufwinnr(s:last_vimfiler_bufnr) : -1
+endfunction"}}}
+function! vimfiler#get_another_vimfiler()"{{{
+  return vimfiler#exists_another_vimfiler() ?
+        \ getbufvar(s:last_vimfiler_bufnr), 'vimfiler') : ''
 endfunction"}}}
 "}}}
 

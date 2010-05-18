@@ -128,6 +128,10 @@ CHANGELOG					*vimfiler-changelog*
 
 2010-05-18
 - Fixed file size calculation.
+- Changed some default mappings.
+- Deleted <Plug>(vimfiler_open_next_file) and <Plug>(vimfiler_open_previous_file) default mappings.
+- Improved sort.
+- Improved another vimfiler detect.
 
 2010-05-16
 - Added g:vimfiler_sort_type and g:vimfiler_directory_display_top options.
