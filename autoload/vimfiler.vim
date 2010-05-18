@@ -97,8 +97,8 @@ function! vimfiler#default_settings()"{{{
 
   " Set autocommands.
   augroup vimfiler"{{{
-    autocmd WinEnter <buffer> call s:event_bufwin_enter()
-    autocmd WinLeave <buffer> let s:last_vimfiler_bufnr = expand('<afile>')
+    autocmd BufWinEnter <buffer> call s:event_bufwin_enter()
+    autocmd WinLeave <buffer> call s:event_win_leave()
     autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
 
@@ -708,7 +708,6 @@ function! vimfiler#head_match(checkstr, headstr)"{{{
 endfunction"}}}
 function! vimfiler#exists_another_vimfiler()"{{{
   let l:winnr = bufwinnr(s:last_vimfiler_bufnr)
-  echomsg l:winnr
   return l:winnr > 0 && winnr() != l:winnr && getwinvar(l:winnr, '&filetype') ==# 'vimfiler'
 endfunction"}}}
 function! vimfiler#bufnr_another_vimfiler()"{{{
@@ -804,12 +803,11 @@ endfunction"}}}
 
 " Event functions.
 function! s:event_bufwin_enter()"{{{
-  if !exists('b:vimfiler')
-    return
-  endif
-
   lcd `=b:vimfiler.current_dir`
   call vimfiler#redraw_screen()
+endfunction"}}}
+function! s:event_win_leave()"{{{
+  let s:last_vimfiler_bufnr = bufnr('%')
 endfunction"}}}
 
 " vim: foldmethod=marker
