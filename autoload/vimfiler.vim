@@ -98,7 +98,7 @@ function! vimfiler#default_settings()"{{{
   " Set autocommands.
   augroup vimfiler"{{{
     autocmd BufWinEnter <buffer> call s:event_bufwin_enter()
-    autocmd WinLeave <buffer> call s:event_win_leave()
+    autocmd WinLeave,BufWinLeave <buffer> call s:event_win_leave(expand('<afile>'))
     autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
 
@@ -806,7 +806,7 @@ function! s:event_bufwin_enter()"{{{
   lcd `=b:vimfiler.current_dir`
   call vimfiler#redraw_screen()
 endfunction"}}}
-function! s:event_win_leave()"{{{
+function! s:event_bufwin_leave()"{{{
   let s:last_vimfiler_bufnr = bufnr('%')
 endfunction"}}}
 
