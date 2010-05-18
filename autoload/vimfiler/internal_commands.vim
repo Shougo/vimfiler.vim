@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 15 May 2010
+" Last Modified: 18 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -234,10 +234,6 @@ function! vimfiler#internal_commands#edit(filename)"{{{
     endif
 
     let b:vimfiler = l:vimfiler_save
-
-    " Set local mappings.
-    nmap <buffer> <C-p>       <Plug>(vimfiler_open_previous_file)
-    nmap <buffer> <C-n>       <Plug>(vimfiler_open_next_file)
   catch
     echohl Error | echomsg v:errmsg | echohl None
   endtry
@@ -253,10 +249,6 @@ function! vimfiler#internal_commands#pedit(filename)"{{{
       let b:vimfiler = l:vimfiler_save
     endif
 
-    " Set local mappings.
-    nmap <buffer> <C-p>       <Plug>(vimfiler_open_previous_file)
-    nmap <buffer> <C-n>       <Plug>(vimfiler_open_next_file)
-    
     if g:vimfiler_pedit_command == 'pedit'
       wincmd p
     endif
