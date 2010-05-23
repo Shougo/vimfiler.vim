@@ -28,6 +28,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   let l:vimfiler_save = deepcopy(b:vimfiler)
   let l:bufnr = bufnr('%')
   
+  vsplit
   edit exrename
   highlight clear
   syntax clear
@@ -53,10 +54,6 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   % delete _
   
   " Print files.
-  let l:max_len = winwidth(winnr()) - g:vimfiler_min_filename_width
-  if l:max_len > g:vimfiler_max_filename_width
-    let l:max_len = g:vimfiler_max_filename_width
-  endif
   for l:file in a:files
     let l:filename = fnamemodify(l:file.name, ':t')
     if l:file.is_directory
@@ -73,7 +70,12 @@ function! vimfiler#exrename#create_buffer(files)"{{{
 endfunction"}}}
 function! s:exit()"{{{
   let l:exrename_buf = bufnr('%')
-  call s:custom_alternate_buffer()
+  " Switch buffer.
+  if winnr('$') != 1
+    close
+  else
+    call s:custom_alternate_buffer()
+  endif
   execute 'bdelete!' l:exrename_buf
 endfunction"}}}
 function! s:do_rename()"{{{
@@ -94,10 +96,8 @@ function! s:do_rename()"{{{
     let l:linenr += 1
   endwhile
   
-  let l:exrename_buf = bufnr('%')
   setlocal modified
-  execute 'buffer' b:exrename.bufnr
-  execute 'bdelete!' l:exrename_buf
+  call s:exit()
 
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}

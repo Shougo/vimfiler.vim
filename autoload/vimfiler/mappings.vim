@@ -373,9 +373,7 @@ function! vimfiler#mappings#rename()"{{{
   let l:marked_files = vimfiler#get_marked_filenames()
   if !empty(l:marked_files)
     " Extended rename.
-    let l:marked_files = vimfiler#get_marked_files()
-    call vimfiler#mappings#clear_mark_all_lines()
-    call vimfiler#exrename#create_buffer(l:marked_files)
+    call vimfiler#exrename#create_buffer(vimfiler#get_marked_files())
     return
   endif
 
