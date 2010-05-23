@@ -232,7 +232,7 @@ function! vimfiler#mappings#exit()"{{{
   else
     call s:custom_alternate_buffer()
   endif
-  execute 'bdelete!'. l:vimfiler_buf
+  execute 'bdelete!' l:vimfiler_buf
 endfunction"}}}
 function! vimfiler#mappings#sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
@@ -263,7 +263,7 @@ function! vimfiler#mappings#sync_with_another_vimfiler()"{{{
 endfunction"}}}
 
 function! vimfiler#mappings#move()"{{{
-  let l:marked_files = vimfiler#get_marked_files()
+  let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
     call vimfiler#mappings#toggle_mark_current_line()
@@ -293,7 +293,7 @@ function! vimfiler#mappings#move()"{{{
   endif
 endfunction"}}}
 function! vimfiler#mappings#copy()"{{{
-  let l:marked_files = vimfiler#get_marked_files()
+  let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
     call vimfiler#mappings#toggle_mark_current_line()
@@ -319,7 +319,7 @@ function! vimfiler#mappings#copy()"{{{
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! vimfiler#mappings#delete()"{{{
-  let l:marked_files = vimfiler#get_marked_files()
+  let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
     call vimfiler#mappings#toggle_mark_current_line()
@@ -349,7 +349,7 @@ function! vimfiler#mappings#delete()"{{{
   endif
 endfunction"}}}
 function! vimfiler#mappings#force_delete()"{{{
-  let l:marked_files = vimfiler#get_marked_files()
+  let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
     call vimfiler#mappings#toggle_mark_current_line()
@@ -367,6 +367,15 @@ function! vimfiler#mappings#force_delete()"{{{
 endfunction"}}}
 function! vimfiler#mappings#rename()"{{{
   if !vimfiler#check_filename_line()
+    return
+  endif
+  
+  let l:marked_files = vimfiler#get_marked_filenames()
+  if !empty(l:marked_files)
+    " Extended rename.
+    let l:marked_files = vimfiler#get_marked_files()
+    call vimfiler#mappings#clear_mark_all_lines()
+    call vimfiler#exrename#create_buffer(l:marked_files)
     return
   endif
 
@@ -446,7 +455,7 @@ function! vimfiler#mappings#restore_from_trashbox()"{{{
     return
   endif
   
-  let l:marked_files = vimfiler#get_marked_files()
+  let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
     call vimfiler#mappings#toggle_mark_current_line()
@@ -461,8 +470,6 @@ function! vimfiler#mappings#restore_from_trashbox()"{{{
       let l:restoredir .= '/'
     endif
 
-    echomsg s:decode_trash_path(l:marked_files[0])
-    echomsg l:restoredir
     call vimfiler#internal_commands#mv(l:restoredir, l:marked_files)
     call vimfiler#force_redraw_all_vimfiler()
   else
@@ -470,7 +477,7 @@ function! vimfiler#mappings#restore_from_trashbox()"{{{
   endif
 endfunction"}}}
 function! vimfiler#mappings#grep()"{{{
-  let l:marked_files = vimfiler#get_marked_files()
+  let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     let l:target = '**/*'
   else

@@ -122,16 +122,10 @@ command! VimFilerDetectDrives call vimfiler#detect_drives()
 if g:vimfiler_as_default_explorer
   " Disable netrw.
   let g:loaded_netrwPlugin = 1
-  augroup FileExplorer
-    autocmd!
-  augroup END
-  
-  augroup Network
-    autocmd!
-  augroup END
   
   augroup vimfiler-FileExplorer
     autocmd!
+    autocmd VimEnter * silent! autocmd! FileExplorer
     autocmd BufEnter * call s:browse_check(expand('<amatch>'))
   augroup END
 endif

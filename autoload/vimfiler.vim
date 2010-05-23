@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 May 2010
+" Last Modified: 23 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -98,7 +98,7 @@ function! vimfiler#default_settings()"{{{
   " Set autocommands.
   augroup vimfiler"{{{
     autocmd BufWinEnter <buffer> call s:event_bufwin_enter()
-    autocmd WinLeave,BufWinLeave <buffer> call s:event_win_leave(expand('<afile>'))
+    autocmd WinLeave,BufWinLeave <buffer> call s:event_bufwin_leave()
     autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
 
@@ -463,6 +463,22 @@ function! vimfiler#force_system(str, ...)"{{{
   return l:output
 endfunction"}}}
 function! vimfiler#get_marked_files()"{{{
+  let l:files = []
+  let l:max = line('$')
+  let l:cnt = 1
+  while l:cnt <= l:max
+    let l:line = getline(l:cnt)
+    if l:line =~ '^[*] '
+      " Marked.
+      call add(l:files, vimfiler#get_file(l:cnt))
+    endif
+
+    let l:cnt += 1
+  endwhile
+
+  return l:files
+endfunction"}}}
+function! vimfiler#get_marked_filenames()"{{{
   let l:files = []
   let l:max = line('$')
   let l:cnt = 1

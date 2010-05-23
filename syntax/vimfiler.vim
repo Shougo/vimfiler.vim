@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
-" AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 07 May 2010
+" AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 23 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,10 +48,10 @@ syn match   VimFilerTypeSystem        '\%(\f\s\?\)\+\s\+\[SYS\]'
 
 syn match   VimFilerSize              '\s\zs[0-9.]\a*\s'
 
-syn match   VimFilerDate              '[[:digit:]/]\+\s\+\d\+:\d\+$'
-syn match   VimFilerDateToday         '[[:digit:]/]\+\s\+\d\+:\d\+$'
-syn match   VimFilerDateWeek          '[[:digit:]/]\+\s\+\d\+:\d\+$'
-syn match   VimFilerDateIgnore        '\s\zs[#~!]\ze[[:digit:]/]\+\s\+\d\+:\d\+$'
+syn match   VimFilerDate              '\s\zs#[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
+syn match   VimFilerDateToday         '\s\zs\~[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
+syn match   VimFilerDateWeek          '\s\zs![[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
+syn match   VimFilerDateIgnore        '[#~!]' contained
 
 if has('gui_running')
     hi VimFilerCurrentDirectory  gui=UNDERLINE guifg=#80ffff guibg=NONE

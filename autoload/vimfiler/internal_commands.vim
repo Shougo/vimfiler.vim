@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
-" AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>(Modified)
-" Last Modified: 18 May 2010
+" AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
+" Last Modified: 23 May 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -162,7 +162,7 @@ function! vimfiler#internal_commands#open(filename)"{{{
     call vimfiler#system('cygstart ''' . l:filename . '''')
   elseif executable('xdg-open')
     " Linux.
-    call vimfiler#system('xdg-open ''' . l:filename . '''')
+    call vimfiler#system('xdg-open ''' . l:filename . ''' &')
   elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
     " KDE.
     call vimfiler#system('kioclient exec ''' . l:filename . '''')
