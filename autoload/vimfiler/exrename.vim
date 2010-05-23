@@ -25,10 +25,18 @@
 "=============================================================================
 
 function! vimfiler#exrename#create_buffer(files)"{{{
-  let l:vimfiler_save = b:vimfiler
+  let l:vimfiler_save = deepcopy(b:vimfiler)
   let l:bufnr = bufnr('%')
+  
   edit exrename
+  highlight clear
+  syntax clear
   setfiletype exrename
+
+  syn match ExrenameModified '^\s*[^#].*'
+  hi def link ExrenameModified Todo
+  hi def link ExrenameOriginal Normal
+  
   setlocal buftype=acwrite
   let b:exrename = l:vimfiler_save
   let b:exrename.bufnr = l:bufnr
@@ -38,6 +46,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   augroup exrename
     autocmd!
     autocmd BufWriteCmd <buffer> call s:do_rename()
+    autocmd CursorMoved,CursorMovedI <buffer> call s:check_lines()
   augroup END
   
   " Clean up the screen.
@@ -53,25 +62,9 @@ function! vimfiler#exrename#create_buffer(files)"{{{
     if l:file.is_directory
       let l:filename .= '/'
     endif
-    if len(l:filename) < l:max_len
-      let l:filename .= repeat(' ', l:max_len - len(l:filename))
-    endif
 
-    if l:file.is_directory
-      let l:line = printf('%s [DIR]         %s',
-            \ l:filename, 
-            \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
-            \)
-    else
-      let l:line = printf('%s %s %s %s',
-            \ l:filename, 
-            \ l:file.type, 
-            \ vimfiler#get_filesize(l:file.size), 
-            \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
-            \)
-    endif
-
-    call append('$', l:line)
+    execute 'syn match ExrenameOriginal' string(printf('^\%%%dl%s$', line('$'), l:filename))
+    call append('$', l:filename)
   endfor
 
   1delete
@@ -85,7 +78,7 @@ function! s:exit()"{{{
 endfunction"}}}
 function! s:do_rename()"{{{
   if line('$') != len(b:exrename.current_files)
-    echohl WarningMsg | echo 'Invalid rename buffer.' | echohl None
+    echohl Error | echo 'Invalid rename buffer!' | echohl None
     return
   endif
 
@@ -93,21 +86,32 @@ function! s:do_rename()"{{{
   let l:linenr = 1
   let l:files = b:exrename.current_files
   while l:linenr <= line('$')
-    call rename(l:files[l:linenr - 1].name, matchstr(getline(l:linenr), '^.*\ze\s\+\[\a\+\]'))
+    let l:filename = l:files[l:linenr - 1].name
+    if l:filename != getline(l:linenr)
+      call rename(l:filename, getline(l:linenr))
+    endif
     
     let l:linenr += 1
   endwhile
   
   let l:exrename_buf = bufnr('%')
-  execute 'buffer!' b:exrename.bufnr
+  setlocal modified
+  execute 'buffer' b:exrename.bufnr
   execute 'bdelete!' l:exrename_buf
 
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 
+function! s:check_lines()"{{{
+  if line('$') != len(b:exrename.current_files)
+    echohl Error | echo 'Invalid rename buffer!' | echohl None
+    return
+  endif
+endfunction"}}}
+
 function! s:custom_alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
-    buffer! #
+    buffer #
   else
     let l:cnt = 0
     let l:pos = 1
@@ -125,9 +129,9 @@ function! s:custom_alternate_buffer()"{{{
     endwhile
 
     if l:current > l:cnt / 2
-      bprevious!
+      bprevious
     else
-      bnext!
+      bnext
     endif
   endif
 endfunction"}}}
