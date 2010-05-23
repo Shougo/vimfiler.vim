@@ -99,7 +99,7 @@ function! s:do_rename()"{{{
   endwhile
   
   let l:exrename_buf = bufnr('%')
-  execute 'buffer' b:exrename.bufnr
+  execute 'buffer!' b:exrename.bufnr
   execute 'bdelete!' l:exrename_buf
 
   call vimfiler#force_redraw_all_vimfiler()
@@ -107,7 +107,7 @@ endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
-    buffer #
+    buffer! #
   else
     let l:cnt = 0
     let l:pos = 1
@@ -125,9 +125,9 @@ function! s:custom_alternate_buffer()"{{{
     endwhile
 
     if l:current > l:cnt / 2
-      bprevious
+      bprevious!
     else
-      bnext
+      bnext!
     endif
   endif
 endfunction"}}}
