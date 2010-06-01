@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-06-01
+- Fixed critical error.
+
 2010-05-24
 - Fixed open bug.
 

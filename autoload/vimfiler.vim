@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 May 2010
+" Last Modified: 01 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -736,7 +736,7 @@ function! vimfiler#winnr_another_vimfiler()"{{{
 endfunction"}}}
 function! vimfiler#get_another_vimfiler()"{{{
   return vimfiler#exists_another_vimfiler() ?
-        \ getbufvar(s:last_vimfiler_bufnr), 'vimfiler') : ''
+        \ getbufvar(s:last_vimfiler_bufnr, 'vimfiler') : ''
 endfunction"}}}
 "}}}
 
