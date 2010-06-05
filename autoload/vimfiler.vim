@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jun 2010
+" Last Modified: 05 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -233,6 +233,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   let b:vimfiler.sort_type = g:vimfiler_sort_type
 
   call vimfiler#force_redraw_screen()
+  3
 endfunction"}}}
 function! vimfiler#switch_filer(directory, options)"{{{
   if a:directory != '' && !isdirectory(a:directory)
