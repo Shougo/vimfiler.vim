@@ -132,7 +132,8 @@ function! vimfiler#internal_commands#cd(dir)"{{{
 
   " Save current pos.
   let l:save_pos = getpos('.')
-  let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = l:save_pos
+  let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = 
+        \ deepcopy(l:save_pos)
   let b:vimfiler.current_dir = l:dir
 
   " Redraw.
