@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 May 2010
+" Last Modified: 09 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -25,20 +25,6 @@
 "=============================================================================
 
 " vimfiler key-mappings functions.
-function! vimfiler#mappings#loop_cursor_down()"{{{
-  if line('.') == line('$')
-    0
-  else
-    normal! j
-  endif
-endfunction"}}}
-function! vimfiler#mappings#loop_cursor_up()"{{{
-  if line('.') == 1
-    $
-  else
-    normal! k
-  endif
-endfunction"}}}
 function! vimfiler#mappings#toggle_mark_current_line()"{{{
   if !vimfiler#check_filename_line()
     " Don't toggle.
