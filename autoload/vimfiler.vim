@@ -519,7 +519,7 @@ function! vimfiler#check_filename_line(...)"{{{
   return l:line =~ '^[*-]\s'
 endfunction"}}}
 function! vimfiler#get_filename(line_num)"{{{
-  return getline(a:line_num) == '..'? '..' : b:vimfiler.current_files[a:line_num - 3].name
+  return a:line_num == 1? '' : getline(a:line_num) == '..'? '..' : b:vimfiler.current_files[a:line_num - 3].name
 endfunction"}}}
 function! vimfiler#get_file(line_num)"{{{
   return getline(a:line_num) == '..'? {} : b:vimfiler.current_files[a:line_num - 3]

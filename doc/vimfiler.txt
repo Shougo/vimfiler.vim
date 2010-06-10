@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-06-10
+- Fixed vimfiler#get_filename() error.
+
 2010-06-09
 - Optimized <Plug>(vimfiler_loop_cursor_down) and <Plug>(vimfiler_loop_cursor_up).
 
