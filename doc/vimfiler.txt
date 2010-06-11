@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-06-11
+- Fixed exrename error.
+
 2010-06-10
 - Fixed vimfiler#get_filename() error.
 
