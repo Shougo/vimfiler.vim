@@ -739,6 +739,10 @@ function! vimfiler#get_another_vimfiler()"{{{
   return vimfiler#exists_another_vimfiler() ?
         \ getbufvar(s:last_vimfiler_bufnr, 'vimfiler') : ''
 endfunction"}}}
+function! vimfiler#resolve(filename)"{{{
+  return ((vimshell#iswin() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
+        \ substitute(resolve(a:filename), '\\', '/', 'g') : a:filename
+endfunction"}}}
 "}}}
 
 " Detect drives.

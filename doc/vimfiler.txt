@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-06-12
+- Supported symbolic link and Win32 shortcut.
+
 2010-06-10
 - Fixed vimfiler#get_filename() error.
 

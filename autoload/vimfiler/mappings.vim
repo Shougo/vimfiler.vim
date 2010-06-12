@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jun 2010
+" Last Modified: 12 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,6 +92,8 @@ function! vimfiler#mappings#execute()"{{{
     return
   endif
 
+  let l:filename = vimfiler#resolve(l:filename)
+
   if isdirectory(l:filename)
     " Change directory.
     call vimfiler#internal_commands#cd(l:filename)
@@ -130,25 +132,26 @@ function! vimfiler#mappings#move_to_drive()"{{{
     echo printf('[%s] %s', l:key, l:drive)
   endfor
 
-  let l:key = tolower(input('Please input drive alphabet or other directory: ', '', 'dir'))
+  let l:key = vimfiler#resolve(expand(input('Please input drive alphabet or other directory: ', '', 'dir')))
+  
   if l:key == ''
     return
-  elseif has_key(l:drives, l:key)
-    call vimfiler#internal_commands#cd(l:drives[l:key])
-  elseif isdirectory(expand(l:key))
-    call vimfiler#internal_commands#cd(expand(l:key))
+  elseif has_key(l:drives, tolower(l:key))
+    call vimfiler#internal_commands#cd(l:drives[tolower(l:key)])
+  elseif isdirectory(l:key)
+    call vimfiler#internal_commands#cd(l:key)
   else
     echo 'Invalid directory name.'
     return
   endif
 endfunction"}}}
 function! vimfiler#mappings#jump_to_directory()"{{{
-  let l:dir = input('Jump to: ', '', 'dir')
+  let l:dir = vimfiler#resolve(expand(input('Jump to: ', '', 'dir')))
   if l:dir == ''
     echo 'Canceled.'
     return
-  elseif isdirectory(expand(l:dir))
-    call vimfiler#internal_commands#cd(expand(l:dir))
+  elseif isdirectory(l:dir)
+    call vimfiler#internal_commands#cd(l:dir)
   else
     echo 'Invalid directory name.'
     return
