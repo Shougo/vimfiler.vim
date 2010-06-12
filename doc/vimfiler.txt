@@ -128,6 +128,8 @@ CHANGELOG					*vimfiler-changelog*
 
 2010-06-12
 - Supported symbolic link and Win32 shortcut.
+- Improved filetype detect.
+- Added g:vimfiler_extensions option.
 
 2010-06-11
 - Fixed exrename error.

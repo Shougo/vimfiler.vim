@@ -173,6 +173,12 @@ function! vimfiler#set_execute_file(exts, program)"{{{
     let g:vimfiler_execute_file_list[ext] = a:program
   endfor
 endfunction"}}}
+function! vimfiler#set_extensions(kind, exts)"{{{
+  let g:vimfiler_extensions[a:kind] = {}
+  for ext in split(a:exts, ',')
+    let g:vimfiler_extensions[a:kind][ext] = 1
+  endfor
+endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions."{{{
@@ -640,32 +646,28 @@ function! vimfiler#smart_omit_filename(filename, length)"{{{
   endif
 endfunction"}}}
 function! vimfiler#get_filetype(filename)"{{{
-  let l:ext = fnamemodify(a:filename, ':e')
-  if isdirectory(a:filename)
+  let l:filename = vimfiler#resolve(a:filename)
+  let l:ext = tolower(fnamemodify(l:filename, ':e'))
+  
+  if isdirectory(l:filename)
     return '[DIR]'
-  elseif l:ext =~? 
-        \'^\%(txt\|cfg\|ini\)$'
-    " Text.
-    return '[TXT]'
-  elseif l:ext =~?
-        \'^\%(bmp\|png\|gif\|jpg\|jpeg\|jp2\|tif\|ico\|wdp\|cur\|ani\)$'
-    " Image.
-    return '[IMG]'
-  elseif l:ext =~? 
-        \'^\%(lzh\|zip\|gz\|bz2\|cab\|rar\|7z\|tgz\|tar\)$'
-    " Archive.
-    return '[ARC]'
-  elseif (!vimfiler#iswin() && executable(a:filename))
-        \|| l:ext =~? 
-        \'^\%(exe\|com\|bat\|cmd\|vbs\|vbe\|js\|jse\|wsf\|wsh\|msc\|pif\|msi\|ps1\)$'
+  elseif (!vimfiler#iswin() && executable(l:filename))
+        \|| has_key(g:vimfiler_extensions.execute, l:ext)
     " Execute.
     return '[EXE]'
-  elseif l:ext =~?
-        \'^\%(avi\|asf\|wmv\|mpg\|flv\|swf\|divx\|mov\|mpa\|m1a\|m2p\|m2a\|mpeg\|m1v\|m2v\|mp2v\|mp4\|qt\|ra\|rm\|ram\|rmvb\|rpm\|smi\|mkv\|mid\|wav\|mp3\|ogg\|wma\|au\)$'
+  elseif has_key(g:vimfiler_extensions.text, l:ext)
+    " Text.
+    return '[TXT]'
+  elseif has_key(g:vimfiler_extensions.image, l:ext)
+    " Image.
+    return '[IMG]'
+  elseif has_key(g:vimfiler_extensions.archive, l:ext)
+    " Archive.
+    return '[ARC]'
+  elseif has_key(g:vimfiler_extensions.multimedia, l:ext)
     " Multimedia.
     return '[MUL]'
-  elseif a:filename =~ '^\.' || l:ext =~? 
-        \'^\%(inf\|sys\|reg\|dat\|spi\|a\|so\|lib\)$'
+  elseif l:filename =~ '^\.' || has_key(g:vimfiler_extensions.system, l:ext)
     " System.
     return '[SYS]'
   else
@@ -740,7 +742,7 @@ function! vimfiler#get_another_vimfiler()"{{{
         \ getbufvar(s:last_vimfiler_bufnr, 'vimfiler') : ''
 endfunction"}}}
 function! vimfiler#resolve(filename)"{{{
-  return ((vimshell#iswin() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
+  return ((vimfiler#iswin() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
         \ substitute(resolve(a:filename), '\\', '/', 'g') : a:filename
 endfunction"}}}
 "}}}
