@@ -126,6 +126,10 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-06-13
+- Optimized redraw.
+- Refactoringed mappings.
+
 2010-06-12
 - Supported symbolic link and Win32 shortcut.
 - Improved filetype detect.
