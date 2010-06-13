@@ -29,7 +29,9 @@ nnoremap <expr> <Plug>(vimfiler_loop_cursor_down)  (line('.') == line('$'))? 'gg
 nnoremap <expr> <Plug>(vimfiler_loop_cursor_up)  (line('.') == 1)? 'G' : 'k'
 nnoremap <silent> <Plug>(vimfiler_redraw_screen)  :<C-u>call vimfiler#force_redraw_screen()<CR>
 nnoremap <silent> <Plug>(vimfiler_toggle_mark_current_line)  :<C-u>call vimfiler#mappings#toggle_mark_current_line()<CR>j
+vnoremap <silent> <Plug>(vimfiler_toggle_mark_selected_lines)  :<C-u>call vimfiler#mappings#toggle_mark_lines(getpos("'<")[1], getpos("'>")[1])<CR>
 nnoremap <silent> <Plug>(vimfiler_toggle_mark_all_lines)  :<C-u>call vimfiler#mappings#toggle_mark_all_lines()<CR>
+nnoremap <silent> <Plug>(vimfiler_clear_mark_all_lines)  :<C-u>call vimfiler#mappings#clear_mark_all_lines()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute)  :<C-u>call vimfiler#mappings#execute()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_file)  :<C-u>call vimfiler#mappings#execute_file()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_up_directory)  :<C-u>call vimfiler#internal_commands#cd('..')<CR>
@@ -78,9 +80,12 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   " Toggle mark.
   nmap <buffer> <C-l> <Plug>(vimfiler_redraw_screen)
   nmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_current_line)
+  vmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_selected_lines)
 
-  " Toggle mark in all lines.
+  " Toggle marks in all lines.
   nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
+  " Clear marks in all lines.
+  nmap <buffer> U <Plug>(vimfiler_clear_mark_all_lines)
 
   " Copy.
   nmap <buffer> c <Plug>(vimfiler_copy_file)
@@ -150,6 +155,21 @@ function! vimfiler#mappings#toggle_mark_all_lines()"{{{
   let l:max = line('$')
   let l:cnt = 1
   while l:cnt <= l:max
+    let l:line = getline(l:cnt)
+    if vimfiler#check_filename_line(l:line)
+      " Toggle mark.
+      let l:file = vimfiler#get_file(l:cnt)
+      let l:file.is_marked = !l:file.is_marked
+    endif
+
+    let l:cnt += 1
+  endwhile
+  
+  call vimfiler#redraw_screen()
+endfunction"}}}
+function! vimfiler#mappings#toggle_mark_lines(start, end)"{{{
+  let l:cnt = a:start
+  while l:cnt <= a:end
     let l:line = getline(l:cnt)
     if vimfiler#check_filename_line(l:line)
       " Toggle mark.

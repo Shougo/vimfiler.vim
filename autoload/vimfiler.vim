@@ -60,71 +60,7 @@ function! vimfiler#default_settings()"{{{
     autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
 
-  " Define key-mappings."{{{
-  if !(exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings)
-    nmap <buffer> <TAB> <C-w>w
-    nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
-    nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
-
-    " Toggle mark.
-    nmap <buffer> <C-l> <Plug>(vimfiler_redraw_screen)
-    nmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_current_line)
-
-    " Toggle mark in all lines.
-    nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
-
-    " Copy.
-    nmap <buffer> c <Plug>(vimfiler_copy_file)
-    
-    " Move.
-    nmap <buffer> m <Plug>(vimfiler_move_file)
-    
-    " Delete.
-    nmap <buffer> d <Plug>(vimfiler_delete_file)
-    nmap <buffer> D <Plug>(vimfiler_force_delete_file)
-    
-    " Restore.
-    nmap <buffer> u <Plug>(vimfiler_restore_from_trashbox)
-    
-    " Rename.
-    nmap <buffer> r <Plug>(vimfiler_rename_file)
-
-    " Make directory.
-    nmap <buffer> K <Plug>(vimfiler_make_directory)
-    
-    " New file.
-    nmap <buffer> N <Plug>(vimfiler_new_file)
-    
-    " Execute or change directory.
-    nmap <buffer> <Enter> <Plug>(vimfiler_execute)
-    nmap <buffer> l <Plug>(vimfiler_execute)
-
-    nmap <buffer> x <Plug>(vimfiler_execute_file)
-    nmap <buffer> h <Plug>(vimfiler_move_to_up_directory)
-    nmap <buffer> L <Plug>(vimfiler_move_to_drive)
-    nmap <buffer> J <Plug>(vimfiler_jump_to_directory)
-    nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
-    nmap <buffer> $ <Plug>(vimfiler_move_to_trashbox_directory)
-    nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
-    nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
-    nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
-    nmap <buffer> H <Plug>(vimfiler_popup_shell)
-    nmap <buffer> e <Plug>(vimfiler_edit_file)
-    nmap <buffer> E <Plug>(vimfiler_execute_external_filer)
-    nmap <buffer> t <Plug>(vimfiler_execute_external_command)
-    nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
-    nmap <buffer> q <Plug>(vimfiler_exit)
-    nmap <buffer> ? <Plug>(vimfiler_help)
-    nmap <buffer> p <Plug>(vimfiler_paste_from_clipboard)
-    nmap <buffer> v <Plug>(vimfiler_preview_file)
-    nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
-    nmap <buffer> O <Plug>(vimfiler_sync_with_another_vimfiler)
-    nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
-    nmap <buffer> M <Plug>(vimfiler_set_current_mask)
-    nmap <buffer> gr <Plug>(vimfiler_grep)
-    nmap <buffer> s <Plug>(vimfiler_select_sort_type)
-  endif
-  "}}}
+  call vimfiler#mappings#define_default_mappings()
 endfunction"}}}
 function! vimfiler#set_execute_file(exts, program)"{{{
   for ext in split(a:exts, ',')

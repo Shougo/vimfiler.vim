@@ -129,6 +129,7 @@ CHANGELOG					*vimfiler-changelog*
 2010-06-13
 - Optimized redraw.
 - Refactoringed mappings.
+- Implemented <Plug>(vimfiler_toggle_mark_selected_lines) mapping.
 
 2010-06-12
 - Supported symbolic link and Win32 shortcut.
