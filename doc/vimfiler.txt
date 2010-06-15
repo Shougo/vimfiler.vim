@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-06-15
+- Improved wincmd.
+
 2010-06-13
 - Optimized redraw.
 - Refactoringed mappings.

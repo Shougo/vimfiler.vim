@@ -350,14 +350,14 @@ function! vimfiler#mappings#sync_with_current_vimfiler()"{{{
     call vimfiler#create_filer(b:vimfiler.current_dir, 
           \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
     let s:last_vimfiler_bufnr = bufnr('%')
-    execute winnr('#') . 'wincmd w'
   else
     " Change another vimfiler directory.
     let l:current_dir = b:vimfiler.current_dir
     execute vimfiler#winnr_another_vimfiler() . 'wincmd w'
     call vimfiler#internal_commands#cd(l:current_dir)
-    execute winnr('#') . 'wincmd w'
   endif
+
+  wincmd p
 endfunction"}}}
 function! vimfiler#mappings#sync_with_another_vimfiler()"{{{
   " Search vimfiler window.
@@ -365,7 +365,7 @@ function! vimfiler#mappings#sync_with_another_vimfiler()"{{{
     call vimfiler#create_filer(b:vimfiler.current_dir, 
           \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
     let s:last_vimfiler_bufnr = bufnr('%')
-    execute winnr('#') . 'wincmd w'
+    wincmd p
   else
     " Change current vimfiler directory.
     call vimfiler#internal_commands#cd(vimfiler#get_another_vimfiler().current_dir)
