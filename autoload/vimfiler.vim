@@ -62,9 +62,9 @@ function! vimfiler#default_settings()"{{{
 
   call vimfiler#mappings#define_default_mappings()
 endfunction"}}}
-function! vimfiler#set_execute_file(exts, program)"{{{
+function! vimfiler#set_execute_file(exts, command)"{{{
   for ext in split(a:exts, ',')
-    let g:vimfiler_execute_file_list[ext] = a:program
+    let g:vimfiler_execute_file_list[ext] = a:command
   endfor
 endfunction"}}}
 function! vimfiler#set_extensions(kind, exts)"{{{
