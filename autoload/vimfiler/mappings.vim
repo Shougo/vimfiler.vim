@@ -59,6 +59,8 @@ nnoremap <silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call vimfiler#ma
 nnoremap <silent> <Plug>(vimfiler_grep)  :<C-u>call vimfiler#mappings#grep()<CR>
 nnoremap <silent> <Plug>(vimfiler_select_sort_type)  :<C-u>call vimfiler#mappings#select_sort_type()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_other_window)  :<C-u>call vimfiler#mappings#move_to_other_window()<CR>
+nnoremap <silent> <Plug>(vimfiler_switch_vim_buffer_mode)  :<C-u>call vimfiler#mappings#switch_vim_buffer_mode()<CR>
+nnoremap <silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call vimfiler#mappings#restore_vimfiler_mode()<CR>
 
 nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call vimfiler#mappings#copy()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call vimfiler#mappings#move()<CR>
@@ -138,6 +140,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> M <Plug>(vimfiler_set_current_mask)
   nmap <buffer> gr <Plug>(vimfiler_grep)
   nmap <buffer> s <Plug>(vimfiler_select_sort_type)
+  nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
 endfunction"}}}
 
 " vimfiler key-mappings functions.
@@ -685,6 +688,32 @@ function! vimfiler#mappings#select_sort_type()"{{{
   else
     echoerr 'Invalid sort type.'
   endif
+endfunction"}}}
+function! vimfiler#mappings#switch_vim_buffer_mode()"{{{
+  redir => l:nmaps
+  silent nmap <buffer>
+  redir END
+  
+  let b:vimfiler.mapdict = {}
+  for l:map in split(l:nmaps, '\n')
+    let l:lhs = split(l:map)[1]
+    let l:rhs = join(split(l:map)[2: ])[1:]
+    if l:rhs =~ '^<Plug>(vimfiler_'
+      let b:vimfiler.mapdict[l:lhs] = l:rhs
+      execute 'nunmap <buffer>' l:lhs
+    endif
+  endfor
+
+  nmap <buffer> <ESC> <Plug>(vimfiler_restore_vimfiler_mode)
+
+  echo 'Switched vim buffer mode'
+endfunction"}}}
+function! vimfiler#mappings#restore_vimfiler_mode()"{{{
+  for [l:lhs, l:rhs] in items(b:vimfiler.mapdict)
+    execute 'nmap <buffer>' l:lhs l:rhs
+  endfor
+
+  echo 'Switched vimfiler mode'
 endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{

@@ -131,6 +131,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added <Plug>(vimfiler_move_to_other_window) mapping.
 - Fixed error.
 - Use vimproc#open().
+- Added <Plug>(vimfiler_switch_vim_buffer_mode) and <Plug>(vimfiler_restore_vimfiler_mode) mappings.
 
 2010-06-18
 - Use command.
