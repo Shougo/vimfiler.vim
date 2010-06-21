@@ -60,9 +60,11 @@ else
 endif
 hi def link VimFilerSpecial Special
 hi def link VimFilerNonMarkedFile Special
-hi def link VimFilerMarkedFile Statement
+"hi VimFilerMarkedFile  gui=REVERSE term=REVERSE
+hi def link VimFilerMarkedFile Type
 hi def link VimFilerDirectory Preproc
 hi def link VimFilerSize Constant
+
 hi def link VimFilerDateToday Statement
 hi def link VimFilerDateWeek Special
 hi def link VimFilerDate Identifier

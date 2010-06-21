@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jun 2010
+" Last Modified: 21 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,7 +26,7 @@
 "=============================================================================
 
 " Check vimproc.
-let s:is_vimproc = exists('*vimproc#system')
+let s:exists_vimproc_system = exists('*vimproc#system')
 
 let s:last_vimfiler_bufnr = bufnr('%')
 
@@ -333,8 +333,8 @@ endfunction"}}}
 function! vimfiler#iswin()"{{{
   return has('win32') || has('win64')
 endfunction"}}}
-function! vimfiler#is_vimproc()"{{{
-  return s:is_vimproc
+function! vimfiler#exists_vimproc()"{{{
+  return s:exists_vimproc_system
 endfunction"}}}
 function! vimfiler#system(str, ...)"{{{
   let l:command = a:str
@@ -343,7 +343,7 @@ function! vimfiler#system(str, ...)"{{{
     let l:command = iconv(l:command, &encoding, &termencoding)
     let l:input = iconv(l:input, &encoding, &termencoding)
   endif
-  let l:output = s:is_vimproc ? (a:0 == 0 ? vimproc#system(l:command) : vimproc#system(l:command, l:input))
+  let l:output = vimfiler#exists_vimproc() ? (a:0 == 0 ? vimproc#system(l:command) : vimproc#system(l:command, l:input))
         \: (a:0 == 0 ? system(l:command) : system(l:command, l:input))
   if &termencoding != '' && &termencoding != &encoding
     let l:output = iconv(l:output, &termencoding, &encoding)
@@ -720,6 +720,10 @@ endfunction"}}}
 
 " Event functions.
 function! s:event_bufwin_enter()"{{{
+  if !exists('b:vimfiler')
+    return
+  endif
+  
   lcd `=b:vimfiler.current_dir`
   call vimfiler#redraw_screen()
 endfunction"}}}

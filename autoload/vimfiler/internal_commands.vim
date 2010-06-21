@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jun 2010
+" Last Modified: 21 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -23,6 +23,8 @@
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
 "=============================================================================
+
+let s:exists_vimproc_open = exists('*vimproc#open')
 
 function! vimfiler#internal_commands#mv(dest_dir, src_files)"{{{
   let l:dest_drive = matchstr(a:dest_dir, '^\a\+\ze:')
@@ -147,40 +149,12 @@ function! vimfiler#internal_commands#cd(dir)"{{{
         \ b:vimfiler.directory_cursor_pos[l:dir] : l:save_pos))
 endfunction"}}}
 function! vimfiler#internal_commands#open(filename)"{{{
-  if &termencoding != '' && &encoding != &termencoding
-    " Convert encoding.
-    let l:filename = iconv(a:filename, &encoding, &termencoding)
-  else
-    let l:filename = a:filename
+  if !s:exists_vimproc_open
+    echoerr 'vimproc#open() is not supported. Please install vimproc Ver.4.1 or later.'
+    return
   endif
 
-  " Detect desktop environment.
-  if vimfiler#iswin()
-    if !isdirectory(a:filename) && executable('fiber.exe')
-      call vimfiler#system('fiber "' . l:filename . '"')
-    else
-      execute printf('silent ! start "" "%s"', l:filename)
-    endif
-  elseif has('win32unix')
-    " Cygwin.
-    call vimfiler#system('cygstart ''' . l:filename . '''')
-  elseif executable('xdg-open')
-    " Linux.
-    call system('xdg-open ''' . l:filename . ''' &')
-  elseif exists('$KDE_FULL_SESSION') && $KDE_FULL_SESSION ==# 'true'
-    " KDE.
-    call vimfiler#system('kioclient exec ''' . l:filename . '''')
-  elseif exists('$GNOME_DESKTOP_SESSION_ID')
-    " GNOME.
-    call system('gnome-open ''' . l:filename . ''' &')
-  elseif executable('exo-open')
-    " Xfce.
-    call system('exo-open ''' . l:filename . ''' &')
-  elseif (has('macunix') || system('uname') =~? '^darwin') && executable('open')
-    call system('open ''' . l:filename . ''' &')
-  else
-    throw 'Not supported.'
-  endif
+  call vimproc#open(a:filename)
 endfunction"}}}
 function! vimfiler#internal_commands#gexe(filename)"{{{
   if &termencoding != '' && &encoding != &termencoding
@@ -191,7 +165,7 @@ function! vimfiler#internal_commands#gexe(filename)"{{{
   endif
   
   if vimfiler#iswin()
-    if a:filename !=# 'gvim' && executable('cmdproxy.exe') && vimfiler#is_vimproc()
+    if a:filename !=# 'gvim' && executable('cmdproxy.exe') && vimfiler#exists_vimproc()
       " Use vimproc.
       let l:commands = split(a:filename)
       call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\" %s"', l:commands[0], join(l:commands[1:])))

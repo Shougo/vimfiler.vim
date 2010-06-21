@@ -58,6 +58,7 @@ nnoremap <silent> <Plug>(vimfiler_set_current_mask)  :<C-u>call vimfiler#mapping
 nnoremap <silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call vimfiler#mappings#restore_from_trashbox()<CR>
 nnoremap <silent> <Plug>(vimfiler_grep)  :<C-u>call vimfiler#mappings#grep()<CR>
 nnoremap <silent> <Plug>(vimfiler_select_sort_type)  :<C-u>call vimfiler#mappings#select_sort_type()<CR>
+nnoremap <silent> <Plug>(vimfiler_move_to_other_window)  :<C-u>call vimfiler#mappings#move_to_other_window()<CR>
 
 nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call vimfiler#mappings#copy()<CR>
 nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call vimfiler#mappings#move()<CR>
@@ -73,7 +74,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
     return
   endif
   
-  nmap <buffer> <TAB> <C-w>w
+  nmap <buffer> <TAB> <Plug>(vimfiler_move_to_other_window)
   nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
   nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
 
@@ -265,6 +266,15 @@ function! vimfiler#mappings#move_to_drive()"{{{
     echo 'Invalid directory name.'
     return
   endif
+endfunction"}}}
+function! vimfiler#mappings#move_to_other_window()"{{{
+  if winnr('$') == 1
+    call vimfiler#create_filer(b:vimfiler.current_dir, 
+          \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+    let s:last_vimfiler_bufnr = bufnr('%')
+  endif
+
+  wincmd w
 endfunction"}}}
 function! vimfiler#mappings#jump_to_directory()"{{{
   let l:dir = vimfiler#resolve(expand(input('Jump to: ', '', 'dir')))
