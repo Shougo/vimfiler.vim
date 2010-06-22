@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Jun 2010
+" Last Modified: 22 Jun 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -25,6 +25,7 @@
 "=============================================================================
 
 let s:exists_vimproc_open = exists('*vimproc#open')
+let s:exists_vimproc_system_bg = exists('*vimproc#system_bg')
 
 function! vimfiler#internal_commands#mv(dest_dir, src_files)"{{{
   let l:dest_drive = matchstr(a:dest_dir, '^\a\+\ze:')
@@ -150,34 +151,19 @@ function! vimfiler#internal_commands#cd(dir)"{{{
 endfunction"}}}
 function! vimfiler#internal_commands#open(filename)"{{{
   if !s:exists_vimproc_open
-    echoerr 'vimproc#open() is not supported. Please install vimproc Ver.4.1 or later.'
+    echoerr 'vimproc#open() is not found. Please install vimproc Ver.4.1 or later.'
     return
   endif
 
   call vimproc#open(a:filename)
 endfunction"}}}
 function! vimfiler#internal_commands#gexe(filename)"{{{
-  if &termencoding != '' && &encoding != &termencoding
-    " Convert encoding.
-    let l:filename = iconv(a:filename, &encoding, &termencoding)
-  else
-    let l:filename = a:filename
+  if !s:exists_vimproc_system_bg
+    echoerr 'vimproc#system_bg() is not found. Please install vimproc Ver.4.1 or later.'
+    return
   endif
-  
-  if vimfiler#iswin()
-    if a:filename !=# 'gvim' && executable('cmdproxy.exe') && vimfiler#exists_vimproc()
-      " Use vimproc.
-      let l:commands = split(a:filename)
-      call vimproc#system(printf('cmdproxy /C "start \"\" \"%s\" %s"', l:commands[0], join(l:commands[1:])))
-    else
-      execute 'silent ! start ' l:filename
-    endif
-  else
-    " For *nix.
 
-    " Background execute.
-    call system(l:filename . '&')
-  endif
+  call vimproc#system_bg(a:filename)
 endfunction"}}}
 function! vimfiler#internal_commands#split()"{{{
   if g:vimfiler_split_command ==# 'split_nicely'

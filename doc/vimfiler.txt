@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-06-22
+- Use vimproc#system_bg().
+
 2010-06-21
 - Improved marked file syntax.
 - Added <Plug>(vimfiler_move_to_other_window) mapping.
