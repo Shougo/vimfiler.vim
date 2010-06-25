@@ -38,7 +38,7 @@ nnoremap <silent> <Plug>(vimfiler_move_to_up_directory)  :<C-u>call vimfiler#int
 nnoremap <silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call vimfiler#internal_commands#cd('~')<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call vimfiler#internal_commands#cd('/')<CR>
 nnoremap <silent> <Plug>(vimfiler_move_to_trashbox_directory)  :<C-u>call vimfiler#internal_commands#cd(g:vimfiler_trashbox_directory)<CR>
-nnoremap <silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call <SID>move_to_drive()<CR>
+nnoremap <silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call vimfiler#mappings#move_to_drive()<CR>
 nnoremap <silent> <Plug>(vimfiler_jump_to_directory)  :<C-u>call <SID>jump_to_directory()<CR>
 nnoremap <silent> <Plug>(vimfiler_execute_new_gvim)  :<C-u>call vimfiler#internal_commands#gexe('gvim')<CR>
 nnoremap <silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call <SID>toggle_visible_dot_files()<CR>
@@ -144,6 +144,91 @@ function! vimfiler#mappings#define_default_mappings()"{{{
 endfunction"}}}
 
 " vimfiler key-mappings functions.
+function! vimfiler#mappings#move_to_drive()"{{{
+  let l:drives = vimfiler#get_drives()
+
+  if empty(l:drives)
+    " No drives.
+    return
+  endif
+
+  for [l:key, l:drive] in items(l:drives)
+    echo printf('[%s] %s', l:key, l:drive)
+  endfor
+
+  let l:key = vimfiler#resolve(expand(input('Please input drive alphabet or other directory: ', '', 'dir')))
+  
+  if l:key == ''
+    return
+  elseif has_key(l:drives, tolower(l:key))
+    call vimfiler#internal_commands#cd(l:drives[tolower(l:key)])
+  elseif isdirectory(l:key)
+    call vimfiler#internal_commands#cd(l:key)
+  else
+    echo 'Invalid directory name.'
+    return
+  endif
+endfunction"}}}
+function! vimfiler#mappings#open_previous_file()"{{{
+  if !exists('b:vimfiler')
+    return
+  endif
+  
+  let i = 0
+  let l:bufname = fnamemodify(bufname('%'), ':p')
+  for l:file in b:vimfiler.current_files
+    if l:file.name == l:bufname
+      " Get next file.
+      let i -= 1
+      while i >= 0
+        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].name)
+        if l:filetype == '     ' || l:filetype == '[TXT]'
+          let l:vimfiler_save = b:vimfiler
+          edit `=b:vimfiler.current_files[i].name`
+          let b:vimfiler = l:vimfiler_save
+          return
+        endif
+
+        let i -= 1
+      endwhile
+      
+      break
+    endif
+
+    let i += 1
+  endfor
+endfunction"}}}
+function! vimfiler#mappings#open_next_file()"{{{
+  if !exists('b:vimfiler')
+    return
+  endif
+  
+  let i = 0
+  let max = len(b:vimfiler.current_files)
+  let l:bufname = fnamemodify(bufname('%'), ':p')
+  for l:file in b:vimfiler.current_files
+    if l:file.name == l:bufname
+      " Get next file.
+      let i += 1
+      while i < max
+        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].name)
+        if l:filetype == '     ' || l:filetype == '[TXT]'
+          let l:vimfiler_save = b:vimfiler
+          edit `=b:vimfiler.current_files[i].name`
+          let b:vimfiler = l:vimfiler_save
+          return
+        endif
+
+        let i += 1
+      endwhile
+
+      break
+    endif
+
+    let i += 1
+  endfor
+endfunction"}}}
+
 function! s:toggle_mark_current_line()"{{{
   if !vimfiler#check_filename_line()
     " Don't toggle.
@@ -244,31 +329,6 @@ function! s:execute_file()"{{{
 
   " Execute cursor file.
   call vimfiler#internal_commands#open(l:filename)
-endfunction"}}}
-function! s:move_to_drive()"{{{
-  let l:drives = vimfiler#get_drives()
-
-  if empty(l:drives)
-    " No drives.
-    return
-  endif
-
-  for [l:key, l:drive] in items(l:drives)
-    echo printf('[%s] %s', l:key, l:drive)
-  endfor
-
-  let l:key = vimfiler#resolve(expand(input('Please input drive alphabet or other directory: ', '', 'dir')))
-  
-  if l:key == ''
-    return
-  elseif has_key(l:drives, tolower(l:key))
-    call vimfiler#internal_commands#cd(l:drives[tolower(l:key)])
-  elseif isdirectory(l:key)
-    call vimfiler#internal_commands#cd(l:key)
-  else
-    echo 'Invalid directory name.'
-    return
-  endif
 endfunction"}}}
 function! s:move_to_other_window()"{{{
   if winnr('$') == 1
@@ -613,65 +673,6 @@ function! s:grep()"{{{
     silent! execute 'vimgrep' '/' . escape(l:pattern, '\&/') . '/j ' . l:target
     if !empty(getqflist()) | copen | endif
   endif
-endfunction"}}}
-function! s:open_previous_file()"{{{
-  if !exists('b:vimfiler')
-    return
-  endif
-  
-  let i = 0
-  let l:bufname = fnamemodify(bufname('%'), ':p')
-  for l:file in b:vimfiler.current_files
-    if l:file.name == l:bufname
-      " Get next file.
-      let i -= 1
-      while i >= 0
-        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].name)
-        if l:filetype == '     ' || l:filetype == '[TXT]'
-          let l:vimfiler_save = b:vimfiler
-          edit `=b:vimfiler.current_files[i].name`
-          let b:vimfiler = l:vimfiler_save
-          return
-        endif
-
-        let i -= 1
-      endwhile
-      
-      break
-    endif
-
-    let i += 1
-  endfor
-endfunction"}}}
-function! s:open_next_file()"{{{
-  if !exists('b:vimfiler')
-    return
-  endif
-  
-  let i = 0
-  let max = len(b:vimfiler.current_files)
-  let l:bufname = fnamemodify(bufname('%'), ':p')
-  for l:file in b:vimfiler.current_files
-    if l:file.name == l:bufname
-      " Get next file.
-      let i += 1
-      while i < max
-        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].name)
-        if l:filetype == '     ' || l:filetype == '[TXT]'
-          let l:vimfiler_save = b:vimfiler
-          edit `=b:vimfiler.current_files[i].name`
-          let b:vimfiler = l:vimfiler_save
-          return
-        endif
-
-        let i += 1
-      endwhile
-
-      break
-    endif
-
-    let i += 1
-  endfor
 endfunction"}}}
 function! s:select_sort_type()"{{{
   for l:type in ['n[one]', 's[ize]', 'e[xtension]', 'f[ilename]', 't[ime]', 'm[anual]']
