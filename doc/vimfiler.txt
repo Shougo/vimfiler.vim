@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-06-25
+- Improved mappings.
+
 2010-06-22
 - Use vimproc#system_bg().
 

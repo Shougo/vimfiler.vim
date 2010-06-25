@@ -545,10 +545,6 @@ function! vimfiler#get_filetype(filename)"{{{
   
   if isdirectory(l:filename)
     return '[DIR]'
-  elseif (!vimfiler#iswin() && executable(l:filename))
-        \|| has_key(g:vimfiler_extensions.execute, l:ext)
-    " Execute.
-    return '[EXE]'
   elseif has_key(g:vimfiler_extensions.text, l:ext)
     " Text.
     return '[TXT]'
@@ -564,6 +560,10 @@ function! vimfiler#get_filetype(filename)"{{{
   elseif l:filename =~ '^\.' || has_key(g:vimfiler_extensions.system, l:ext)
     " System.
     return '[SYS]'
+  elseif (!vimfiler#iswin() && executable(l:filename))
+        \|| has_key(g:vimfiler_extensions.execute, l:ext)
+    " Execute.
+    return '[EXE]'
   else
     " Others filetype.
     return '     '
