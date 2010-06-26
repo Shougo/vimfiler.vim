@@ -126,6 +126,7 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+ChangeLog 1.50{{{
 2010-06-25
 - Improved mappings.
 
@@ -264,6 +265,7 @@ CHANGELOG					*vimfiler-changelog*
 * Improved marks.
 * Improved cd.
 
+  }}}
 ChangeLog 1.x-1.00{{{
     1.02 :
     - Added <Plug>(vimfiler_execute) and <Plug>(vimfiler_move_to_current_directory) mappings.
