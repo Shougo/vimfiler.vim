@@ -1,6 +1,6 @@
 *vimfiler.txt*	Powerful filer implemented by VimScript
 
-Version: 1.50
+Version: 2.0
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -125,6 +125,10 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-07-12
+- Started Ver.2.0 development.
+- Improved vimproc check.
 
 ChangeLog 1.50{{{
 2010-06-25

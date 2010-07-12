@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Jun 2010
+" Last Modified: 12 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -22,11 +22,16 @@
 "     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
-" Version: 1.50, for Vim 7.0
+" Version: 2.0, for Vim 7.0
 "=============================================================================
 
 " Check vimproc.
-let s:exists_vimproc_system = exists('*vimproc#system')
+try
+  call vimproc#version()
+  let s:exists_vimproc = 1
+catch
+  let s:exists_vimproc = 0
+endtry
 
 let s:last_vimfiler_bufnr = bufnr('%')
 
@@ -334,7 +339,7 @@ function! vimfiler#iswin()"{{{
   return has('win32') || has('win64')
 endfunction"}}}
 function! vimfiler#exists_vimproc()"{{{
-  return s:exists_vimproc_system
+  return s:exists_vimproc
 endfunction"}}}
 function! vimfiler#system(str, ...)"{{{
   let l:command = a:str
