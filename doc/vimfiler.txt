@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-07-17
+- Optimized head match.
+
 2010-07-12
 - Started Ver.2.0 development.
 - Improved vimproc check.

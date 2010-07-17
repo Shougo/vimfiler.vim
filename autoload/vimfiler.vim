@@ -621,8 +621,7 @@ function! vimfiler#get_datemark(filename)"{{{
   endif
 endfunction"}}}
 function! vimfiler#head_match(checkstr, headstr)"{{{
-  return a:headstr == '' || a:checkstr ==# a:headstr
-        \|| a:checkstr[: len(a:headstr)-1] ==# a:headstr
+  return stridx(a:checkstr, a:headstr) == 0
 endfunction"}}}
 function! vimfiler#exists_another_vimfiler()"{{{
   let l:winnr = bufwinnr(s:last_vimfiler_bufnr)
