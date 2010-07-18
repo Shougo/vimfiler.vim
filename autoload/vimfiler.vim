@@ -300,9 +300,17 @@ function! vimfiler#redraw_screen()"{{{
     endif
     if l:filename =~ '[^[:print:]]'
       " Multibyte.
-      let l:filename = vimfiler#smart_omit_filename(l:filename, l:max_len)
+      let l:len = len(substitute(l:filename, '.', 'x', 'g'))
+
+      if l:len * 2 > l:max_len
+        let l:head = matchstr(l:filename, printf('^.\{%d}', l:max_len/2 - 7))
+        let l:tail = matchstr(l:filename, '.\{5}$')
+        let l:filename = l:head . '..' . l:tail
+      else
+        let l:filename .= repeat(' ', l:max_len - l:len * 2)
+      endif
     elseif len(l:filename) > l:max_len
-      let l:filename = l:filename[: l:max_len - 4] . '...'
+      let l:filename = l:filename[: l:max_len - 15] . '..' . l:filename[-13 :]
     else
       let l:filename .= repeat(' ', l:max_len - len(l:filename))
     endif
