@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-07-19
+- Deleted cursorline.
+
 2010-07-18
 - Improved omit filename.
 
