@@ -293,6 +293,7 @@ function! vimfiler#redraw_screen()"{{{
   if l:max_len > g:vimfiler_max_filename_width
     let l:max_len = g:vimfiler_max_filename_width
   endif
+  let l:max_len -= 1
   for l:file in b:vimfiler.current_files
     let l:filename = fnamemodify(l:file.name, ':t')
     if l:file.is_directory
@@ -300,17 +301,16 @@ function! vimfiler#redraw_screen()"{{{
     endif
     if l:filename =~ '[^[:print:]]'
       " Multibyte.
-      let l:len = len(substitute(l:filename, '.', 'x', 'g'))
+      let l:len = vimfiler#util#wcswidth(l:filename)
 
-      if l:len * 2 > l:max_len
-        let l:head = matchstr(l:filename, printf('^.\{%d}', l:max_len/2 - 7))
-        let l:tail = matchstr(l:filename, '.\{5}$')
-        let l:filename = l:head . '..' . l:tail
-      else
-        let l:filename .= repeat(' ', l:max_len - l:len * 2)
+      if l:len > l:max_len
+        let l:filename = vimfiler#util#truncate(l:filename, l:max_len - 2) . '..'
+        let l:len = vimfiler#util#wcswidth(l:filename)
       endif
+      
+      let l:filename .= repeat(' ', l:max_len - l:len)
     elseif len(l:filename) > l:max_len
-      let l:filename = l:filename[: l:max_len - 15] . '..' . l:filename[-13 :]
+      let l:filename = l:filename[: l:max_len - 15] . '..' . l:filename[-12 :]
     else
       let l:filename .= repeat(' ', l:max_len - len(l:filename))
     endif
