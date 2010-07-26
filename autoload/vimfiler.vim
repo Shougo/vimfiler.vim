@@ -58,6 +58,7 @@ function! vimfiler#default_settings()"{{{
   let &l:winwidth = g:vimfiler_min_filename_width + 10
   if v:version >= 703
     setlocal conceallevel=3
+    setlocal concealcursor=n
   endif
 
   " Set autocommands.
