@@ -56,6 +56,9 @@ function! vimfiler#default_settings()"{{{
     setlocal noautochdir
   endif
   let &l:winwidth = g:vimfiler_min_filename_width + 10
+  if v:version >= 703
+    setlocal conceallevel=3
+  endif
 
   " Set autocommands.
   augroup vimfiler"{{{

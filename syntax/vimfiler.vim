@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 May 2010
+" Last Modified: 26 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,12 @@ syn match   VimFilerSize              '\s\zs[0-9.]\a*\s'
 syn match   VimFilerDate              '\s\zs#[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
 syn match   VimFilerDateToday         '\s\zs\~[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
 syn match   VimFilerDateWeek          '\s\zs![[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
-syn match   VimFilerDateIgnore        '[#~!]' contained
+if v:version >= 703
+  " Supported conceal features.
+  syn match   VimFilerDateIgnore        '[#~!]' contained conceal
+else
+  syn match   VimFilerDateIgnore        '[#~!]' contained
+endif
 
 if has('gui_running')
     hi VimFilerCurrentDirectory  gui=UNDERLINE guifg=#80ffff guibg=NONE

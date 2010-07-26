@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-07-26
+- Supported conceal feature.
+
 2010-07-19
 - Deleted cursorline.
 
