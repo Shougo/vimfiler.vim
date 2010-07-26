@@ -51,7 +51,7 @@ syn match   VimFilerSize              '\s\zs[0-9.]\a*\s'
 syn match   VimFilerDate              '\s\zs#[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
 syn match   VimFilerDateToday         '\s\zs\~[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
 syn match   VimFilerDateWeek          '\s\zs![[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
-if v:version >= 703
+if has('conceal')
   " Supported conceal features.
   syn match   VimFilerDateIgnore        '[#~!]' contained conceal
 else

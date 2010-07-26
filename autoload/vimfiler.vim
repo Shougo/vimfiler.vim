@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jul 2010
+" Last Modified: 26 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,7 +56,7 @@ function! vimfiler#default_settings()"{{{
     setlocal noautochdir
   endif
   let &l:winwidth = g:vimfiler_min_filename_width + 10
-  if v:version >= 703
+  if has('conceal')
     setlocal conceallevel=3
     setlocal concealcursor=n
   endif
