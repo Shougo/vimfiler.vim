@@ -111,6 +111,63 @@ g:vimfiler_max_directory_histories		*g:vimfiler_max_directory_histories*
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
 
+<Plug>(vimfiler_move_to_other_window)		*<Plug>(vimfiler_move_to_other_window)*
+		
+		
+		
+
+
+						*g:vimfiler_default_key_mappings*
+Following keymappings are default keymappings.
+
+{lhs}			{rhs}
+--------		-----------------------------
+<TAB>			<Plug>(vimfiler_move_to_other_window)
+j			<Plug>(vimfiler_loop_cursor_down)
+k			<Plug>(vimfiler_loop_cursor_up)
+<C-l>			<Plug>(vimfiler_redraw_screen)
+<Space>			<Plug>(vimfiler_toggle_mark_current_line)
+<Space>			<Plug>(vimfiler_toggle_mark_selected_lines)
+*			<Plug>(vimfiler_toggle_mark_all_lines)
+U			<Plug>(vimfiler_clear_mark_all_lines)
+c			<Plug>(vimfiler_copy_file)
+m			<Plug>(vimfiler_move_file)
+d			<Plug>(vimfiler_delete_file)
+D			<Plug>(vimfiler_force_delete_file)
+u			<Plug>(vimfiler_restore_from_trashbox)
+r			<Plug>(vimfiler_rename_file)
+K			<Plug>(vimfiler_make_directory)
+N			<Plug>(vimfiler_new_file)
+<Enter>			<Plug>(vimfiler_execute)
+l			<Plug>(vimfiler_execute)
+x			<Plug>(vimfiler_execute_file)
+h			<Plug>(vimfiler_move_to_up_directory)
+L			<Plug>(vimfiler_move_to_drive)
+J			<Plug>(vimfiler_jump_to_directory)
+~			<Plug>(vimfiler_move_to_home_directory)
+$			<Plug>(vimfiler_move_to_trashbox_directory)
+\			<Plug>(vimfiler_move_to_root_directory)
+<C-h>			<Plug>(vimfiler_move_to_history_back)
+<C-l>			<Plug>(vimfiler_move_to_history_forward)
+gv			<Plug>(vimfiler_execute_new_gvim)
+.			<Plug>(vimfiler_toggle_visible_dot_files)
+H			<Plug>(vimfiler_popup_shell)
+e			<Plug>(vimfiler_edit_file)
+E			<Plug>(vimfiler_execute_external_filer)
+t			<Plug>(vimfiler_execute_external_command)
+!			<Plug>(vimfiler_execute_shell_command)
+q			<Plug>(vimfiler_exit)
+?			<Plug>(vimfiler_help)
+p			<Plug>(vimfiler_paste_from_clipboard)
+v			<Plug>(vimfiler_preview_file)
+o			<Plug>(vimfiler_sync_with_current_vimfiler)
+O			<Plug>(vimfiler_sync_with_another_vimfiler)
+<C-g>			<Plug>(vimfiler_print_filename)
+M			<Plug>(vimfiler_set_current_mask)
+gr			<Plug>(vimfiler_grep)
+s			<Plug>(vimfiler_select_sort_type)
+<C-v>			<Plug>(vimfiler_switch_vim_buffer_mode)
+
 	Please refer to vimfiler#mappings#define_default_mappings() in
 	autoload/vimfiler/mappings.vim.
 
@@ -141,6 +198,7 @@ CHANGELOG					*vimfiler-changelog*
 - Implemented dictionary plugin.
 - Added <Plug>(vimfiler_move_to_history_forward) and <Plug>(vimfiler_move_to_history_back) key-mappings.
 - Added g:vimfiler_enable_clipboard option.
+- Revised documentation.
 
 2010-07-26
 - Supported conceal feature.

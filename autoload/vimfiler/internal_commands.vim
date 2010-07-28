@@ -37,7 +37,9 @@ function! vimfiler#internal_commands#rm(files)"{{{
   call l:scheme.rm(a:files)
 endfunction"}}}
 
-function! vimfiler#internal_commands#cd(dir)"{{{
+function! vimfiler#internal_commands#cd(dir, ...)"{{{
+  let l:save_history = a:0 ? a:1 : 1
+
   if a:dir == '..'
     if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
       " Select drive.
@@ -77,16 +79,25 @@ function! vimfiler#internal_commands#cd(dir)"{{{
   let l:save_pos = getpos('.')
   let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = 
         \ deepcopy(l:save_pos)
+  let l:prev_dir = b:vimfiler.current_dir
   let b:vimfiler.current_dir = l:dir
 
   " Save changed directories.
-  call add(b:vimfiler.changed_dir, l:dir)
-  let l:max_save = g:vimfiler_max_directory_histories > 0 ? g:vimfiler_max_directory_histories : 10
-  if len(b:vimfiler.changed_dir) >= l:max_save
-    " Get last l:max_save num elements.
-    let b:vimfiler.changed_dir = b:vimfiler.changed_dir[-l:max_save :]
+  if l:save_history
+    " Reset b:vimfiler.current_changed_dir_index.
+    if b:vimfiler.current_changed_dir_index !=# -1
+      call add(b:vimfiler.changed_dir, l:prev_dir)
+      let b:vimfiler.current_changed_dir_index = -1
+    endif
+
+    call add(b:vimfiler.changed_dir, l:dir)
+
+    let l:max_save = g:vimfiler_max_directory_histories > 0 ? g:vimfiler_max_directory_histories : 10
+    if len(b:vimfiler.changed_dir) >= l:max_save
+      " Get last l:max_save num elements.
+      let b:vimfiler.changed_dir = b:vimfiler.changed_dir[-l:max_save :]
+    endif
   endif
-  let b:vimfiler.current_changed_dir_index = -1
 
   " Redraw.
   call vimfiler#force_redraw_screen()
