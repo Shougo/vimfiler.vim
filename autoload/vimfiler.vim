@@ -132,6 +132,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
   endif
+  let b:vimfiler.changed_dir = []
   let b:vimfiler.clipboard = {}
   let b:vimfiler.is_visible_dot_files = 0
   let b:vimfiler.is_simple = l:simple_flag

@@ -141,6 +141,12 @@ function! vimfiler#internal_commands#cd(dir)"{{{
         \ deepcopy(l:save_pos)
   let b:vimfiler.current_dir = l:dir
 
+  " Save changed directories.
+  call add(b:vimfiler.changed_dir, l:dir)
+  while len(b:vimfiler.changed_dir) >= g:vimfiler_max_save_directories
+    call remove(b:vimfiler.changed_dir, 0)
+  endwhile
+
   " Redraw.
   call vimfiler#force_redraw_screen()
 
