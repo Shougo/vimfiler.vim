@@ -146,11 +146,15 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
   " Save changed directories.
   if l:save_history
     call add(b:vimfiler.changed_dir, l:dir)
+
     let l:max_save = g:vimfiler_max_save_histories > 0 ? g:vimfiler_max_save_histories : 10
     if len(b:vimfiler.changed_dir) >= l:max_save
       " Get last l:max_save num elements.
       let b:vimfiler.changed_dir = b:vimfiler.changed_dir[-l:max_save :]
     endif
+
+    " Reset.
+    let b:vimfiler.current_changed_dir_index = -1
   endif
 
   " Redraw.
