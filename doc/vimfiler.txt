@@ -111,15 +111,167 @@ g:vimfiler_max_directory_histories		*g:vimfiler_max_directory_histories*
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
 
+Normal mode mappings.
+
 <Plug>(vimfiler_move_to_other_window)		*<Plug>(vimfiler_move_to_other_window)*
-		
+		Move to other vimfiler window.
+
+<Plug>(vimfiler_loop_cursor_down)		*<Plug>(vimfiler_loop_cursor_down)*
+		Move to next line with loop.
+
+<Plug>(vimfiler_loop_cursor_up)			*<Plug>(vimfiler_loop_cursor_up)*
+		Move to previous line with loop.
+
+<Plug>(vimfiler_redraw_screen)			*<Plug>(vimfiler_redraw_screen)*
+		Redraw vimfiler screen.
+
+<Plug>(vimfiler_toggle_mark_current_line)	*<Plug>(vimfiler_toggle_mark_current_line)*
+		Toggle mark in cursor line.
+
+<Plug>(vimfiler_toggle_mark_all_lines)		*<Plug>(vimfiler_toggle_mark_all_lines)*
+		Toggle marks in all lines.
+
+<Plug>(vimfiler_clear_mark_all_lines)		*<Plug>(vimfiler_clear_mark_all_lines)*
+		Clear marks in all lines.
+
+<Plug>(vimfiler_copy_file)			*<Plug>(vimfiler_copy_file)*
+		Copy marked files to destination directory. If exists another
+		vimfiler buffer, destination directory is another vimfiler
+		directory. Else, depends |g:vimfiler_enable_clipboard|.
+		If no marked files, mark current file.
+
+<Plug>(vimfiler_move_file)			*<Plug>(vimfiler_move_file)*
+		Move marked files to destination directory. If exists another
+		vimfiler buffer, destination directory is another vimfiler
+		directory. Else, depends |g:vimfiler_enable_clipboard|.
+		If no marked files, mark current file.
+
+<Plug>(vimfiler_delete_file)			*<Plug>(vimfiler_delete_file)*
+		Delete marked files to |g:vimfiler_trashbox_directory|.
+		If no marked files, mark current file.
+
+<Plug>(vimfiler_force_delete_file)		*<Plug>(vimfiler_force_delete_file)*
+		Delete marked files completely.
+		If no marked files, mark current file.
+
+<Plug>(vimfiler_restore_from_trashbox)		*<Plug>(vimfiler_restore_from_trashbox)*
+		Restore marked files from |g:vimfiler_trashbox_directory|.
+		This command is valid in |g:vimfiler_trashbox_directory|.
+
+<Plug>(vimfiler_make_directory)			*<Plug>(vimfiler_make_directory)*
 		
 		
 
+<Plug>(vimfiler_new_file)			*<Plug>(vimfiler_new_file)*
+		
+		
+
+<Plug>(vimfiler_execute)			*<Plug>(vimfiler_execute)*
+		
+		
+
+<Plug>(vimfiler_execute_file)			*<Plug>(vimfiler_execute_file)*
+		
+		
+
+<Plug>(vimfiler_move_to_up_directory)		*<Plug>(vimfiler_move_to_up_directory)*
+		
+		
+
+<Plug>(vimfiler_move_to_drive)			*<Plug>(vimfiler_move_to_drive)*
+		
+		
+
+<Plug>(vimfiler_jump_to_directory)		*<Plug>(vimfiler_jump_to_directory)*
+		
+		
+
+<Plug>(vimfiler_move_to_home_directory)		*<Plug>(vimfiler_move_to_home_directory)*
+		Move to home directory.
+
+<Plug>(vimfiler_move_to_trashbox_directory)	*<Plug>(vimfiler_move_to_trashbox_directory)*
+		Move to |g:vimfiler_trashbox_directory|.
+		
+
+<Plug>(vimfiler_move_to_root_directory)		*<Plug>(vimfiler_move_to_root_directory)*
+		
+		
+
+<Plug>(vimfiler_move_to_history_back)		*<Plug>(vimfiler_move_to_history_back)*
+		
+		
+
+<Plug>(vimfiler_move_to_history_forward)	*<Plug>(vimfiler_move_to_history_forward)*
+		
+		
+
+<Plug>(vimfiler_execute_new_gvim)		*<Plug>(vimfiler_execute_new_gvim)*
+		
+		
+
+<Plug>(vimfiler_toggle_visible_dot_files)	*<Plug>(vimfiler_toggle_visible_dot_files)*
+		
+		
+
+<Plug>(vimfiler_popup_shell)			*<Plug>(vimfiler_popup_shell)*
+		Execute |:VimShellPop|or |:shell|.
+		
+
+<Plug>(vimfiler_edit_file)			*<Plug>(vimfiler_edit_file)*
+		
+
+<Plug>(vimfiler_execute_external_filer)		*<Plug>(vimfiler_execute_external_filer)*
+		
+
+<Plug>(vimfiler_execute_external_command)	*<Plug>(vimfiler_execute_external_command)*
+		
+
+<Plug>(vimfiler_execute_shell_command)		*<Plug>(vimfiler_execute_shell_command)*
+		
+
+<Plug>(vimfiler_exit)				*<Plug>(vimfiler_exit)*
+		
+
+<Plug>(vimfiler_help)				*<Plug>(vimfiler_help)*
+		
+
+<Plug>(vimfiler_paste_from_clipboard)		*<Plug>(vimfiler_paste_from_clipboard)*
+		
+
+<Plug>(vimfiler_preview_file)			*<Plug>(vimfiler_preview_file)*
+		
+
+<Plug>(vimfiler_sync_with_current_vimfiler)	*<Plug>(vimfiler_sync_with_current_vimfiler)*
+		
+
+<Plug>(vimfiler_sync_with_another_vimfiler)	*<Plug>(vimfiler_sync_with_another_vimfiler)*
+		
+
+<Plug>(vimfiler_print_filename)			*<Plug>(vimfiler_print_filename)*
+		
+
+<Plug>(vimfiler_set_current_mask)		*<Plug>(vimfiler_set_current_mask)*
+		
+
+<Plug>(vimfiler_grep)				*<Plug>(vimfiler_grep)*
+		
+
+<Plug>(vimfiler_select_sort_type)		*<Plug>(vimfiler_select_sort_type)*
+		
+
+<Plug>(vimfiler_switch_vim_buffer_mode)		*<Plug>(vimfiler_switch_vim_buffer_mode)*
+		Switch to vimfiler buffer mode. All vimfiler mappings is
+		disabled. If press <ESC>, settings will be restored.
+
+Visual mode mappings.
+
+<Plug>(vimfiler_toggle_mark_selected_lines)	*<Plug>(vimfiler_toggle_selected_lines)*
+		Toggle marks in selected lines.
 
 						*g:vimfiler_default_key_mappings*
 Following keymappings are default keymappings.
 
+Normal mode mappings.
 {lhs}			{rhs}
 --------		-----------------------------
 <TAB>			<Plug>(vimfiler_move_to_other_window)
@@ -127,7 +279,6 @@ j			<Plug>(vimfiler_loop_cursor_down)
 k			<Plug>(vimfiler_loop_cursor_up)
 <C-l>			<Plug>(vimfiler_redraw_screen)
 <Space>			<Plug>(vimfiler_toggle_mark_current_line)
-<Space>			<Plug>(vimfiler_toggle_mark_selected_lines)
 *			<Plug>(vimfiler_toggle_mark_all_lines)
 U			<Plug>(vimfiler_clear_mark_all_lines)
 c			<Plug>(vimfiler_copy_file)
@@ -168,6 +319,11 @@ gr			<Plug>(vimfiler_grep)
 s			<Plug>(vimfiler_select_sort_type)
 <C-v>			<Plug>(vimfiler_switch_vim_buffer_mode)
 
+Visual mode mappings.
+{lhs}			{rhs}
+--------		-----------------------------
+<Space>			<Plug>(vimfiler_toggle_mark_selected_lines)
+
 	Please refer to vimfiler#mappings#define_default_mappings() in
 	autoload/vimfiler/mappings.vim.
 
@@ -199,6 +355,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added <Plug>(vimfiler_move_to_history_forward) and <Plug>(vimfiler_move_to_history_back) key-mappings.
 - Added g:vimfiler_enable_clipboard option.
 - Revised documentation.
+- Added mappings manual.
 
 2010-07-26
 - Supported conceal feature.
