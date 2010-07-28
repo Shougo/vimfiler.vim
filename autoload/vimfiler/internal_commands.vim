@@ -99,7 +99,9 @@ function! s:external(command, dest_dir, src_files)"{{{
   endif
 endfunction"}}}
 
-function! vimfiler#internal_commands#cd(dir)"{{{
+function! vimfiler#internal_commands#cd(dir, ...)"{{{
+  let l:save_history = a:0 ? a:1 : 1
+
   if a:dir == '..'
     if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
       " Select drive.
@@ -142,10 +144,13 @@ function! vimfiler#internal_commands#cd(dir)"{{{
   let b:vimfiler.current_dir = l:dir
 
   " Save changed directories.
-  call add(b:vimfiler.changed_dir, l:dir)
-  while len(b:vimfiler.changed_dir) >= g:vimfiler_max_save_directories
-    call remove(b:vimfiler.changed_dir, 0)
-  endwhile
+  if l:save_history
+    call add(b:vimfiler.changed_dir, l:dir)
+    let l:max_save = g:vimfiler_max_save_directories > 0 ? g:vimfiler_max_save_directories : 10
+    while len(b:vimfiler.changed_dir) >= l:max_save
+      call remove(b:vimfiler.changed_dir, 0)
+    endwhile
+  endif
 
   " Redraw.
   call vimfiler#force_redraw_screen()
