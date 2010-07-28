@@ -70,6 +70,9 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <silent> <Plug>(vimfiler_rename_file)  :<C-u>call <SID>rename()<CR>
   nnoremap <silent> <Plug>(vimfiler_make_directory)  :<C-u>call <SID>make_directory()<CR>
   nnoremap <silent> <Plug>(vimfiler_new_file)  :<C-u>call <SID>new_file()<CR>
+
+  nnoremap <silent> <Plug>(vimfiler_history_forward)   :<C-u>call <SID>history_forward()<CR>
+  nnoremap <silent> <Plug>(vimfiler_history_back)      :<C-u>call <SID>history_back()<CR>
   "}}}
 
   if exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings
@@ -715,6 +718,42 @@ function! s:restore_vimfiler_mode()"{{{
   endfor
 
   echo 'Switched vimfiler mode'
+endfunction"}}}
+function! s:history_forward()"{{{
+  if len(b:vimfiler.changed_dir) < 2
+    return
+  endif
+  if b:vimfiler.current_changed_dir_index ==# -1
+    return
+  endif
+
+  let b:vimfiler.current_changed_dir_index += 1
+  let l:dir = b:vimfiler.changed_dir[b:vimfiler.current_changed_dir_index]
+
+  " Reset b:vimfiler.current_changed_dir_index
+  if len(b:vimfiler.changed_dir) - 2 ==# b:vimfiler.current_changed_dir_index
+    let b:vimfiler.current_changed_dir_index = -1
+  endif
+
+  call vimfiler#internal_commands#cd(l:dir)
+endfunction"}}}
+function! s:history_back()"{{{
+  if len(b:vimfiler.changed_dir) < 2
+    return
+  endif
+  if b:vimfiler.current_changed_dir_index ==# 0
+    return
+  endif
+
+  if b:vimfiler.current_changed_dir_index ==# -1
+    " Last item must be b:vimfiler.current_dir
+    let b:vimfiler.current_changed_dir_index = len(b:vimfiler.changed_dir) - 2
+  else
+    let b:vimfiler.current_changed_dir_index -= 1
+  endif
+
+  let l:dir = b:vimfiler.changed_dir[b:vimfiler.current_changed_dir_index]
+  call vimfiler#internal_commands#cd(l:dir)
 endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{
