@@ -126,6 +126,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-07-28
+- Implemented dictionary plugin.
+
 2010-07-26
 - Supported conceal feature.
 
