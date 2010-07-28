@@ -24,6 +24,39 @@
 " }}}
 "=============================================================================
 
+" Global options definition."{{{
+" External commands.
+if !exists('g:vimfiler_external_delete_command')
+  if vimfiler#iswin() && !executable('rm')
+    let g:vimfiler_external_delete_command = 'system rmdir /Q /S $srcs'
+  else
+    let g:vimfiler_external_delete_command = 'rm -r $srcs'
+  endif
+endif
+if !exists('g:vimfiler_external_copy_file_command')
+  if vimfiler#iswin() && !executable('cp')
+    let g:vimfiler_external_copy_file_command = 'system copy $src $dest'
+  else
+    let g:vimfiler_external_copy_file_command = 'cp $src $dest'
+  endif
+endif
+if !exists('g:vimfiler_external_copy_directory_command')
+  if vimfiler#iswin() && !executable('cp')
+    " Can't support.
+    let g:vimfiler_external_copy_directory_command = ''
+  else
+    let g:vimfiler_external_copy_directory_command = 'cp -r $src $dest'
+  endif
+endif
+if !exists('g:vimfiler_external_move_command')
+  if vimfiler#iswin() && !executable('mv')
+    let g:vimfiler_external_move_command = 'move /Y $srcs $dest'
+  else
+    let g:vimfiler_external_move_command = 'mv $srcs $dest'
+  endif
+endif
+"}}}
+
 let s:scheme = {
       \ 'name' : 'file',
       \}

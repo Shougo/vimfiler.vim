@@ -81,7 +81,7 @@ function! vimfiler#internal_commands#cd(dir)"{{{
 
   " Save changed directories.
   call add(b:vimfiler.changed_dir, l:dir)
-  let l:max_save = g:vimfiler_max_save_histories > 0 ? g:vimfiler_max_save_histories : 10
+  let l:max_save = g:vimfiler_max_directory_histories > 0 ? g:vimfiler_max_directory_histories : 10
   if len(b:vimfiler.changed_dir) >= l:max_save
     " Get last l:max_save num elements.
     let b:vimfiler.changed_dir = b:vimfiler.changed_dir[-l:max_save :]

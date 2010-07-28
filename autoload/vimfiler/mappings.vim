@@ -462,17 +462,22 @@ function! s:move()"{{{
   endif
 
   if !vimfiler#exists_another_vimfiler()
-    " Copy to clipboard.
-    let b:vimfiler.clipboard = {
-          \ 'command' : 'move', 'files' : l:marked_files
-          \}
-    call s:clear_mark_all_lines()
-    echo 'Saved to clipboard.'
-    return
+    if g:vimfiler_enable_clipboard
+      " Copy to clipboard.
+      let b:vimfiler.clipboard = {
+            \ 'command' : 'move', 'files' : l:marked_files
+            \}
+      call s:clear_mark_all_lines()
+      echo 'Saved to clipboard.'
+      return
+    else
+      " Input destination directory.
+      let l:dest_dir = vimfiler#input_directory('Input destination directory: ')
+    endif
+  else
+    " Get destination directory.
+    let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
   endif
-  
-  " Get destination directory.
-  let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
 
   let l:yesno = vimfiler#input_yesno('Really move marked files?')
 
@@ -492,18 +497,23 @@ function! s:copy()"{{{
   endif
 
   if !vimfiler#exists_another_vimfiler()
-    " Copy to clipboard.
-    let b:vimfiler.clipboard = {
-          \ 'command' : 'copy', 'files' : l:marked_files
-          \}
-    call s:clear_mark_all_lines()
-    echo 'Saved to clipboard.'
-    return
+    if g:vimfiler_enable_clipboard
+      " Copy to clipboard.
+      let b:vimfiler.clipboard = {
+            \ 'command' : 'copy', 'files' : l:marked_files
+            \}
+      call s:clear_mark_all_lines()
+      echo 'Saved to clipboard.'
+      return
+    else
+      " Input destination directory.
+      let l:dest_dir = vimfiler#input_directory('Input destination directory: ')
+    endif
+  else
+    " Get destination directory.
+    let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
   endif
   
-  " Get destination directory.
-  let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
-
   " Execute copy.
   call vimfiler#internal_commands#cp(l:dest_dir . '/', l:marked_files)
   call s:clear_mark_all_lines()

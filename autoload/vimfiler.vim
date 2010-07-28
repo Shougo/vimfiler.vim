@@ -510,55 +510,6 @@ function! vimfiler#redraw_all_vimfiler()"{{{
 
   execute l:current_nr . 'wincmd w'
 endfunction"}}}
-function! vimfiler#smart_omit_filename(filename, length)"{{{
-  let l:len = len(a:filename)
-
-  " For multibyte.
-  let l:pos = 0
-  let l:fchar = char2nr(a:filename[l:pos])
-  let l:display_diff = 0
-  while l:pos < l:len && l:pos-l:display_diff < a:length
-    if l:fchar >= 0x80
-      " Skip multibyte
-      if l:fchar < 0xc0
-        " Skip UTF-8 on the way
-        let l:fchar = char2nr(a:filename[l:pos])
-        while l:pos < a:length && 0x80 <= l:fchar && l:fchar < 0xc0
-          let l:pos += 1
-          let l:fchar = char2nr(a:filename[l:pos])
-        endwhile
-      elseif l:fchar < 0xe0
-        " 2byte code
-        let l:pos += 1
-      elseif l:fchar < 0xf0
-        " 3byte code
-        let l:display_diff += 1
-        let l:pos += 2
-      elseif l:fchar < 0xf8
-        " 4byte code
-        let l:display_diff += 2
-        let l:pos += 3
-      elseif l:fchar < 0xfe
-        " 5byte code
-        let l:display_diff += 3
-        let l:pos += 4
-      else
-        " 6byte code
-        let l:display_diff += 4
-        let l:pos += 5
-      endif
-    endif
-
-    let l:pos += 1
-    let l:fchar = char2nr(a:filename[l:pos])
-  endwhile
-
-  if l:pos > a:length
-    return a:filename[: l:pos] . '...'
-  else
-    return a:filename[: l:pos] . repeat(' ', a:length - l:pos+l:display_diff)
-  endif
-endfunction"}}}
 function! vimfiler#get_filetype(filename)"{{{
   let l:filename = vimfiler#resolve(a:filename)
   let l:ext = tolower(fnamemodify(l:filename, ':e'))

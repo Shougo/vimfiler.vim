@@ -71,34 +71,12 @@ if !exists('g:vimfiler_detect_drives')
             \ 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
             \ 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 endif
-if !exists('g:vimfiler_external_delete_command')
-  if s:iswin && !executable('rm')
-    let g:vimfiler_external_delete_command = 'system rmdir /Q /S $srcs'
-  else
-    let g:vimfiler_external_delete_command = 'rm -r $srcs'
-  endif
+
+if !exists('g:vimfiler_max_directory_histories')
+  let g:vimfiler_max_directory_histories = 10
 endif
-if !exists('g:vimfiler_external_copy_file_command')
-  if s:iswin && !executable('cp')
-    let g:vimfiler_external_copy_file_command = 'system copy $src $dest'
-  else
-    let g:vimfiler_external_copy_file_command = 'cp $src $dest'
-  endif
-endif
-if !exists('g:vimfiler_external_copy_directory_command')
-  if s:iswin && !executable('cp')
-    " Can't support.
-    let g:vimfiler_external_copy_directory_command = ''
-  else
-    let g:vimfiler_external_copy_directory_command = 'cp -r $src $dest'
-  endif
-endif
-if !exists('g:vimfiler_external_move_command')
-  if s:iswin && !executable('mv')
-    let g:vimfiler_external_move_command = 'move /Y $srcs $dest'
-  else
-    let g:vimfiler_external_move_command = 'mv $srcs $dest'
-  endif
+if !exists('g:vimfiler_enable_clipboard')
+  let g:vimfiler_enable_clipboard = 0
 endif
 
 " Set extensions.
@@ -115,7 +93,7 @@ if !has_key(g:vimfiler_extensions, 'archive')
   call vimfiler#set_extensions('archive', 'lzh,zip,gz,bz2,cab,rar,7z,tgz,tar')
 endif
 if !has_key(g:vimfiler_extensions, 'execute')
-  if has('win32') || has('win64')
+  if s:iswin
     call vimfiler#set_extensions('execute', substitute(substitute(tolower($PATHEXT), ';', ',', 'g'), '\.', '', 'g'))
   else
     let g:vimfiler_extensions.execute = {}
@@ -126,10 +104,6 @@ if !has_key(g:vimfiler_extensions, 'system')
 endif
 if !has_key(g:vimfiler_extensions, 'multimedia')
   call vimfiler#set_extensions('multimedia', 'avi,asf,wmv,mpg,flv,swf,divx,mov,mpa,m1a,m2p,m2a,mpeg,m1v,m2v,mp2v,mp4,qt,ra,rm,ram,rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au')
-endif
-
-if !exists('g:vimfiler_max_save_histories')
-  let g:vimfiler_max_save_histories = 10
 endif
 "}}}
 

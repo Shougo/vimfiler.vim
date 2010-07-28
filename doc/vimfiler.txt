@@ -97,11 +97,22 @@ g:vimfiler_max_filename_width			*g:vimfiler_max_filename_width*
 		
 		Default value is 50.
 
+g:vimfiler_enable_clipboard			*g:vimfiler_enable_clipboard*
+		This variable controls vimfiler use clipboard when other
+		vimfiler buffer is not found.
+		
+		Default value is 0.
+
+g:vimfiler_max_directory_histories		*g:vimfiler_max_directory_histories*
+		This variable controls vimfiler max directory history entries.
+		
+		Default value is 10.
+
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
 
-<Plug>(vimfiler_)				*<Plug>(vimfiler_)*
-		
+	Please refer to vimfiler#mappings#define_default_mappings() in
+	autoload/vimfiler/mappings.vim.
 
 ==============================================================================
 EXAMPLES					*vimfiler-examples*
@@ -129,6 +140,7 @@ CHANGELOG					*vimfiler-changelog*
 2010-07-28
 - Implemented dictionary plugin.
 - Added <Plug>(vimfiler_move_to_history_forward) and <Plug>(vimfiler_move_to_history_back) key-mappings.
+- Added g:vimfiler_enable_clipboard option.
 
 2010-07-26
 - Supported conceal feature.
