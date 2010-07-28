@@ -735,7 +735,7 @@ function! s:history_forward()"{{{
     let b:vimfiler.current_changed_dir_index = -1
   endif
 
-  call vimfiler#internal_commands#cd(l:dir, 0)
+  call vimfiler#internal_commands#cd(l:dir)
 endfunction"}}}
 function! s:history_back()"{{{
   if len(b:vimfiler.changed_dir) < 2
@@ -753,7 +753,7 @@ function! s:history_back()"{{{
   endif
 
   let l:dir = b:vimfiler.changed_dir[b:vimfiler.current_changed_dir_index]
-  call vimfiler#internal_commands#cd(l:dir, 0)
+  call vimfiler#internal_commands#cd(l:dir)
 endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{
