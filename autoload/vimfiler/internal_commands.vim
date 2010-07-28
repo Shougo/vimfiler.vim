@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Jun 2010
+" Last Modified: 28 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,79 +24,17 @@
 " }}}
 "=============================================================================
 
-let s:exists_vimproc_open = exists('*vimproc#open')
-let s:exists_vimproc_system_bg = exists('*vimproc#system_bg')
-
 function! vimfiler#internal_commands#mv(dest_dir, src_files)"{{{
-  let l:dest_drive = matchstr(a:dest_dir, '^\a\+\ze:')
-  for l:src in a:src_files
-    if isdirectory(l:src) && vimfiler#iswin() && matchstr(l:src, '^\a\+\ze:') !=? l:dest_drive
-      " rename() doesn't supported directory over drive move in Windows.
-      if g:vimfiler_external_copy_directory_command == ''
-        echohl Error | echoerr "Directory move is not supported in this platform. Please install cp.exe." | echohl None
-      else
-        call s:external('copy_directory', a:dest_dir, [l:src])
-        call s:external('delete', '', [l:src])
-      endif
-    else
-      call rename(l:src, a:dest_dir . fnamemodify(l:src, ':t'))
-    endif
-  endfor
+  let l:scheme = vimfiler#available_schemes('file')
+  call l:scheme.mv(a:dest_dir, a:src_files)
 endfunction"}}}
 function! vimfiler#internal_commands#cp(dest_dir, src_files)"{{{
-  for l:file in a:src_files
-    if isdirectory(l:file)
-      if g:vimfiler_external_copy_directory_command == ''
-        echohl Error | echoerr "Recursive copy is not supported in this platform. Please install cp.exe." | echohl None
-      else
-        call s:external('copy_directory', a:dest_dir, [l:file])
-      endif
-    else
-      call s:external('copy_file', a:dest_dir, [l:file])
-    endif
-  endfor
+  let l:scheme = vimfiler#available_schemes('file')
+  call l:scheme.cp(a:dest_dir, a:src_files)
 endfunction"}}}
 function! vimfiler#internal_commands#rm(files)"{{{
-  for l:file in a:files
-    if isdirectory(l:file)
-      call s:external('delete', '', [l:file])
-    else
-      call delete(l:file)
-    endif
-  endfor
-endfunction"}}}
-function! s:external(command, dest_dir, src_files)"{{{
-  let l:command_line = g:vimfiler_external_{a:command}_command
-
-  if l:command_line =~# '\$src\>'
-    for l:src in a:src_files
-      let l:command_line = g:vimfiler_external_{a:command}_command
-      
-      let l:command_line = substitute(l:command_line, 
-            \'\$src\>', '"'.l:src.'"', 'g') 
-      let l:command_line = substitute(l:command_line, 
-            \'\$dest\>', '"'.a:dest_dir.'"', 'g')
-      
-      if vimfiler#iswin() && l:command_line =~# '^system '
-        let l:output = vimfiler#force_system(l:command_line[7:])
-      else
-        let l:output = vimfiler#system(l:command_line)
-      endif
-    endfor
-  else
-    let l:command_line = substitute(l:command_line, 
-          \'\$srcs\>', join(map(a:src_files, '''"''.v:val.''"''')), 'g') 
-    let l:command_line = substitute(l:command_line, 
-          \'\$dest\>', '"'.a:dest_dir.'"', 'g')
-
-    if vimfiler#iswin() && l:command_line =~# '^system '
-      let l:output = vimfiler#force_system(l:command_line[7:])
-    else
-      let l:output = vimfiler#system(l:command_line)
-    endif
-    
-    echon l:output
-  endif
+  let l:scheme = vimfiler#available_schemes('file')
+  call l:scheme.rm(a:files)
 endfunction"}}}
 
 function! vimfiler#internal_commands#cd(dir)"{{{
@@ -159,7 +97,7 @@ function! vimfiler#internal_commands#cd(dir)"{{{
         \ b:vimfiler.directory_cursor_pos[l:dir] : l:save_pos))
 endfunction"}}}
 function! vimfiler#internal_commands#open(filename)"{{{
-  if !s:exists_vimproc_open
+  if !exists('*vimproc#open')
     echoerr 'vimproc#open() is not found. Please install vimproc Ver.4.1 or later.'
     return
   endif
@@ -167,7 +105,7 @@ function! vimfiler#internal_commands#open(filename)"{{{
   call vimproc#open(a:filename)
 endfunction"}}}
 function! vimfiler#internal_commands#gexe(filename)"{{{
-  if !s:exists_vimproc_system_bg
+  if !exists('*vimproc#system_bg')
     echoerr 'vimproc#system_bg() is not found. Please install vimproc Ver.4.1 or later.'
     return
   endif

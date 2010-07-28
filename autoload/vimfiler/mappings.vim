@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jul 2010
+" Last Modified: 28 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,6 +40,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call vimfiler#internal_commands#cd('/')<CR>
   nnoremap <silent> <Plug>(vimfiler_move_to_trashbox_directory)  :<C-u>call vimfiler#internal_commands#cd(g:vimfiler_trashbox_directory)<CR>
   nnoremap <silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call vimfiler#mappings#move_to_drive()<CR>
+  nnoremap <silent> <Plug>(vimfiler_move_to_history_forward)   :<C-u>call <SID>history_forward()<CR>
+  nnoremap <silent> <Plug>(vimfiler_move_to_history_back)      :<C-u>call <SID>history_back()<CR>
   nnoremap <silent> <Plug>(vimfiler_jump_to_directory)  :<C-u>call <SID>jump_to_directory()<CR>
   nnoremap <silent> <Plug>(vimfiler_execute_new_gvim)  :<C-u>call vimfiler#internal_commands#gexe('gvim')<CR>
   nnoremap <silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call <SID>toggle_visible_dot_files()<CR>
@@ -70,9 +72,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <silent> <Plug>(vimfiler_rename_file)  :<C-u>call <SID>rename()<CR>
   nnoremap <silent> <Plug>(vimfiler_make_directory)  :<C-u>call <SID>make_directory()<CR>
   nnoremap <silent> <Plug>(vimfiler_new_file)  :<C-u>call <SID>new_file()<CR>
-
-  nnoremap <silent> <Plug>(vimfiler_history_forward)   :<C-u>call <SID>history_forward()<CR>
-  nnoremap <silent> <Plug>(vimfiler_history_back)      :<C-u>call <SID>history_back()<CR>
   "}}}
 
   if exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings
@@ -93,13 +92,13 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   " Clear marks in all lines.
   nmap <buffer> U <Plug>(vimfiler_clear_mark_all_lines)
 
-  " Copy.
+  " Copy files.
   nmap <buffer> c <Plug>(vimfiler_copy_file)
 
-  " Move.
+  " Move files.
   nmap <buffer> m <Plug>(vimfiler_move_file)
 
-  " Delete.
+  " Delete files.
   nmap <buffer> d <Plug>(vimfiler_delete_file)
   nmap <buffer> D <Plug>(vimfiler_force_delete_file)
 
@@ -120,12 +119,17 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> l <Plug>(vimfiler_execute)
 
   nmap <buffer> x <Plug>(vimfiler_execute_file)
+
+  " Move to directory.
   nmap <buffer> h <Plug>(vimfiler_move_to_up_directory)
   nmap <buffer> L <Plug>(vimfiler_move_to_drive)
   nmap <buffer> J <Plug>(vimfiler_jump_to_directory)
   nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
   nmap <buffer> $ <Plug>(vimfiler_move_to_trashbox_directory)
   nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
+  nmap <buffer> <C-h> <Plug>(vimfiler_move_to_history_back)
+  nmap <buffer> <C-l> <Plug>(vimfiler_move_to_history_forward)
+  
   nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
   nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
   nmap <buffer> H <Plug>(vimfiler_popup_shell)
@@ -342,6 +346,7 @@ function! s:move_to_other_window()"{{{
 
   wincmd w
 endfunction"}}}
+
 function! s:jump_to_directory()"{{{
   let l:dir = vimfiler#resolve(expand(input('Jump to: ', '', 'dir')))
   if l:dir == ''
@@ -719,6 +724,7 @@ function! s:restore_vimfiler_mode()"{{{
 
   echo 'Switched vimfiler mode'
 endfunction"}}}
+
 function! s:history_forward()"{{{
   if len(b:vimfiler.changed_dir) < 2
     return

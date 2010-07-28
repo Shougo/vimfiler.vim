@@ -139,8 +139,11 @@ function! vimfiler#create_filer(directory, options)"{{{
   let b:vimfiler.is_simple = l:simple_flag
   let b:vimfiler.directory_cursor_pos = {}
   " Set mask.
-  let b:vimfiler.current_mask = '*'
+  let b:vimfiler.current_mask = ''
   let b:vimfiler.sort_type = g:vimfiler_sort_type
+
+  " Initialize schemes.
+  call s:init_schemes()
 
   call vimfiler#force_redraw_screen()
   3
@@ -227,18 +230,17 @@ function! vimfiler#switch_filer(directory, options)"{{{
   " Create window.
   call vimfiler#create_filer(a:directory, a:options)
 endfunction"}}}
+function! vimfiler#available_schemes(name)"{{{
+  return get(s:schemes, a:name, {})
+endfunction"}}}
 function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
-  let l:current_files = []
+  
+  let l:scheme = vimfiler#available_schemes('file')
+  let l:current_files = l:scheme.read(b:vimfiler.current_dir, b:vimfiler.current_mask)[1]
   for l:mask in split(b:vimfiler.current_mask)
-    let l:current_files += split(glob(b:vimfiler.current_dir . l:mask), '\n')
+    call filter(l:current_files, 'v:val =~' . string(l:mask))
   endfor
-  if b:vimfiler.is_visible_dot_files
-    for l:mask in split(b:vimfiler.current_mask)
-      let l:current_files += filter(split(glob(b:vimfiler.current_dir . '.' . l:mask), '\n'), 
-            \'v:val !~ "[/\\\\]\.\.\\?$"')
-    endfor
-  endif
   
   let l:dirs = []
   let l:files = []
@@ -746,6 +748,19 @@ function! s:event_bufwin_enter()"{{{
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
   let s:last_vimfiler_bufnr = bufnr('%')
+endfunction"}}}
+
+function! s:init_schemes()"{{{
+  " Initialize internal scheme table.
+  let s:schemes= {}
+
+  " Search autoload.
+  for list in split(globpath(&runtimepath, 'autoload/vimfiler/schemes/*.vim'), '\n')
+    let l:scheme = fnamemodify(list, ':t:r')
+    if !has_key(s:schemes, l:scheme)
+      let s:schemes[l:scheme] = call('vimfiler#schemes#'.l:scheme.'#define', [])
+    endif
+  endfor
 endfunction"}}}
 
 " vim: foldmethod=marker

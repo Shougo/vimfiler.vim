@@ -126,6 +126,10 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-07-28
+- Implemented dictionary plugin.
+- Added <Plug>(vimfiler_move_to_history_forward) and <Plug>(vimfiler_move_to_history_back) key-mappings.
+
 2010-07-26
 - Supported conceal feature.
 
