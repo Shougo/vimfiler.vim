@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jul 2010
+" Last Modified: 29 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,7 +36,8 @@ syn match   VimFilerDirectory         '^..$'
 
 syn match   VimFilerPrompt            '^\%(Current directory\|CD\): .*$' contains=VimFilerSpecial,VimFilerCurrentDirectory
 syn match   VimFilerSpecial           '^\%(Current directory\|CD\):' contained
-syn match   VimFilerCurrentDirectory  '\s\zs.*$' contained
+syn match   VimFilerCurrentDirectory  '\s\zs.*$' contained contains=VimFilerMask
+syn match   VimFilerMask  '\[.*\]$' contained
 
 syn match   VimFilerTypeText          '\%(\f\s\?\)\+\s\+\[TXT\]'
 syn match   VimFilerTypeImage         '\%(\f\s\?\)\+\s\+\[IMG\]'
@@ -63,6 +64,8 @@ if has('gui_running')
 else
     hi def link VimFilerCurrentDirectory Identifier
 endif
+hi def link VimFilerMask Statement
+
 hi def link VimFilerSpecial Special
 hi def link VimFilerNonMarkedFile Special
 "hi VimFilerMarkedFile  gui=REVERSE term=REVERSE

@@ -63,9 +63,9 @@ let s:scheme = {
 
 function! s:scheme.read(path, is_visible_dot_file)"{{{
   if isdirectory(a:path)
-    let l:files = split(glob(a:path . '*'), '\n')
+    let l:files = split(glob(a:path . '/*'), '\n')
     if a:is_visible_dot_file
-      let l:files += filter(split(glob(a:path . '.*'), '\n'), 'v:val !~ "[/\\\\]\.\.\\?$"')
+      let l:files += filter(split(glob(a:path . '/.*'), '\n'), 'v:val !~ "[/\\\\]\.\.\\?$"')
     endif
     return [ 'directory', l:files ]
   elseif filereadable(a:path)

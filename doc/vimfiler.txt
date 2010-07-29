@@ -350,6 +350,11 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-07-29
+- Improved move_to_drive().
+- Improved mask.
+- Fixed visible doted file bug.
+
 2010-07-28
 - Implemented dictionary plugin.
 - Added <Plug>(vimfiler_move_to_history_forward) and <Plug>(vimfiler_move_to_history_back) key-mappings.

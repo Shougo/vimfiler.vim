@@ -237,9 +237,9 @@ function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
   
   let l:scheme = vimfiler#available_schemes('file')
-  let l:current_files = l:scheme.read(b:vimfiler.current_dir, b:vimfiler.current_mask)[1]
+  let l:current_files = l:scheme.read(b:vimfiler.current_dir, b:vimfiler.is_visible_dot_files)[1]
   for l:mask in split(b:vimfiler.current_mask)
-    call filter(l:current_files, 'v:val =~' . string(l:mask))
+    let l:current_files = filter(l:current_files, 'fnamemodify(v:val, ":t") =~# ' . string(l:mask))
   endfor
   
   let l:dirs = []
@@ -288,8 +288,9 @@ function! vimfiler#redraw_screen()"{{{
   % delete _
 
   " Print current directory.
-  call setline(1, (b:vimfiler.is_simple ? 'CD: ' : 'Current directory: ')
-        \. b:vimfiler.current_dir . b:vimfiler.current_mask)
+  call setline(1, printf('%s%s[%s]',
+        \ (b:vimfiler.is_simple ? 'CD: ' : 'Current directory: '),
+        \ b:vimfiler.current_dir , b:vimfiler.current_mask))
 
   " Append up directory.
   call append('$', '..')

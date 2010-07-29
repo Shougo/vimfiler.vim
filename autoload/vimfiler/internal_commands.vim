@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jul 2010
+" Last Modified: 29 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -42,8 +42,7 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
 
   if a:dir == '..'
     if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
-      " Select drive.
-      call vimfiler#mappings#move_to_drive()
+      " Ignore.
       return
     endif
 

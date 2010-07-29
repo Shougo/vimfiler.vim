@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jul 2010
+" Last Modified: 29 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,7 +39,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call vimfiler#internal_commands#cd('~')<CR>
   nnoremap <silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call vimfiler#internal_commands#cd('/')<CR>
   nnoremap <silent> <Plug>(vimfiler_move_to_trashbox_directory)  :<C-u>call vimfiler#internal_commands#cd(g:vimfiler_trashbox_directory)<CR>
-  nnoremap <silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call vimfiler#mappings#move_to_drive()<CR>
+  nnoremap <silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call <SID>move_to_drive()<CR>
   nnoremap <silent> <Plug>(vimfiler_move_to_history_forward)   :<C-u>call <SID>history_forward()<CR>
   nnoremap <silent> <Plug>(vimfiler_move_to_history_back)      :<C-u>call <SID>history_back()<CR>
   nnoremap <silent> <Plug>(vimfiler_jump_to_directory)  :<C-u>call <SID>jump_to_directory()<CR>
@@ -151,31 +151,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
 endfunction"}}}
 
 " vimfiler key-mappings functions.
-function! vimfiler#mappings#move_to_drive()"{{{
-  let l:drives = vimfiler#get_drives()
-
-  if empty(l:drives)
-    " No drives.
-    return
-  endif
-
-  for [l:key, l:drive] in items(l:drives)
-    echo printf('[%s] %s', l:key, l:drive)
-  endfor
-
-  let l:key = vimfiler#resolve(expand(input('Please input drive alphabet or other directory: ', '', 'dir')))
-  
-  if l:key == ''
-    return
-  elseif has_key(l:drives, tolower(l:key))
-    call vimfiler#internal_commands#cd(l:drives[tolower(l:key)])
-  elseif isdirectory(l:key)
-    call vimfiler#internal_commands#cd(l:key)
-  else
-    echo 'Invalid directory name.'
-    return
-  endif
-endfunction"}}}
 function! vimfiler#mappings#open_previous_file()"{{{
   if !exists('b:vimfiler')
     return
@@ -347,6 +322,31 @@ function! s:move_to_other_window()"{{{
   wincmd w
 endfunction"}}}
 
+function! s:move_to_drive()"{{{
+  let l:drives = vimfiler#get_drives()
+
+  if empty(l:drives)
+    " No drives.
+    return
+  endif
+
+  for [l:key, l:drive] in items(l:drives)
+    echo printf('[%s] %s', l:key, l:drive)
+  endfor
+
+  let l:key = vimfiler#resolve(expand(input('Please input drive alphabet or other directory: ', '', 'dir')))
+  
+  if l:key == ''
+    return
+  elseif has_key(l:drives, tolower(l:key))
+    call vimfiler#internal_commands#cd(l:drives[tolower(l:key)])
+  elseif isdirectory(l:key)
+    call vimfiler#internal_commands#cd(l:key)
+  else
+    echo 'Invalid directory name.'
+    return
+  endif
+endfunction"}}}
 function! s:jump_to_directory()"{{{
   let l:dir = vimfiler#resolve(expand(input('Jump to: ', '', 'dir')))
   if l:dir == ''
@@ -638,9 +638,6 @@ function! s:paste_from_clipboard()"{{{
 endfunction"}}}
 function! s:set_current_mask()"{{{
   let l:mask = input('Please input new mask pattern: ', '')
-  if l:mask == ''
-    let l:mask = '*'
-  endif
 
   let b:vimfiler.current_mask = l:mask
   call vimfiler#force_redraw_screen()
