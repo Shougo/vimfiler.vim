@@ -182,10 +182,6 @@ Normal mode mappings.
 		
 		
 
-<Plug>(vimfiler_jump_to_directory)		*<Plug>(vimfiler_jump_to_directory)*
-		
-		
-
 <Plug>(vimfiler_move_to_home_directory)		*<Plug>(vimfiler_move_to_home_directory)*
 		Move to home directory.
 
@@ -202,6 +198,14 @@ Normal mode mappings.
 		
 
 <Plug>(vimfiler_move_to_history_forward)	*<Plug>(vimfiler_move_to_history_forward)*
+		
+		
+
+<Plug>(vimfiler_jump_to_directory)		*<Plug>(vimfiler_jump_to_directory)*
+		
+		
+
+<Plug>(vimfiler_jump_to_history_directory)	*<Plug>(vimfiler_jump_to_history_directory)*
 		
 		
 
@@ -300,6 +304,7 @@ $			<Plug>(vimfiler_move_to_trashbox_directory)
 \			<Plug>(vimfiler_move_to_root_directory)
 <C-h>			<Plug>(vimfiler_move_to_history_back)
 <C-l>			<Plug>(vimfiler_move_to_history_forward)
+<C-j>			<Plug>(vimfiler_jump_to_history_directory)
 gv			<Plug>(vimfiler_execute_new_gvim)
 .			<Plug>(vimfiler_toggle_visible_dot_files)
 H			<Plug>(vimfiler_popup_shell)
@@ -354,6 +359,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved move_to_drive().
 - Improved mask.
 - Fixed visible doted file bug.
+- Implemanted <Plug>(vimfiler_jump_to_history_directory).
 
 2010-07-28
 - Implemented dictionary plugin.

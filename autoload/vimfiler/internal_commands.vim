@@ -68,7 +68,7 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
     " Ignore.
     return
   endif
-
+  
   lcd `=l:dir`
   if l:dir !~ '/$'
     let l:dir .= '/'
@@ -97,7 +97,7 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
       let b:vimfiler.changed_dir = b:vimfiler.changed_dir[-l:max_save :]
     endif
   endif
-
+  
   " Redraw.
   call vimfiler#force_redraw_screen()
 

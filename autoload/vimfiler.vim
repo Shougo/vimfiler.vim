@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jul 2010
+" Last Modified: 29 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -132,7 +132,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
   endif
-  let b:vimfiler.changed_dir = [l:current]
+  let b:vimfiler.changed_dir = [b:vimfiler.current_dir]
   let b:vimfiler.current_changed_dir_index = -1
   let b:vimfiler.clipboard = {}
   let b:vimfiler.is_visible_dot_files = 0
@@ -288,9 +288,11 @@ function! vimfiler#redraw_screen()"{{{
   % delete _
 
   " Print current directory.
-  call setline(1, printf('%s%s[%s]',
+  call setline(1, printf('%s%s[%s%s]',
         \ (b:vimfiler.is_simple ? 'CD: ' : 'Current directory: '),
-        \ b:vimfiler.current_dir , b:vimfiler.current_mask))
+        \ b:vimfiler.current_dir ,
+        \ (b:vimfiler.is_visible_dot_files ? '.:' : ''),
+        \ b:vimfiler.current_mask))
 
   " Append up directory.
   call append('$', '..')

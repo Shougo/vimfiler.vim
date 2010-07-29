@@ -43,6 +43,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <silent> <Plug>(vimfiler_move_to_history_forward)   :<C-u>call <SID>history_forward()<CR>
   nnoremap <silent> <Plug>(vimfiler_move_to_history_back)      :<C-u>call <SID>history_back()<CR>
   nnoremap <silent> <Plug>(vimfiler_jump_to_directory)  :<C-u>call <SID>jump_to_directory()<CR>
+  nnoremap <silent> <Plug>(vimfiler_jump_to_history_directory)  :<C-u>call <SID>jump_to_history_directory()<CR>
   nnoremap <silent> <Plug>(vimfiler_execute_new_gvim)  :<C-u>call vimfiler#internal_commands#gexe('gvim')<CR>
   nnoremap <silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call <SID>toggle_visible_dot_files()<CR>
   nnoremap <silent> <Plug>(vimfiler_popup_shell)  :<C-u>call <SID>popup_shell()<CR>
@@ -129,6 +130,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
   nmap <buffer> <C-h> <Plug>(vimfiler_move_to_history_back)
   nmap <buffer> <C-l> <Plug>(vimfiler_move_to_history_forward)
+  nmap <buffer> <C-j> <Plug>(vimfiler_jump_to_history_directory)
   
   nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
   nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
@@ -343,18 +345,44 @@ function! s:move_to_drive()"{{{
   elseif isdirectory(l:key)
     call vimfiler#internal_commands#cd(l:key)
   else
+    redraw
     echo 'Invalid directory name.'
     return
+  endif
+endfunction"}}}
+function! s:jump_to_history_directory()"{{{
+  let l:cnt = 0
+  for l:directory in b:vimfiler.changed_dir
+    echo printf('%s[%s] %s',
+          \ (l:cnt == b:vimfiler.current_changed_dir_index ? '*' : ' '),
+          \ l:cnt, l:directory)
+    let l:cnt += 1
+  endfor
+
+  let l:key = input('Please input history number: ')
+  
+  if l:key == '' || l:key !~ '^\d\+$'
+    return
+  endif
+  
+  let l:num = str2nr(l:key)
+  if l:num < len(b:vimfiler.changed_dir)
+    call vimfiler#internal_commands#cd(b:vimfiler.changed_dir[l:num])
+  else
+    redraw
+    echo 'Invalid history number.'
   endif
 endfunction"}}}
 function! s:jump_to_directory()"{{{
   let l:dir = vimfiler#resolve(expand(input('Jump to: ', '', 'dir')))
   if l:dir == ''
+    redraw
     echo 'Canceled.'
     return
   elseif isdirectory(l:dir)
     call vimfiler#internal_commands#cd(l:dir)
   else
+    redraw
     echo 'Invalid directory name.'
     return
   endif
@@ -398,6 +426,7 @@ endfunction"}}}
 function! s:execute_external_command()"{{{
   let l:command = input('Input external command: ', '', 'shellcmd')
   if l:command == ''
+    redraw
     echo 'Canceled.'
     return
   endif
@@ -407,6 +436,7 @@ endfunction"}}}
 function! s:execute_shell_command()"{{{
   let l:command = input('Input shell command: ', '', 'shellcmd')
   if l:command == ''
+    redraw
     echo 'Canceled.'
     return
   endif
@@ -546,6 +576,7 @@ function! s:delete()"{{{
     call vimfiler#internal_commands#mv(l:trashdir, l:marked_files)
     call vimfiler#force_redraw_all_vimfiler()
   else
+    redraw
     echo 'Canceled.'
   endif
 endfunction"}}}
@@ -563,6 +594,7 @@ function! s:force_delete()"{{{
     call vimfiler#internal_commands#rm(l:marked_files)
     call vimfiler#force_redraw_all_vimfiler()
   else
+    redraw
     echo 'Canceled.'
   endif
 endfunction"}}}
@@ -582,6 +614,7 @@ function! s:rename()"{{{
   let l:filename = input(printf('New filename: %s -> ', l:oldfilename), l:oldfilename, 'file')
 
   if l:filename == '' || l:filename ==# l:oldfilename
+    redraw
     echo 'Canceled.'
   else
     call rename(l:oldfilename, l:filename)
@@ -592,8 +625,10 @@ function! s:make_directory()"{{{
   let l:dirname = input('New directory name: ', '', 'dir')
 
   if l:dirname == ''
+    redraw
     echo 'Canceled.'
   elseif isdirectory(l:dirname) || filereadable(l:dirname)
+    redraw
     echo 'File exists.'
   else
     if &termencoding != '' && &termencoding != &encoding
@@ -609,8 +644,10 @@ function! s:new_file()"{{{
   let l:filename = input('New file name: ', '', 'file')
 
   if l:filename == ''
+    redraw
     echo 'Canceled.'
   elseif filereadable(l:filename)
+    redraw
     echo 'File exists.'
   else
     call writefile([], l:filename)
@@ -669,6 +706,7 @@ function! s:restore_from_trashbox()"{{{
     call vimfiler#internal_commands#mv(l:restoredir, l:marked_files)
     call vimfiler#force_redraw_all_vimfiler()
   else
+    redraw
     echo 'Canceled.'
   endif
 endfunction"}}}
@@ -682,6 +720,7 @@ function! s:grep()"{{{
 
   let l:pattern = input('Input search pattern: ')
   if l:pattern == ''
+    redraw
     echo 'Canceled.'
   else
     call s:clear_mark_all_lines()
@@ -696,6 +735,7 @@ function! s:select_sort_type()"{{{
   let l:sort_type = input(printf('Select sort type(Upper case is descending order) %s -> ', b:vimfiler.sort_type), '')
 
   if l:sort_type == ''
+    redraw
     echo 'Canceled.'
   elseif l:sort_type =~? 
         \'^\%(n\%[one]\|s\%[ize]\|e\%[xtension]\|f\%[ilename]\|t\%[ime]\|m\%[anual]\)$'
