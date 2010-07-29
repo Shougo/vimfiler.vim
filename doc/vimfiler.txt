@@ -97,6 +97,27 @@ g:vimfiler_max_filename_width			*g:vimfiler_max_filename_width*
 		
 		Default value is 50.
 
+g:vimfiler_sort_type				*g:vimfiler_sort_type*
+		This variable controls default vimfiler sort type.
+		
+		Default value is 'none'.
+
+g:vimfiler_directory_display_top		*g:vimfiler_directory_display_top*
+		This variable controls vimfiler sorts directories as top.
+		
+		Default value is 1.
+
+g:vimfiler_trashbox_directory			*g:vimfiler_trashbox_directory*
+		This variable controls vimfiler trashbox directory.
+		
+		Default value is '~/.vimfiler_trashbox'.
+
+g:vimfiler_detect_drives			*g:vimfiler_detect_drives*
+		 (Windows only) This variable controls vimfiler uses drives
+		 when |<Plug>(vimfiler_move_to_drive)|.
+		
+		Default value is refer to plugin/vimfiler.vim.
+
 g:vimfiler_enable_clipboard			*g:vimfiler_enable_clipboard*
 		This variable controls vimfiler use clipboard when other
 		vimfiler buffer is not found.
@@ -107,6 +128,27 @@ g:vimfiler_max_directory_histories		*g:vimfiler_max_directory_histories*
 		This variable controls vimfiler max directory history entries.
 		
 		Default value is 10.
+
+g:vimfiler_external_delete_command		*g:vimfiler_external_delete_command*
+		This variable controls vimfiler use delete command.
+		
+		Default value is refer to autoload/vimfiler/schemes/file.vim.
+
+g:vimfiler_external_copy_file_command		*g:vimfiler_external_copy_file_command*
+		This variable controls vimfiler use copy files command.
+		
+		Default value is refer to autoload/vimfiler/schemes/file.vim.
+
+g:vimfiler_external_copy_directory_command	*g:vimfiler_external_copy_directory_command*
+		This variable controls vimfiler use copy directories command.
+		If variable is empty, this system can't support copy directories.
+		
+		Default value is refer to autoload/vimfiler/schemes/file.vim.
+
+g:vimfiler_external_move_command		*g:vimfiler_external_move_command*
+		This variable controls vimfiler use move files command.
+		
+		Default value is refer to autoload/vimfiler/schemes/file.vim.
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
@@ -360,6 +402,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved mask.
 - Fixed visible doted file bug.
 - Implemanted <Plug>(vimfiler_jump_to_history_directory).
+- Revised documentation.
 
 2010-07-28
 - Implemented dictionary plugin.
