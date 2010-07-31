@@ -31,9 +31,7 @@ Interface		|vimfiler-interface|
   Variables		  |vimfiler-variables|
   Key mappings		  |vimfiler-key-mappings|
 Examples		|vimfiler-examples|
-Internal Commands	|vimfiler-internal-commands|
-Special Commands	|vimfiler-special-commands|
-Create plugin		|vimfiler-create-plugin|
+Create scheme		|vimfiler-create-scheme|
 ToDo			|vimfiler-todo|
 Bugs			|vimfiler-bugs|
 Changelog		|vimfiler-changelog|
@@ -396,6 +394,9 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-07-31
+- Fixed documentation.
 
 2010-07-29
 - Improved move_to_drive().
