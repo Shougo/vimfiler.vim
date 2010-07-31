@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jul 2010
+" Last Modified: 31 Jul 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -298,7 +298,7 @@ function! s:execute()"{{{
       let l:command = g:vimfiler_execute_file_list[l:ext]
       if l:command == 'vim'
         " Edit with vim.
-        call s:edit_file()
+        call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')), 'edit')
       else
         call vimfiler#internal_commands#gexe(printf('%s %s%s%s', g:vimfiler_execute_file_list[l:ext], &shellquote, l:filename, &shellquote))
       endif
@@ -509,6 +509,12 @@ function! s:move()"{{{
     let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
   endif
 
+  if l:dest_dir ==# b:vimfiler.current_dir
+    " Rename.
+    call s:rename()
+    return
+  endif
+
   let l:yesno = vimfiler#input_yesno('Really move marked files?')
 
   if l:yesno =~? 'y\%[es]'
@@ -542,6 +548,25 @@ function! s:copy()"{{{
   else
     " Get destination directory.
     let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
+  endif
+
+  if l:dest_dir ==# b:vimfiler.current_dir
+    if len(l:marked_files) > 1
+      echo 'Same directory.'
+      return
+    endif
+
+    " Rename copy.
+    let l:oldfilename = l:marked_files[0]
+    let l:filename = input(printf('New filename: %s -> ', l:oldfilename), l:oldfilename, 'file')
+    if l:filename == '' || l:filename ==# l:oldfilename
+      redraw
+      echo 'Canceled.'
+    else
+      call writefile(readfile(l:oldfilename, 'b'), l:filename)
+    endif
+    
+    return
   endif
   
   " Execute copy.

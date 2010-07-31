@@ -397,6 +397,9 @@ CHANGELOG					*vimfiler-changelog*
 
 2010-07-31
 - Fixed documentation.
+- Improved edit behavior.
+- Implemented rename copy.
+- Detect same directory.
 
 2010-07-29
 - Improved move_to_drive().

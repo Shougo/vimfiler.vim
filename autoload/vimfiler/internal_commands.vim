@@ -134,7 +134,9 @@ function! vimfiler#internal_commands#split()"{{{
     execute g:vimfiler_split_command
   endif
 endfunction"}}}
-function! vimfiler#internal_commands#edit(filename)"{{{
+function! vimfiler#internal_commands#edit(filename, ...)"{{{
+  let l:edit_command = a:0 > 0 ? a:1 : g:vimfiler_edit_command
+  
   if isdirectory(a:filename)
     call vimfiler#create_filer(a:filename, 
           \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
@@ -144,14 +146,14 @@ function! vimfiler#internal_commands#edit(filename)"{{{
   try
     let l:vimfiler_save = b:vimfiler
     
-    if g:vimfiler_edit_command ==# 'edit_nicely'
+    if l:edit_command ==# 'edit_nicely'
       if winheight(0) > &winheight
         new `=a:filename`
       else
         vnew `=a:filename`
       endif
     else
-      execute g:vimfiler_edit_command a:filename
+      execute l:edit_command a:filename
     endif
 
     let b:vimfiler = l:vimfiler_save
