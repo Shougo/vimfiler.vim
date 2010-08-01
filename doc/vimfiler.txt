@@ -395,6 +395,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-08-01
+- Improved rename copy.
+
 2010-07-31
 - Fixed documentation.
 - Improved edit behavior.

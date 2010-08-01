@@ -551,6 +551,7 @@ function! s:copy()"{{{
   endif
 
   if l:dest_dir ==# b:vimfiler.current_dir
+        \ || l:dest_dir == '.'
     if len(l:marked_files) > 1
       echo 'Same directory.'
       return
@@ -562,15 +563,17 @@ function! s:copy()"{{{
     if l:filename == '' || l:filename ==# l:oldfilename
       redraw
       echo 'Canceled.'
-    else
-      call writefile(readfile(l:oldfilename, 'b'), l:filename)
+
+      return
     endif
     
-    return
+    let l:dest_dir = l:filename
+  else
+    let l:dest_dir .= '/'
   endif
   
   " Execute copy.
-  call vimfiler#internal_commands#cp(l:dest_dir . '/', l:marked_files)
+  call vimfiler#internal_commands#cp(l:dest_dir, l:marked_files)
   call s:clear_mark_all_lines()
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
