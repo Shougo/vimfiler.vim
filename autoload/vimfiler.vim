@@ -127,7 +127,7 @@ function! vimfiler#create_filer(directory, options)"{{{
 
   " Set current directory.
   let l:current = (a:directory != '')? a:directory : getcwd()
-  lcd `=l:current`
+  call vimfiler#change_directory(l:current)
   let b:vimfiler.current_dir = l:current
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
@@ -612,6 +612,11 @@ function! vimfiler#resolve(filename)"{{{
   return ((vimfiler#iswin() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
         \ substitute(resolve(a:filename), '\\', '/', 'g') : a:filename
 endfunction"}}}
+function! vimfiler#change_directory(dir)"{{{
+  if g:vimfiler_change_vim_cwd
+    lcd `=a:dir`
+  endif
+endfunction"}}}
 "}}}
 
 " Detect drives.
@@ -697,7 +702,7 @@ function! s:event_bufwin_enter()"{{{
     return
   endif
   
-  lcd `=b:vimfiler.current_dir`
+  call vimfiler#change_directory(b:vimfiler.current_dir)
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{

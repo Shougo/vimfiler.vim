@@ -78,6 +78,9 @@ endif
 if !exists('g:vimfiler_enable_clipboard')
   let g:vimfiler_enable_clipboard = 0
 endif
+if !exists('g:vimfiler_change_vim_cwd')
+  let g:vimfiler_change_vim_cwd = 1
+endif
 
 " Set extensions.
 if !exists('g:vimfiler_extensions')

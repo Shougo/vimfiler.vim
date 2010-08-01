@@ -69,7 +69,7 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
     return
   endif
   
-  lcd `=l:dir`
+  call vimfiler#change_directory(l:dir)
   if l:dir !~ '/$'
     let l:dir .= '/'
   endif
