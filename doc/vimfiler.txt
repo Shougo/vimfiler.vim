@@ -402,6 +402,7 @@ CHANGELOG					*vimfiler-changelog*
 2010-08-02
 - Don't change current directory.
 - Added <Plug>(vimfiler_cd) mapping.
+- Improved mappings.
 
 2010-08-01
 - Improved rename copy.
