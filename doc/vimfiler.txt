@@ -307,6 +307,9 @@ Normal mode mappings.
 		Switch to vimfiler buffer mode. All vimfiler mappings is
 		disabled. If press <ESC>, settings will be restored.
 
+<Plug>(vimfiler_cd)				*<Plug>(vimfiler_cd)*
+		
+
 Visual mode mappings.
 
 <Plug>(vimfiler_toggle_mark_selected_lines)	*<Plug>(vimfiler_toggle_selected_lines)*
@@ -363,6 +366,7 @@ M			<Plug>(vimfiler_set_current_mask)
 gr			<Plug>(vimfiler_grep)
 s			<Plug>(vimfiler_select_sort_type)
 <C-v>			<Plug>(vimfiler_switch_vim_buffer_mode)
+gc			<Plug>(vimfiler_cd)
 
 Visual mode mappings.
 {lhs}			{rhs}
@@ -394,6 +398,10 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-08-02
+- Don't change current directory.
+- Added <Plug>(vimfiler_cd) mapping.
 
 2010-08-01
 - Improved rename copy.

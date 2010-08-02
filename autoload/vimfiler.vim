@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jul 2010
+" Last Modified: 02 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -127,7 +127,6 @@ function! vimfiler#create_filer(directory, options)"{{{
 
   " Set current directory.
   let l:current = (a:directory != '')? a:directory : getcwd()
-  lcd `=l:current`
   let b:vimfiler.current_dir = l:current
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
@@ -697,7 +696,6 @@ function! s:event_bufwin_enter()"{{{
     return
   endif
   
-  lcd `=b:vimfiler.current_dir`
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
