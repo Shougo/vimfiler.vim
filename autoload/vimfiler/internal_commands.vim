@@ -69,7 +69,6 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
     return
   endif
   
-  call vimfiler#change_directory(l:dir)
   if l:dir !~ '/$'
     let l:dir .= '/'
   endif
@@ -120,7 +119,10 @@ function! vimfiler#internal_commands#gexe(filename)"{{{
     return
   endif
 
+  let l:current_dir = getcwd()
+  lcd `=b:vimfiler.current_dir`
   call vimproc#system_bg(a:filename)
+  lcd `=l:current_dir`
 endfunction"}}}
 function! vimfiler#internal_commands#split()"{{{
   if g:vimfiler_split_command ==# 'split_nicely'

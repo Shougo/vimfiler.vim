@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jul 2010
+" Last Modified: 02 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -65,6 +65,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <silent> <Plug>(vimfiler_move_to_other_window)  :<C-u>call <SID>move_to_other_window()<CR>
   nnoremap <silent> <Plug>(vimfiler_switch_vim_buffer_mode)  :<C-u>call <SID>switch_vim_buffer_mode()<CR>
   nnoremap <silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call <SID>restore_vimfiler_mode()<CR>
+  nnoremap <silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>cd()<CR>
 
   nnoremap <silent> <Plug>(vimfiler_copy_file)  :<C-u>call <SID>copy()<CR>
   nnoremap <silent> <Plug>(vimfiler_move_file)  :<C-u>call <SID>move()<CR>
@@ -150,6 +151,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> gr <Plug>(vimfiler_grep)
   nmap <buffer> s <Plug>(vimfiler_select_sort_type)
   nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
+  nmap <buffer> gc <Plug>(vimfiler_cd)
 endfunction"}}}
 
 " vimfiler key-mappings functions.
@@ -405,8 +407,10 @@ function! s:popup_shell()"{{{
     endif
   else
     " Run shell.
-    let l:save_currnet_dir = getcwd()
+    let l:current_dir = getcwd()
+    lcd `=b:vimfiler.current_dir`
     shell
+    lcd `=l:current_dir`
   endif
 endfunction"}}}
 function! s:edit_file()"{{{
@@ -443,7 +447,10 @@ function! s:execute_shell_command()"{{{
 
   let l:command = substitute(l:command, 
         \'\s\+\zs\*\ze\%([;|[:space:]]\|$\)', join(vimfiler#get_escaped_marked_files()), 'g')
+  let l:current_dir = getcwd()
+  lcd `=b:vimfiler.current_dir`
   echo vimfiler#system(l:command)
+  lcd `=l:current_dir`
 endfunction"}}}
 function! s:exit()"{{{
   let l:vimfiler_buf = bufnr('%')
@@ -752,7 +759,12 @@ function! s:grep()"{{{
     echo 'Canceled.'
   else
     call s:clear_mark_all_lines()
+
+    let l:current_dir = getcwd()
+    lcd `=b:vimfiler.current_dir`
     silent! execute 'vimgrep' '/' . escape(l:pattern, '\&/') . '/j ' . l:target
+    lcd `=l:current_dir`
+    
     if !empty(getqflist()) | copen | endif
   endif
 endfunction"}}}
@@ -798,6 +810,9 @@ function! s:restore_vimfiler_mode()"{{{
   endfor
 
   echo 'Switched vimfiler mode'
+endfunction"}}}
+function! s:cd()"{{{
+  lcd `=b:vimfiler.current_dir`
 endfunction"}}}
 
 function! s:history_forward()"{{{
