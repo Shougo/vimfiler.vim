@@ -78,7 +78,7 @@ g:vimfiler_split_command			*g:vimfiler_split_command*
 g:vimfiler_edit_command				*g:vimfiler_edit_command*
 		This variable controls vimfiler edit command.
 		
-		Default value is 'edit_nicely'.
+		Default value is 'edit'.
 
 g:vimfiler_pedit_command			*g:vimfiler_pedit_command*
 		This variable controls vimfiler preview edit command.
@@ -405,6 +405,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2010-08-07
 - Implemented <Plug>(vimfiler_split_edit_file).
+- Improved edit.
 
 2010-08-02
 - Don't change current directory.
