@@ -48,6 +48,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call <SID>toggle_visible_dot_files()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)  :<C-u>call <SID>popup_shell()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)  :<C-u>call <SID>edit_file()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)  :<C-u>call <SID>edit_file(1)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_filer)  :<C-u>call vimfiler#internal_commands#open(b:vimfiler.current_dir)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_command)  :<C-u>call <SID>execute_external_command()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_shell_command)  :<C-u>call <SID>execute_shell_command()<CR>
@@ -136,8 +137,11 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
   nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
   nmap <buffer> H <Plug>(vimfiler_popup_shell)
+  
   nmap <buffer> e <Plug>(vimfiler_edit_file)
-  nmap <buffer> E <Plug>(vimfiler_execute_external_filer)
+  nmap <buffer> E <Plug>(vimfiler_split_edit_file)
+  
+  nmap <buffer> ge <Plug>(vimfiler_execute_external_filer)
   nmap <buffer> t <Plug>(vimfiler_execute_external_command)
   nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
   nmap <buffer> q <Plug>(vimfiler_exit)
@@ -300,7 +304,7 @@ function! s:execute()"{{{
       let l:command = g:vimfiler_execute_file_list[l:ext]
       if l:command == 'vim'
         " Edit with vim.
-        call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')), 'edit')
+        call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')), 0)
       else
         call vimfiler#internal_commands#gexe(printf('%s %s%s%s', g:vimfiler_execute_file_list[l:ext], &shellquote, l:filename, &shellquote))
       endif
@@ -413,12 +417,12 @@ function! s:popup_shell()"{{{
     lcd `=l:current_dir`
   endif
 endfunction"}}}
-function! s:edit_file()"{{{
+function! s:edit_file(is_split)"{{{
   if !vimfiler#check_filename_line()
     return
   endif
 
-  call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')))
+  call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')), a:is_split)
 endfunction"}}}
 function! s:preview_file()"{{{
   if !vimfiler#check_filename_line()
@@ -687,7 +691,7 @@ function! s:new_file()"{{{
   else
     call writefile([], l:filename)
     call vimfiler#force_redraw_all_vimfiler()
-    call vimfiler#internal_commands#edit(l:filename)
+    call vimfiler#internal_commands#edit(l:filename, 0)
   endif
 endfunction"}}}
 function! s:paste_from_clipboard()"{{{

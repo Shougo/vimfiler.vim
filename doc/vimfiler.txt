@@ -264,6 +264,9 @@ Normal mode mappings.
 <Plug>(vimfiler_edit_file)			*<Plug>(vimfiler_edit_file)*
 		
 
+<Plug>(vimfiler_split_edit_file)		*<Plug>(vimfiler_split_edit_file)*
+		
+
 <Plug>(vimfiler_execute_external_filer)		*<Plug>(vimfiler_execute_external_filer)*
 		
 
@@ -352,7 +355,8 @@ gv			<Plug>(vimfiler_execute_new_gvim)
 .			<Plug>(vimfiler_toggle_visible_dot_files)
 H			<Plug>(vimfiler_popup_shell)
 e			<Plug>(vimfiler_edit_file)
-E			<Plug>(vimfiler_execute_external_filer)
+E			<Plug>(vimfiler_split_edit_file)
+ge			<Plug>(vimfiler_execute_external_filer)
 t			<Plug>(vimfiler_execute_external_command)
 !			<Plug>(vimfiler_execute_shell_command)
 q			<Plug>(vimfiler_exit)
@@ -398,6 +402,9 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-08-07
+- Implemented <Plug>(vimfiler_split_edit_file).
 
 2010-08-02
 - Don't change current directory.
