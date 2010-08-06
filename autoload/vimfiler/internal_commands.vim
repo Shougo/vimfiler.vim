@@ -146,17 +146,11 @@ function! vimfiler#internal_commands#edit(filename, is_split)"{{{
   try
     let l:vimfiler_save = b:vimfiler
     
-    if g:vimfiler_edit_command ==# 'edit_nicely'
-      if !a:is_split
-        edit `=a:filename`
-      elseif winheight(0) > &winheight
-        new `=a:filename`
-      else
-        vnew `=a:filename`
-      endif
-    else
-      execute g:vimfiler_edit_command a:filename
+    if a:is_split
+      call vimfiler#internal_commands#split()
     endif
+    
+    execute g:vimfiler_edit_command a:filename
 
     let b:vimfiler = l:vimfiler_save
   catch
