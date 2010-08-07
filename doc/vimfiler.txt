@@ -403,6 +403,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-08-09
+- Improved default buffer settings.
+
 2010-08-07
 - Implemented <Plug>(vimfiler_split_edit_file).
 - Improved edit.
