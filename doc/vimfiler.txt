@@ -368,7 +368,7 @@ O			<Plug>(vimfiler_sync_with_another_vimfiler)
 <C-g>			<Plug>(vimfiler_print_filename)
 M			<Plug>(vimfiler_set_current_mask)
 gr			<Plug>(vimfiler_grep)
-s			<Plug>(vimfiler_select_sort_type)
+S			<Plug>(vimfiler_select_sort_type)
 <C-v>			<Plug>(vimfiler_switch_vim_buffer_mode)
 gc			<Plug>(vimfiler_cd)
 
@@ -403,8 +403,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
-2010-08-09
+2010-08-08
 - Improved default buffer settings.
+- Changed <Plug>(vimfiler_select_sort_type) default mapping.
 
 2010-08-07
 - Implemented <Plug>(vimfiler_split_edit_file).
