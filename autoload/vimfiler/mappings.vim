@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Aug 2010
+" Last Modified: 08 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -153,7 +153,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
   nmap <buffer> M <Plug>(vimfiler_set_current_mask)
   nmap <buffer> gr <Plug>(vimfiler_grep)
-  nmap <buffer> s <Plug>(vimfiler_select_sort_type)
+  nmap <buffer> S <Plug>(vimfiler_select_sort_type)
   nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
   nmap <buffer> gc <Plug>(vimfiler_cd)
 endfunction"}}}
