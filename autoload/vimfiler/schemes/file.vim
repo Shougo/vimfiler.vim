@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jul 2010
+" Last Modified: 12 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,7 +37,7 @@ if !exists('g:vimfiler_external_copy_file_command')
   if vimfiler#iswin() && !executable('cp')
     let g:vimfiler_external_copy_file_command = 'system copy $src $dest'
   else
-    let g:vimfiler_external_copy_file_command = 'cp $src $dest'
+    let g:vimfiler_external_copy_file_command = 'cp -p $src $dest'
   endif
 endif
 if !exists('g:vimfiler_external_copy_directory_command')
@@ -45,7 +45,7 @@ if !exists('g:vimfiler_external_copy_directory_command')
     " Can't support.
     let g:vimfiler_external_copy_directory_command = ''
   else
-    let g:vimfiler_external_copy_directory_command = 'cp -r $src $dest'
+    let g:vimfiler_external_copy_directory_command = 'cp -p -r $src $dest'
   endif
 endif
 if !exists('g:vimfiler_external_move_command')

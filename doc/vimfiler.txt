@@ -403,6 +403,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-08-12
+- Improved copy option.
+
 2010-08-08
 - Improved default buffer settings.
 - Changed <Plug>(vimfiler_select_sort_type) default mapping.
