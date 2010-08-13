@@ -267,6 +267,9 @@ Normal mode mappings.
 <Plug>(vimfiler_split_edit_file)		*<Plug>(vimfiler_split_edit_file)*
 		
 
+<Plug>(vimfiler_edit_binary_file)		*<Plug>(vimfiler_edit_binary_file)*
+		
+
 <Plug>(vimfiler_execute_external_filer)		*<Plug>(vimfiler_execute_external_filer)*
 		
 
@@ -356,6 +359,7 @@ gv			<Plug>(vimfiler_execute_new_gvim)
 H			<Plug>(vimfiler_popup_shell)
 e			<Plug>(vimfiler_edit_file)
 E			<Plug>(vimfiler_split_edit_file)
+B			<Plug>(vimfiler_edit_binary_file)
 ge			<Plug>(vimfiler_execute_external_filer)
 t			<Plug>(vimfiler_execute_external_command)
 !			<Plug>(vimfiler_execute_shell_command)
@@ -402,6 +406,10 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-08-13
+- Improved error message.
+- Added <Plug>(vimfiler_edit_binary_file) mapping.
 
 2010-08-12
 - Improved copy option.

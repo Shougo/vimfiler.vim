@@ -88,7 +88,7 @@ endfunction"}}}
 " vimfiler plugin utility functions."{{{
 function! vimfiler#create_filer(directory, options)"{{{
   if a:directory != '' && !isdirectory(a:directory)
-    echohl Error | echomsg 'Invalid directory name: ' . a:directory | echohl None
+    call vimfiler#print_error('Invalid directory name: ' . a:directory)
     return
   endif
 
@@ -151,7 +151,7 @@ function! vimfiler#create_filer(directory, options)"{{{
 endfunction"}}}
 function! vimfiler#switch_filer(directory, options)"{{{
   if a:directory != '' && !isdirectory(a:directory)
-    echohl Error | echomsg 'Invalid directory name: ' . a:directory | echohl None
+    call vimfiler#print_error('Invalid directory name: ' . a:directory)
     return
   endif
   
@@ -459,7 +459,7 @@ function! vimfiler#input_directory(message)"{{{
     endif
 
     " Retry.
-    echohl WarningMsg | echo 'Invalid path.' | echohl None
+    call vimfiler#print_error('Invalid path.')
     echo a:message
     let l:dir = input('', '', 'dir')
   endwhile
@@ -476,7 +476,7 @@ function! vimfiler#input_yesno(message)"{{{
     endif
 
     " Retry.
-    echohl WarningMsg | echo 'Invalid input.' | echohl None
+    call vimfiler#print_error('Invalid input.')
     let l:yesno = input(a:message . ' [yes/no] :   ')
   endwhile
 
@@ -612,6 +612,9 @@ endfunction"}}}
 function! vimfiler#resolve(filename)"{{{
   return ((vimfiler#iswin() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
         \ substitute(resolve(a:filename), '\\', '/', 'g') : a:filename
+endfunction"}}}
+function! vimfiler#print_error(message)"{{{
+  echohl WarningMsg | echo a:message | echohl None
 endfunction"}}}
 "}}}
 
