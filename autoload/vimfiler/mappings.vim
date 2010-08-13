@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Aug 2010
+" Last Modified: 13 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,6 +49,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)  :<C-u>call <SID>popup_shell()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)  :<C-u>call <SID>edit_file(0)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)  :<C-u>call <SID>edit_file(1)<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)  :<C-u>call <SID>edit_binary_file(0)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_filer)  :<C-u>call vimfiler#internal_commands#open(b:vimfiler.current_dir)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_command)  :<C-u>call <SID>execute_external_command()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_shell_command)  :<C-u>call <SID>execute_shell_command()<CR>
@@ -138,8 +139,10 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
   nmap <buffer> H <Plug>(vimfiler_popup_shell)
   
+  " Edit file.
   nmap <buffer> e <Plug>(vimfiler_edit_file)
   nmap <buffer> E <Plug>(vimfiler_split_edit_file)
+  nmap <buffer> B <Plug>(vimfiler_edit_binary_file)
   
   nmap <buffer> ge <Plug>(vimfiler_execute_external_filer)
   nmap <buffer> t <Plug>(vimfiler_execute_external_command)
@@ -423,6 +426,22 @@ function! s:edit_file(is_split)"{{{
   endif
 
   call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')), a:is_split)
+endfunction"}}}
+function! s:edit_binary_file(is_split)"{{{
+  if !vimfiler#check_filename_line()
+    return
+  endif
+
+  if !exists(':Vinarise')
+    call vimfiler#print_error('vinarise is not found. Please install it.')
+    return
+  endif
+
+  if a:is_split
+    call vimfiler#internal_commands#split()
+  endif
+
+  Vinarise `=vimfiler#get_filename(line('.'))`
 endfunction"}}}
 function! s:preview_file()"{{{
   if !vimfiler#check_filename_line()
@@ -709,7 +728,7 @@ function! s:paste_from_clipboard()"{{{
     
     let b:vimfiler.clipboard = {}
   else
-    echoerr 'Invalid command.'
+    call vimfiler#print_error('Invalid command.')
   endif
 endfunction"}}}
 function! s:set_current_mask()"{{{
@@ -786,7 +805,7 @@ function! s:select_sort_type()"{{{
     let b:vimfiler.sort_type = l:sort_type
     call vimfiler#force_redraw_screen()
   else
-    echoerr 'Invalid sort type.'
+    call vimfiler#print_error('Invalid sort type.')
   endif
 endfunction"}}}
 function! s:switch_vim_buffer_mode()"{{{
