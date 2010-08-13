@@ -680,6 +680,9 @@ function! s:rename()"{{{
   endif
 endfunction"}}}
 function! s:make_directory()"{{{
+  let l:current_dir = getcwd()
+  lcd `=b:vimfiler.current_dir`
+  
   let l:dirname = input('New directory name: ', '', 'dir')
 
   if l:dirname == ''
@@ -697,6 +700,8 @@ function! s:make_directory()"{{{
     call vimfiler#force_redraw_all_vimfiler()
     call vimfiler#internal_commands#cd(l:dirname)
   endif
+
+  lcd `=l:current_dir`
 endfunction"}}}
 function! s:new_file()"{{{
   let l:filename = input('New file name: ', '', 'file')
