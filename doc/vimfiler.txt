@@ -127,9 +127,10 @@ g:vimfiler_max_directory_histories		*g:vimfiler_max_directory_histories*
 		
 		Default value is 10.
 
-g:vimfiler_wildignore				*g:vimfiler_wildignore*
-		This variable change 'wildignore' temporally.
-		
+g:vimfiler_wildignore		*g:vimfiler_wildignore*
+		This variable influences file list.
+		See 'wildignore' for the value.
+
 		Default value is same to 'wildignore'.
 
 g:vimfiler_external_delete_command		*g:vimfiler_external_delete_command*
@@ -152,12 +153,6 @@ g:vimfiler_external_move_command		*g:vimfiler_external_move_command*
 		This variable controls vimfiler use move files command.
 		
 		Default value is refer to autoload/vimfiler/schemes/file.vim.
-
-g:vimfiler_wildignore		*g:vimfiler_wildignore*
-		This variable influences file list.
-		See |'wildignore'| for the value.
-
-		Default value is refer to |'wildignore'|.
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
