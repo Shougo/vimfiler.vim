@@ -63,7 +63,7 @@ let s:scheme = {
 
 function! s:scheme.read(path, is_visible_dot_file)"{{{
   if isdirectory(a:path)
-    let l:save_variables = vimfiler#save_variables({
+    let l:save_variables = vimfiler#set_variables({
           \ '&wildignore' : g:vimfiler_wildignore,
           \})
     try
