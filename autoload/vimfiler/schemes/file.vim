@@ -63,10 +63,16 @@ let s:scheme = {
 
 function! s:scheme.read(path, is_visible_dot_file)"{{{
   if isdirectory(a:path)
-    let l:files = split(glob(a:path . '*'), '\n')
-    if a:is_visible_dot_file
-      let l:files += filter(split(glob(a:path . '.*'), '\n'), 'v:val !~ "[/\\\\]\.\.\\?$"')
-    endif
+    let save_wildignore = &l:wildignore
+    let &l:wildignore = g:vimfiler_wildignore
+    try
+      let l:files = split(glob(a:path . '*'), '\n')
+      if a:is_visible_dot_file
+        let l:files += filter(split(glob(a:path . '.*'), '\n'), 'v:val !~ "[/\\\\]\.\.\\?$"')
+      endif
+    finally
+      let &l:wildignore = save_wildignore
+    endtry
     return [ 'directory', l:files ]
   elseif filereadable(a:path)
     return [ 'file', a:path ]

@@ -108,6 +108,10 @@ endif
 if !has_key(g:vimfiler_extensions, 'multimedia')
   call vimfiler#set_extensions('multimedia', 'avi,asf,wmv,mpg,flv,swf,divx,mov,mpa,m1a,m2p,m2a,mpeg,m1v,m2v,mp2v,mp4,qt,ra,rm,ram,rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au')
 endif
+
+if !exists('g:vimfiler_wildignore')
+    let g:vimfiler_wildignore = &l:wildignore
+endif
 "}}}
 
 " Plugin keymappings"{{{
