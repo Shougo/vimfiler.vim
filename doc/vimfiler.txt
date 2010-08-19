@@ -407,6 +407,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-08-19
+- Fixed readonly.
+
 2010-08-13
 - Improved error message.
 - Added <Plug>(vimfiler_edit_binary_file) mapping.
