@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Aug 2010
+" Last Modified: 19 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -63,15 +63,16 @@ let s:scheme = {
 
 function! s:scheme.read(path, is_visible_dot_file)"{{{
   if isdirectory(a:path)
-    let save_wildignore = &l:wildignore
-    let &l:wildignore = g:vimfiler_wildignore
+    let l:save_variables = vimfiler#save_variables({
+          \ '&wildignore' : g:vimfiler_wildignore,
+          \})
     try
       let l:files = split(glob(a:path . '*'), '\n')
       if a:is_visible_dot_file
         let l:files += filter(split(glob(a:path . '.*'), '\n'), 'v:val !~ "[/\\\\]\.\.\\?$"')
       endif
     finally
-      let &l:wildignore = save_wildignore
+      call vimfiler#restore_variables(l:save_variables)
     endtry
     return [ 'directory', l:files ]
   elseif filereadable(a:path)

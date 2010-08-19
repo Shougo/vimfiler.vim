@@ -127,6 +127,11 @@ g:vimfiler_max_directory_histories		*g:vimfiler_max_directory_histories*
 		
 		Default value is 10.
 
+g:vimfiler_wildignore				*g:vimfiler_wildignore*
+		This variable change 'wildignore' temporally.
+		
+		Default value is same to 'wildignore'.
+
 g:vimfiler_external_delete_command		*g:vimfiler_external_delete_command*
 		This variable controls vimfiler use delete command.
 		
@@ -409,6 +414,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2010-08-19
 - Fixed readonly.
+- Added g:vimfiler_wildignore option.
 
 2010-08-13
 - Improved error message.

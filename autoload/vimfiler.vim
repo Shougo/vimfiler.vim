@@ -617,6 +617,22 @@ endfunction"}}}
 function! vimfiler#print_error(message)"{{{
   echohl WarningMsg | echo a:message | echohl None
 endfunction"}}}
+function! vimfiler#set_variables(variables)"{{{
+  let l:variables_save = {}
+  for [key, value] in items(a:variables)
+    let l:save_value = exists(key) ? eval(key) : ''
+
+    let l:variables_save[key] = l:save_value
+    execute 'let' key '= value'
+  endfor
+  
+  return l:variables_save
+endfunction"}}}
+function! vimfiler#restore_variables(variables_save)"{{{
+  for [key, value] in items(a:variables_save)
+    execute 'let' key '= value'
+  endfor
+endfunction"}}}
 "}}}
 
 " Detect drives.
