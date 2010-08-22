@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Aug 2010
+" Last Modified: 22 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,6 +68,7 @@ function! vimfiler#default_settings()"{{{
   augroup vimfiler"{{{
     autocmd BufWinEnter <buffer> call s:event_bufwin_enter()
     autocmd WinLeave,BufWinLeave <buffer> call s:event_bufwin_leave()
+    autocmd BufReadCmd <buffer> call vimfiler#create_filer(expand('<amatch>'), ['overwrite'])
     autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
 

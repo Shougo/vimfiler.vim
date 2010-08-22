@@ -413,6 +413,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-08-22
+- Fixed edit.
+
 2010-08-19
 - Fixed readonly.
 - Added g:vimfiler_wildignore option.
