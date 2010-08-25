@@ -357,8 +357,8 @@ J			<Plug>(vimfiler_jump_to_directory)
 ~			<Plug>(vimfiler_move_to_home_directory)
 $			<Plug>(vimfiler_move_to_trashbox_directory)
 \			<Plug>(vimfiler_move_to_root_directory)
-<C-h>			<Plug>(vimfiler_move_to_history_back)
-<C-l>			<Plug>(vimfiler_move_to_history_forward)
+<C-p>			<Plug>(vimfiler_move_to_history_back)
+<C-n>			<Plug>(vimfiler_move_to_history_forward)
 <C-j>			<Plug>(vimfiler_jump_to_history_directory)
 gv			<Plug>(vimfiler_execute_new_gvim)
 .			<Plug>(vimfiler_toggle_visible_dot_files)
@@ -415,6 +415,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2010-08-25
 - Fixed cd bug.
+- Improved default mappings.
 
 2010-08-22
 - Fixed edit.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Aug 2010
+" Last Modified: 25 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -131,8 +131,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
   nmap <buffer> $ <Plug>(vimfiler_move_to_trashbox_directory)
   nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
-  nmap <buffer> <C-h> <Plug>(vimfiler_move_to_history_back)
-  nmap <buffer> <C-l> <Plug>(vimfiler_move_to_history_forward)
+  nmap <buffer> <C-p> <Plug>(vimfiler_move_to_history_back)
+  nmap <buffer> <C-n> <Plug>(vimfiler_move_to_history_forward)
   nmap <buffer> <C-j> <Plug>(vimfiler_jump_to_history_directory)
   
   nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
