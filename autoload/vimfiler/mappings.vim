@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Aug 2010
+" Last Modified: 26 Aug 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -790,7 +790,7 @@ function! s:grep()"{{{
 
     let l:current_dir = getcwd()
     lcd `=b:vimfiler.current_dir`
-    silent! execute 'vimgrep' '/' . escape(l:pattern, '\&/') . '/j ' . l:target
+    silent! execute 'grep' l:pattern l:target
     lcd `=l:current_dir`
     
     if !empty(getqflist()) | copen | endif

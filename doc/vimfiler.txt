@@ -413,6 +413,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-08-26
+- Improved grep.
+
 2010-08-25
 - Fixed cd bug.
 - Improved default mappings.
