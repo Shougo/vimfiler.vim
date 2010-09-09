@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2010
+" Last Modified: 09 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -120,12 +120,12 @@ function! vimfiler#mappings#define_default_mappings()"{{{
 
   " Execute or change directory.
   nmap <buffer> <Enter> <Plug>(vimfiler_execute)
-  nmap <buffer> l <Plug>(vimfiler_execute)
+  nmap <buffer><expr> l line('.') == 1 ? 'l' : "\<Plug>(vimfiler_execute)"
 
   nmap <buffer> x <Plug>(vimfiler_execute_file)
 
   " Move to directory.
-  nmap <buffer> h <Plug>(vimfiler_move_to_up_directory)
+  nmap <buffer><expr> h line('.') == 1 ? 'h' : "\<Plug>(vimfiler_move_to_up_directory)"
   nmap <buffer> L <Plug>(vimfiler_move_to_drive)
   nmap <buffer> J <Plug>(vimfiler_jump_to_directory)
   nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)

@@ -413,6 +413,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-09-09
+- Improved h and l keymappings.
+
 2010-08-26
 - Improved grep.
 
