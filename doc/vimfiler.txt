@@ -413,6 +413,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-09-18
+- Fixed current directory bug.
+
 2010-09-09
 - Improved h and l keymappings.
 
