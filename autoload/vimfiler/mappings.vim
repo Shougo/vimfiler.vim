@@ -790,7 +790,7 @@ function! s:grep()"{{{
   else
     call s:clear_mark_all_lines()
 
-    silent! execute 'grep' l:pattern l:target
+    silent! execute 'grep!' l:pattern l:target
     
     if !empty(getqflist()) | copen | endif
   endif
