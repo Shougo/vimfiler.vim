@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Sep 2010
+" Last Modified: 23 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -781,7 +781,7 @@ function! s:grep()"{{{
   if empty(l:marked_files)
     let l:marked_files = copy(b:vimfiler.current_files)
   endif
-  let l:target = join(map(l:marked_files, 'isdirectory(v:val)? v:val."/*" : v:val'))
+  let l:target = join(map(l:marked_files, 'v:val.is_directory ? v:val.name . "/*" : v:val.name'))
 
   let l:pattern = input('Input search pattern: ')
   if l:pattern == ''

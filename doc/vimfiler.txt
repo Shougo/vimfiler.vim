@@ -413,6 +413,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-09-23
+- Fixed grep.
+
 2010-09-18
 - Fixed current directory bug.
 
