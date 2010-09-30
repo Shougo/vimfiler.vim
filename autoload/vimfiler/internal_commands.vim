@@ -39,27 +39,27 @@ endfunction"}}}
 
 function! vimfiler#internal_commands#cd(dir, ...)"{{{
   let l:save_history = a:0 ? a:1 : 1
+  let l:dir = substitute(a:dir, '\\', '/', 'g')
 
-  if a:dir == '..'
+  if l:dir == '..'
     if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
       " Ignore.
       return
     endif
 
     let l:dir = fnamemodify(substitute(b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
-  elseif a:dir == '/'
+  elseif l:dir == '/'
     " Root.
     let l:dir = vimfiler#iswin() ? 
-          \matchstr(fnamemodify(b:vimfiler.current_dir, ':p'), '^\a\+:[/\\]') : a:dir
-  elseif a:dir == '~'
+          \matchstr(fnamemodify(b:vimfiler.current_dir, ':p'), '^\a\+:[/\\]') : l:dir
+  elseif l:dir == '~'
     " Home.
     let l:dir = expand('~')
-  elseif (vimfiler#iswin() && a:dir =~ '^\a\+:[/\\]\|^\a\+:$')
-        \ || (!vimfiler#iswin() && a:dir =~ '^/')
-    let l:dir = a:dir
+  elseif (vimfiler#iswin() && l:dir =~ '^\a\+:/\|^\a\+:$')
+        \ || (!vimfiler#iswin() && l:dir =~ '^/')
   else
     " Relative path.
-    let l:dir = substitute(simplify(b:vimfiler.current_dir . a:dir), '\\', '/', 'g')
+    let l:dir = substitute(simplify(b:vimfiler.current_dir . l:dir), '\\', '/', 'g')
   endif
 
   let l:dir = vimfiler#resolve(l:dir)

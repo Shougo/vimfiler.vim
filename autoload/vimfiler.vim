@@ -131,6 +131,7 @@ function! vimfiler#create_filer(directory, options)"{{{
 
   " Set current directory.
   let l:current = (a:directory != '')? a:directory : getcwd()
+  let l:current = substitute(l:current, '\\', '/', 'g')
   let b:vimfiler.current_dir = l:current
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'

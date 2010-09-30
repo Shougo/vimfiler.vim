@@ -413,6 +413,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-10-01
+- Fixed noshellslash bug.
+
 2010-09-23
 - Fixed grep.
 
