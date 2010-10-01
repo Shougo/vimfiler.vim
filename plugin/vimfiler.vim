@@ -123,8 +123,9 @@ nnoremap <silent> <Plug>(vimfiler_open_next_file)     :<C-u>call vimfiler#mappin
 "}}}
 
 command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(<q-args>, [])
-command! -nargs=? -complete=dir VimFilerSimple call vimfiler#create_filer(<q-args>, ['simple', 'split'])
 command! -nargs=? -complete=dir VimFilerCreate call vimfiler#create_filer(<q-args>, [])
+command! -nargs=? -complete=dir VimFilerSimple call vimfiler#create_filer(<q-args>, ['simple', 'split'])
+command! -nargs=? -complete=dir VimFilerSplit call vimfiler#create_filer(<q-args>, ['split'])
 command! VimFilerDetectDrives call vimfiler#detect_drives()
 
 if g:vimfiler_as_default_explorer

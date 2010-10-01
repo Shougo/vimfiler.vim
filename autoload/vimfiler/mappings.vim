@@ -68,6 +68,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)  :<C-u>call <SID>switch_vim_buffer_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call <SID>restore_vimfiler_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>cd()<CR>
+  nnoremap <buffer><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#internal_commands#cd('..')\<CR>"
+  nnoremap <buffer><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>mappings_caller('execute')\<CR>"
 
   nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)  :<C-u>call <SID>mappings_caller('copy')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_file)  :<C-u>call <SID>mappings_caller('move')<CR>
@@ -120,12 +122,12 @@ function! vimfiler#mappings#define_default_mappings()"{{{
 
   " Execute or change directory.
   nmap <buffer> <Enter> <Plug>(vimfiler_execute)
-  nmap <buffer><expr> l line('.') == 1 ? 'l' : "\<Plug>(vimfiler_execute)"
+  nmap <buffer> l <Plug>(vimfiler_smart_l)
 
   nmap <buffer> x <Plug>(vimfiler_execute_file)
 
   " Move to directory.
-  nmap <buffer><expr> h line('.') == 1 ? 'h' : "\<Plug>(vimfiler_move_to_up_directory)"
+  nmap <buffer> h <Plug>(vimfiler_smart_h)
   nmap <buffer> L <Plug>(vimfiler_move_to_drive)
   nmap <buffer> J <Plug>(vimfiler_jump_to_directory)
   nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
