@@ -429,6 +429,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed vim buffer mode.
 - Added :VimFilerSplit command.
 - Silent error message.
+- Improved vimfiler switch.
 
 2010-10-01
 - Fixed noshellslash bug.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Sep 2010
+" Last Modified: 02 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -135,6 +135,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
   endif
+  
   let b:vimfiler.changed_dir = [b:vimfiler.current_dir]
   let b:vimfiler.current_changed_dir_index = -1
   let b:vimfiler.clipboard = {}
@@ -164,66 +165,18 @@ function! vimfiler#switch_filer(directory, options)"{{{
     endif
   endfor
   
-  if &filetype ==# 'vimfiler'
-    if winnr('$') != 1
-      close
-    else
-      buffer #
-    endif
-
-    if a:directory != ''
-      " Change current directory.
-      let b:vimfiler.current_dir = a:directory
-      if b:vimfiler.current_dir !~ '/$'
-        let b:vimfiler.current_dir .= '/'
-      endif
-    endif
-
-    call vimfiler#force_redraw_screen()
+  " Search vimfiler buffer.
+  if buflisted(s:last_vimfiler_bufnr)
+        \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
+    call s:switch_vimfiler(s:last_vimfiler_bufnr, a:split_flag, a:directory)
     return
   endif
-
-  " Search vimfiler window.
-  let l:cnt = 1
-  while l:cnt <= winnr('$')
-    if getwinvar(l:cnt, '&filetype') ==# 'vimfiler'
-
-      execute l:cnt . 'wincmd w'
-
-      if a:directory != ''
-        " Change current directory.
-        let b:vimfiler.current_dir = a:directory
-        if b:vimfiler.current_dir !~ '/$'
-          let b:vimfiler.current_dir .= '/'
-        endif
-      endif
-
-      call vimfiler#force_redraw_screen()
-      return
-    endif
-
-    let l:cnt += 1
-  endwhile
-
+  
   " Search vimfiler buffer.
   let l:cnt = 1
   while l:cnt <= bufnr('$')
     if getbufvar(l:cnt, '&filetype') ==# 'vimfiler'
-      if l:split_flag
-        execute 'sbuffer' . l:cnt
-      else
-        execute 'buffer' . l:cnt
-      endif
-
-      if a:directory != ''
-        " Change current directory.
-        let b:vimfiler.current_dir = a:directory
-        if b:vimfiler.current_dir !~ '/$'
-          let b:vimfiler.current_dir .= '/'
-        endif
-      endif
-
-      call vimfiler#force_redraw_screen()
+      call s:switch_vimfiler(l:cnt, l:split_flag, a:directory)
       return
     endif
 
@@ -736,6 +689,23 @@ function! s:init_schemes()"{{{
       let s:schemes[l:scheme] = call('vimfiler#schemes#'.l:scheme.'#define', [])
     endif
   endfor
+endfunction"}}}
+function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
+  if a:split_flag
+    execute 'sbuffer' . a:bufnr
+  else
+    execute 'buffer' . a:bufnr
+  endif
+
+  " Set current directory.
+  let l:current = (a:directory != '')? a:directory : getcwd()
+  let l:current = substitute(l:current, '\\', '/', 'g')
+  let b:vimfiler.current_dir = l:current
+  if b:vimfiler.current_dir !~ '/$'
+    let b:vimfiler.current_dir .= '/'
+  endif
+
+  call vimfiler#force_redraw_screen()
 endfunction"}}}
 
 " vim: foldmethod=marker
