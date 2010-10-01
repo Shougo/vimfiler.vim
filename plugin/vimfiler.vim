@@ -140,7 +140,7 @@ if g:vimfiler_as_default_explorer
 endif
 
 function! s:browse_check(directory)
-  if a:directory != '' && &filetype != 'vimfiler' && isdirectory(a:directory)
+  if a:directory != '' && &filetype !=# 'vimfiler' && isdirectory(a:directory)
     silent! call vimfiler#create_filer(a:directory, ['overwrite'])
   endif
 endfunction

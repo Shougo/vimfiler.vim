@@ -90,7 +90,6 @@ endfunction"}}}
 " vimfiler plugin utility functions."{{{
 function! vimfiler#create_filer(directory, options)"{{{
   if a:directory != '' && !isdirectory(a:directory)
-    call vimfiler#print_error('Invalid directory name: ' . a:directory)
     return
   endif
 
