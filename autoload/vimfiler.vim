@@ -168,7 +168,7 @@ function! vimfiler#switch_filer(directory, options)"{{{
   " Search vimfiler buffer.
   if buflisted(s:last_vimfiler_bufnr)
         \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
-    call s:switch_vimfiler(s:last_vimfiler_bufnr, a:split_flag, a:directory)
+    call s:switch_vimfiler(s:last_vimfiler_bufnr, l:split_flag, a:directory)
     return
   endif
   
