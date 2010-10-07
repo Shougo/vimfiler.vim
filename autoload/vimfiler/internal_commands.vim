@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Aug 2010
+" Last Modified: 07 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -62,7 +62,9 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
     let l:dir = substitute(simplify(b:vimfiler.current_dir . l:dir), '\\', '/', 'g')
   endif
 
-  let l:dir = vimfiler#resolve(l:dir)
+  if vimfiler#iswin()
+    let l:dir = vimfiler#resolve(l:dir)
+  endif
 
   if !isdirectory(l:dir)
     " Ignore.

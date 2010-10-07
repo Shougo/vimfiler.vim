@@ -426,6 +426,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-10-07
+- Don't resolve link.
+
 2010-10-06
 - Disabled copy in Windows when cp.exe is not found.
 
