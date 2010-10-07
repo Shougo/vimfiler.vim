@@ -146,6 +146,7 @@ g:vimfiler_external_delete_command		*g:vimfiler_external_delete_command*
 
 g:vimfiler_external_copy_file_command		*g:vimfiler_external_copy_file_command*
 		This variable controls vimfiler use copy files command.
+		If variable is empty, this system can't support copy file.
 		
 		Default value is refer to autoload/vimfiler/schemes/file.vim.
 
@@ -424,6 +425,9 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-10-06
+- Disabled copy in Windows when cp.exe is not found.
 
 2010-10-02
 - Fixed vim buffer mode.

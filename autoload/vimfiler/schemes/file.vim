@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Aug 2010
+" Last Modified: 07 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,7 +35,8 @@ if !exists('g:vimfiler_external_delete_command')
 endif
 if !exists('g:vimfiler_external_copy_file_command')
   if vimfiler#iswin() && !executable('cp')
-    let g:vimfiler_external_copy_file_command = 'system copy $src $dest'
+    " Can't support.
+    let g:vimfiler_external_copy_file_command = ''
   else
     let g:vimfiler_external_copy_file_command = 'cp -p $src $dest'
   endif
@@ -98,13 +99,15 @@ function! s:scheme.mv(dest_dir, src_files)"{{{
   endfor
 endfunction"}}}
 function! s:scheme.cp(dest_dir, src_files)"{{{
+  if g:vimfiler_external_copy_directory_command == ''
+        \ || g:vimfiler_external_copy_command == ''
+    echohl Error | echoerr "Copy is not supported in this platform. Please install cp.exe." | echohl None
+    return
+  endif
+
   for l:file in a:src_files
     if isdirectory(l:file)
-      if g:vimfiler_external_copy_directory_command == ''
-        echohl Error | echoerr "Recursive copy is not supported in this platform. Please install cp.exe." | echohl None
-      else
-        call s:external('copy_directory', a:dest_dir, [l:file])
-      endif
+      call s:external('copy_directory', a:dest_dir, [l:file])
     else
       call s:external('copy_file', a:dest_dir, [l:file])
     endif
