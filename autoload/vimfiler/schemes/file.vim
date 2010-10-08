@@ -100,7 +100,7 @@ function! s:scheme.mv(dest_dir, src_files)"{{{
 endfunction"}}}
 function! s:scheme.cp(dest_dir, src_files)"{{{
   if g:vimfiler_external_copy_directory_command == ''
-        \ || g:vimfiler_external_copy_command == ''
+        \ || g:vimfiler_external_copy_file_command == ''
     echohl Error | echoerr "Copy is not supported in this platform. Please install cp.exe." | echohl None
     return
   endif
