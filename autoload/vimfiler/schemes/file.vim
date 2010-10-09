@@ -84,17 +84,19 @@ function! s:scheme.read(path, is_visible_dot_file)"{{{
 endfunction"}}}
 function! s:scheme.mv(dest_dir, src_files)"{{{
   let l:dest_drive = matchstr(a:dest_dir, '^\a\+\ze:')
-  for l:src in a:src_files
-    if isdirectory(l:src) && vimfiler#iswin() && matchstr(l:src, '^\a\+\ze:') !=? l:dest_drive
+  for l:file in a:src_files
+    let l:file = substitute(l:file, '\\', '/', 'g')
+
+    if isdirectory(l:file) && vimfiler#iswin() && matchstr(l:file, '^\a\+\ze:') !=? l:dest_drive
       " rename() doesn't supported directory over drive move in Windows.
       if g:vimfiler_external_copy_directory_command == ''
         echohl Error | echoerr "Directory move is not supported in this platform. Please install cp.exe." | echohl None
       else
-        call s:external('copy_directory', a:dest_dir, [l:src])
-        call s:external('delete', '', [l:src])
+        call s:external('copy_directory', a:dest_dir, [l:file])
+        call s:external('delete', '', [l:file])
       endif
     else
-      call rename(l:src, a:dest_dir . fnamemodify(l:src, ':t'))
+      call rename(l:file, a:dest_dir . fnamemodify(l:file, ':t'))
     endif
   endfor
 endfunction"}}}
@@ -106,6 +108,7 @@ function! s:scheme.cp(dest_dir, src_files)"{{{
   endif
 
   for l:file in a:src_files
+    let l:file = substitute(l:file, '\\', '/', 'g')
     if isdirectory(l:file)
       call s:external('copy_directory', a:dest_dir, [l:file])
     else
@@ -115,6 +118,7 @@ function! s:scheme.cp(dest_dir, src_files)"{{{
 endfunction"}}}
 function! s:scheme.rm(files)"{{{
   for l:file in a:files
+    let l:file = substitute(l:file, '\\', '/', 'g')
     if isdirectory(l:file)
       call s:external('delete', '', [l:file])
     else

@@ -426,6 +426,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-10-09
+- Fixed shellslash bug.
+
 2010-10-07
 - Don't resolve link.
 
