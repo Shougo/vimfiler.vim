@@ -244,12 +244,7 @@ function! vimfiler#redraw_screen()"{{{
   " Clean up the screen.
   % delete _
 
-  " Print current directory.
-  call setline(1, printf('%s%s[%s%s]',
-        \ (b:vimfiler.is_simple ? 'CD: ' : 'Current directory: '),
-        \ b:vimfiler.current_dir ,
-        \ (b:vimfiler.is_visible_dot_files ? '.:' : ''),
-        \ b:vimfiler.current_mask))
+  call vimfiler#redraw_prompt()
 
   " Append up directory.
   call append('$', '..')
@@ -274,7 +269,7 @@ function! vimfiler#redraw_screen()"{{{
         let l:filename = vimfiler#util#truncate(l:filename, l:max_len - 2) . '..'
         let l:len = vimfiler#util#wcswidth(l:filename)
       endif
-      
+
       let l:filename .= repeat(' ', l:max_len - l:len)
     elseif len(l:filename) > l:max_len
       let l:filename = l:filename[: l:max_len - 15] . '..' . l:filename[-12 :]
@@ -309,6 +304,17 @@ function! vimfiler#redraw_screen()"{{{
   
   call setpos('.', l:pos)
   setlocal nomodifiable
+endfunction"}}}
+function! vimfiler#redraw_prompt()"{{{
+  let l:modifiable_save = &l:modifiable
+  setlocal modifiable
+  call setline(1, printf('%s%s%s[%s%s]',
+        \ (b:vimfiler.is_safe_mode ? '*Safe* ' : ''),
+        \ (b:vimfiler.is_simple ? 'CD: ' : 'Current directory: '),
+        \ b:vimfiler.current_dir ,
+        \ (b:vimfiler.is_visible_dot_files ? '.:' : ''),
+        \ b:vimfiler.current_mask))
+  let &l:modifiable = l:modifiable_save
 endfunction"}}}
 function! vimfiler#iswin()"{{{
   return has('win32') || has('win64')

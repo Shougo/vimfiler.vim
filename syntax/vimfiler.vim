@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jul 2010
+" Last Modified: 10 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,9 +34,11 @@ syn match   VimFilerNonMarkedFile     '^-'
 syn match   VimFilerMarkedFile        '^\* .*$'
 syn match   VimFilerDirectory         '^..$'
 
-syn match   VimFilerPrompt            '^\%(Current directory\|CD\): .*$' contains=VimFilerSpecial,VimFilerCurrentDirectory
-syn match   VimFilerPromptSafe        '^\[Safe\]\%(Current directory\|CD\): .*$' contains=VimFilerSpecial,VimFilerCurrentDirectory
-syn match   VimFilerSpecialSafe       '^\[Safe\]' contained
+syn match   VimFilerPrompt            '^\%(Current directory\|CD\): .*$'
+      \ contains=VimFilerSpecial,VimFilerCurrentDirectory
+syn match   VimFilerPromptSafe        '^\*Safe\* \%(Current directory\|CD\): .*$'
+      \ contains=VimFilerSpecial,VimFilerSpecialSafe,VimFilerCurrentDirectory
+syn match   VimFilerSpecialSafe       '^\*Safe\* ' contained
 syn match   VimFilerSpecial           '\%(Current directory\|CD\):' contained
 syn match   VimFilerCurrentDirectory  '\s\zs.*$' contained contains=VimFilerMask
 syn match   VimFilerMask  '\[.*\]$' contained

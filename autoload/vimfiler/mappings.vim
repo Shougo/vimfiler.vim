@@ -874,6 +874,7 @@ endfunction"}}}
 function! s:toggle_safe_mode()"{{{
   let b:vimfiler.is_safe_mode = !b:vimfiler.is_safe_mode
   echo 'Safe mode is ' . (b:vimfiler.is_safe_mode ? 'enabled' : 'disabled')
+  call vimfiler#redraw_prompt()
 endfunction"}}}
 
 function! s:history_forward()"{{{
