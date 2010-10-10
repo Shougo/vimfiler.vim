@@ -818,7 +818,7 @@ function! s:switch_vim_buffer_mode()"{{{
   redir => l:nmaps
   silent nmap <buffer>
   redir END
-  
+
   let b:vimfiler.mapdict = {}
   for l:map in split(l:nmaps, '\n')
     let l:lhs = split(l:map)[1]

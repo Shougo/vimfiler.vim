@@ -35,7 +35,9 @@ syn match   VimFilerMarkedFile        '^\* .*$'
 syn match   VimFilerDirectory         '^..$'
 
 syn match   VimFilerPrompt            '^\%(Current directory\|CD\): .*$' contains=VimFilerSpecial,VimFilerCurrentDirectory
-syn match   VimFilerSpecial           '^\%(Current directory\|CD\):' contained
+syn match   VimFilerPromptSafe        '^\[Safe\]\%(Current directory\|CD\): .*$' contains=VimFilerSpecial,VimFilerCurrentDirectory
+syn match   VimFilerSpecialSafe       '^\[Safe\]' contained
+syn match   VimFilerSpecial           '\%(Current directory\|CD\):' contained
 syn match   VimFilerCurrentDirectory  '\s\zs.*$' contained contains=VimFilerMask
 syn match   VimFilerMask  '\[.*\]$' contained
 
@@ -67,6 +69,7 @@ endif
 hi def link VimFilerMask Statement
 
 hi def link VimFilerSpecial Special
+hi def link VimFilerSpecialSafe Statement
 hi def link VimFilerNonMarkedFile Special
 "hi VimFilerMarkedFile  gui=REVERSE term=REVERSE
 hi def link VimFilerMarkedFile Type

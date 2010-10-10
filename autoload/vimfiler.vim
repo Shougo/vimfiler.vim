@@ -106,7 +106,7 @@ function! vimfiler#create_filer(directory, options)"{{{
       let l:simple_flag = 1
     endif
   endfor
-  
+
   if !l:overwrite_flag
     " Create new buffer.
     let l:bufname = '[1]vimfiler'
@@ -135,7 +135,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
   endif
-  
+
   let b:vimfiler.changed_dir = [b:vimfiler.current_dir]
   let b:vimfiler.current_changed_dir_index = -1
   let b:vimfiler.clipboard = {}
@@ -157,21 +157,21 @@ function! vimfiler#switch_filer(directory, options)"{{{
     call vimfiler#print_error('Invalid directory name: ' . a:directory)
     return
   endif
-  
+
   let l:split_flag = 0
   for l:option in a:options
     if l:option ==# 'split'
       let l:split_flag = 1
     endif
   endfor
-  
+
   " Search vimfiler buffer.
   if buflisted(s:last_vimfiler_bufnr)
         \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
     call s:switch_vimfiler(s:last_vimfiler_bufnr, l:split_flag, a:directory)
     return
   endif
-  
+
   " Search vimfiler buffer.
   let l:cnt = 1
   while l:cnt <= bufnr('$')
