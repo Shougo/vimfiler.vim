@@ -73,6 +73,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
 
   if !b:vimfiler.is_safe_mode
     call s:mapping_file_operations()
+  else
+    call s:unmapping_file_operations()
   endif
   "}}}
 
@@ -841,6 +843,7 @@ function! s:cd()"{{{
   lcd `=b:vimfiler.current_dir`
 endfunction"}}}
 
+" For safe mode.
 function! s:toggle_safe_mode()"{{{
   let b:vimfiler.is_safe_mode = !b:vimfiler.is_safe_mode
   echo 'Safe mode is ' . (b:vimfiler.is_safe_mode ? 'enabled' : 'disabled')
@@ -863,14 +866,17 @@ function! s:mapping_file_operations()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call <SID>restore_from_trashbox()<CR>
 endfunction"}}}
 function! s:unmapping_file_operations()"{{{
-  nunmap  <Plug>(vimfiler_copy_file)
-  nunmap  <Plug>(vimfiler_move_file)
-  nunmap  <Plug>(vimfiler_delete_file)
-  nunmap  <Plug>(vimfiler_force_delete_file)
-  nunmap  <Plug>(vimfiler_rename_file)
-  nunmap  <Plug>(vimfiler_make_directory)
-  nunmap  <Plug>(vimfiler_new_file)
-  nunmap  <Plug>(vimfiler_restore_from_trashbox)
+  nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)  :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_file)  :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_delete_file)  :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_force_delete_file)  :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_rename_file)  :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_make_directory)  :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_new_file)  :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call <SID>disable_operation()<CR>
+endfunction"}}}
+function! s:disable_operation()"{{{
+  call vimfiler#print_error('In safe mode, this operation is disabled.')
 endfunction"}}}
 
 function! s:history_forward()"{{{

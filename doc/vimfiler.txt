@@ -458,6 +458,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved safe mode.
 - Disabled file operation mappings in safe mode.
 - Added g:vimfiler_time_format option.
+- Improved safe mode mappings.
 
 2010-10-09
 - Fixed shellslash bug.
