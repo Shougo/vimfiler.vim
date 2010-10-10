@@ -282,7 +282,7 @@ function! vimfiler#redraw_screen()"{{{
       if l:file.is_directory
         let l:line = printf('%s %s [DIR]         %s',
               \ l:mark, l:filename, 
-              \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
+              \ l:file.datemark . strftime(g:vimfiler_time_format, l:file.time)
               \)
       else
         let l:line = printf('%s %s %s %s %s',
@@ -290,7 +290,7 @@ function! vimfiler#redraw_screen()"{{{
               \ l:filename, 
               \ l:file.type, 
               \ vimfiler#get_filesize(l:file.size), 
-              \ l:file.datemark . strftime('%y/%m/%d %H:%M', l:file.time)
+              \ l:file.datemark . strftime(g:vimfiler_time_format, l:file.time)
               \)
       endif
     elseif l:file.is_directory

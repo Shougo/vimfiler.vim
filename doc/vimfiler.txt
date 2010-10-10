@@ -145,6 +145,12 @@ g:vimfiler_safe_mode_by_default		*g:vimfiler_safe_mode_by_default*
 		
 		Default value is 0.
 
+g:vimfiler_time_format			*g:vimfiler_time_format*
+		This variable controls displayed time format.
+		The time format option is compatible |strftime()|.
+		
+		Default value is '%y/%m/%d %H:%M'.
+
 g:vimfiler_external_delete_command		*g:vimfiler_external_delete_command*
 		This variable controls vimfiler use delete command.
 		
@@ -451,6 +457,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved safe mode prompt.
 - Improved safe mode.
 - Disabled file operation mappings in safe mode.
+- Added g:vimfiler_time_format option.
 
 2010-10-09
 - Fixed shellslash bug.

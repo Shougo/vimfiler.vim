@@ -84,6 +84,9 @@ endif
 if !exists('g:vimfiler_safe_mode_by_default')
   let g:vimfiler_safe_mode_by_default = 0
 endif
+if !exists('g:vimfiler_time_format')
+  let g:vimfiler_time_format = '%y/%m/%d %H:%M'
+endif
 
 " Set extensions.
 if !exists('g:vimfiler_extensions')
