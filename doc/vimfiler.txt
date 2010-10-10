@@ -438,8 +438,8 @@ EXAMPLES					*vimfiler-examples*
 	let g:vimfiler_external_move_command = 'mv $srcs $dest'
 	let g:vimfiler_as_default_explorer = 1
 	
-	" Disable dangerous command.
-	"let g:vimfiler_safe_mode_by_default = 1
+	" Enable file operation commands.
+	"let g:vimfiler_safe_mode_by_default = 0
 >
 ==============================================================================
 TODO						*vimfiler-todo*
@@ -459,6 +459,7 @@ CHANGELOG					*vimfiler-changelog*
 - Disabled file operation mappings in safe mode.
 - Added g:vimfiler_time_format option.
 - Improved safe mode mappings.
+- Safe mode is default.
 
 2010-10-09
 - Fixed shellslash bug.

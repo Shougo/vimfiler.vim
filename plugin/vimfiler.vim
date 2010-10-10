@@ -82,7 +82,7 @@ if !exists('g:vimfiler_wildignore')
     let g:vimfiler_wildignore = &l:wildignore
 endif
 if !exists('g:vimfiler_safe_mode_by_default')
-  let g:vimfiler_safe_mode_by_default = 0
+  let g:vimfiler_safe_mode_by_default = 1
 endif
 if !exists('g:vimfiler_time_format')
   let g:vimfiler_time_format = '%y/%m/%d %H:%M'
