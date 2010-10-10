@@ -139,6 +139,12 @@ g:vimfiler_wildignore		*g:vimfiler_wildignore*
 
 		Default value is same to 'wildignore'.
 
+g:vimfiler_safe_mode_by_default		*g:vimfiler_safe_mode_by_default*
+		This variable controls vimfiler enter safe mode by default. In
+		safe mode, dangerous command is disabled.
+		
+		Default value is 0.
+
 g:vimfiler_external_delete_command		*g:vimfiler_external_delete_command*
 		This variable controls vimfiler use delete command.
 		
@@ -335,6 +341,9 @@ Normal mode mappings.
 <Plug>(vimfiler_smart_l)			*<Plug>(vimfiler_smart_l)*
 		
 
+<Plug>(vimfiler_toggle_safe_mode)		*<Plug>(vimfiler_toggle_safe_mode)*
+		Toggle safe mode. In safe mode, dangerous command is disabled.
+
 Visual mode mappings.
 
 <Plug>(vimfiler_toggle_mark_selected_lines)	*<Plug>(vimfiler_toggle_selected_lines)*
@@ -394,6 +403,7 @@ gr			<Plug>(vimfiler_grep)
 S			<Plug>(vimfiler_select_sort_type)
 <C-v>			<Plug>(vimfiler_switch_vim_buffer_mode)
 gc			<Plug>(vimfiler_cd)
+gs			<Plug>(vimfiler_toggle_safe_mode)
 
 Visual mode mappings.
 {lhs}			{rhs}
@@ -416,6 +426,9 @@ EXAMPLES					*vimfiler-examples*
 	let g:vimfiler_external_delete_command = 'rm -r $srcs'
 	let g:vimfiler_external_move_command = 'mv $srcs $dest'
 	let g:vimfiler_as_default_explorer = 1
+	
+	" Disable dangerous command.
+	"let g:vimfiler_safe_mode_by_default = 1
 >
 ==============================================================================
 TODO						*vimfiler-todo*
@@ -425,6 +438,11 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-10-10
+- Implemented safe mode.
+- Added <Plug>(vimfiler_toggle_safe_mode) mapping.
+- Added g:vimfiler_safe_mode_by_default option.
 
 2010-10-09
 - Fixed shellslash bug.
