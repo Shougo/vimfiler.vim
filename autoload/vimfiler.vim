@@ -123,9 +123,6 @@ function! vimfiler#create_filer(directory, options)"{{{
     endif
   endif
 
-  call vimfiler#default_settings()
-  setfiletype vimfiler
-
   let b:vimfiler = {}
 
   " Set current directory.
@@ -149,6 +146,9 @@ function! vimfiler#create_filer(directory, options)"{{{
 
   " Initialize schemes.
   call s:init_schemes()
+
+  call vimfiler#default_settings()
+  setfiletype vimfiler
 
   call vimfiler#force_redraw_screen()
   3

@@ -61,7 +61,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_print_filename)  :<C-u>echo vimfiler#get_filename(line('.'))<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_paste_from_clipboard)  :<C-u>call <SID>paste_from_clipboard()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_set_current_mask)  :<C-u>call <SID>set_current_mask()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call <SID>restore_from_trashbox()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_grep)  :<C-u>call <SID>mappings_caller('grep')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)  :<C-u>call <SID>select_sort_type()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_other_window)  :<C-u>call <SID>move_to_other_window()<CR>
@@ -72,13 +71,9 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#internal_commands#cd('..')\<CR>"
   nnoremap <buffer><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>mappings_caller('execute')\<CR>"
 
-  nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)  :<C-u>call <SID>mappings_caller('copy')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_file)  :<C-u>call <SID>mappings_caller('move')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_delete_file)  :<C-u>call <SID>mappings_caller('delete')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_force_delete_file)  :<C-u>call <SID>mappings_caller('force_delete')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_rename_file)  :<C-u>call <SID>mappings_caller('rename')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_make_directory)  :<C-u>call <SID>mappings_caller('make_directory')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_new_file)  :<C-u>call <SID>mappings_caller('new_file')<CR>
+  if !b:vimfiler.is_safe_mode
+    call s:mapping_file_operations()
+  endif
   "}}}
 
   if exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings
@@ -525,11 +520,6 @@ function! s:sync_with_another_vimfiler()"{{{
 endfunction"}}}
 
 function! s:move()"{{{
-  if b:vimfiler.is_safe_mode
-    call vimfiler#print_error('In safe mode, this command is disabled.')
-    return
-  endif
-
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
@@ -571,11 +561,6 @@ function! s:move()"{{{
   endif
 endfunction"}}}
 function! s:copy()"{{{
-  if b:vimfiler.is_safe_mode
-    call vimfiler#print_error('In safe mode, this command is disabled.')
-    return
-  endif
-
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
@@ -629,11 +614,6 @@ function! s:copy()"{{{
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:delete()"{{{
-  if b:vimfiler.is_safe_mode
-    call vimfiler#print_error('In safe mode, this command is disabled.')
-    return
-  endif
-
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
@@ -647,7 +627,7 @@ function! s:delete()"{{{
     if !isdirectory(g:vimfiler_trashbox_directory)
       call mkdir(g:vimfiler_trashbox_directory, 'p')
     endif
-    
+
     let l:trashdir = s:encode_trash_path(b:vimfiler.current_dir[: -2])
     if !isdirectory(l:trashdir)
       call mkdir(l:trashdir, 'p')
@@ -665,11 +645,6 @@ function! s:delete()"{{{
   endif
 endfunction"}}}
 function! s:force_delete()"{{{
-  if b:vimfiler.is_safe_mode
-    call vimfiler#print_error('In safe mode, this command is disabled.')
-    return
-  endif
-
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
@@ -688,11 +663,6 @@ function! s:force_delete()"{{{
   endif
 endfunction"}}}
 function! s:rename()"{{{
-  if b:vimfiler.is_safe_mode
-    call vimfiler#print_error('In safe mode, this command is disabled.')
-    return
-  endif
-
   if !vimfiler#check_filename_line()
     return
   endif
@@ -716,11 +686,6 @@ function! s:rename()"{{{
   endif
 endfunction"}}}
 function! s:make_directory()"{{{
-  if b:vimfiler.is_safe_mode
-    call vimfiler#print_error('In safe mode, this command is disabled.')
-    return
-  endif
-
   let l:current_dir = getcwd()
   let l:dirname = input('New directory name: ', '', 'dir')
 
@@ -741,11 +706,6 @@ function! s:make_directory()"{{{
   endif
 endfunction"}}}
 function! s:new_file()"{{{
-  if b:vimfiler.is_safe_mode
-    call vimfiler#print_error('In safe mode, this command is disabled.')
-    return
-  endif
-
   let l:filename = input('New file name: ', '', 'file')
 
   if l:filename == ''
@@ -761,11 +721,6 @@ function! s:new_file()"{{{
   endif
 endfunction"}}}
 function! s:paste_from_clipboard()"{{{
-  if b:vimfiler.is_safe_mode
-    call vimfiler#print_error('In safe mode, this command is disabled.')
-    return
-  endif
-
   if empty(b:vimfiler.clipboard)
     echo 'Clipboard is empty.'
     return
@@ -790,11 +745,6 @@ function! s:set_current_mask()"{{{
   call vimfiler#force_redraw_screen()
 endfunction"}}}
 function! s:restore_from_trashbox()"{{{
-  if b:vimfiler.is_safe_mode
-    call vimfiler#print_error('In safe mode, this command is disabled.')
-    return
-  endif
-
   if !vimfiler#head_match(b:vimfiler.current_dir, g:vimfiler_trashbox_directory . '/')
     echo 'This command is valid in trashbox directory.'
     return
@@ -895,6 +845,32 @@ function! s:toggle_safe_mode()"{{{
   let b:vimfiler.is_safe_mode = !b:vimfiler.is_safe_mode
   echo 'Safe mode is ' . (b:vimfiler.is_safe_mode ? 'enabled' : 'disabled')
   call vimfiler#redraw_prompt()
+
+  if b:vimfiler.is_safe_mode
+    call s:unmapping_file_operations()
+  else
+    call s:mapping_file_operations()
+  endif
+endfunction"}}}
+function! s:mapping_file_operations()"{{{
+  nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)  :<C-u>call <SID>mappings_caller('copy')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_file)  :<C-u>call <SID>mappings_caller('move')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_delete_file)  :<C-u>call <SID>mappings_caller('delete')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_force_delete_file)  :<C-u>call <SID>mappings_caller('force_delete')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_rename_file)  :<C-u>call <SID>mappings_caller('rename')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_make_directory)  :<C-u>call <SID>mappings_caller('make_directory')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_new_file)  :<C-u>call <SID>mappings_caller('new_file')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call <SID>restore_from_trashbox()<CR>
+endfunction"}}}
+function! s:unmapping_file_operations()"{{{
+  nunmap  <Plug>(vimfiler_copy_file)
+  nunmap  <Plug>(vimfiler_move_file)
+  nunmap  <Plug>(vimfiler_delete_file)
+  nunmap  <Plug>(vimfiler_force_delete_file)
+  nunmap  <Plug>(vimfiler_rename_file)
+  nunmap  <Plug>(vimfiler_make_directory)
+  nunmap  <Plug>(vimfiler_new_file)
+  nunmap  <Plug>(vimfiler_restore_from_trashbox)
 endfunction"}}}
 
 function! s:history_forward()"{{{

@@ -204,25 +204,30 @@ Normal mode mappings.
 		vimfiler buffer, destination directory is another vimfiler
 		directory. Else, depends |g:vimfiler_enable_clipboard|.
 		If no marked files, mark current file.
+		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_delete_file)			*<Plug>(vimfiler_delete_file)*
 		Delete marked files to |g:vimfiler_trashbox_directory|.
 		If no marked files, mark current file.
+		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_force_delete_file)		*<Plug>(vimfiler_force_delete_file)*
 		Delete marked files completely.
 		If no marked files, mark current file.
+		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_restore_from_trashbox)		*<Plug>(vimfiler_restore_from_trashbox)*
 		Restore marked files from |g:vimfiler_trashbox_directory|.
 		This command is valid in |g:vimfiler_trashbox_directory|.
+		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_make_directory)			*<Plug>(vimfiler_make_directory)*
 		
-		
+		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_new_file)			*<Plug>(vimfiler_new_file)*
 		
+		This mappings is disabled in vimfiler safe mode.
 		
 
 <Plug>(vimfiler_execute)			*<Plug>(vimfiler_execute)*
@@ -445,6 +450,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added g:vimfiler_safe_mode_by_default option.
 - Improved safe mode prompt.
 - Improved safe mode.
+- Disabled file operation mappings in safe mode.
 
 2010-10-09
 - Fixed shellslash bug.
