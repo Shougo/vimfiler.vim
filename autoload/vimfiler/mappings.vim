@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2010
+" Last Modified: 10 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -571,13 +571,18 @@ function! s:move()"{{{
   endif
 endfunction"}}}
 function! s:copy()"{{{
+  if b:vimfiler.is_safe_mode
+    call vimfiler#print_error('In safe mode, this command is disabled.')
+    return
+  endif
+
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
     call s:toggle_mark_current_line()
     return
   endif
-  
+
   if !vimfiler#exists_another_vimfiler()
     if g:vimfiler_enable_clipboard
       " Copy to clipboard.
@@ -711,6 +716,11 @@ function! s:rename()"{{{
   endif
 endfunction"}}}
 function! s:make_directory()"{{{
+  if b:vimfiler.is_safe_mode
+    call vimfiler#print_error('In safe mode, this command is disabled.')
+    return
+  endif
+
   let l:current_dir = getcwd()
   let l:dirname = input('New directory name: ', '', 'dir')
 
@@ -731,6 +741,11 @@ function! s:make_directory()"{{{
   endif
 endfunction"}}}
 function! s:new_file()"{{{
+  if b:vimfiler.is_safe_mode
+    call vimfiler#print_error('In safe mode, this command is disabled.')
+    return
+  endif
+
   let l:filename = input('New file name: ', '', 'file')
 
   if l:filename == ''
@@ -746,11 +761,16 @@ function! s:new_file()"{{{
   endif
 endfunction"}}}
 function! s:paste_from_clipboard()"{{{
+  if b:vimfiler.is_safe_mode
+    call vimfiler#print_error('In safe mode, this command is disabled.')
+    return
+  endif
+
   if empty(b:vimfiler.clipboard)
     echo 'Clipboard is empty.'
     return
   endif
-  
+
   if b:vimfiler.clipboard.command ==# 'copy'
     call vimfiler#internal_commands#cp(b:vimfiler.current_dir, b:vimfiler.clipboard.files)
     call vimfiler#force_redraw_all_vimfiler()
