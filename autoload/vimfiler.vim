@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Oct 2010
+" Last Modified: 10 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -145,6 +145,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   " Set mask.
   let b:vimfiler.current_mask = ''
   let b:vimfiler.sort_type = g:vimfiler_sort_type
+  let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
 
   " Initialize schemes.
   call s:init_schemes()

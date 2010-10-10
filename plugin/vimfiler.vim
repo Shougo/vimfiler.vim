@@ -81,6 +81,9 @@ endif
 if !exists('g:vimfiler_wildignore')
     let g:vimfiler_wildignore = &l:wildignore
 endif
+if !exists('g:vimfiler_safe_mode_by_default')
+  let g:vimfiler_safe_mode_by_default = 0
+endif
 
 " Set extensions.
 if !exists('g:vimfiler_extensions')

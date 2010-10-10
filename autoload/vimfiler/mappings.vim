@@ -68,6 +68,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)  :<C-u>call <SID>switch_vim_buffer_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call <SID>restore_vimfiler_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>cd()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)  :<C-u>call <SID>toggle_safe_mode()<CR>
   nnoremap <buffer><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#internal_commands#cd('..')\<CR>"
   nnoremap <buffer><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>mappings_caller('execute')\<CR>"
 
@@ -83,7 +84,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   if exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings
     return
   endif
-  
+
   nmap <buffer> <TAB> <Plug>(vimfiler_move_to_other_window)
   nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
   nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
@@ -136,16 +137,16 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-p> <Plug>(vimfiler_move_to_history_back)
   nmap <buffer> <C-n> <Plug>(vimfiler_move_to_history_forward)
   nmap <buffer> <C-j> <Plug>(vimfiler_jump_to_history_directory)
-  
+
   nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
   nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
   nmap <buffer> H <Plug>(vimfiler_popup_shell)
-  
+
   " Edit file.
   nmap <buffer> e <Plug>(vimfiler_edit_file)
   nmap <buffer> E <Plug>(vimfiler_split_edit_file)
   nmap <buffer> B <Plug>(vimfiler_edit_binary_file)
-  
+
   nmap <buffer> ge <Plug>(vimfiler_execute_external_filer)
   nmap <buffer> t <Plug>(vimfiler_execute_external_command)
   nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
@@ -161,6 +162,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> S <Plug>(vimfiler_select_sort_type)
   nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
   nmap <buffer> gc <Plug>(vimfiler_cd)
+  nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
 endfunction"}}}
 
 " vimfiler key-mappings functions.
@@ -523,6 +525,11 @@ function! s:sync_with_another_vimfiler()"{{{
 endfunction"}}}
 
 function! s:move()"{{{
+  if b:vimfiler.is_safe_mode
+    call vimfiler#print_error('In safe mode, this command is disabled.')
+    return
+  endif
+
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
@@ -617,6 +624,11 @@ function! s:copy()"{{{
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:delete()"{{{
+  if b:vimfiler.is_safe_mode
+    call vimfiler#print_error('In safe mode, this command is disabled.')
+    return
+  endif
+
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
@@ -648,6 +660,11 @@ function! s:delete()"{{{
   endif
 endfunction"}}}
 function! s:force_delete()"{{{
+  if b:vimfiler.is_safe_mode
+    call vimfiler#print_error('In safe mode, this command is disabled.')
+    return
+  endif
+
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
@@ -666,10 +683,15 @@ function! s:force_delete()"{{{
   endif
 endfunction"}}}
 function! s:rename()"{{{
+  if b:vimfiler.is_safe_mode
+    call vimfiler#print_error('In safe mode, this command is disabled.')
+    return
+  endif
+
   if !vimfiler#check_filename_line()
     return
   endif
-  
+
   let l:marked_files = vimfiler#get_marked_filenames()
   if !empty(l:marked_files)
     " Extended rename.
@@ -748,6 +770,11 @@ function! s:set_current_mask()"{{{
   call vimfiler#force_redraw_screen()
 endfunction"}}}
 function! s:restore_from_trashbox()"{{{
+  if b:vimfiler.is_safe_mode
+    call vimfiler#print_error('In safe mode, this command is disabled.')
+    return
+  endif
+
   if !vimfiler#head_match(b:vimfiler.current_dir, g:vimfiler_trashbox_directory . '/')
     echo 'This command is valid in trashbox directory.'
     return
@@ -755,7 +782,7 @@ function! s:restore_from_trashbox()"{{{
     echo 'Invalid restore path.'
     return
   endif
-  
+
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
     " Mark current line.
@@ -842,6 +869,11 @@ function! s:restore_vimfiler_mode()"{{{
 endfunction"}}}
 function! s:cd()"{{{
   lcd `=b:vimfiler.current_dir`
+endfunction"}}}
+
+function! s:toggle_safe_mode()"{{{
+  let b:vimfiler.is_safe_mode = !b:vimfiler.is_safe_mode
+  echo 'Safe mode is ' . (b:vimfiler.is_safe_mode ? 'enabled' : 'disabled')
 endfunction"}}}
 
 function! s:history_forward()"{{{
