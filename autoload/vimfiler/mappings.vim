@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2010
+" Last Modified: 11 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,10 +71,10 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#internal_commands#cd('..')\<CR>"
   nnoremap <buffer><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>mappings_caller('execute')\<CR>"
 
-  if !b:vimfiler.is_safe_mode
-    call s:mapping_file_operations()
-  else
+  if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()
+  else
+    call s:mapping_file_operations()
   endif
   "}}}
 

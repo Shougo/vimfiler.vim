@@ -450,6 +450,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-10-11
+- Improved safe mode view.
+
 2010-10-10
 - Implemented safe mode.
 - Added <Plug>(vimfiler_toggle_safe_mode) mapping.

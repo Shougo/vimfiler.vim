@@ -309,7 +309,7 @@ function! vimfiler#redraw_prompt()"{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
   call setline(1, printf('%s%s%s[%s%s]',
-        \ (b:vimfiler.is_safe_mode ? '*Safe* ' : ''),
+        \ (b:vimfiler.is_safe_mode ? '' : b:vimfiler.is_simple ? '*u* ' : '*unsafe* '),
         \ (b:vimfiler.is_simple ? 'CD: ' : 'Current directory: '),
         \ b:vimfiler.current_dir ,
         \ (b:vimfiler.is_visible_dot_files ? '.:' : ''),
