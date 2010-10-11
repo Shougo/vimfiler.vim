@@ -34,6 +34,7 @@ catch
 endtry
 
 let s:last_vimfiler_bufnr = -1
+let s:last_system_is_vimproc = -1
 
 " Global options definition."{{{
 if !exists('g:vimfiler_execute_file_list')
@@ -323,12 +324,15 @@ function! vimfiler#exists_vimproc()"{{{
   return s:exists_vimproc
 endfunction"}}}
 function! vimfiler#system(str, ...)"{{{
+  let s:last_system_is_vimproc = vimfiler#exists_vimproc()
+
   let l:command = a:str
   let l:input = join(a:000)
   if &termencoding != '' && &termencoding != &encoding
     let l:command = iconv(l:command, &encoding, &termencoding)
     let l:input = iconv(l:input, &encoding, &termencoding)
   endif
+
   let l:output = vimfiler#exists_vimproc() ? (a:0 == 0 ? vimproc#system(l:command) : vimproc#system(l:command, l:input))
         \: (a:0 == 0 ? system(l:command) : system(l:command, l:input))
   if &termencoding != '' && &termencoding != &encoding
@@ -337,6 +341,8 @@ function! vimfiler#system(str, ...)"{{{
   return l:output
 endfunction"}}}
 function! vimfiler#force_system(str, ...)"{{{
+  let s:last_system_is_vimproc = 0
+
   let l:command = a:str
   let l:input = join(a:000)
   if &termencoding != '' && &termencoding != &encoding
@@ -348,6 +354,13 @@ function! vimfiler#force_system(str, ...)"{{{
     let l:output = iconv(l:output, &termencoding, &encoding)
   endif
   return l:output
+endfunction"}}}
+function! vimfiler#get_system_error()"{{{
+  if s:last_system_is_vimproc
+    return vimproc#get_last_status()
+  else
+    return v:shell_error
+  endif
 endfunction"}}}
 function! vimfiler#get_marked_files()"{{{
   let l:files = []

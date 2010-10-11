@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: file.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Oct 2010
+" Last Modified: 11 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -75,6 +75,7 @@ function! s:scheme.read(path, is_visible_dot_file)"{{{
     finally
       call vimfiler#restore_variables(l:save_variables)
     endtry
+
     return [ 'directory', l:files ]
   elseif filereadable(a:path)
     return [ 'file', a:path ]
@@ -92,11 +93,21 @@ function! s:scheme.mv(dest_dir, src_files)"{{{
       if g:vimfiler_external_copy_directory_command == ''
         echohl Error | echoerr "Directory move is not supported in this platform. Please install cp.exe." | echohl None
       else
-        call s:external('copy_directory', a:dest_dir, [l:file])
-        call s:external('delete', '', [l:file])
+        let l:ret = s:external('copy_directory', a:dest_dir, [l:file])
+        if l:ret
+          call vimfiler#print_error('Failed file move: ' . l:file)
+        else
+          let l:ret = s:external('delete', '', [l:file])
+          if l:ret
+            call vimfiler#print_error('Failed file delete: ' . l:file)
+          endif
+        endif
       endif
     else
-      call rename(l:file, a:dest_dir . fnamemodify(l:file, ':t'))
+      let l:ret = rename(l:file, a:dest_dir . fnamemodify(l:file, ':t'))
+      if l:ret
+        call vimfiler#print_error('Failed file move: ' . l:file)
+      endif
     endif
   endfor
 endfunction"}}}
@@ -109,20 +120,23 @@ function! s:scheme.cp(dest_dir, src_files)"{{{
 
   for l:file in a:src_files
     let l:file = substitute(l:file, '\\', '/', 'g')
-    if isdirectory(l:file)
-      call s:external('copy_directory', a:dest_dir, [l:file])
-    else
-      call s:external('copy_file', a:dest_dir, [l:file])
+    let l:ret = isdirectory(l:file) ?
+          \ s:external('copy_directory', a:dest_dir, [l:file]) :
+          \ s:external('copy_file', a:dest_dir, [l:file])
+    if l:ret
+      call vimfiler#print_error('Failed file copy: ' . l:file)
     endif
   endfor
 endfunction"}}}
 function! s:scheme.rm(files)"{{{
   for l:file in a:files
     let l:file = substitute(l:file, '\\', '/', 'g')
-    if isdirectory(l:file)
-      call s:external('delete', '', [l:file])
-    else
-      call delete(l:file)
+    let l:ret = isdirectory(l:file) ?
+       \ call s:external('delete', '', [l:file]) :
+       \ delete(l:file)
+
+    if l:ret
+      call vimfiler#print_error('Failed file delete: ' . l:file)
     endif
   endfor
 endfunction"}}}
@@ -137,12 +151,12 @@ function! s:external(command, dest_dir, src_files)"{{{
   if l:command_line =~# '\$src\>'
     for l:src in a:src_files
       let l:command_line = g:vimfiler_external_{a:command}_command
-      
+
       let l:command_line = substitute(l:command_line, 
             \'\$src\>', '"'.l:src.'"', 'g') 
       let l:command_line = substitute(l:command_line, 
             \'\$dest\>', '"'.a:dest_dir.'"', 'g')
-      
+
       if vimfiler#iswin() && l:command_line =~# '^system '
         let l:output = vimfiler#force_system(l:command_line[7:])
       else
@@ -160,8 +174,10 @@ function! s:external(command, dest_dir, src_files)"{{{
     else
       let l:output = vimfiler#system(l:command_line)
     endif
-    
+
     echon l:output
   endif
+
+  return vimfiler#get_system_error()
 endfunction"}}}
 " vim: foldmethod=marker

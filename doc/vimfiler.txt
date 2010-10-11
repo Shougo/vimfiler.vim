@@ -452,6 +452,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2010-10-11
 - Improved safe mode view.
+- Improved error detection.
 
 2010-10-10
 - Implemented safe mode.

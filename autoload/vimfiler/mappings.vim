@@ -521,6 +521,7 @@ function! s:sync_with_another_vimfiler()"{{{
   endif
 endfunction"}}}
 
+" File operations.
 function! s:move()"{{{
   let l:marked_files = vimfiler#get_marked_filenames()
   if empty(l:marked_files)
@@ -701,7 +702,7 @@ function! s:make_directory()"{{{
     if &termencoding != '' && &termencoding != &encoding
       let l:dirname = iconv(l:dirname, &encoding, &termencoding)
     endif
-    
+
     call mkdir(l:dirname, 'p')
     call vimfiler#force_redraw_all_vimfiler()
     call vimfiler#internal_commands#cd(l:dirname)
@@ -740,6 +741,7 @@ function! s:paste_from_clipboard()"{{{
     call vimfiler#print_error('Invalid command.')
   endif
 endfunction"}}}
+
 function! s:set_current_mask()"{{{
   let l:mask = input('Please input new mask pattern: ', '')
 
