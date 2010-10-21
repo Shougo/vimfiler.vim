@@ -64,6 +64,9 @@ COMMANDS 					*vimfiler-commands*
 :VimFilerSplit					*:VimFilerSplit*
 		Create simple vimfiler buffer and split window.
 
+:VimFilerTab					*:VimFilerTab*
+		Create vimfiler buffer and create tab.
+
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
 
@@ -449,6 +452,9 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-10-21
+- Added :VimFilerTab command.
 
 2010-10-11
 - Improved safe mode view.
