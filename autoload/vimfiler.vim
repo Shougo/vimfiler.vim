@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2010
+" Last Modified: 21 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -170,6 +170,7 @@ function! vimfiler#switch_filer(directory, options)"{{{
   " Search vimfiler buffer.
   if buflisted(s:last_vimfiler_bufnr)
         \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
+        \ && (!exists('t:unite_buffer_dictionary') || has_key(t:unite_buffer_dictionary, s:last_vimfiler_bufnr))
     call s:switch_vimfiler(s:last_vimfiler_bufnr, l:split_flag, a:directory)
     return
   endif
@@ -178,6 +179,7 @@ function! vimfiler#switch_filer(directory, options)"{{{
   let l:cnt = 1
   while l:cnt <= bufnr('$')
     if getbufvar(l:cnt, '&filetype') ==# 'vimfiler'
+        \ && (!exists('t:unite_buffer_dictionary') || has_key(t:unite_buffer_dictionary, l:cnt))
       call s:switch_vimfiler(l:cnt, l:split_flag, a:directory)
       return
     endif
