@@ -50,19 +50,19 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
     let l:dir = fnamemodify(substitute(b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
   elseif l:dir == '/'
     " Root.
-    let l:dir = vimfiler#iswin() ? 
+    let l:dir = vimfiler#iswin() ?
           \matchstr(fnamemodify(b:vimfiler.current_dir, ':p'), '^\a\+:[/\\]') : l:dir
   elseif l:dir == '~'
     " Home.
     let l:dir = expand('~')
-  elseif l:dir =~ '^//'
-        \ || (vimfiler#iswin() && l:dir =~ '^\a\+:/\|^\a\+:$')
+  elseif (vimfiler#iswin() && l:dir =~ '^//\|^\a\+:')
         \ || (!vimfiler#iswin() && l:dir =~ '^/')
       " Network drive or absolute path.
   else
     " Relative path.
-    let l:dir = substitute(simplify(b:vimfiler.current_dir . l:dir), '\\', '/', 'g')
+    let l:dir = simplify(b:vimfiler.current_dir . l:dir)
   endif
+  let l:dir = substitute(l:dir, '\\', '/', 'g')
 
   if vimfiler#iswin()
     let l:dir = vimfiler#resolve(l:dir)
@@ -70,10 +70,10 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
 
   if !isdirectory(l:dir)
     " Ignore.
-    call vimfiler#print_error('cd: "' . l:dir . '" is not directory.')
+    call vimfiler#print_error('cd: "' . l:dir . '" is not a directory.')
     return
   endif
-  
+
   if l:dir !~ '/$'
     let l:dir .= '/'
   endif
@@ -101,7 +101,7 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
       let b:vimfiler.changed_dir = b:vimfiler.changed_dir[-l:max_save :]
     endif
   endif
-  
+
   " Redraw.
   call vimfiler#force_redraw_screen()
 
