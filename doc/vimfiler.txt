@@ -456,6 +456,7 @@ CHANGELOG					*vimfiler-changelog*
 2010-10-27
 - Detect cd error.
 - Improved cd.
+- Convert path separator \ to / only for Windows.
 
 2010-10-21
 - Added :VimFilerTab command.

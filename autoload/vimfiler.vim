@@ -610,10 +610,7 @@ function! vimfiler#restore_variables(variables_save)"{{{
   endfor
 endfunction"}}}
 function! vimfiler#substitute_path_separator(path)"{{{
-    if vimfiler#iswin()
-        return substitute(a:dir, '\\', '/', 'g')
-    endif
-    return a:path
+  return vimfiler#iswin() ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 "}}}
 
