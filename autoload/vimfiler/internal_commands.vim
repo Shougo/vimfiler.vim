@@ -55,8 +55,10 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
   elseif l:dir == '~'
     " Home.
     let l:dir = expand('~')
-  elseif (vimfiler#iswin() && l:dir =~ '^\a\+:/\|^\a\+:$')
+  elseif l:dir =~ '^//'
+        \ || (vimfiler#iswin() && l:dir =~ '^\a\+:/\|^\a\+:$')
         \ || (!vimfiler#iswin() && l:dir =~ '^/')
+      " Network drive or absolute path.
   else
     " Relative path.
     let l:dir = substitute(simplify(b:vimfiler.current_dir . l:dir), '\\', '/', 'g')
