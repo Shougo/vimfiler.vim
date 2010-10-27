@@ -453,6 +453,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-10-27
+- Detect cd error.
+
 2010-10-21
 - Added :VimFilerTab command.
 - Check t:unite_buffer_dictionary.
