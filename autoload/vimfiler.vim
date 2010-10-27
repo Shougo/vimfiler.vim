@@ -128,7 +128,7 @@ function! vimfiler#create_filer(directory, options)"{{{
 
   " Set current directory.
   let l:current = (a:directory != '')? a:directory : getcwd()
-  let l:current = substitute(l:current, '\\', '/', 'g')
+  let l:current = vimfiler#substitute_path_separator(l:current)
   let b:vimfiler.current_dir = l:current
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
@@ -588,7 +588,7 @@ function! vimfiler#get_another_vimfiler()"{{{
 endfunction"}}}
 function! vimfiler#resolve(filename)"{{{
   return ((vimfiler#iswin() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
-        \ substitute(resolve(a:filename), '\\', '/', 'g') : a:filename
+        \ vimfiler#substitute_path_separator(resolve(a:filename)) : a:filename
 endfunction"}}}
 function! vimfiler#print_error(message)"{{{
   echohl WarningMsg | echo a:message | echohl None
@@ -608,6 +608,12 @@ function! vimfiler#restore_variables(variables_save)"{{{
   for [key, value] in items(a:variables_save)
     execute 'let' key '= value'
   endfor
+endfunction"}}}
+function! vimfiler#substitute_path_separator(path)"{{{
+    if vimfiler#iswin()
+        return substitute(a:dir, '\\', '/', 'g')
+    endif
+    return a:path
 endfunction"}}}
 "}}}
 
@@ -721,7 +727,7 @@ function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
 
   " Set current directory.
   let l:current = (a:directory != '')? a:directory : getcwd()
-  let l:current = substitute(l:current, '\\', '/', 'g')
+  let l:current = vimfiler#substitute_path_separator(l:current)
   let b:vimfiler.current_dir = l:current
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'

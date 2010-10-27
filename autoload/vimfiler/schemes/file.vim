@@ -86,7 +86,7 @@ endfunction"}}}
 function! s:scheme.mv(dest_dir, src_files)"{{{
   let l:dest_drive = matchstr(a:dest_dir, '^\a\+\ze:')
   for l:file in a:src_files
-    let l:file = substitute(l:file, '\\', '/', 'g')
+    let l:file = vimfiler#substitute_path_separator(l:file)
 
     if isdirectory(l:file) && vimfiler#iswin() && matchstr(l:file, '^\a\+\ze:') !=? l:dest_drive
       " rename() doesn't supported directory over drive move in Windows.
@@ -119,7 +119,7 @@ function! s:scheme.cp(dest_dir, src_files)"{{{
   endif
 
   for l:file in a:src_files
-    let l:file = substitute(l:file, '\\', '/', 'g')
+    let l:file = vimfiler#substitute_path_separator(l:file)
     let l:ret = isdirectory(l:file) ?
           \ s:external('copy_directory', a:dest_dir, [l:file]) :
           \ s:external('copy_file', a:dest_dir, [l:file])
@@ -130,7 +130,7 @@ function! s:scheme.cp(dest_dir, src_files)"{{{
 endfunction"}}}
 function! s:scheme.rm(files)"{{{
   for l:file in a:files
-    let l:file = substitute(l:file, '\\', '/', 'g')
+    let l:file = vimfiler#substitute_path_separator(l:file)
     let l:ret = isdirectory(l:file) ?
        \ call s:external('delete', '', [l:file]) :
        \ delete(l:file)

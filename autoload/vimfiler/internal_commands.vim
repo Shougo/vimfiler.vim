@@ -39,7 +39,7 @@ endfunction"}}}
 
 function! vimfiler#internal_commands#cd(dir, ...)"{{{
   let l:save_history = a:0 ? a:1 : 1
-  let l:dir = substitute(a:dir, '\\', '/', 'g')
+  let l:dir = vimfiler#substitute_path_separator(a:dir)
 
   if l:dir == '..'
     if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
@@ -62,7 +62,7 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
     " Relative path.
     let l:dir = simplify(b:vimfiler.current_dir . l:dir)
   endif
-  let l:dir = substitute(l:dir, '\\', '/', 'g')
+  let l:dir = vimfiler#substitute_path_separator(l:dir)
 
   if vimfiler#iswin()
     let l:dir = vimfiler#resolve(l:dir)
