@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -492,10 +492,12 @@ function! vimfiler#redraw_all_vimfiler()"{{{
   execute l:current_nr . 'wincmd w'
 endfunction"}}}
 function! vimfiler#get_filetype(filename)"{{{
-  let l:filename = vimfiler#resolve(a:filename)
+  let l:filename = a:filename
   let l:ext = tolower(fnamemodify(l:filename, ':e'))
   
-  if isdirectory(l:filename)
+  if (vimfiler#iswin() && fnamemodify(l:filename, ':e') ==? 'LNK') || getftype(l:filename) ==# 'link'
+    return '[LNK]'
+  elseif isdirectory(l:filename)
     return '[DIR]'
   elseif has_key(g:vimfiler_extensions.text, l:ext)
     " Text.

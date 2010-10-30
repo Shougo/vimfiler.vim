@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,6 +50,7 @@ syn match   VimFilerTypeExecute       '\%(\f\s\?\)\+\s\+\[EXE\]'
 syn match   VimFilerTypeMultimedia    '\%(\f\s\?\)\+\s\+\[MUL\]'
 syn match   VimFilerTypeDirectory     '\%(\f\s\?\)\+\s\+\[DIR\]'
 syn match   VimFilerTypeSystem        '\%(\f\s\?\)\+\s\+\[SYS\]'
+syn match   VimFilerTypeLink          '\%(\f\s\?\)\+\s\+\[LNK\]'
 
 syn match   VimFilerSize              '\s\zs[0-9.]\a*\s'
 
@@ -90,5 +91,6 @@ hi def link VimFilerTypeExecute Statement
 hi def link VimFilerTypeMultimedia Identifier
 hi def link VimFilerTypeDirectory Preproc
 hi def link VimFilerTypeSystem Comment
+hi def link VimFilerTypeLink Comment
 
 let b:current_syntax = "vimfiler"
