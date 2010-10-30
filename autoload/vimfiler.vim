@@ -209,7 +209,7 @@ function! vimfiler#force_redraw_screen()"{{{
       call add(l:dirs, {
           \ 'name' : l:file, 
           \ 'extension' : '', 
-          \ 'type' : '[DIR]', 
+          \ 'type' : vimfiler#get_filetype(l:file),
           \ 'size' : 0, 
           \ 'datemark' : vimfiler#get_datemark(l:file), 
           \ 'time' : getftime(l:file), 
@@ -283,8 +283,9 @@ function! vimfiler#redraw_screen()"{{{
     let l:mark = l:file.is_marked ? '*' : '-'
     if !b:vimfiler.is_simple
       if l:file.is_directory
-        let l:line = printf('%s %s [DIR]         %s',
+        let l:line = printf('%s %s %s         %s',
               \ l:mark, l:filename, 
+              \ l:file.type,
               \ l:file.datemark . strftime(g:vimfiler_time_format, l:file.time)
               \)
       else
@@ -296,8 +297,6 @@ function! vimfiler#redraw_screen()"{{{
               \ l:file.datemark . strftime(g:vimfiler_time_format, l:file.time)
               \)
       endif
-    elseif l:file.is_directory
-      let l:line = printf('%s %s [DIR]', l:mark, l:filename)
     else
       let l:line = printf('%s %s %s', l:mark, l:filename, l:file.type)
     endif
