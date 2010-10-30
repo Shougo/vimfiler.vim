@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Oct 2010
+" Last Modified: 30 Oct 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -155,7 +155,7 @@ function! vimfiler#internal_commands#edit(filename, is_split)"{{{
       call vimfiler#internal_commands#split()
     endif
     
-    execute g:vimfiler_edit_command a:filename
+    execute (a:is_split ? 'edit' : g:vimfiler_edit_command) a:filename
 
     let b:vimfiler = l:vimfiler_save
   catch

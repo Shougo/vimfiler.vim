@@ -295,10 +295,11 @@ Normal mode mappings.
 		
 
 <Plug>(vimfiler_edit_file)			*<Plug>(vimfiler_edit_file)*
-		
+		Edit cursor file.
 
 <Plug>(vimfiler_split_edit_file)		*<Plug>(vimfiler_split_edit_file)*
-		
+		Split buffer and edit cursor file. |g:vimfiler_edit_command|is
+		ignored.
 
 <Plug>(vimfiler_edit_binary_file)		*<Plug>(vimfiler_edit_binary_file)*
 		
@@ -452,6 +453,9 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-10-30
+- When execute <Plug>(vimfiler_split_edit_file), g:vimfiler_edit_command is ignored.
 
 2010-10-27
 - Detect cd error.
