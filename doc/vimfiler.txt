@@ -454,9 +454,12 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-10-31
+- Improved symbolic link.
+
 2010-10-30
 - When execute <Plug>(vimfiler_split_edit_file), g:vimfiler_edit_command is ignored.
-- Display simbolic link.
+- Display symbolic link.
 
 2010-10-27
 - Detect cd error.
