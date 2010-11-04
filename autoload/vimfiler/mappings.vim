@@ -68,8 +68,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call <SID>restore_vimfiler_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>cd()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)  :<C-u>call <SID>toggle_safe_mode()<CR>
-  nnoremap <buffer><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#internal_commands#cd('..')\<CR>"
-  nnoremap <buffer><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>mappings_caller('execute')\<CR>"
+  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#internal_commands#cd('..')\<CR>"
+  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>mappings_caller('execute')\<CR>"
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()

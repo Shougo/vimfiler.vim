@@ -614,7 +614,7 @@ function! vimfiler#substitute_path_separator(path)"{{{
   return vimfiler#iswin() ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 function! vimfiler#cd(directory)"{{{
-  execute g:vimfiler_cd_command `=a:directory`
+  execute g:vimfiler_cd_command '`=a:directory`'
 endfunction"}}}
 "}}}
 
