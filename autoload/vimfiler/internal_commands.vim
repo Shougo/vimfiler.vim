@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 04 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,9 +125,9 @@ function! vimfiler#internal_commands#gexe(filename)"{{{
   endif
 
   let l:current_dir = getcwd()
-  lcd `=b:vimfiler.current_dir`
+  call vimfiler#cd(b:vimfiler.current_dir)
   call vimproc#system_bg(a:filename)
-  lcd `=l:current_dir`
+  call vimfiler#cd(l:current_dir)
 endfunction"}}}
 function! vimfiler#internal_commands#split()"{{{
   if g:vimfiler_split_command ==# 'split_nicely'

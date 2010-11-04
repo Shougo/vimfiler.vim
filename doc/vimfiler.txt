@@ -152,7 +152,12 @@ g:vimfiler_time_format			*g:vimfiler_time_format*
 		This variable controls displayed time format.
 		The time format option is compatible |strftime()|.
 		
-		Default value is '%y/%m/%d %H:%M'.
+		Default value is "%y/%m/%d %H:%M".
+
+g:vimfiler_cd_command			*g:vimfiler_cd_command*
+		This variable controls cd command when vimshell execute cd.
+		
+		Default value is "lcd".
 
 g:vimfiler_external_delete_command		*g:vimfiler_external_delete_command*
 		This variable controls vimfiler use delete command.
@@ -453,6 +458,9 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2010-11-04
+- Added g:vimfiler_cd_command option.
 
 2010-10-31
 - Improved symbolic link.

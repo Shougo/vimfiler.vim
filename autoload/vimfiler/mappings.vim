@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Oct 2010
+" Last Modified: 04 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -229,11 +229,11 @@ endfunction
 
 function! s:mappings_caller(funcname)"{{{
   let l:current_dir = getcwd()
-  lcd `=b:vimfiler.current_dir`
-  
+  call vimfiler#cd(b:vimfiler.current_dir)
+
   call call(s:SID_PREFIX().a:funcname, [])
 
-  lcd `=l:current_dir`
+  call vimfiler#cd(l:current_dir)
 endfunction"}}}
 
 function! s:toggle_mark_current_line()"{{{
@@ -842,7 +842,7 @@ function! s:restore_vimfiler_mode()"{{{
   echo 'Switched vimfiler mode'
 endfunction"}}}
 function! s:cd()"{{{
-  lcd `=b:vimfiler.current_dir`
+  call vimfiler#cd(b:vimfiler.current_dir)
 endfunction"}}}
 
 " For safe mode.

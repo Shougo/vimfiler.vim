@@ -87,6 +87,9 @@ endif
 if !exists('g:vimfiler_time_format')
   let g:vimfiler_time_format = '%y/%m/%d %H:%M'
 endif
+if !exists('g:vimfiler_cd_command')
+  let g:vimfiler_cd_command = 'lcd'
+endif
 
 " Set extensions.
 if !exists('g:vimfiler_extensions')
@@ -138,7 +141,7 @@ command! VimFilerDetectDrives call vimfiler#detect_drives()
 if g:vimfiler_as_default_explorer
   " Disable netrw.
   let g:loaded_netrwPlugin = 1
-  
+
   augroup vimfiler-FileExplorer
     autocmd!
     autocmd VimEnter * silent! autocmd! FileExplorer
