@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jun 2010
+" Last Modified: 08 Nov 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,7 +27,7 @@
 function! vimfiler#exrename#create_buffer(files)"{{{
   let l:vimfiler_save = deepcopy(b:vimfiler)
   let l:bufnr = bufnr('%')
-  
+
   vsplit
   edit exrename
   highlight clear
@@ -37,11 +37,13 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   syn match ExrenameModified '^\s*[^#].*'
   hi def link ExrenameModified Todo
   hi def link ExrenameOriginal Normal
-  
+
   setlocal buftype=acwrite
   let b:exrename = l:vimfiler_save
   let b:exrename.bufnr = l:bufnr
   let b:exrename.current_files = a:files
+
+  lcd `=b:exrename.current_dir`
 
   nnoremap <buffer><silent> q    :<C-u>call <SID>exit()<CR>
   augroup exrename
@@ -49,10 +51,10 @@ function! vimfiler#exrename#create_buffer(files)"{{{
     autocmd BufWriteCmd <buffer> call s:do_rename()
     autocmd CursorMoved,CursorMovedI <buffer> call s:check_lines()
   augroup END
-  
+
   " Clean up the screen.
   % delete _
-  
+
   " Print files.
   for l:file in a:files
     let l:filename = fnamemodify(l:file.name, ':t')
@@ -92,10 +94,10 @@ function! s:do_rename()"{{{
     if l:filename != getline(l:linenr)
       call rename(l:filename, getline(l:linenr))
     endif
-    
+
     let l:linenr += 1
   endwhile
-  
+
   setlocal nomodified
   call s:exit()
 

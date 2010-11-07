@@ -459,6 +459,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-11-08
+- Fixed exrename bug.
+
 2010-11-07
 - Improved modeline.
 
