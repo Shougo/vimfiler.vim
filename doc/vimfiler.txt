@@ -146,7 +146,7 @@ g:vimfiler_safe_mode_by_default		*g:vimfiler_safe_mode_by_default*
 		This variable controls vimfiler enter safe mode by default. In
 		safe mode, dangerous command is disabled.
 		
-		Default value is 0.
+		Default value is 1.
 
 g:vimfiler_time_format			*g:vimfiler_time_format*
 		This variable controls displayed time format.
@@ -464,6 +464,9 @@ CHANGELOG					*vimfiler-changelog*
 
 2010-11-30
 - Improved examples.
+
+2010-11-09
+- Fixed g:vimfiler_safe_mode_by_default description.
 
 2010-11-08
 - Fixed exrename bug.
