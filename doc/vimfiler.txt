@@ -462,6 +462,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2010-12-05
+- Fixed cd command.
+
 2010-11-30
 - Improved examples.
 
