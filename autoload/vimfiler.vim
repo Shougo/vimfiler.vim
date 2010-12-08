@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Dec 2010
+" Last Modified: 08 Dec 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -614,7 +614,7 @@ function! vimfiler#substitute_path_separator(path)"{{{
   return vimfiler#iswin() ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 function! vimfiler#cd(directory)"{{{
-  execute g:vimfiler_cd_command escape(expand(a:directory), " \t\n*?[{`$\\%#'\"|!<")
+  execute g:vimfiler_cd_command '`=a:directory`'
 endfunction"}}}
 "}}}
 
