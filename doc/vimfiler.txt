@@ -156,6 +156,7 @@ g:vimfiler_time_format			*g:vimfiler_time_format*
 
 g:vimfiler_cd_command			*g:vimfiler_cd_command*
 		This variable controls cd command when vimshell execute cd.
+		This command must interpret |`=|.
 		
 		Default value is "lcd".
 
