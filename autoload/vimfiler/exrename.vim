@@ -91,7 +91,7 @@ function! s:do_rename()"{{{
   let l:linenr = 1
   let l:files = b:exrename.current_files
   while l:linenr <= line('$')
-    let l:filename = l:files[l:linenr - 1].name
+    let l:filename = l:files[l:linenr - 1]
     if l:filename !=# getline(l:linenr)
       call rename(l:filename, getline(l:linenr))
     endif
