@@ -34,7 +34,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   syntax clear
   setfiletype exrename
 
-  syn match ExrenameModified '^\s*[^#].*'
+  syn match ExrenameModified '^.*$'
   hi def link ExrenameModified Todo
   hi def link ExrenameOriginal Normal
 

@@ -464,7 +464,8 @@ BUGS						*vimfiler-bugs*
 CHANGELOG					*vimfiler-changelog*
 
 2010-12-19
-- Fixed exrename.
+- Fixed exrename error.
+- Fixed exrename syntax.
 
 2010-12-08
 - Restored cd behavior.
