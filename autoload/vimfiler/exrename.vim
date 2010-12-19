@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Nov 2010
+" Last Modified: 19 Dec 2010.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,7 +41,6 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   setlocal buftype=acwrite
   let b:exrename = l:vimfiler_save
   let b:exrename.bufnr = l:bufnr
-  let b:exrename.current_files = a:files
 
   lcd `=b:exrename.current_dir`
 
@@ -56,6 +55,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   % delete _
 
   " Print files.
+  let b:exrename.current_files = []
   for l:file in a:files
     let l:filename = fnamemodify(l:file.name, ':t')
     if l:file.is_directory
@@ -64,6 +64,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
 
     execute 'syn match ExrenameOriginal' string(printf('^\%%%dl%s$', line('$'), l:filename))
     call append('$', l:filename)
+    call add(b:exrename.current_files, l:filename)
   endfor
 
   1delete
@@ -91,7 +92,7 @@ function! s:do_rename()"{{{
   let l:files = b:exrename.current_files
   while l:linenr <= line('$')
     let l:filename = l:files[l:linenr - 1].name
-    if l:filename != getline(l:linenr)
+    if l:filename !=# getline(l:linenr)
       call rename(l:filename, getline(l:linenr))
     endif
 
