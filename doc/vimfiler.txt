@@ -463,6 +463,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-01-01
+- Fixed exrename initialize.
+
 2010-12-19
 - Fixed exrename error.
 - Fixed exrename syntax.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Dec 2010.
+" Last Modified: 01 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,7 +32,6 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   edit exrename
   highlight clear
   syntax clear
-  setfiletype exrename
 
   syn match ExrenameModified '^.*$'
   hi def link ExrenameModified Todo
@@ -50,6 +49,8 @@ function! vimfiler#exrename#create_buffer(files)"{{{
     autocmd BufWriteCmd <buffer> call s:do_rename()
     autocmd CursorMoved,CursorMovedI <buffer> call s:check_lines()
   augroup END
+
+  setfiletype exrename
 
   " Clean up the screen.
   % delete _
