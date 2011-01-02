@@ -463,6 +463,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-01-03
+- Fixed edit file.
+
 2011-01-01
 - Fixed exrename initialize.
 

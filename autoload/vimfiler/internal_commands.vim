@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Nov 2010
+" Last Modified: 03 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -147,15 +147,15 @@ function! vimfiler#internal_commands#edit(filename, is_split)"{{{
           \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
     return
   endif
-  
+
   try
     let l:vimfiler_save = b:vimfiler
-    
+
     if a:is_split
       call vimfiler#internal_commands#split()
     endif
-    
-    execute (a:is_split ? 'edit' : g:vimfiler_edit_command) a:filename
+
+    execute (a:is_split ? 'edit' : g:vimfiler_edit_command) '`=a:filename`'
 
     let b:vimfiler = l:vimfiler_save
   catch
@@ -165,9 +165,9 @@ endfunction"}}}
 function! vimfiler#internal_commands#pedit(filename)"{{{
   try
     let l:vimfiler_save = b:vimfiler
-    
-    execute g:vimfiler_pedit_command a:filename
-    
+
+    execute g:vimfiler_pedit_command '`=a:filename`'
+
     if g:vimfiler_pedit_command == 'pedit'
       wincmd p
       let b:vimfiler = l:vimfiler_save
