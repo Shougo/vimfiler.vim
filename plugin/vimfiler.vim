@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Oct 2010
+" Last Modified: 12 Jan 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -139,9 +139,6 @@ command! -nargs=? -complete=dir VimFilerTab tabnew | call vimfiler#create_filer(
 command! VimFilerDetectDrives call vimfiler#detect_drives()
 
 if g:vimfiler_as_default_explorer
-  " Disable netrw.
-  let g:loaded_netrwPlugin = 1
-
   augroup vimfiler-FileExplorer
     autocmd!
     autocmd VimEnter * silent! autocmd! FileExplorer

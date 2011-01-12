@@ -463,6 +463,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-01-11
+- Fixed g:vimfiler_as_default_explorer.
+
 2011-01-03
 - Fixed edit file.
 
