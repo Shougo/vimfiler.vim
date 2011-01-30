@@ -456,7 +456,7 @@ function! vimfiler#input_yesno(message)"{{{
     let l:yesno = input(a:message . ' [yes/no] :   ')
   endwhile
 
-  return l:yesno
+  return l:yesno =~? 'y\%[es]'
 endfunction"}}}
 function! vimfiler#force_redraw_all_vimfiler()"{{{
   let l:current_nr = winnr()

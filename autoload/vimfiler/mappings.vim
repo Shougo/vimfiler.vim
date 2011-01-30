@@ -554,9 +554,9 @@ function! s:move()"{{{
     return
   endif
 
-  let l:yesno = vimfiler#input_yesno('Really move marked files?')
+  let l:yes = vimfiler#input_yesno('Really move marked files?')
 
-  if l:yesno =~? 'y\%[es]'
+  if l:yes
     " Execute move.
     call vimfiler#internal_commands#mv(l:dest_dir . '/', l:marked_files)
     call s:clear_mark_all_lines()
@@ -623,9 +623,9 @@ function! s:delete()"{{{
     call s:toggle_mark_current_line()
     return
   endif
-  let l:yesno = vimfiler#input_yesno('Really move marked files to trashbox?')
+  let l:yes = vimfiler#input_yesno('Really move marked files to trashbox?')
 
-  if l:yesno =~? 'y\%[es]'
+  if l:yes
     " Execute delete.
     if !isdirectory(g:vimfiler_trashbox_directory)
       call mkdir(g:vimfiler_trashbox_directory, 'p')
@@ -654,9 +654,9 @@ function! s:force_delete()"{{{
     call s:toggle_mark_current_line()
     return
   endif
-  let l:yesno = vimfiler#input_yesno('Really force delete marked files?')
+  let l:yes = vimfiler#input_yesno('Really force delete marked files?')
 
-  if l:yesno =~? 'y\%[es]'
+  if l:yes
     " Execute force delete.
     call vimfiler#internal_commands#rm(l:marked_files)
     call vimfiler#force_redraw_all_vimfiler()
@@ -763,9 +763,9 @@ function! s:restore_from_trashbox()"{{{
     call s:toggle_mark_current_line()
     return
   endif
-  let l:yesno = vimfiler#input_yesno('Restore marked files in trashbox?')
+  let l:yes = vimfiler#input_yesno('Restore marked files in trashbox?')
 
-  if l:yesno =~? 'y\%[es]'
+  if l:yes
     " Execute restore.
     let l:restoredir = fnamemodify(s:decode_trash_path(l:marked_files[0]), ':h')
     if l:restoredir !~ '[/\\]$'
