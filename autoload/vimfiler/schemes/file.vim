@@ -132,7 +132,7 @@ function! s:scheme.rm(files)"{{{
   for l:file in a:files
     let l:file = vimfiler#substitute_path_separator(l:file)
     let l:ret = isdirectory(l:file) ?
-       \ call s:external('delete', '', [l:file]) :
+       \ s:external('delete', '', [l:file]) :
        \ delete(l:file)
 
     if l:ret
