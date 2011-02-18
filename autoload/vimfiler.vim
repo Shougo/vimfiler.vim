@@ -443,7 +443,7 @@ function! vimfiler#input_directory(message)"{{{
   return l:dir
 endfunction"}}}
 function! vimfiler#input_yesno(message)"{{{
-  let l:yesno = input(a:message . ' [yes/no] :   ')
+  let l:yesno = input(a:message . ' [yes/no] : ')
   while l:yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
     redraw
     if l:yesno == ''
@@ -453,7 +453,7 @@ function! vimfiler#input_yesno(message)"{{{
 
     " Retry.
     call vimfiler#print_error('Invalid input.')
-    let l:yesno = input(a:message . ' [yes/no] :   ')
+    let l:yesno = input(a:message . ' [yes/no] : ')
   endwhile
 
   return l:yesno =~? 'y\%[es]'
