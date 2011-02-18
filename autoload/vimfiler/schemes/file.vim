@@ -131,9 +131,7 @@ endfunction"}}}
 function! s:scheme.rm(files)"{{{
   for l:file in a:files
     let l:file = vimfiler#substitute_path_separator(l:file)
-    let l:ret = isdirectory(l:file) ?
-       \ s:external('delete', '', [l:file]) :
-       \ delete(l:file)
+    let l:ret = s:external('delete', '', [l:file])
 
     if l:ret
       call vimfiler#print_error('Failed file delete: ' . l:file)
