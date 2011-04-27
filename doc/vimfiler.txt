@@ -97,7 +97,7 @@ g:vimfiler_pedit_command			*g:vimfiler_pedit_command*
 g:vimfiler_min_filename_width			*g:vimfiler_min_filename_width*
 		This variable controls vimfiler displays min filename width.
 		
-		Default value is 35.
+		Default value is 30.
 
 g:vimfiler_max_filename_width			*g:vimfiler_max_filename_width*
 		This variable controls vimfiler displays max filename width.
