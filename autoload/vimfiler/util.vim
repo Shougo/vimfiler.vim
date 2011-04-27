@@ -24,68 +24,76 @@
 " }}}
 "=============================================================================
 
-" Original function is from mattn.
-" http://github.com/mattn/googlereader-vim/tree/master
-function! vimfiler#util#truncate(str, num)"{{{
-  let mx_first = '^\(.\)\(.*\)$'
-  let str = a:str
-  let ret = ''
-  let width = 0
-  while 1
-    let char = substitute(str, mx_first, '\1', '')
-    let ucs = char2nr(char)
-    if ucs == 0
-      break
-    endif
-    let cells = s:wcwidth(ucs)
-    if width + cells > a:num
-      break
-    endif
-    let width = width + cells
-    let ret .= char
-    let str = substitute(str, mx_first, '\2', '')
-  endwhile
-  while width + 1 <= a:num
-    let ret .= " "
-    let width = width + 1
-  endwhile
-  return ret
-endfunction"}}}
+let s:save_cpo = &cpo
+set cpo&vim
 
-function! vimfiler#util#wcswidth(str)"{{{
-  let mx_first = '^\(.\)'
-  let str = a:str
-  let width = 0
-  while 1
-    let ucs = char2nr(substitute(str, mx_first, '\1', ''))
-    if ucs == 0
-      break
-    endif
-    let width = width + s:wcwidth(ucs)
-    let str = substitute(str, mx_first, '', '')
-  endwhile
-  return width
-endfunction"}}}
+let s:V = vital#of('unite')
+call s:V.load('Data.List')
+function! vimfiler#util#truncate_smart(...)
+  return call(s:V.truncate_smart, a:000)
+endfunction
+function! vimfiler#util#truncate(...)
+  return call(s:V.truncate, a:000)
+endfunction
+function! vimfiler#util#strchars(...)
+  return call(s:V.strchars, a:000)
+endfunction
+function! vimfiler#util#strwidthpart(...)
+  return call(s:V.strwidthpart, a:000)
+endfunction
+function! vimfiler#util#strwidthpart_reverse(...)
+  return call(s:V.strwidthpart_reverse, a:000)
+endfunction
+function! vimfiler#util#wcswidth(...)
+  return call(s:V.wcswidth, a:000)
+endfunction
+function! vimfiler#util#wcswidth(...)
+  return call(s:V.wcswidth, a:000)
+endfunction
+function! vimfiler#util#is_win(...)
+  return call(s:V.is_win, a:000)
+endfunction
+function! vimfiler#util#print_error(...)
+  return call(s:V.print_error, a:000)
+endfunction
+function! vimfiler#util#smart_execute_command(...)
+  return call(s:V.smart_execute_command, a:000)
+endfunction
+function! vimfiler#util#escape_file_searching(...)
+  return call(s:V.escape_file_searching, a:000)
+endfunction
+function! vimfiler#util#escape_pattern(...)
+  return call(s:V.escape_pattern, a:000)
+endfunction
+function! vimfiler#util#set_default(...)
+  return call(s:V.set_default, a:000)
+endfunction
+function! vimfiler#util#set_dictionary_helper(...)
+  return call(s:V.set_dictionary_helper, a:000)
+endfunction
+function! vimfiler#util#substitute_path_separator(...)
+  return call(s:V.substitute_path_separator, a:000)
+endfunction
+function! vimfiler#util#path2directory(...)
+  return call(s:V.path2directory, a:000)
+endfunction
+function! vimfiler#util#path2project_directory(...)
+  return call(s:V.path2project_directory, a:000)
+endfunction
+function! vimfiler#util#has_vimproc(...)
+  return call(s:V.has_vimproc, a:000)
+endfunction
+function! vimfiler#util#system(...)
+  return call(s:V.system, a:000)
+endfunction
+function! vimfiler#util#get_last_status(...)
+  return call(s:V.get_last_status, a:000)
+endfunction
+function! vimfiler#util#sort_by(...)
+  return call(s:V.Data.List.sort_by, a:000)
+endfunction
 
-function! s:wcwidth(ucs)"{{{
-  let ucs = a:ucs
-  if (ucs >= 0x1100
-   \  && (ucs <= 0x115f
-   \  || ucs == 0x2329
-   \  || ucs == 0x232a
-   \  || (ucs >= 0x2e80 && ucs <= 0xa4cf
-   \      && ucs != 0x303f)
-   \  || (ucs >= 0xac00 && ucs <= 0xd7a3)
-   \  || (ucs >= 0xf900 && ucs <= 0xfaff)
-   \  || (ucs >= 0xfe30 && ucs <= 0xfe6f)
-   \  || (ucs >= 0xff00 && ucs <= 0xff60)
-   \  || (ucs >= 0xffe0 && ucs <= 0xffe6)
-   \  || (ucs >= 0x20000 && ucs <= 0x2fffd)
-   \  || (ucs >= 0x30000 && ucs <= 0x3fffd)
-   \  ))
-    return 2
-  endif
-  return 1
-endfunction"}}}
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim: foldmethod=marker

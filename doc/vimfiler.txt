@@ -463,6 +463,10 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-04-27
+- Improved displays.
+- Vitalized.
+
 2011-01-11
 - Fixed g:vimfiler_as_default_explorer.
 

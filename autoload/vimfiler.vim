@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Dec 2010
+" Last Modified: 27 Apr 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,6 +56,7 @@ function! vimfiler#default_settings()"{{{
   setlocal nowrap
   setlocal nofoldenable
   setlocal foldcolumn=0
+  setlocal nolist
   if has('netbeans_intg') || has('sun_workshop')
     setlocal noautochdir
   endif
@@ -253,7 +254,9 @@ function! vimfiler#redraw_screen()"{{{
   call append('$', '..')
 
   " Print files.
-  let l:max_len = b:vimfiler.is_simple ? 
+  let l:is_simple = b:vimfiler.is_simple ||
+        \ winwidth(winnr()) < g:vimfiler_min_filename_width * 2
+  let l:max_len = l:is_simple ?
         \ g:vimfiler_min_filename_width : (winwidth(winnr()) - g:vimfiler_min_filename_width)
   if l:max_len > g:vimfiler_max_filename_width
     let l:max_len = g:vimfiler_max_filename_width
@@ -264,46 +267,33 @@ function! vimfiler#redraw_screen()"{{{
     if l:file.is_directory
       let l:filename .= '/'
     endif
-    if l:filename =~ '[^[:print:]]'
-      " Multibyte.
-      let l:len = vimfiler#util#wcswidth(l:filename)
-
-      if l:len > l:max_len
-        let l:filename = vimfiler#util#truncate(l:filename, l:max_len - 2) . '..'
-        let l:len = vimfiler#util#wcswidth(l:filename)
-      endif
-
-      let l:filename .= repeat(' ', l:max_len - l:len)
-    elseif len(l:filename) > l:max_len
-      let l:filename = l:filename[: l:max_len - 15] . '..' . l:filename[-12 :]
-    else
-      let l:filename .= repeat(' ', l:max_len - len(l:filename))
-    endif
+    let l:filename = vimfiler#util#truncate_smart(
+          \ l:filename, l:max_len, l:max_len/3, '..')
 
     let l:mark = l:file.is_marked ? '*' : '-'
-    if !b:vimfiler.is_simple
+    if !l:is_simple
       if l:file.is_directory
         let l:line = printf('%s %s %s         %s',
-              \ l:mark, l:filename, 
+              \ l:mark, l:filename,
               \ l:file.type,
               \ l:file.datemark . strftime(g:vimfiler_time_format, l:file.time)
               \)
       else
         let l:line = printf('%s %s %s %s %s',
-              \ l:mark, 
-              \ l:filename, 
-              \ l:file.type, 
-              \ vimfiler#get_filesize(l:file.size), 
+              \ l:mark,
+              \ l:filename,
+              \ l:file.type,
+              \ vimfiler#get_filesize(l:file.size),
               \ l:file.datemark . strftime(g:vimfiler_time_format, l:file.time)
               \)
       endif
     else
       let l:line = printf('%s %s %s', l:mark, l:filename, l:file.type)
     endif
-    
+
     call append('$', l:line)
   endfor
-  
+
   call setpos('.', l:pos)
   setlocal nomodifiable
 endfunction"}}}
