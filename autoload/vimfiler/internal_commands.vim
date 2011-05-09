@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jan 2011.
+" Last Modified: 09 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -143,7 +143,7 @@ function! vimfiler#internal_commands#split()"{{{
 endfunction"}}}
 function! vimfiler#internal_commands#edit(filename, is_split)"{{{
   if isdirectory(a:filename)
-    call vimfiler#create_filer(a:filename, 
+    call vimfiler#create_filer(a:filename,
           \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
     return
   endif

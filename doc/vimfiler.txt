@@ -463,6 +463,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-05-09
+- Do autocmd BufNewFile.
+
 2011-04-27
 - Improved displays.
 - Vitalized.
