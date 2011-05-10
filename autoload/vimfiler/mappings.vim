@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 May 2011.
+" Last Modified: 10 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -323,7 +323,8 @@ function! s:execute()"{{{
         " Edit with vim.
         call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')), 0)
       else
-        call vimfiler#internal_commands#gexe(printf('%s %s%s%s', g:vimfiler_execute_file_list[l:ext], &shellquote, l:filename, &shellquote))
+        call vimfiler#internal_commands#gexe(printf('%s ''%s''',
+              \ g:vimfiler_execute_file_list[l:ext], l:filename))
       endif
     endif
   endif

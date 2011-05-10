@@ -463,6 +463,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-05-10
+- Fixed <Plug>(vimfiler_execute).
+
 2011-05-09
 - Do autocmd BufNewFile.
 
