@@ -463,6 +463,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-05-11
+- <Plug>(vimfiler_new_file) keymapping supports create multiple files.
+
 2011-05-10
 - Fixed <Plug>(vimfiler_execute).
 

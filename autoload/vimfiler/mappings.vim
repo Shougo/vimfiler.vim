@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 May 2011.
+" Last Modified: 11 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -710,22 +710,26 @@ function! s:make_directory()"{{{
   endif
 endfunction"}}}
 function! s:new_file()"{{{
-  let l:filename = input('New file name: ', '', 'file')
-
-  if l:filename == ''
+  let l:filenames = input('New files name(comma separated multiple files): ', '', 'file')
+  if l:filenames == ''
     redraw
     echo 'Canceled.'
-  elseif filereadable(l:filename)
-    redraw
-    echo 'File exists.'
-  else
-    call writefile([], l:filename)
-
-    call vimfiler#force_redraw_all_vimfiler()
-    call vimfiler#internal_commands#edit(l:filename, 0)
-
-    doautocmd BufNewFile
+    return
   endif
+
+  for l:filename in split(l:filenames, ',')
+    if filereadable(l:filename)
+      redraw
+      echo l:filename . ' is exists.'
+    else
+      call writefile([], l:filename)
+
+      call vimfiler#force_redraw_all_vimfiler()
+      call vimfiler#internal_commands#edit(l:filename, 0)
+
+      doautocmd BufNewFile
+    endif
+  endfor
 endfunction"}}}
 function! s:paste_from_clipboard()"{{{
   if empty(b:vimfiler.clipboard)
