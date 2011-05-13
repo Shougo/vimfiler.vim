@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 May 2011.
+" Last Modified: 13 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -119,14 +119,14 @@ function! vimfiler#internal_commands#open(filename)"{{{
   call vimproc#open(a:filename)
 endfunction"}}}
 function! vimfiler#internal_commands#gexe(filename)"{{{
-  if !exists('*vimproc#system_bg')
-    echoerr 'vimproc#system_bg() is not found. Please install vimproc Ver.4.1 or later.'
+  if !exists('*vimproc#system_gui')
+    echoerr 'vimproc#system_gui() is not found. Please install vimproc Ver.5.2 or later.'
     return
   endif
 
   let l:current_dir = getcwd()
   call vimfiler#cd(b:vimfiler.current_dir)
-  call vimproc#system_bg(a:filename)
+  call vimproc#system_gui(a:filename)
   call vimfiler#cd(l:current_dir)
 endfunction"}}}
 function! vimfiler#internal_commands#split()"{{{
