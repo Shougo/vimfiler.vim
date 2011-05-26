@@ -113,12 +113,20 @@ else
 endif
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
-function! s:is_win()"{{{
+let s:is_mac = !s:is_windows && (has('mac') || has('macunix') || has('gui_macvim') || system('uname') =~? '^darwin')
+function! s:is_windows()"{{{
   return s:is_windows
+endfunction"}}}
+function! s:is_mac()"{{{
+  return s:is_mac
 endfunction"}}}
 
 function! s:print_error(message)"{{{
-  echohl WarningMsg | echomsg a:message | echohl None
+  echohl ErrorMsg
+  for m in split(a:message, "\n")
+    echomsg m
+  endfor
+  echohl None
 endfunction"}}}
 
 function! s:smart_execute_command(action, word)"{{{
@@ -131,6 +139,19 @@ endfunction"}}}
 function! s:escape_pattern(str)"{{{
   return escape(a:str, '~"\.^$[]*')
 endfunction"}}}
+" iconv() wrapper for safety.
+function! s:iconv(expr, from, to)
+  if a:from == '' || a:to == '' || a:from ==# a:to
+    return a:expr
+  endif
+  let result = iconv(a:expr, a:from, a:to)
+  return result != '' ? result : a:expr
+endfunction
+" Like builtin getchar() but returns string always.
+function! s:getchar(...)
+  let c = call('getchar', a:000)
+  return type(c) == type(0) ? nr2char(c) : c
+endfunction
 
 function! s:set_default(var, val)  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
@@ -198,8 +219,8 @@ function! s:system(str, ...)"{{{
   let l:command = a:str
   let l:input = a:0 >= 1 ? a:1 : ''
   if &termencoding != '' && &termencoding != &encoding
-    let l:command = iconv(l:command, &encoding, &termencoding)
-    let l:input = iconv(l:input, &encoding, &termencoding)
+    let l:command = s:iconv(l:command, &encoding, &termencoding)
+    let l:input = s:iconv(l:input, &encoding, &termencoding)
   endif
 
   if a:0 == 0
@@ -211,7 +232,7 @@ function! s:system(str, ...)"{{{
   endif
 
   if &termencoding != '' && &termencoding != &encoding
-    let l:output = iconv(l:output, &termencoding, &encoding)
+    let l:output = s:iconv(l:output, &termencoding, &encoding)
   endif
 
   return l:output

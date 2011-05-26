@@ -74,7 +74,7 @@ function! s:_build_module(sid)
   endif
   let prefix = '<SNR>' . a:sid . '_'
   let funcs = s:_redir('function')
-  let filter_pat = '^function ' . prefix
+  let filter_pat = '^\s*function ' . prefix
   let map_pat = prefix . '\zs\w\+'
   let functions = map(filter(split(funcs, "\n"), 'v:val =~# filter_pat'),
   \          'matchstr(v:val, map_pat)')
@@ -107,7 +107,7 @@ function! s:_redir(...)
     endfor
     if &verbosefile ==# temp
       let &verbosefile = save_vfile
-      let res = join(readfile(temp), "\n")
+      let res = join(readfile(temp, 'b'), "\n")
     endif
   finally
     call delete(temp)
