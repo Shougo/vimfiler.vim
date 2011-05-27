@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Jun 2010
+" Last Modified: 27 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:V = vital#of('unite')
+let s:V = vital#of('vimfiler')
 call s:V.load('Data.List')
 function! vimfiler#util#truncate_smart(...)
   return call(s:V.truncate_smart, a:000)

@@ -463,6 +463,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-05-27
+- Fixed vital bug.
+
 2011-05-12
 - Use system_gui().
 
