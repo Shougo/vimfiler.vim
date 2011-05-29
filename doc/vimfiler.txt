@@ -67,6 +67,9 @@ COMMANDS 					*vimfiler-commands*
 :VimFilerTab					*:VimFilerTab*
 		Create vimfiler buffer and create tab.
 
+:VimFilerDouble					*:VimFilerDouble*
+		Create double vimfiler buffer.
+
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
 
@@ -466,6 +469,8 @@ CHANGELOG					*vimfiler-changelog*
 2011-05-29
 - Use unite-grep in grep command.
 - Fixed grep error.
+- Improved move_to_other_window mapping.
+- Added :VimFilerDouble command.
 
 2011-05-27
 - Fixed vital bug.

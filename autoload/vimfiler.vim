@@ -99,6 +99,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   let l:split_flag = 0
   let l:overwrite_flag = 0
   let l:simple_flag = 0
+  let l:double_flag = 0
   for l:option in a:options
     if l:option ==# 'split'
       let l:split_flag = 1
@@ -106,6 +107,8 @@ function! vimfiler#create_filer(directory, options)"{{{
       let l:overwrite_flag = 1
     elseif l:option ==# 'simple'
       let l:simple_flag = 1
+    elseif l:option ==# 'double'
+      let l:double_flag = 1
     endif
   endfor
 
@@ -151,6 +154,14 @@ function! vimfiler#create_filer(directory, options)"{{{
 
   call vimfiler#default_settings()
   setfiletype vimfiler
+
+  if l:double_flag
+    " Create another vimfiler.
+    call vimfiler#create_filer(b:vimfiler.current_dir,
+          \ b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+    let s:last_vimfiler_bufnr = bufnr('%')
+    wincmd w
+  endif
 
   call vimfiler#force_redraw_screen()
   3

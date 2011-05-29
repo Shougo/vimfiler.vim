@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Apr 2011.
+" Last Modified: 29 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -132,6 +132,7 @@ nnoremap <silent> <Plug>(vimfiler_open_next_file)     :<C-u>call vimfiler#mappin
 "}}}
 
 command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(<q-args>, [])
+command! -nargs=? -complete=dir VimFilerDouble call vimfiler#create_filer(<q-args>, ['double'])
 command! -nargs=? -complete=dir VimFilerCreate call vimfiler#create_filer(<q-args>, [])
 command! -nargs=? -complete=dir VimFilerSimple call vimfiler#create_filer(<q-args>, ['simple', 'split'])
 command! -nargs=? -complete=dir VimFilerSplit call vimfiler#create_filer(<q-args>, ['split'])

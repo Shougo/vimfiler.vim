@@ -340,9 +340,12 @@ function! s:execute_file()"{{{
 endfunction"}}}
 function! s:move_to_other_window()"{{{
   if winnr('$') == 1
-    call vimfiler#create_filer(b:vimfiler.current_dir, 
-          \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+    " Create another vimfiler.
+    call vimfiler#create_filer(b:vimfiler.current_dir,
+          \ b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
     let s:last_vimfiler_bufnr = bufnr('%')
+    wincmd w
+    call vimfiler#force_redraw_screen()
   endif
 
   wincmd w
@@ -954,7 +957,7 @@ function! s:custom_alternate_buffer()"{{{
       bnext
     endif
   endif
-  
+
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 
