@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Apr 2011.
+" Last Modified: 29 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -196,13 +196,13 @@ function! vimfiler#available_schemes(name)"{{{
 endfunction"}}}
 function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
-  
+
   let l:scheme = vimfiler#available_schemes('file')
   let l:current_files = l:scheme.read(b:vimfiler.current_dir, b:vimfiler.is_visible_dot_files)[1]
   for l:mask in split(b:vimfiler.current_mask)
     let l:current_files = filter(l:current_files, 'fnamemodify(v:val, ":t") =~# ' . string(l:mask))
   endfor
-  
+
   let l:dirs = []
   let l:files = []
   for l:file in l:current_files

@@ -463,6 +463,10 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-05-29
+- Use unite-grep in grep command.
+- Fixed grep error.
+
 2011-05-27
 - Fixed vital bug.
 

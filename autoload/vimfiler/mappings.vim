@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 May 2011.
+" Last Modified: 29 May 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -606,12 +606,12 @@ function! s:copy()"{{{
 
       return
     endif
-    
+
     let l:dest_dir = l:filename
   else
     let l:dest_dir .= '/'
   endif
-  
+
   " Execute copy.
   call vimfiler#internal_commands#cp(l:dest_dir, l:marked_files)
   call s:clear_mark_all_lines()
@@ -640,7 +640,7 @@ function! s:delete()"{{{
     if l:trashdir !~ '[/\\]$'
       let l:trashdir .= '/'
     endif
-    
+
     call vimfiler#internal_commands#mv(l:trashdir, l:marked_files)
     call vimfiler#force_redraw_all_vimfiler()
   else
@@ -788,23 +788,26 @@ function! s:restore_from_trashbox()"{{{
   endif
 endfunction"}}}
 function! s:grep()"{{{
-  let l:marked_files = vimfiler#get_marked_filenames()
-  if empty(l:marked_files)
-    let l:marked_files = copy(b:vimfiler.current_files)
+  try
+    let l:unite_source = unite#get_sources('grep')
+  catch
+    call vimfiler#print_error('unite.vim or unite-grep is not installed. grep command is disabled.')
+    return
+  endtry
+  if empty(l:unite_source)
+    call vimfiler#print_error('unite.vim or unite-grep is not installed. grep command is disabled.')
+    return
   endif
-  let l:target = join(map(l:marked_files, 'v:val.is_directory ? v:val.name . "/*" : v:val.name'))
 
-  let l:pattern = input('Input search pattern: ')
-  if l:pattern == ''
+  let l:marked_files = vimfiler#get_marked_files()
+  if empty(l:marked_files)
     redraw
     echo 'Canceled.'
-  else
-    call s:clear_mark_all_lines()
-
-    silent! execute 'grep!' l:pattern l:target
-    
-    if !empty(getqflist()) | copen | endif
+    return
   endif
+  let l:target = join(map(l:marked_files, 'v:val.is_directory ? v:val.name . "/**" : v:val.name'))
+
+  call unite#start([['grep', l:target]])
 endfunction"}}}
 function! s:select_sort_type()"{{{
   for l:type in ['n[one]', 's[ize]', 'e[xtension]', 'f[ilename]', 't[ime]', 'm[anual]']
