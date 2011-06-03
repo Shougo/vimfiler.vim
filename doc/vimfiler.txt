@@ -468,6 +468,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-06-03
 - Improved grep action.
+- Improved default filer behavior.
 
 2011-05-29
 - Use unite-grep in grep command.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 May 2011.
+" Last Modified: 03 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -148,7 +148,7 @@ if g:vimfiler_as_default_explorer
 endif
 
 function! s:browse_check(directory)
-  if a:directory != '' && &filetype !=# 'vimfiler' && isdirectory(a:directory)
+  if a:directory != '' && isdirectory(a:directory)
     silent! call vimfiler#create_filer(a:directory, ['overwrite'])
   endif
 endfunction
