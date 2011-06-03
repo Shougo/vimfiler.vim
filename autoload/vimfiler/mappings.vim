@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 May 2011.
+" Last Modified: 03 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -808,9 +808,9 @@ function! s:grep()"{{{
     echo 'Canceled.'
     return
   endif
-  let l:target = join(map(l:marked_files, 'v:val.is_directory ? v:val.name . "/**" : v:val.name'))
+  let l:target = join(map(l:marked_files, 'v:val.name'))
 
-  call unite#start([['grep', l:target]])
+  call unite#start([['grep', l:target, '-R']])
 endfunction"}}}
 function! s:select_sort_type()"{{{
   for l:type in ['n[one]', 's[ize]', 'e[xtension]', 'f[ilename]', 't[ime]', 'm[anual]']
