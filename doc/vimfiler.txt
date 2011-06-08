@@ -466,6 +466,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-06-08
+- Improved substitute path separator.
+
 2011-06-03
 - Improved grep action.
 - Improved default filer behavior.

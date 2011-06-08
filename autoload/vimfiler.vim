@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Jun 2011.
+" Last Modified: 08 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -132,7 +132,7 @@ function! vimfiler#create_filer(directory, options)"{{{
 
   " Set current directory.
   let l:current = (a:directory != '')? a:directory : getcwd()
-  let l:current = vimfiler#substitute_path_separator(l:current)
+  let l:current = vimfiler#util#substitute_path_separator(l:current)
   let b:vimfiler.current_dir = l:current
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
@@ -209,7 +209,8 @@ function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
 
   let l:scheme = vimfiler#available_schemes('file')
-  let l:current_files = l:scheme.read(b:vimfiler.current_dir, b:vimfiler.is_visible_dot_files)[1]
+  let l:current_files = map(l:scheme.read(b:vimfiler.current_dir, b:vimfiler.is_visible_dot_files)[1],
+        \ 'vimfiler#util#substitute_path_separator(v:val)')
   for l:mask in split(b:vimfiler.current_mask)
     let l:current_files = filter(l:current_files, 'fnamemodify(v:val, ":t") =~# ' . string(l:mask))
   endfor
@@ -219,23 +220,23 @@ function! vimfiler#force_redraw_screen()"{{{
   for l:file in l:current_files
     if isdirectory(l:file)
       call add(l:dirs, {
-          \ 'name' : l:file, 
-          \ 'extension' : '', 
+          \ 'name' : l:file,
+          \ 'extension' : '',
           \ 'type' : vimfiler#get_filetype(l:file),
-          \ 'size' : 0, 
-          \ 'datemark' : vimfiler#get_datemark(l:file), 
-          \ 'time' : getftime(l:file), 
-          \ 'is_directory' : 1, 'is_marked' : 0, 
+          \ 'size' : 0,
+          \ 'datemark' : vimfiler#get_datemark(l:file),
+          \ 'time' : getftime(l:file),
+          \ 'is_directory' : 1, 'is_marked' : 0,
           \ })
     else
       call add(l:files, {
-          \ 'name' : l:file, 
-          \ 'extension' : fnamemodify(l:file, ':e'), 
-          \ 'type' : vimfiler#get_filetype(l:file), 
-          \ 'size' : getfsize(l:file), 
-          \ 'datemark' : vimfiler#get_datemark(l:file), 
-          \ 'time' : getftime(l:file), 
-          \ 'is_directory' : 0, 'is_marked' : 0, 
+          \ 'name' : l:file,
+          \ 'extension' : fnamemodify(l:file, ':e'),
+          \ 'type' : vimfiler#get_filetype(l:file),
+          \ 'size' : getfsize(l:file),
+          \ 'datemark' : vimfiler#get_datemark(l:file),
+          \ 'time' : getftime(l:file),
+          \ 'is_directory' : 0, 'is_marked' : 0,
           \ })
     endif
   endfor
@@ -590,7 +591,7 @@ function! vimfiler#get_another_vimfiler()"{{{
 endfunction"}}}
 function! vimfiler#resolve(filename)"{{{
   return ((vimfiler#iswin() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
-        \ vimfiler#substitute_path_separator(resolve(a:filename)) : a:filename
+        \ vimfiler#util#substitute_path_separator(resolve(a:filename)) : a:filename
 endfunction"}}}
 function! vimfiler#print_error(message)"{{{
   echohl WarningMsg | echo a:message | echohl None
@@ -610,9 +611,6 @@ function! vimfiler#restore_variables(variables_save)"{{{
   for [key, value] in items(a:variables_save)
     execute 'let' key '= value'
   endfor
-endfunction"}}}
-function! vimfiler#substitute_path_separator(path)"{{{
-  return vimfiler#iswin() ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 function! vimfiler#cd(directory)"{{{
   execute g:vimfiler_cd_command '`=a:directory`'
@@ -729,7 +727,7 @@ function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
 
   " Set current directory.
   let l:current = (a:directory != '')? a:directory : getcwd()
-  let l:current = vimfiler#substitute_path_separator(l:current)
+  let l:current = vimfiler#util#substitute_path_separator(l:current)
   let b:vimfiler.current_dir = l:current
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'

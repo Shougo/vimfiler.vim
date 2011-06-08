@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 May 2011.
+" Last Modified: 08 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,7 +39,7 @@ endfunction"}}}
 
 function! vimfiler#internal_commands#cd(dir, ...)"{{{
   let l:save_history = a:0 ? a:1 : 1
-  let l:dir = vimfiler#substitute_path_separator(a:dir)
+  let l:dir = vimfiler#util#substitute_path_separator(a:dir)
 
   if l:dir == '..'
     if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
@@ -62,7 +62,7 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
     " Relative path.
     let l:dir = simplify(b:vimfiler.current_dir . l:dir)
   endif
-  let l:dir = vimfiler#substitute_path_separator(l:dir)
+  let l:dir = vimfiler#util#substitute_path_separator(l:dir)
 
   if vimfiler#iswin()
     let l:dir = vimfiler#resolve(l:dir)
