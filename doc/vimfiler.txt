@@ -466,6 +466,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-06-26
+- Improved cd internal command.
+
 2011-06-15
 - Improved grep action.
 

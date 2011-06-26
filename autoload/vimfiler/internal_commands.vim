@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jun 2011.
+" Last Modified: 26 Jun 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -109,6 +109,7 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
   let l:save_pos[1] = 3
   call setpos('.', (has_key(b:vimfiler.directory_cursor_pos, l:dir) ?
         \ b:vimfiler.directory_cursor_pos[l:dir] : l:save_pos))
+  normal! zz
 endfunction"}}}
 function! vimfiler#internal_commands#open(filename)"{{{
   if !exists('*vimproc#open')
