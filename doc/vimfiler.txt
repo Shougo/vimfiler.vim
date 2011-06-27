@@ -466,6 +466,10 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-06-26
+- Improved cd internal command.
+- Fixed exrename highlight.
+
 2011-06-15
 - Improved grep action.
 
