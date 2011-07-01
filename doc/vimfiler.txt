@@ -466,6 +466,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-07-01
+- Improved sync vimfiler.
+
 2011-06-26
 - Improved cd internal command.
 - Fixed exrename highlight.
