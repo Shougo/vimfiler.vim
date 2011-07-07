@@ -466,6 +466,9 @@ BUGS						*vimfiler-bugs*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-07-07
+- Set no-quit option in unite-grep.
+
 2011-07-01
 - Improved sync vimfiler.
 
