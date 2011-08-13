@@ -1,6 +1,6 @@
 *vimfiler.txt*	Powerful filer implemented by VimScript
 
-Version: 2.0
+Version: 3.0
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -465,6 +465,12 @@ BUGS						*vimfiler-bugs*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-08-13
+- Ver.3.0 development is started.
+
+------------------------------------------------------------------------------
+ChangeLog 2.0
 
 2011-08-13
 - Improved another vimfiler.
