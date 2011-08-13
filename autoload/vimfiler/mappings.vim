@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Jul 2011.
+" Last Modified: 13 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -515,10 +515,11 @@ function! s:sync_with_current_vimfiler()"{{{
 endfunction"}}}
 function! s:sync_with_another_vimfiler()"{{{
   " Search vimfiler window.
-  if  !vimfiler#exists_another_vimfiler()
+  if !vimfiler#exists_another_vimfiler()
     call vimfiler#create_filer(b:vimfiler.current_dir,
           \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
     let s:last_vimfiler_bufnr = bufnr('%')
+    let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
     wincmd p
     call vimfiler#redraw_screen()
   else

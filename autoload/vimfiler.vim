@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jun 2011.
+" Last Modified: 13 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -68,7 +68,8 @@ function! vimfiler#default_settings()"{{{
 
   " Set autocommands.
   augroup vimfiler"{{{
-    autocmd BufWinEnter <buffer> call s:event_bufwin_enter()
+    autocmd WinEnter,BufWinEnter <buffer> call s:event_bufwin_enter()
+    autocmd BufWinEnter <buffer> call s:restore_vimfiler()
     autocmd WinLeave,BufWinLeave <buffer> call s:event_bufwin_leave()
     autocmd BufReadCmd <buffer> call vimfiler#create_filer(expand('<amatch>'), ['overwrite'])
     autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
@@ -148,6 +149,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   let b:vimfiler.current_mask = ''
   let b:vimfiler.sort_type = g:vimfiler_sort_type
   let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
+  let b:vimfiler.another_vimfiler_bufnr = -1
 
   " Initialize schemes.
   call s:init_schemes()
@@ -160,6 +162,7 @@ function! vimfiler#create_filer(directory, options)"{{{
     call vimfiler#create_filer(b:vimfiler.current_dir,
           \ b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
     let s:last_vimfiler_bufnr = bufnr('%')
+    let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
     wincmd w
   endif
 
@@ -574,8 +577,8 @@ function! vimfiler#head_match(checkstr, headstr)"{{{
   return stridx(a:checkstr, a:headstr) == 0
 endfunction"}}}
 function! vimfiler#exists_another_vimfiler()"{{{
-  let l:winnr = bufwinnr(s:last_vimfiler_bufnr)
-  return l:winnr > 0 && winnr() != l:winnr && getwinvar(l:winnr, '&filetype') ==# 'vimfiler'
+  let l:winnr = bufwinnr(b:vimfiler.another_vimfiler_bufnr)
+  return l:winnr > 0 && getwinvar(l:winnr, '&filetype') ==# 'vimfiler'
 endfunction"}}}
 function! vimfiler#bufnr_another_vimfiler()"{{{
   return vimfiler#exists_another_vimfiler() ?
@@ -583,11 +586,11 @@ function! vimfiler#bufnr_another_vimfiler()"{{{
 endfunction"}}}
 function! vimfiler#winnr_another_vimfiler()"{{{
   return vimfiler#exists_another_vimfiler() ?
-        \ bufwinnr(s:last_vimfiler_bufnr) : -1
+        \ bufwinnr(b:vimfiler.another_vimfiler_bufnr) : -1
 endfunction"}}}
 function! vimfiler#get_another_vimfiler()"{{{
   return vimfiler#exists_another_vimfiler() ?
-        \ getbufvar(s:last_vimfiler_bufnr, 'vimfiler') : ''
+        \ getbufvar(b:vimfiler.another_vimfiler_bufnr, 'vimfiler') : ''
 endfunction"}}}
 function! vimfiler#resolve(filename)"{{{
   return ((vimfiler#iswin() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
@@ -699,11 +702,39 @@ function! s:event_bufwin_enter()"{{{
   if !exists('b:vimfiler')
     return
   endif
-  
+
+  if bufwinnr(s:last_vimfiler_bufnr) > 0
+        \ && s:last_vimfiler_bufnr != bufnr('%')
+    let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
+  endif
+
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
   let s:last_vimfiler_bufnr = bufnr('%')
+endfunction"}}}
+function! s:restore_vimfiler()"{{{
+  if !exists('b:vimfiler')
+    return
+  endif
+
+  " Search other vimfiler window.
+  let l:cnt = 1
+  while l:cnt <= winnr('$')
+    if l:cnt != winnr() && getwinvar(l:cnt, '&filetype') ==# 'vimfiler'
+      return
+    endif
+
+    let l:cnt += 1
+  endwhile
+
+  " Restore another vimfiler.
+  if bufwinnr(b:vimfiler.another_vimfiler_bufnr) < 0
+        \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
+    call s:switch_vimfiler(b:vimfiler.another_vimfiler_bufnr, 1, '')
+    wincmd p
+    call vimfiler#redraw_screen()
+  endif
 endfunction"}}}
 
 function! s:init_schemes()"{{{
@@ -720,7 +751,7 @@ function! s:init_schemes()"{{{
 endfunction"}}}
 function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
   if a:split_flag
-    execute 'sbuffer' . a:bufnr
+    execute 'vertical sbuffer' . a:bufnr
   else
     execute 'buffer' . a:bufnr
   endif
