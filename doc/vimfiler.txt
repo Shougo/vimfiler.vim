@@ -468,6 +468,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-08-13
 - Improved another vimfiler.
+- Released ver.2.0.
 
 2011-07-07
 - Set no-quit option in unite-grep.
