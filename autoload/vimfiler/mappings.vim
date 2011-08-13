@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Aug 2011.
+" Last Modified: 14 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -167,25 +167,25 @@ function! vimfiler#mappings#open_previous_file()"{{{
   if !exists('b:vimfiler')
     return
   endif
-  
+
   let i = 0
   let l:bufname = fnamemodify(bufname('%'), ':p')
   for l:file in b:vimfiler.current_files
-    if l:file.name == l:bufname
+    if l:file.vimfiler__filename == l:bufname
       " Get next file.
       let i -= 1
       while i >= 0
-        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].name)
+        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].vimfiler__filename)
         if l:filetype == '     ' || l:filetype == '[TXT]'
           let l:vimfiler_save = b:vimfiler
-          edit `=b:vimfiler.current_files[i].name`
+          edit `=b:vimfiler.current_files[i].vimfiler__filename`
           let b:vimfiler = l:vimfiler_save
           return
         endif
 
         let i -= 1
       endwhile
-      
+
       break
     endif
 
@@ -201,14 +201,14 @@ function! vimfiler#mappings#open_next_file()"{{{
   let max = len(b:vimfiler.current_files)
   let l:bufname = fnamemodify(bufname('%'), ':p')
   for l:file in b:vimfiler.current_files
-    if l:file.name == l:bufname
+    if l:file.vimfiler__filename == l:bufname
       " Get next file.
       let i += 1
       while i < max
-        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].name)
+        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].vimfiler__filename)
         if l:filetype == '     ' || l:filetype == '[TXT]'
           let l:vimfiler_save = b:vimfiler
-          edit `=b:vimfiler.current_files[i].name`
+          edit `=b:vimfiler.current_files[i].vimfiler__filename`
           let b:vimfiler = l:vimfiler_save
           return
         endif
@@ -811,7 +811,7 @@ function! s:grep()"{{{
     echo 'Canceled.'
     return
   endif
-  let l:target = join(map(l:marked_files, 'v:val.name'))
+  let l:target = join(map(l:marked_files, 'v:val.vimfiler__filename'))
 
   call unite#start([['grep', l:target, g:unite_source_grep_recursive_opt]],
         \ { 'no_quit' : 1 })
@@ -825,7 +825,7 @@ function! s:select_sort_type()"{{{
   if l:sort_type == ''
     redraw
     echo 'Canceled.'
-  elseif l:sort_type =~? 
+  elseif l:sort_type =~?
         \'^\%(n\%[one]\|s\%[ize]\|e\%[xtension]\|f\%[ilename]\|t\%[ime]\|m\%[anual]\)$'
     let b:vimfiler.sort_type = l:sort_type
     call vimfiler#force_redraw_screen()

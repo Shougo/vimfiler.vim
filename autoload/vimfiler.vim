@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Aug 2011.
+" Last Modified: 14 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,6 +32,22 @@ try
 catch
   let s:exists_vimproc = 0
 endtry
+
+" Check unite.vim."{{{
+try
+  let s:exists_unite_version = unite#version()
+catch
+  echoerr v:errmsg
+  echoerr v:exception
+  echoerr 'Error occured while loading unite.vim.'
+  echoerr 'Please install unite.vim Ver.3.0 or above.'
+  finish
+endtry
+if s:exists_unite_version < 300
+  echoerr 'Your unite.vim is too old.'
+  echoerr 'Please install unite.vim Ver.3.0 or above.'
+  finish
+endif"}}}
 
 let s:last_vimfiler_bufnr = -1
 let s:last_system_is_vimproc = -1
@@ -211,38 +227,18 @@ endfunction"}}}
 function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
 
-  let l:scheme = vimfiler#available_schemes('file')
-  let l:current_files = map(l:scheme.read(b:vimfiler.current_dir, b:vimfiler.is_visible_dot_files)[1],
-        \ 'vimfiler#util#substitute_path_separator(v:val)')
+  let l:context = {
+        \ 'vimfiler__visible_dot_files' : b:vimfiler.is_visible_dot_files
+        \ }
+  let l:current_files = unite#get_vimfiler_candidates(
+        \ [['file', b:vimfiler.current_dir]], l:context)
   for l:mask in split(b:vimfiler.current_mask)
-    let l:current_files = filter(l:current_files, 'fnamemodify(v:val, ":t") =~# ' . string(l:mask))
+    let l:current_files = filter(l:current_files,
+          \ 'v:val.vimfiler__filename =~# ' . string(l:mask))
   endfor
 
-  let l:dirs = []
-  let l:files = []
-  for l:file in l:current_files
-    if isdirectory(l:file)
-      call add(l:dirs, {
-          \ 'name' : l:file,
-          \ 'extension' : '',
-          \ 'type' : vimfiler#get_filetype(l:file),
-          \ 'size' : 0,
-          \ 'datemark' : vimfiler#get_datemark(l:file),
-          \ 'time' : getftime(l:file),
-          \ 'is_directory' : 1, 'is_marked' : 0,
-          \ })
-    else
-      call add(l:files, {
-          \ 'name' : l:file,
-          \ 'extension' : fnamemodify(l:file, ':e'),
-          \ 'type' : vimfiler#get_filetype(l:file),
-          \ 'size' : getfsize(l:file),
-          \ 'datemark' : vimfiler#get_datemark(l:file),
-          \ 'time' : getftime(l:file),
-          \ 'is_directory' : 0, 'is_marked' : 0,
-          \ })
-    endif
-  endfor
+  let l:dirs = filter(copy(l:current_files), 'v:val.vimfiler__is_directory')
+  let l:files = filter(copy(l:current_files), '!v:val.vimfiler__is_directory')
   if g:vimfiler_directory_display_top
     let b:vimfiler.current_files = vimfiler#sort(l:dirs, b:vimfiler.sort_type)
           \+ vimfiler#sort(l:files, b:vimfiler.sort_type)
@@ -278,30 +274,23 @@ function! vimfiler#redraw_screen()"{{{
   endif
   let l:max_len -= 1
   for l:file in b:vimfiler.current_files
-    let l:filename = fnamemodify(l:file.name, ':t')
-    if l:file.is_directory
+    let l:filename = l:file.vimfiler__abbr
+    if l:file.vimfiler__is_directory
+          \ && l:filename !~ '/$'
       let l:filename .= '/'
     endif
     let l:filename = vimfiler#util#truncate_smart(
           \ l:filename, l:max_len, l:max_len/3, '..')
 
-    let l:mark = l:file.is_marked ? '*' : '-'
+    let l:mark = l:file.vimfiler__is_marked ? '*' : '-'
     if !l:is_simple
-      if l:file.is_directory
-        let l:line = printf('%s %s %s         %s',
-              \ l:mark, l:filename,
-              \ l:file.type,
-              \ l:file.datemark . strftime(g:vimfiler_time_format, l:file.time)
-              \)
-      else
-        let l:line = printf('%s %s %s %s %s',
-              \ l:mark,
-              \ l:filename,
-              \ l:file.type,
-              \ vimfiler#get_filesize(l:file.size),
-              \ l:file.datemark . strftime(g:vimfiler_time_format, l:file.time)
-              \)
-      endif
+      let l:line = printf('%s %s %s %s %s',
+            \ l:mark,
+            \ l:filename,
+            \ l:file.vimfiler__filetype,
+            \ vimfiler#get_filesize(l:file),
+            \ l:file.vimfiler__datemark . strftime(g:vimfiler_time_format, l:file.vimfiler__filetime)
+            \)
     else
       let l:line = printf('%s %s %s', l:mark, l:filename, l:file.type)
     endif
@@ -416,18 +405,17 @@ function! vimfiler#get_escaped_marked_files()"{{{
 
   return l:files
 endfunction"}}}
-function! vimfiler#get_escaped_files(list)"{{{
-  return 
-endfunction"}}}
 function! vimfiler#check_filename_line(...)"{{{
   let l:line = (a:0 == 0)? getline('.') : a:1
   return l:line =~ '^[*-]\s'
 endfunction"}}}
 function! vimfiler#get_filename(line_num)"{{{
-  return a:line_num == 1? '' : getline(a:line_num) == '..'? '..' : b:vimfiler.current_files[a:line_num - 3].name
+  return a:line_num == 1 ? '' :
+   \ getline(a:line_num) == '..' ? '..' :
+   \ b:vimfiler.current_files[a:line_num - 3].action__path
 endfunction"}}}
 function! vimfiler#get_file(line_num)"{{{
-  return getline(a:line_num) == '..'? {} : b:vimfiler.current_files[a:line_num - 3]
+  return getline(a:line_num) == '..' ? {} : b:vimfiler.current_files[a:line_num - 3]
 endfunction"}}}
 function! vimfiler#input_directory(message)"{{{
   echo a:message
@@ -495,13 +483,12 @@ function! vimfiler#redraw_all_vimfiler()"{{{
 
   execute l:current_nr . 'wincmd w'
 endfunction"}}}
-function! vimfiler#get_filetype(filename)"{{{
-  let l:filename = a:filename
-  let l:ext = tolower(fnamemodify(l:filename, ':e'))
-  
-  if (vimfiler#iswin() && fnamemodify(l:filename, ':e') ==? 'LNK') || getftype(l:filename) ==# 'link'
+function! vimfiler#get_filetype(file)"{{{
+  let l:ext = tolower(a:file.vimfiler__extension)
+
+  if (vimfiler#iswin() && l:ext ==? 'LNK')
     return '[LNK]'
-  elseif isdirectory(l:filename)
+  elseif a:file.vimfiler__is_directory
     return '[DIR]'
   elseif has_key(g:vimfiler_extensions.text, l:ext)
     " Text.
@@ -515,10 +502,11 @@ function! vimfiler#get_filetype(filename)"{{{
   elseif has_key(g:vimfiler_extensions.multimedia, l:ext)
     " Multimedia.
     return '[MUL]'
-  elseif l:filename =~ '^\.' || has_key(g:vimfiler_extensions.system, l:ext)
+  elseif a:file.vimfiler__filename =~ '^\.'
+        \ || has_key(g:vimfiler_extensions.system, l:ext)
     " System.
     return '[SYS]'
-  elseif (!vimfiler#iswin() && executable(l:filename))
+  elseif (!vimfiler#iswin() && a:file.vimfiler__is_executable)
         \|| has_key(g:vimfiler_extensions.execute, l:ext)
     " Execute.
     return '[EXE]'
@@ -527,42 +515,46 @@ function! vimfiler#get_filetype(filename)"{{{
     return '     '
   endif
 endfunction"}}}
-function! vimfiler#get_filesize(size)"{{{
+function! vimfiler#get_filesize(file)"{{{
+  if a:file.vimfiler__is_directory
+    return '       '
+  endif
+
   " Get human file size.
-  if a:size < 0
+  if a:file.vimfiler__filesize < 0
     " Above 2GB.
     let l:suffix = 'G'
-    let l:mega = (a:size+1073741824+1073741824) / 1024 / 1024
+    let l:mega = (a:file.vimfiler__filesize+1073741824+1073741824) / 1024 / 1024
     let l:float = (l:mega%1024)*100/1024
     let l:pattern = printf('%d.%d', 2+l:mega/1024, l:float)
-  elseif a:size >= 1073741824
+  elseif a:file.vimfiler__filesize >= 1073741824
     " GB.
     let l:suffix = 'G'
-    let l:mega = a:size / 1024 / 1024
+    let l:mega = a:file.vimfiler__filesize / 1024 / 1024
     let l:float = (l:mega%1024)*100/1024
     let l:pattern = printf('%d.%d', l:mega/1024, l:float)
-  elseif a:size >= 1048576
+  elseif a:file.vimfiler__filesize >= 1048576
     " MB.
     let l:suffix = 'M'
-    let l:kilo = a:size / 1024
+    let l:kilo = a:file.vimfiler__filesize / 1024
     let l:float = (l:kilo%1024)*100/1024
     let l:pattern = printf('%d.%d', l:kilo/1024, l:float)
-  elseif a:size >= 1024
+  elseif a:file.vimfiler__filesize >= 1024
     " KB.
     let l:suffix = 'K'
-    let l:float = (a:size%1024)*100/1024
-    let l:pattern = printf('%d.%d', a:size/1024, l:float)
+    let l:float = (a:file.vimfiler__filesize%1024)*100/1024
+    let l:pattern = printf('%d.%d', a:file.vimfiler__filesize/1024, l:float)
   else
     " B.
     let l:suffix = 'B'
     let l:float = ''
-    let l:pattern = printf('%6d', a:size)
+    let l:pattern = printf('%6d', a:file.vimfiler__filesize)
   endif
 
   return printf('%s%s%s', l:pattern[:5], repeat(' ', 6-len(l:pattern)), l:suffix)
 endfunction"}}}
-function! vimfiler#get_datemark(filename)"{{{
-  let l:time = localtime() - getftime(a:filename)
+function! vimfiler#get_datemark(file)"{{{
+  let l:time = localtime() - a:file.vimfiler__filetime
   if l:time < 86400
     " 60 * 60 * 24
     return '!'
@@ -685,16 +677,16 @@ function! vimfiler#sort(files, type)"{{{
   return l:files
 endfunction"}}}
 function! s:compare_size(i1, i2)"{{{
-  return a:i1.size > a:i2.size ? 1 : a:i1.size == a:i2.size ? 0 : -1
+  return a:i1.vimfiler__filesize > a:i2.vimfiler__filesize ? 1 : a:i1.vimfiler__filesize == a:i2.vimfiler__filesize ? 0 : -1
 endfunction"}}}
 function! s:compare_extension(i1, i2)"{{{
-  return a:i1.extension > a:i2.extension ? 1 : a:i1.extension == a:i2.extension ? 0 : -1
+  return a:i1.vimfiler__extension > a:i2.vimfiler__extension ? 1 : a:i1.vimfiler__extension == a:i2.vimfiler__extension ? 0 : -1
 endfunction"}}}
 function! s:compare_name(i1, i2)"{{{
-  return a:i1.name > a:i2.name ? 1 : a:i1.name == a:i2.name ? 0 : -1
+  return a:i1.vimfiler__filename > a:i2.vimfiler__filename ? 1 : a:i1.vimfiler__filename == a:i2.vimfiler__filename ? 0 : -1
 endfunction"}}}
 function! s:compare_time(i1, i2)"{{{
-  return a:i1.time > a:i2.time ? 1 : a:i1.time == a:i2.time ? 0 : -1
+  return a:i1.vimfiler__filetime > a:i2.vimfiler__filetime ? 1 : a:i1.vimfiler__filetime == a:i2.vimfiler__filetime ? 0 : -1
 endfunction"}}}
 
 " Event functions.

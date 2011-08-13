@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jun 2011.
+" Last Modified: 14 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,12 +58,13 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   " Print files.
   let b:exrename.current_files = []
   for l:file in a:files
-    let l:filename = fnamemodify(l:file.name, ':t')
-    if l:file.is_directory
+    let l:filename = l:file.vimfiler__filename
+    if l:file.vimfiler__is_directory
       let l:filename .= '/'
     endif
 
-    execute 'syn match ExrenameOriginal' string(printf('^\%%%dl%s$', line('$'), l:filename))
+    execute 'syn match ExrenameOriginal'
+          \ string(printf('^\%%%dl%s$', line('$'), l:filename))
     call append('$', l:filename)
     call add(b:exrename.current_files, l:filename)
   endfor
