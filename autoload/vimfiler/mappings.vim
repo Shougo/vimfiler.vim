@@ -328,7 +328,7 @@ function! s:execute_file()"{{{
   endif
 
   " Execute cursor file.
-  call unite#mappings#do_action('start', [l:file])
+  call unite#mappings#do_action('vimfiler__execute', [l:file])
 endfunction"}}}
 function! s:move_to_other_window()"{{{
   if winnr('$') == 1
@@ -434,7 +434,7 @@ function! s:edit_file(is_split)"{{{
 
   let l:file = vimfiler#get_file(line('.'))
   call unite#mappings#do_action(
-        \ (a:is_split ? 'open' : g:vimfiler_split_action), [l:file])
+        \ (a:is_split ? g:vimfiler_edit_action : g:vimfiler_split_action), [l:file])
 endfunction"}}}
 function! s:edit_binary_file(is_split)"{{{
   if !vimfiler#check_filename_line()
@@ -459,7 +459,7 @@ function! s:preview_file()"{{{
 
   let l:file = vimfiler#get_file(line('.'))
   call unite#mappings#do_action(
-        \ (a:is_split ? 'preview' : g:vimfiler_split_action), [l:file])
+        \ (a:is_split ? g:vimfiler_preview_action : g:vimfiler_split_action), [l:file])
 endfunction"}}}
 function! s:execute_shell_command()"{{{
   let l:command = input('Input shell command: ', '', 'shellcmd')
@@ -547,14 +547,15 @@ function! s:move()"{{{
     return
   endif
 
-  let l:yes = vimfiler#input_yesno('Really move marked files?')
+  let l:context = deepcopy(unite#get_context())
+  let l:context.vimfiler__dest_directory = l:dest_dir
+  let l:old_context = unite#set_context(l:context)
 
-  if l:yes
-    " Execute move.
-    call vimfiler#internal_commands#mv(l:dest_dir . '/', l:marked_files)
-    call s:clear_mark_all_lines()
-    call vimfiler#force_redraw_all_vimfiler()
-  endif
+  " Execute move.
+  call unite#mappings#do_action('vimfiler__move', [l:marked_files])
+  call s:clear_mark_all_lines()
+  call vimfiler#force_redraw_all_vimfiler()
+  call unite#set_context(l:old_context)
 endfunction"}}}
 function! s:copy()"{{{
   let l:marked_files = vimfiler#get_marked_filenames()
@@ -604,10 +605,15 @@ function! s:copy()"{{{
     let l:dest_dir .= '/'
   endif
 
+  let l:context = deepcopy(unite#get_context())
+  let l:context.vimfiler__dest_directory = l:dest_dir
+  let l:old_context = unite#set_context(l:context)
+
   " Execute copy.
-  call vimfiler#internal_commands#cp(l:dest_dir, l:marked_files)
+  call unite#mappings#do_action('vimfiler__copy', [l:marked_files])
   call s:clear_mark_all_lines()
   call vimfiler#force_redraw_all_vimfiler()
+  call unite#set_context(l:old_context)
 endfunction"}}}
 function! s:delete()"{{{
   let l:marked_files = vimfiler#get_marked_filenames()
@@ -616,16 +622,11 @@ function! s:delete()"{{{
     call s:toggle_mark_current_line()
     return
   endif
-  let l:yes = vimfiler#input_yesno('Really force delete marked files?')
 
-  if l:yes
-    " Execute force delete.
-    call vimfiler#internal_commands#rm(l:marked_files)
-    call vimfiler#force_redraw_all_vimfiler()
-  else
-    redraw
-    echo 'Canceled.'
-  endif
+  " Execute delete.
+  call unite#mappings#do_action('vimfiler__delete', [l:marked_files])
+  call s:clear_mark_all_lines()
+  call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:rename()"{{{
   if !vimfiler#check_filename_line()
@@ -639,16 +640,9 @@ function! s:rename()"{{{
     return
   endif
 
-  let l:oldfilename = vimfiler#get_filename(line('.'))
-  
-  let l:filename = input(printf('New filename: %s -> ', l:oldfilename), l:oldfilename, 'file')
-  if l:filename == '' || l:filename ==# l:oldfilename
-    redraw
-    echo 'Canceled.'
-  else
-    call rename(l:oldfilename, l:filename)
-    call vimfiler#force_redraw_all_vimfiler()
-  endif
+  let l:file = vimfiler#get_file(line('.'))
+  call unite#mappings#do_action('vimfiler__rename', [l:file])
+  call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:make_directory()"{{{
   let l:current_dir = getcwd()

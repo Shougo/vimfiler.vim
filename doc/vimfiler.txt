@@ -82,20 +82,20 @@ g:vimfiler_as_default_explorer			*g:vimfiler_as_default_explorer*
 g:vimfiler_execute_file_list			*g:vimfiler_execute_file_list*
 		This variable controls vimfiler execute.
 
-g:vimfiler_split_command			*g:vimfiler_split_command*
-		This variable controls vimfiler split command.
+g:vimfiler_split_action				*g:vimfiler_split_action*
+		This variable controls vimfiler split action.
 		
-		Default value is 'split_nicely'.
+		Default value is "vsplit".
 
 g:vimfiler_edit_command				*g:vimfiler_edit_command*
 		This variable controls vimfiler edit command.
 		
-		Default value is 'edit'.
+		Default value is "open".
 
-g:vimfiler_pedit_command			*g:vimfiler_pedit_command*
-		This variable controls vimfiler preview edit command.
+g:vimfiler_preview_action			*g:vimfiler_preview_action*
+		This variable controls vimfiler preview action.
 		
-		Default value is 'pedit'.
+		Default value is "preview".
 
 g:vimfiler_min_filename_width			*g:vimfiler_min_filename_width*
 		This variable controls vimfiler displays min filename width.

@@ -45,11 +45,11 @@ endif
 if !exists('g:vimfiler_split_action')
   let g:vimfiler_split_action = 'vsplit'
 endif
-if !exists('g:vimfiler_edit_command')
-  let g:vimfiler_edit_command = 'edit'
+if !exists('g:vimfiler_edit_action')
+  let g:vimfiler_edit_action = 'open'
 endif
-if !exists('g:vimfiler_pedit_command')
-  let g:vimfiler_pedit_command = 'pedit'
+if !exists('g:vimfiler_preview_action')
+  let g:vimfiler_preview_action = 'preview'
 endif
 if !exists('g:vimfiler_min_filename_width')
   let g:vimfiler_min_filename_width = 30
