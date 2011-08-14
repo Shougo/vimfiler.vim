@@ -468,6 +468,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-08-14
 - Use unite.vim Ver.3(experimental).
+- Deleted scheme file.
 
 2011-08-13
 - Ver.3.0 development is started.

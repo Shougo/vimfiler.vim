@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: internal_commands.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jun 2011.
+" Last Modified: 14 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -23,19 +23,6 @@
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
 "=============================================================================
-
-function! vimfiler#internal_commands#mv(dest_dir, src_files)"{{{
-  let l:scheme = vimfiler#available_schemes('file')
-  call l:scheme.mv(a:dest_dir, a:src_files)
-endfunction"}}}
-function! vimfiler#internal_commands#cp(dest_dir, src_files)"{{{
-  let l:scheme = vimfiler#available_schemes('file')
-  call l:scheme.cp(a:dest_dir, a:src_files)
-endfunction"}}}
-function! vimfiler#internal_commands#rm(files)"{{{
-  let l:scheme = vimfiler#available_schemes('file')
-  call l:scheme.rm(a:files)
-endfunction"}}}
 
 function! vimfiler#internal_commands#cd(dir, ...)"{{{
   let l:save_history = a:0 ? a:1 : 1
