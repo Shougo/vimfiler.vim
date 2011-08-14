@@ -43,7 +43,7 @@ if !exists('g:vimfiler_execute_file_list')
   let g:vimfiler_execute_file_list = {}
 endif
 if !exists('g:vimfiler_split_action')
-  let g:vimfiler_split_action = 'vimfiler__vsplit'
+  let g:vimfiler_split_action = 'vsplit'
 endif
 if !exists('g:vimfiler_edit_command')
   let g:vimfiler_edit_command = 'edit'

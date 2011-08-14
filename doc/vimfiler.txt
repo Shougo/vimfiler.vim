@@ -441,6 +441,7 @@ CHANGELOG					*vimfiler-changelog*
 - Deleted scheme file.
 - Deleted vimfiler trash box routine.
 - Deleted obsolute mapping.
+- Improved action name.
 
 2011-08-13
 - Ver.3.0 development is started.

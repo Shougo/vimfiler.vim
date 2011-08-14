@@ -328,7 +328,7 @@ function! s:execute_file()"{{{
   endif
 
   " Execute cursor file.
-  call unite#mappings#do_action('vimfiler__execute', [l:file])
+  call unite#mappings#do_action('start', [l:file])
 endfunction"}}}
 function! s:move_to_other_window()"{{{
   if winnr('$') == 1
@@ -434,7 +434,7 @@ function! s:edit_file(is_split)"{{{
 
   let l:file = vimfiler#get_file(line('.'))
   call unite#mappings#do_action(
-        \ (a:is_split ? 'vimfiler__open' : g:vimfiler_split_action), [l:file])
+        \ (a:is_split ? 'open' : g:vimfiler_split_action), [l:file])
 endfunction"}}}
 function! s:edit_binary_file(is_split)"{{{
   if !vimfiler#check_filename_line()
@@ -459,7 +459,7 @@ function! s:preview_file()"{{{
 
   let l:file = vimfiler#get_file(line('.'))
   call unite#mappings#do_action(
-        \ (a:is_split ? 'vimfiler__preview' : g:vimfiler_split_action), [l:file])
+        \ (a:is_split ? 'preview' : g:vimfiler_split_action), [l:file])
 endfunction"}}}
 function! s:execute_shell_command()"{{{
   let l:command = input('Input shell command: ', '', 'shellcmd')
@@ -718,27 +718,14 @@ function! s:set_current_mask()"{{{
   call vimfiler#force_redraw_screen()
 endfunction"}}}
 function! s:grep()"{{{
-  try
-    let l:unite_source = unite#get_sources('grep')
-  catch
-    call vimfiler#print_error('unite.vim or unite-grep is not installed. grep command is disabled.')
-    return
-  endtry
-  if empty(l:unite_source)
-    call vimfiler#print_error('unite.vim or unite-grep is not installed. grep command is disabled.')
-    return
-  endif
-
   let l:marked_files = vimfiler#get_marked_files()
   if empty(l:marked_files)
     redraw
     echo 'Canceled.'
     return
   endif
-  let l:target = join(map(l:marked_files, 'v:val.vimfiler__filename'))
 
-  call unite#start([['grep', l:target, g:unite_source_grep_recursive_opt]],
-        \ { 'no_quit' : 1 })
+  call unite#mappings#do_action('grep', unite#get_marked_candidates())
 endfunction"}}}
 function! s:select_sort_type()"{{{
   for l:type in ['n[one]', 's[ize]', 'e[xtension]', 'f[ilename]', 't[ime]', 'm[anual]']
