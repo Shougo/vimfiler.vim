@@ -272,10 +272,6 @@ Normal mode mappings.
 		
 		
 
-<Plug>(vimfiler_execute_new_gvim)		*<Plug>(vimfiler_execute_new_gvim)*
-		
-		
-
 <Plug>(vimfiler_toggle_visible_dot_files)	*<Plug>(vimfiler_toggle_visible_dot_files)*
 		
 		
@@ -381,7 +377,6 @@ J			<Plug>(vimfiler_jump_to_directory)
 <C-p>			<Plug>(vimfiler_move_to_history_back)
 <C-n>			<Plug>(vimfiler_move_to_history_forward)
 <C-j>			<Plug>(vimfiler_jump_to_history_directory)
-gv			<Plug>(vimfiler_execute_new_gvim)
 .			<Plug>(vimfiler_toggle_visible_dot_files)
 H			<Plug>(vimfiler_popup_shell)
 e			<Plug>(vimfiler_edit_file)
@@ -445,6 +440,7 @@ CHANGELOG					*vimfiler-changelog*
 - Use unite.vim Ver.3(experimental).
 - Deleted scheme file.
 - Deleted vimfiler trash box routine.
+- Deleted obsolute mapping.
 
 2011-08-13
 - Ver.3.0 development is started.

@@ -43,7 +43,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_back)      :<C-u>call <SID>history_back()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_jump_to_directory)  :<C-u>call <SID>mappings_caller('jump_to_directory')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_jump_to_history_directory)  :<C-u>call <SID>mappings_caller('jump_to_history_directory')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_execute_new_gvim)  :<C-u>call vimfiler#internal_commands#gexe('gvim')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call <SID>toggle_visible_dot_files()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)  :<C-u>call <SID>mappings_caller('popup_shell')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)  :<C-u>call <SID>edit_file(0)<CR>

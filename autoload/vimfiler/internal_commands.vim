@@ -109,23 +109,5 @@ function! vimfiler#internal_commands#gexe(filename)"{{{
   call vimproc#system_gui(a:filename)
   call vimfiler#cd(l:current_dir)
 endfunction"}}}
-function! vimfiler#internal_commands#pedit(filename)"{{{
-  try
-    let l:vimfiler_save = b:vimfiler
-
-    execute g:vimfiler_pedit_command '`=a:filename`'
-
-    if g:vimfiler_pedit_command == 'pedit'
-      wincmd p
-      let b:vimfiler = l:vimfiler_save
-    endif
-
-    if g:vimfiler_pedit_command == 'pedit'
-      wincmd p
-    endif
-  catch
-    echohl Error | echomsg v:errmsg | echohl None
-  endtry
-endfunction"}}}
 
 " vim: foldmethod=marker
