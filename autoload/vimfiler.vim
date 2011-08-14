@@ -167,9 +167,6 @@ function! vimfiler#create_filer(directory, options)"{{{
   let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
   let b:vimfiler.another_vimfiler_bufnr = -1
 
-  " Initialize schemes.
-  call s:init_schemes()
-
   call vimfiler#default_settings()
   setfiletype vimfiler
 
@@ -220,9 +217,6 @@ function! vimfiler#switch_filer(directory, options)"{{{
 
   " Create window.
   call vimfiler#create_filer(a:directory, a:options)
-endfunction"}}}
-function! vimfiler#available_schemes(name)"{{{
-  return get(s:schemes, a:name, {})
 endfunction"}}}
 function! vimfiler#force_redraw_screen()"{{{
   " Save current files.
@@ -729,18 +723,6 @@ function! s:restore_vimfiler()"{{{
   endif
 endfunction"}}}
 
-function! s:init_schemes()"{{{
-  " Initialize internal scheme table.
-  let s:schemes= {}
-
-  " Search autoload.
-  for list in split(globpath(&runtimepath, 'autoload/vimfiler/schemes/*.vim'), '\n')
-    let l:scheme = fnamemodify(list, ':t:r')
-    if !has_key(s:schemes, l:scheme)
-      let s:schemes[l:scheme] = call('vimfiler#schemes#'.l:scheme.'#define', [])
-    endif
-  endfor
-endfunction"}}}
 function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
   if a:split_flag
     execute 'vertical sbuffer' . a:bufnr
