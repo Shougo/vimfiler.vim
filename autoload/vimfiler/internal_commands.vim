@@ -98,14 +98,6 @@ function! vimfiler#internal_commands#cd(dir, ...)"{{{
         \ b:vimfiler.directory_cursor_pos[l:dir] : l:save_pos))
   normal! zz
 endfunction"}}}
-function! vimfiler#internal_commands#open(filename)"{{{
-  if !exists('*vimproc#open')
-    echoerr 'vimproc#open() is not found. Please install vimproc Ver.4.1 or later.'
-    return
-  endif
-
-  call vimproc#open(a:filename)
-endfunction"}}}
 function! vimfiler#internal_commands#gexe(filename)"{{{
   if !exists('*vimproc#system_gui')
     echoerr 'vimproc#system_gui() is not found. Please install vimproc Ver.5.2 or later.'
@@ -116,39 +108,6 @@ function! vimfiler#internal_commands#gexe(filename)"{{{
   call vimfiler#cd(b:vimfiler.current_dir)
   call vimproc#system_gui(a:filename)
   call vimfiler#cd(l:current_dir)
-endfunction"}}}
-function! vimfiler#internal_commands#split()"{{{
-  if g:vimfiler_split_command ==# 'split_nicely'
-    " Split nicely.
-    if winheight(0) > &winheight
-      split
-    else
-      vsplit
-    endif
-  else
-    execute g:vimfiler_split_command
-  endif
-endfunction"}}}
-function! vimfiler#internal_commands#edit(filename, is_split)"{{{
-  if isdirectory(a:filename)
-    call vimfiler#create_filer(a:filename,
-          \b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
-    return
-  endif
-
-  try
-    let l:vimfiler_save = b:vimfiler
-
-    if a:is_split
-      call vimfiler#internal_commands#split()
-    endif
-
-    execute (a:is_split ? 'edit' : g:vimfiler_edit_command) '`=a:filename`'
-
-    let b:vimfiler = l:vimfiler_save
-  catch
-    echohl Error | echomsg v:errmsg | echohl None
-  endtry
 endfunction"}}}
 function! vimfiler#internal_commands#pedit(filename)"{{{
   try

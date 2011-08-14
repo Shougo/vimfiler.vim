@@ -297,9 +297,6 @@ Normal mode mappings.
 <Plug>(vimfiler_execute_external_filer)		*<Plug>(vimfiler_execute_external_filer)*
 		
 
-<Plug>(vimfiler_execute_external_command)	*<Plug>(vimfiler_execute_external_command)*
-		
-
 <Plug>(vimfiler_execute_shell_command)		*<Plug>(vimfiler_execute_shell_command)*
 		
 

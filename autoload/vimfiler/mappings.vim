@@ -50,7 +50,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)  :<C-u>call <SID>edit_file(1)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)  :<C-u>call <SID>edit_binary_file(0)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_filer)  :<C-u>call vimfiler#internal_commands#open(b:vimfiler.current_dir)<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_command)  :<C-u>call <SID>mappings_caller('execute_external_command')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_shell_command)  :<C-u>call <SID>mappings_caller('execute_shell_command')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_exit)  :<C-u>call <SID>exit()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_help)  :<C-u>nnoremap <buffer><CR>
@@ -190,7 +189,7 @@ function! vimfiler#mappings#open_next_file()"{{{
   if !exists('b:vimfiler')
     return
   endif
-  
+
   let i = 0
   let max = len(b:vimfiler.current_files)
   let l:bufname = fnamemodify(bufname('%'), ':p')
@@ -324,13 +323,13 @@ function! s:execute()"{{{
   endif
 endfunction"}}}
 function! s:execute_file()"{{{
-  let l:filename = vimfiler#get_filename(line('.'))
-  if l:filename != '..' && !vimfiler#check_filename_line()
+  let l:file = vimfiler#get_file(line('.'))
+  if l:file.vimfiler__filename != '..' && !vimfiler#check_filename_line()
     return
   endif
 
   " Execute cursor file.
-  call vimfiler#internal_commands#open(l:filename)
+  call unite#mappings#do_action('vimfiler__execute', [l:file])
 endfunction"}}}
 function! s:move_to_other_window()"{{{
   if winnr('$') == 1
@@ -434,7 +433,9 @@ function! s:edit_file(is_split)"{{{
     return
   endif
 
-  call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')), a:is_split)
+  let l:file = vimfiler#get_file(line('.'))
+  call unite#mappings#do_action(
+        \ (a:is_split ? 'vimfiler__open' : g:vimfiler_split_action), [l:file])
 endfunction"}}}
 function! s:edit_binary_file(is_split)"{{{
   if !vimfiler#check_filename_line()
@@ -457,17 +458,9 @@ function! s:preview_file()"{{{
     return
   endif
 
-  call vimfiler#internal_commands#pedit(vimfiler#get_filename(line('.')))
-endfunction"}}}
-function! s:execute_external_command()"{{{
-  let l:command = input('Input external command: ', '', 'shellcmd')
-  if l:command == ''
-    redraw
-    echo 'Canceled.'
-    return
-  endif
-
-  call vimfiler#internal_commands#gexe(l:command)
+  let l:file = vimfiler#get_file(line('.'))
+  call unite#mappings#do_action(
+        \ (a:is_split ? 'vimfiler__preview' : g:vimfiler_split_action), [l:file])
 endfunction"}}}
 function! s:execute_shell_command()"{{{
   let l:command = input('Input shell command: ', '', 'shellcmd')
@@ -477,7 +470,7 @@ function! s:execute_shell_command()"{{{
     return
   endif
 
-  let l:command = substitute(l:command, 
+  let l:command = substitute(l:command,
         \'\s\+\zs\*\ze\%([;|[:space:]]\|$\)', join(vimfiler#get_escaped_marked_files()), 'g')
   echo vimfiler#system(l:command)
 endfunction"}}}

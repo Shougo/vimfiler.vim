@@ -42,8 +42,8 @@ endif
 if !exists('g:vimfiler_execute_file_list')
   let g:vimfiler_execute_file_list = {}
 endif
-if !exists('g:vimfiler_split_command')
-  let g:vimfiler_split_command = 'split_nicely'
+if !exists('g:vimfiler_split_action')
+  let g:vimfiler_split_action = 'vimfiler__vsplit'
 endif
 if !exists('g:vimfiler_edit_command')
   let g:vimfiler_edit_command = 'edit'
