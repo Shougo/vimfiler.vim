@@ -117,11 +117,6 @@ g:vimfiler_directory_display_top		*g:vimfiler_directory_display_top*
 		
 		Default value is 1.
 
-g:vimfiler_trashbox_directory			*g:vimfiler_trashbox_directory*
-		This variable controls vimfiler trashbox directory.
-		
-		Default value is '~/.vimfiler_trashbox'.
-
 g:vimfiler_detect_drives			*g:vimfiler_detect_drives*
 		 (Windows only) This variable controls vimfiler uses drives
 		 when |<Plug>(vimfiler_move_to_drive)|.
@@ -225,18 +220,8 @@ Normal mode mappings.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_delete_file)			*<Plug>(vimfiler_delete_file)*
-		Delete marked files to |g:vimfiler_trashbox_directory|.
-		If no marked files, mark current file.
-		This mappings is disabled in vimfiler safe mode.
-
-<Plug>(vimfiler_force_delete_file)		*<Plug>(vimfiler_force_delete_file)*
 		Delete marked files completely.
 		If no marked files, mark current file.
-		This mappings is disabled in vimfiler safe mode.
-
-<Plug>(vimfiler_restore_from_trashbox)		*<Plug>(vimfiler_restore_from_trashbox)*
-		Restore marked files from |g:vimfiler_trashbox_directory|.
-		This command is valid in |g:vimfiler_trashbox_directory|.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_make_directory)			*<Plug>(vimfiler_make_directory)*
@@ -266,10 +251,6 @@ Normal mode mappings.
 
 <Plug>(vimfiler_move_to_home_directory)		*<Plug>(vimfiler_move_to_home_directory)*
 		Move to home directory.
-
-<Plug>(vimfiler_move_to_trashbox_directory)	*<Plug>(vimfiler_move_to_trashbox_directory)*
-		Move to |g:vimfiler_trashbox_directory|.
-		
 
 <Plug>(vimfiler_move_to_root_directory)		*<Plug>(vimfiler_move_to_root_directory)*
 		
@@ -389,8 +370,6 @@ U			<Plug>(vimfiler_clear_mark_all_lines)
 c			<Plug>(vimfiler_copy_file)
 m			<Plug>(vimfiler_move_file)
 d			<Plug>(vimfiler_delete_file)
-D			<Plug>(vimfiler_force_delete_file)
-u			<Plug>(vimfiler_restore_from_trashbox)
 r			<Plug>(vimfiler_rename_file)
 K			<Plug>(vimfiler_make_directory)
 N			<Plug>(vimfiler_new_file)
@@ -401,7 +380,6 @@ h			<Plug>(vimfiler_smart_h)
 L			<Plug>(vimfiler_move_to_drive)
 J			<Plug>(vimfiler_jump_to_directory)
 ~			<Plug>(vimfiler_move_to_home_directory)
-$			<Plug>(vimfiler_move_to_trashbox_directory)
 \			<Plug>(vimfiler_move_to_root_directory)
 <C-p>			<Plug>(vimfiler_move_to_history_back)
 <C-n>			<Plug>(vimfiler_move_to_history_forward)
@@ -469,6 +447,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-08-14
 - Use unite.vim Ver.3(experimental).
 - Deleted scheme file.
+- Deleted vimfiler trash box routine.
 
 2011-08-13
 - Ver.3.0 development is started.

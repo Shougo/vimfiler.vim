@@ -38,7 +38,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_up_directory)  :<C-u>call vimfiler#internal_commands#cd('..')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call vimfiler#internal_commands#cd('~')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call vimfiler#internal_commands#cd('/')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_trashbox_directory)  :<C-u>call vimfiler#internal_commands#cd(g:vimfiler_trashbox_directory)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call <SID>mappings_caller('move_to_drive')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_forward)   :<C-u>call <SID>history_forward()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_back)      :<C-u>call <SID>history_back()<CR>
@@ -104,10 +103,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
 
   " Delete files.
   nmap <buffer> d <Plug>(vimfiler_delete_file)
-  nmap <buffer> D <Plug>(vimfiler_force_delete_file)
-
-  " Restore.
-  nmap <buffer> u <Plug>(vimfiler_restore_from_trashbox)
 
   " Rename.
   nmap <buffer> r <Plug>(vimfiler_rename_file)
@@ -129,7 +124,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> L <Plug>(vimfiler_move_to_drive)
   nmap <buffer> J <Plug>(vimfiler_jump_to_directory)
   nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
-  nmap <buffer> $ <Plug>(vimfiler_move_to_trashbox_directory)
   nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
   nmap <buffer> <C-p> <Plug>(vimfiler_move_to_history_back)
   nmap <buffer> <C-n> <Plug>(vimfiler_move_to_history_forward)
@@ -630,37 +624,6 @@ function! s:delete()"{{{
     call s:toggle_mark_current_line()
     return
   endif
-  let l:yes = vimfiler#input_yesno('Really move marked files to trashbox?')
-
-  if l:yes
-    " Execute delete.
-    if !isdirectory(g:vimfiler_trashbox_directory)
-      call mkdir(g:vimfiler_trashbox_directory, 'p')
-    endif
-
-    let l:trashdir = s:encode_trash_path(b:vimfiler.current_dir[: -2])
-    if !isdirectory(l:trashdir)
-      call mkdir(l:trashdir, 'p')
-    endif
-
-    if l:trashdir !~ '[/\\]$'
-      let l:trashdir .= '/'
-    endif
-
-    call vimfiler#internal_commands#mv(l:trashdir, l:marked_files)
-    call vimfiler#force_redraw_all_vimfiler()
-  else
-    redraw
-    echo 'Canceled.'
-  endif
-endfunction"}}}
-function! s:force_delete()"{{{
-  let l:marked_files = vimfiler#get_marked_filenames()
-  if empty(l:marked_files)
-    " Mark current line.
-    call s:toggle_mark_current_line()
-    return
-  endif
   let l:yes = vimfiler#input_yesno('Really force delete marked files?')
 
   if l:yes
@@ -762,37 +725,6 @@ function! s:set_current_mask()"{{{
   let b:vimfiler.current_mask = l:mask
   call vimfiler#force_redraw_screen()
 endfunction"}}}
-function! s:restore_from_trashbox()"{{{
-  if !vimfiler#head_match(b:vimfiler.current_dir, g:vimfiler_trashbox_directory . '/')
-    echo 'This command is valid in trashbox directory.'
-    return
-  elseif s:decode_trash_path(b:vimfiler.current_dir) == ''
-    echo 'Invalid restore path.'
-    return
-  endif
-
-  let l:marked_files = vimfiler#get_marked_filenames()
-  if empty(l:marked_files)
-    " Mark current line.
-    call s:toggle_mark_current_line()
-    return
-  endif
-  let l:yes = vimfiler#input_yesno('Restore marked files in trashbox?')
-
-  if l:yes
-    " Execute restore.
-    let l:restoredir = fnamemodify(s:decode_trash_path(l:marked_files[0]), ':h')
-    if l:restoredir !~ '[/\\]$'
-      let l:restoredir .= '/'
-    endif
-
-    call vimfiler#internal_commands#mv(l:restoredir, l:marked_files)
-    call vimfiler#force_redraw_all_vimfiler()
-  else
-    redraw
-    echo 'Canceled.'
-  endif
-endfunction"}}}
 function! s:grep()"{{{
   try
     let l:unite_source = unite#get_sources('grep')
@@ -879,21 +811,17 @@ function! s:mapping_file_operations()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)  :<C-u>call <SID>mappings_caller('copy')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_file)  :<C-u>call <SID>mappings_caller('move')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_delete_file)  :<C-u>call <SID>mappings_caller('delete')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_force_delete_file)  :<C-u>call <SID>mappings_caller('force_delete')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_rename_file)  :<C-u>call <SID>mappings_caller('rename')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_make_directory)  :<C-u>call <SID>mappings_caller('make_directory')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_new_file)  :<C-u>call <SID>mappings_caller('new_file')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call <SID>restore_from_trashbox()<CR>
 endfunction"}}}
 function! s:unmapping_file_operations()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)  :<C-u>call <SID>disable_operation()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_file)  :<C-u>call <SID>disable_operation()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_delete_file)  :<C-u>call <SID>disable_operation()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_force_delete_file)  :<C-u>call <SID>disable_operation()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_rename_file)  :<C-u>call <SID>disable_operation()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_make_directory)  :<C-u>call <SID>disable_operation()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_new_file)  :<C-u>call <SID>disable_operation()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_restore_from_trashbox)  :<C-u>call <SID>disable_operation()<CR>
 endfunction"}}}
 function! s:disable_operation()"{{{
   call vimfiler#print_error('In safe mode, this operation is disabled.')
@@ -965,13 +893,4 @@ function! s:custom_alternate_buffer()"{{{
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 
-function! s:encode_trash_path(path)"{{{
-  return printf('%s/%s/%s', g:vimfiler_trashbox_directory,
-        \ substitute(strftime('%Y%m%d/%X'), ':', '_', 'g'),
-        \ substitute(substitute(a:path, ':[/\\]\?', '++', 'g'), '[/\\]', '=', 'g'))
-endfunction"}}}
-function! s:decode_trash_path(path)"{{{
-  let l:path = matchstr(a:path[len(g:vimfiler_trashbox_directory)+1 :], '^[^/]\+/[^/]\+/\zs.*')
-  return substitute(substitute(l:path, '++/\?', ':/', 'g'), '/\?+/\?', '/', 'g')
-endfunction"}}}
 " vim: foldmethod=marker
