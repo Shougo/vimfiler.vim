@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Aug 2011.
+" Last Modified: 15 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -235,7 +235,7 @@ function! s:toggle_mark_current_line()"{{{
   endif
 
   let l:file = vimfiler#get_file(line('.'))
-  let l:file.is_marked = !l:file.is_marked
+  let l:file.vimfiler__is_marked = !l:file.vimfiler__is_marked
   
   call vimfiler#redraw_screen()
 endfunction"}}}
@@ -247,7 +247,7 @@ function! s:toggle_mark_all_lines()"{{{
     if vimfiler#check_filename_line(l:line)
       " Toggle mark.
       let l:file = vimfiler#get_file(l:cnt)
-      let l:file.is_marked = !l:file.is_marked
+      let l:file.vimfiler__is_marked = !l:file.vimfiler__is_marked
     endif
 
     let l:cnt += 1
@@ -262,7 +262,7 @@ function! s:toggle_mark_lines(start, end)"{{{
     if vimfiler#check_filename_line(l:line)
       " Toggle mark.
       let l:file = vimfiler#get_file(l:cnt)
-      let l:file.is_marked = !l:file.is_marked
+      let l:file.vimfiler__is_marked = !l:file.vimfiler__is_marked
     endif
 
     let l:cnt += 1
@@ -279,7 +279,7 @@ function! s:clear_mark_all_lines()"{{{
       " Clear mark.
 
       let l:file = vimfiler#get_file(l:cnt)
-      let l:file.is_marked = 0
+      let l:file.vimfiler__is_marked = 0
     endif
 
     let l:cnt += 1
@@ -516,7 +516,7 @@ endfunction"}}}
 
 " File operations.
 function! s:move()"{{{
-  let l:marked_files = vimfiler#get_marked_filenames()
+  let l:marked_files = vimfiler#get_marked_files()
   if empty(l:marked_files)
     " Mark current line.
     call s:toggle_mark_current_line()
@@ -527,7 +527,7 @@ function! s:move()"{{{
     if g:vimfiler_enable_clipboard
       " Copy to clipboard.
       let b:vimfiler.clipboard = {
-            \ 'command' : 'move', 'files' : l:marked_files
+            \ 'command' : 'move', 'files' : vimfiler#get_marked_filenames()
             \}
       call s:clear_mark_all_lines()
       echo 'Saved to clipboard.'
@@ -552,13 +552,13 @@ function! s:move()"{{{
   let l:old_context = unite#set_context(l:context)
 
   " Execute move.
-  call unite#mappings#do_action('vimfiler__move', [l:marked_files])
+  call unite#mappings#do_action('vimfiler__move', l:marked_files)
   call s:clear_mark_all_lines()
   call vimfiler#force_redraw_all_vimfiler()
   call unite#set_context(l:old_context)
 endfunction"}}}
 function! s:copy()"{{{
-  let l:marked_files = vimfiler#get_marked_filenames()
+  let l:marked_files = vimfiler#get_marked_files()
   if empty(l:marked_files)
     " Mark current line.
     call s:toggle_mark_current_line()
@@ -569,7 +569,7 @@ function! s:copy()"{{{
     if g:vimfiler_enable_clipboard
       " Copy to clipboard.
       let b:vimfiler.clipboard = {
-            \ 'command' : 'copy', 'files' : l:marked_files
+            \ 'command' : 'copy', 'files' : vimfiler#get_marked_filenames()
             \}
       call s:clear_mark_all_lines()
       echo 'Saved to clipboard.'
@@ -583,40 +583,20 @@ function! s:copy()"{{{
     let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
   endif
 
-  if l:dest_dir ==# b:vimfiler.current_dir
-        \ || l:dest_dir == '.'
-    if len(l:marked_files) > 1
-      echo 'Same directory.'
-      return
-    endif
-
-    " Rename copy.
-    let l:oldfilename = l:marked_files[0]
-    let l:filename = input(printf('New filename: %s -> ', l:oldfilename), l:oldfilename, 'file')
-    if l:filename == '' || l:filename ==# l:oldfilename
-      redraw
-      echo 'Canceled.'
-
-      return
-    endif
-
-    let l:dest_dir = l:filename
-  else
-    let l:dest_dir .= '/'
-  endif
+  let l:dest_dir .= '/'
 
   let l:context = deepcopy(unite#get_context())
   let l:context.vimfiler__dest_directory = l:dest_dir
   let l:old_context = unite#set_context(l:context)
 
   " Execute copy.
-  call unite#mappings#do_action('vimfiler__copy', [l:marked_files])
+  call unite#mappings#do_action('vimfiler__copy', l:marked_files)
   call s:clear_mark_all_lines()
   call vimfiler#force_redraw_all_vimfiler()
   call unite#set_context(l:old_context)
 endfunction"}}}
 function! s:delete()"{{{
-  let l:marked_files = vimfiler#get_marked_filenames()
+  let l:marked_files = vimfiler#get_marked_files()
   if empty(l:marked_files)
     " Mark current line.
     call s:toggle_mark_current_line()
@@ -624,7 +604,7 @@ function! s:delete()"{{{
   endif
 
   " Execute delete.
-  call unite#mappings#do_action('vimfiler__delete', [l:marked_files])
+  call unite#mappings#do_action('vimfiler__delete', l:marked_files)
   call s:clear_mark_all_lines()
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
