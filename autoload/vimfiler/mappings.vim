@@ -548,7 +548,7 @@ function! s:move()"{{{
   endif
 
   let l:context = deepcopy(unite#get_context())
-  let l:context.vimfiler__dest_directory = l:dest_dir
+  let l:context.action__directory = l:dest_dir
   let l:old_context = unite#set_context(l:context)
 
   " Execute move.
@@ -586,7 +586,7 @@ function! s:copy()"{{{
   let l:dest_dir .= '/'
 
   let l:context = deepcopy(unite#get_context())
-  let l:context.vimfiler__dest_directory = l:dest_dir
+  let l:context.action__directory = l:dest_dir
   let l:old_context = unite#set_context(l:context)
 
   " Execute copy.

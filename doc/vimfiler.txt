@@ -438,6 +438,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-08-15
 - Fixed some errors.
+- Improved context.
 
 2011-08-14
 - Use unite.vim Ver.3(experimental).
