@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Aug 2011.
+" Last Modified: 16 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -523,6 +523,12 @@ function! s:move()"{{{
     return
   endif
 
+  if !unite#util#input_yesno('Really move files?')
+    redraw
+    echo 'Canceled.'
+    return
+  endif
+
   if !vimfiler#exists_another_vimfiler()
     if g:vimfiler_enable_clipboard
       " Copy to clipboard.
@@ -547,15 +553,11 @@ function! s:move()"{{{
     return
   endif
 
-  let l:context = deepcopy(unite#get_context())
-  let l:context.action__directory = l:dest_dir
-  let l:old_context = unite#set_context(l:context)
-
   " Execute move.
-  call unite#mappings#do_action('vimfiler__move', l:marked_files)
+  call unite#mappings#do_action('vimfiler__move', l:marked_files,
+        \ { 'action__directory' : l:dest_dir })
   call s:clear_mark_all_lines()
   call vimfiler#force_redraw_all_vimfiler()
-  call unite#set_context(l:old_context)
 endfunction"}}}
 function! s:copy()"{{{
   let l:marked_files = vimfiler#get_marked_files()
@@ -585,21 +587,23 @@ function! s:copy()"{{{
 
   let l:dest_dir .= '/'
 
-  let l:context = deepcopy(unite#get_context())
-  let l:context.action__directory = l:dest_dir
-  let l:old_context = unite#set_context(l:context)
-
   " Execute copy.
-  call unite#mappings#do_action('vimfiler__copy', l:marked_files)
+  call unite#mappings#do_action('vimfiler__copy', l:marked_files,
+        \ { 'action__directory' : l:dest_dir })
   call s:clear_mark_all_lines()
   call vimfiler#force_redraw_all_vimfiler()
-  call unite#set_context(l:old_context)
 endfunction"}}}
 function! s:delete()"{{{
   let l:marked_files = vimfiler#get_marked_files()
   if empty(l:marked_files)
     " Mark current line.
     call s:toggle_mark_current_line()
+    return
+  endif
+
+  if !unite#util#input_yesno('Really force delete files?')
+    redraw
+    echo 'Canceled.'
     return
   endif
 
