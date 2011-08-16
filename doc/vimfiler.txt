@@ -50,23 +50,23 @@ INTERFACE					*vimfiler-interface*
 COMMANDS 					*vimfiler-commands*
 
 :VimFiler					*:VimFiler*
-		Run vimfiler. This command reuse buffer if another vimfiler buffer
-		exists.
+		Run vimfiler. This command reuses a buffer if a vimfiler
+		buffer already exists.
 
 :VimFilerCreate					*:VimFilerCreate*
-		Create new vimfiler buffer.
+		Create a new vimfiler buffer.
 
 :VimFilerSimple					*:VimFilerSimple*
-		Create simple vimfiler buffer.
+		Create a simple vimfiler buffer.
 
 :VimFilerSplit					*:VimFilerSplit*
-		Create simple vimfiler buffer and split window.
+		Create a simple vimfiler buffer and split the window.
 
 :VimFilerTab					*:VimFilerTab*
-		Create vimfiler buffer and create tab.
+		Create a vimfiler buffer and create a tab.
 
 :VimFilerDouble					*:VimFilerDouble*
-		Create double vimfiler buffer.
+		Create double vimfiler buffers.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
