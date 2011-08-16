@@ -121,12 +121,6 @@ g:vimfiler_detect_drives			*g:vimfiler_detect_drives*
 		
 		Default value is refer to plugin/vimfiler.vim.
 
-g:vimfiler_enable_clipboard			*g:vimfiler_enable_clipboard*
-		This variable controls vimfiler use clipboard when other
-		vimfiler buffer is not found.
-		
-		Default value is 0.
-
 g:vimfiler_max_directory_histories		*g:vimfiler_max_directory_histories*
 		This variable controls vimfiler max directory history entries.
 		
@@ -207,13 +201,13 @@ Normal mode mappings.
 <Plug>(vimfiler_copy_file)			*<Plug>(vimfiler_copy_file)*
 		Copy marked files to destination directory. If exists another
 		vimfiler buffer, destination directory is another vimfiler
-		directory. Else, depends |g:vimfiler_enable_clipboard|.
+		directory.
 		If no marked files, mark current file.
 
 <Plug>(vimfiler_move_file)			*<Plug>(vimfiler_move_file)*
 		Move marked files to destination directory. If exists another
 		vimfiler buffer, destination directory is another vimfiler
-		directory. Else, depends |g:vimfiler_enable_clipboard|.
+		directory.
 		If no marked files, mark current file.
 		This mappings is disabled in vimfiler safe mode.
 
@@ -300,9 +294,6 @@ Normal mode mappings.
 <Plug>(vimfiler_help)				*<Plug>(vimfiler_help)*
 		
 
-<Plug>(vimfiler_paste_from_clipboard)		*<Plug>(vimfiler_paste_from_clipboard)*
-		
-
 <Plug>(vimfiler_preview_file)			*<Plug>(vimfiler_preview_file)*
 		
 
@@ -385,7 +376,6 @@ t			<Plug>(vimfiler_execute_external_command)
 !			<Plug>(vimfiler_execute_shell_command)
 q			<Plug>(vimfiler_exit)
 ?			<Plug>(vimfiler_help)
-p			<Plug>(vimfiler_paste_from_clipboard)
 v			<Plug>(vimfiler_preview_file)
 o			<Plug>(vimfiler_sync_with_current_vimfiler)
 O			<Plug>(vimfiler_sync_with_another_vimfiler)
@@ -460,6 +450,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-08-16
 - Improved actions.
 - Added vimfiler sort source.
+- Deleted vimfiler clipboard.
 
 2011-08-15
 - Fixed some errors.

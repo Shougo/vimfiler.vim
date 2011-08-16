@@ -56,7 +56,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_current_vimfiler)  :<C-u>call <SID>sync_with_current_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_another_vimfiler)  :<C-u>call <SID>sync_with_another_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_print_filename)  :<C-u>echo vimfiler#get_filename(line('.'))<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_paste_from_clipboard)  :<C-u>call <SID>paste_from_clipboard()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_set_current_mask)  :<C-u>call <SID>set_current_mask()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_grep)  :<C-u>call <SID>mappings_caller('grep')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)  :<C-u>call <SID>select_sort_type()<CR>
@@ -141,7 +140,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
   nmap <buffer> q <Plug>(vimfiler_exit)
   nmap <buffer> ? <Plug>(vimfiler_help)
-  nmap <buffer> p <Plug>(vimfiler_paste_from_clipboard)
   nmap <buffer> v <Plug>(vimfiler_preview_file)
   nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
   nmap <buffer> O <Plug>(vimfiler_sync_with_another_vimfiler)
@@ -529,23 +527,10 @@ function! s:move()"{{{
     return
   endif
 
-  if !vimfiler#exists_another_vimfiler()
-    if g:vimfiler_enable_clipboard
-      " Copy to clipboard.
-      let b:vimfiler.clipboard = {
-            \ 'command' : 'move', 'files' : vimfiler#get_marked_filenames()
-            \}
-      call s:clear_mark_all_lines()
-      echo 'Saved to clipboard.'
-      return
-    else
-      " Input destination directory.
-      let l:dest_dir = vimfiler#input_directory('Input destination directory: ')
-    endif
-  else
-    " Get destination directory.
-    let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
-  endif
+  " Get destination directory.
+  let l:dest_dir = vimfiler#exists_another_vimfiler() ?
+        \ vimfiler#get_another_vimfiler().current_dir :
+        \ vimfiler#input_directory('Input destination directory: ')
 
   if l:dest_dir ==# b:vimfiler.current_dir
     " Rename.
@@ -567,25 +552,10 @@ function! s:copy()"{{{
     return
   endif
 
-  if !vimfiler#exists_another_vimfiler()
-    if g:vimfiler_enable_clipboard
-      " Copy to clipboard.
-      let b:vimfiler.clipboard = {
-            \ 'command' : 'copy', 'files' : vimfiler#get_marked_filenames()
-            \}
-      call s:clear_mark_all_lines()
-      echo 'Saved to clipboard.'
-      return
-    else
-      " Input destination directory.
-      let l:dest_dir = vimfiler#input_directory('Input destination directory: ')
-    endif
-  else
-    " Get destination directory.
-    let l:dest_dir = vimfiler#get_another_vimfiler().current_dir
-  endif
-
-  let l:dest_dir .= '/'
+  " Get destination directory.
+  let l:dest_dir = vimfiler#exists_another_vimfiler() ?
+        \ vimfiler#get_another_vimfiler().current_dir :
+        \ vimfiler#input_directory('Input destination directory: ')
 
   " Execute copy.
   call unite#mappings#do_action('vimfiler__copy', l:marked_files,
@@ -669,24 +639,6 @@ function! s:new_file()"{{{
       doautocmd BufNewFile
     endif
   endfor
-endfunction"}}}
-function! s:paste_from_clipboard()"{{{
-  if empty(b:vimfiler.clipboard)
-    echo 'Clipboard is empty.'
-    return
-  endif
-
-  if b:vimfiler.clipboard.command ==# 'copy'
-    call vimfiler#internal_commands#cp(b:vimfiler.current_dir, b:vimfiler.clipboard.files)
-    call vimfiler#force_redraw_all_vimfiler()
-  elseif b:vimfiler.clipboard.command ==# 'move'
-    call vimfiler#internal_commands#mv(b:vimfiler.current_dir, b:vimfiler.clipboard.files)
-    call vimfiler#force_redraw_all_vimfiler()
-    
-    let b:vimfiler.clipboard = {}
-  else
-    call vimfiler#print_error('Invalid command.')
-  endif
 endfunction"}}}
 
 function! s:set_current_mask()"{{{

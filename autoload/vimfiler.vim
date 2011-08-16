@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Aug 2011.
+" Last Modified: 16 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -157,7 +157,6 @@ function! vimfiler#create_filer(directory, options)"{{{
 
   let b:vimfiler.changed_dir = [b:vimfiler.current_dir]
   let b:vimfiler.current_changed_dir_index = -1
-  let b:vimfiler.clipboard = {}
   let b:vimfiler.is_visible_dot_files = 0
   let b:vimfiler.is_simple = l:simple_flag
   let b:vimfiler.directory_cursor_pos = {}
