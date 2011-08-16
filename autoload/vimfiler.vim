@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Aug 2011.
+" Last Modified: 17 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -217,7 +217,7 @@ function! vimfiler#switch_filer(directory, options)"{{{
   " Create window.
   call vimfiler#create_filer(a:directory, a:options)
 endfunction"}}}
-function! vimfiler#force_redraw_screen()"{{{
+function! vimfiler#get_all_files()"{{{
   " Save current files.
 
   let l:context = {
@@ -225,19 +225,23 @@ function! vimfiler#force_redraw_screen()"{{{
         \ }
   let l:current_files = unite#get_vimfiler_candidates(
         \ [['file', b:vimfiler.current_dir]], l:context)
-  for l:mask in split(b:vimfiler.current_mask)
-    let l:current_files = filter(l:current_files,
-          \ 'v:val.vimfiler__filename =~# ' . string(l:mask))
-  endfor
 
   let l:dirs = filter(copy(l:current_files), 'v:val.vimfiler__is_directory')
   let l:files = filter(copy(l:current_files), '!v:val.vimfiler__is_directory')
   if g:vimfiler_directory_display_top
-    let b:vimfiler.current_files = vimfiler#sort(l:dirs, b:vimfiler.sort_type)
+    let l:current_files = vimfiler#sort(l:dirs, b:vimfiler.sort_type)
           \+ vimfiler#sort(l:files, b:vimfiler.sort_type)
   else
-    let b:vimfiler.current_files = vimfiler#sort(l:files + l:dirs, b:vimfiler.sort_type)
+    let l:current_files = vimfiler#sort(l:files + l:dirs, b:vimfiler.sort_type)
   endif
+
+  return l:current_files
+endfunction"}}}
+function! vimfiler#force_redraw_screen()"{{{
+  " Use matcher_glob.
+  let b:vimfiler.current_files =
+        \ unite#filters#matcher_glob#define().filter(
+        \ vimfiler#get_all_files(), { 'input' : b:vimfiler.current_mask })
 
   call vimfiler#redraw_screen()
 endfunction"}}}

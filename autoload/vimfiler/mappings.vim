@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Aug 2011.
+" Last Modified: 17 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -642,10 +642,7 @@ function! s:new_file()"{{{
 endfunction"}}}
 
 function! s:set_current_mask()"{{{
-  let l:mask = input('Please input new mask pattern: ', '')
-
-  let b:vimfiler.current_mask = l:mask
-  call vimfiler#force_redraw_screen()
+  call unite#start([['vimfiler/mask']], { 'start_insert' : 1 })
 endfunction"}}}
 function! s:grep()"{{{
   let l:marked_files = vimfiler#get_marked_files()

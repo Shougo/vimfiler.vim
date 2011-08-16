@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: vimfiler/sort.vim
+" FILE: vimfiler/mask.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 17 Aug 2011.
 " License: MIT license  {{{
@@ -27,17 +27,18 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#vimfiler_sort#define()"{{{
+function! unite#sources#vimfiler_mask#define()"{{{
   return s:source
 endfunction"}}}
 
 let s:source = {
-      \ 'name' : 'vimfiler/sort',
-      \ 'description' : 'candidates from vimfiler sort method',
-      \ 'default_action' : 'sort',
+      \ 'name' : 'vimfiler/mask',
+      \ 'description' : 'change vimfiler mask',
+      \ 'default_action' : 'change',
       \ 'action_table' : {},
       \ 'hooks' : {},
       \ 'is_listed' : 0,
+      \ 'filters' : [ 'matcher_glob' ],
       \ }
 
 function! s:source.hooks.on_init(args, context)"{{{
@@ -45,32 +46,33 @@ function! s:source.hooks.on_init(args, context)"{{{
     return
   endif
 
-  let a:context.source__sort = b:vimfiler.sort_type
+  let a:context.source__mask = b:vimfiler.current_mask
+  let a:context.source__candidates = vimfiler#get_all_files()
+
+  call unite#print_message('[vimfiler/mask] Current mask: ' . a:context.source__mask)
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context)"{{{
-  if !has_key(a:context, 'source__sort')
+function! s:source.change_candidates(args, context)"{{{
+  if !has_key(a:context, 'source__mask')
     return []
   endif
 
-  call unite#print_message('[vimfiler/sort] Current sort type: ' . a:context.source__sort)
-  call unite#print_message('[vimfiler/sort] (Upper case is descending order)')
-
-  return map([ 'none', 'size', 'extension', 'filename', 'time', 'manual',
-        \ 'None', 'Size', 'Extension', 'Filename', 'Time', 'Manual', ], '{
-        \ "word" : v:val,
-        \ "action__sort" : v:val,
+  return map(add(copy(a:context.source__candidates), {
+        \ 'vimfiler__abbr' : 'New mask: "' . a:context.input . '"',
+        \ 'vimfiler__is_directory' : 0,}), '{
+        \ "word" : v:val.vimfiler__abbr .
+        \        (v:val.vimfiler__is_directory ? "/" : ""),
         \ }')
 endfunction"}}}
 
 " Actions"{{{
 let s:action_table = {}
 
-let s:action_table.sort = {
-      \ 'description' : 'sort vimfiler items',
+let s:action_table.change = {
+      \ 'description' : 'change current mask',
       \ }
-function! s:action_table.sort.func(candidate)"{{{
-  let b:vimfiler.sort_type = a:candidate.action__sort
+function! s:action_table.change.func(candidate)"{{{
+  let b:vimfiler.current_mask = unite#get_context().input
   call vimfiler#force_redraw_screen()
 endfunction"}}}
 

@@ -447,6 +447,9 @@ vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-08-17
+- Added vimfiler/mask source.
+
 2011-08-16
 - Improved actions.
 - Added vimfiler sort source.
