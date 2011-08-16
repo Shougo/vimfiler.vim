@@ -706,21 +706,7 @@ function! s:grep()"{{{
   call unite#mappings#do_action('grep', unite#get_marked_candidates())
 endfunction"}}}
 function! s:select_sort_type()"{{{
-  for l:type in ['n[one]', 's[ize]', 'e[xtension]', 'f[ilename]', 't[ime]', 'm[anual]']
-    echo l:type
-  endfor
-  let l:sort_type = input(printf('Select sort type(Upper case is descending order) %s -> ', b:vimfiler.sort_type), '')
-
-  if l:sort_type == ''
-    redraw
-    echo 'Canceled.'
-  elseif l:sort_type =~?
-        \'^\%(n\%[one]\|s\%[ize]\|e\%[xtension]\|f\%[ilename]\|t\%[ime]\|m\%[anual]\)$'
-    let b:vimfiler.sort_type = l:sort_type
-    call vimfiler#force_redraw_screen()
-  else
-    call vimfiler#print_error('Invalid sort type.')
-  endif
+  call unite#start([['vimfiler/sort']])
 endfunction"}}}
 function! s:switch_vim_buffer_mode()"{{{
   redir => l:nmaps

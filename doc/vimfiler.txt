@@ -31,9 +31,7 @@ Interface		|vimfiler-interface|
   Variables		  |vimfiler-variables|
   Key mappings		  |vimfiler-key-mappings|
 Examples		|vimfiler-examples|
-Create scheme		|vimfiler-create-scheme|
-ToDo			|vimfiler-todo|
-Bugs			|vimfiler-bugs|
+Unite sources		|vimfiler-unite-sources|
 Changelog		|vimfiler-changelog|
 
 ==============================================================================
@@ -428,16 +426,40 @@ EXAMPLES					*vimfiler-examples*
 	"let g:vimfiler_safe_mode_by_default = 0
 >
 ==============================================================================
-TODO						*vimfiler-todo*
+UNITE SOURCES						*vimfiler-unite-sources*
 
-==============================================================================
-BUGS						*vimfiler-bugs*
+ここでは、vimshellに添付されている、|unite|用sourceについて解説を行なう。
+
+							*vimfiler-unite-source-vimfiler-history*
+vimfiler/history
+		Candidates of vimfiler history.
+
+							*vimfiler-unite-source-vimfiler-sort*
+vimfiler/sort
+		Candidates of vimfiler sort method.
+
+							*vimfiler-unite-source-vimfiler-mask*
+vimfiler/mask
+		Change vimfiler mask.
+
+Actions of source original.
+
+vimfiler/history					*vimfiler-unite-action-vimfiler-history*
+	edit		Edit history
+	delete		Delete history
+
+vimfiler/sort						*vimfiler-unite-action-vimfiler-sort*
+	sort		Set sort type
+
+vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
+	change		Change vimfiler mask
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
 2011-08-16
 - Improved actions.
+- Added vimfiler sort source.
 
 2011-08-15
 - Fixed some errors.
