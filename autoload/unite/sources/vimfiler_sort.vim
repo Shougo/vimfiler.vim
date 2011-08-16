@@ -36,7 +36,8 @@ let s:source = {
       \ 'description' : 'candidates from vimfiler sort method',
       \ 'default_action' : 'sort',
       \ 'action_table' : {},
-      \ 'hooks' : {}
+      \ 'hooks' : {},
+      \ 'is_listed' : 0,
       \ }
 
 function! s:source.hooks.on_init(args, context)"{{{

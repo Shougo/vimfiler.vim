@@ -451,6 +451,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved actions.
 - Added vimfiler sort source.
 - Deleted vimfiler clipboard.
+- Added is_listed attribute.
 
 2011-08-15
 - Fixed some errors.
