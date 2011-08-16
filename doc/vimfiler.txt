@@ -417,6 +417,10 @@ vimfiler/sort
 vimfiler/mask
 		Change vimfiler mask.
 
+							*vimfiler-unite-source-vimfiler-mapping*
+vimfiler/mapping
+		Candidates of vimfiler mappings.
+
 Actions of source original.
 
 vimfiler/history					*vimfiler-unite-action-vimfiler-history*
@@ -434,6 +438,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-08-17
 - Added vimfiler/mask source.
 - Added vimfiler/history source.
+- Added vimfiler/mapping source.
 
 2011-08-16
 - Improved actions.

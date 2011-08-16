@@ -48,7 +48,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_filer)  :<C-u>call vimfiler#internal_commands#open(b:vimfiler.current_dir)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_shell_command)  :<C-u>call <SID>mappings_caller('execute_shell_command')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_exit)  :<C-u>call <SID>exit()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_help)  :<C-u>nnoremap <buffer><CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_help)  :<C-u>call <SID>help()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_preview_file)  :<C-u>call <SID>preview_file()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_current_vimfiler)  :<C-u>call <SID>sync_with_current_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_another_vimfiler)  :<C-u>call <SID>sync_with_another_vimfiler()<CR>
@@ -645,6 +645,9 @@ function! s:restore_vimfiler_mode()"{{{
 endfunction"}}}
 function! s:cd()"{{{
   call vimfiler#cd(b:vimfiler.current_dir)
+endfunction"}}}
+function! s:help()"{{{
+  call unite#start([['vimfiler/mapping']])
 endfunction"}}}
 
 " For safe mode.

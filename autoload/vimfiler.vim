@@ -251,6 +251,7 @@ function! vimfiler#redraw_screen()"{{{
 
   setlocal modifiable
   let l:pos = getpos('.')
+  echomsg string(l:pos)
 
   " Clean up the screen.
   % delete _
@@ -695,8 +696,6 @@ function! s:event_bufwin_enter()"{{{
         \ && s:last_vimfiler_bufnr != bufnr('%')
     let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
   endif
-
-  call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
   let s:last_vimfiler_bufnr = bufnr('%')
