@@ -432,7 +432,7 @@ function! s:edit_file(is_split)"{{{
 
   let l:file = vimfiler#get_file(line('.'))
   call unite#mappings#do_action(
-        \ (a:is_split ? g:vimfiler_edit_action : g:vimfiler_split_action), [l:file])
+        \ (a:is_split ? g:vimfiler_split_action : g:vimfiler_edit_action), [l:file])
 endfunction"}}}
 function! s:edit_binary_file(is_split)"{{{
   if !vimfiler#check_filename_line()
