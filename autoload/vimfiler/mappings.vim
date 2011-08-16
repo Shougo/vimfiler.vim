@@ -39,10 +39,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call vimfiler#internal_commands#cd('~')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call vimfiler#internal_commands#cd('/')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call <SID>mappings_caller('move_to_drive')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_forward)   :<C-u>call <SID>history_forward()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_back)      :<C-u>call <SID>history_back()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_jump_to_directory)  :<C-u>call <SID>mappings_caller('jump_to_directory')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_jump_to_history_directory)  :<C-u>call <SID>mappings_caller('jump_to_history_directory')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_directory)  :<C-u>call <SID>mappings_caller('move_to_history_directory')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call <SID>toggle_visible_dot_files()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)  :<C-u>call <SID>mappings_caller('popup_shell')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)  :<C-u>call <SID>edit_file(0)<CR>
@@ -119,12 +116,9 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   " Move to directory.
   nmap <buffer> h <Plug>(vimfiler_smart_h)
   nmap <buffer> L <Plug>(vimfiler_move_to_drive)
-  nmap <buffer> J <Plug>(vimfiler_jump_to_directory)
   nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
   nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
-  nmap <buffer> <C-p> <Plug>(vimfiler_move_to_history_back)
-  nmap <buffer> <C-n> <Plug>(vimfiler_move_to_history_forward)
-  nmap <buffer> <C-j> <Plug>(vimfiler_jump_to_history_directory)
+  nmap <buffer> <C-j> <Plug>(vimfiler_move_to_history_directory)
 
   nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
   nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
@@ -367,42 +361,8 @@ function! s:move_to_drive()"{{{
     return
   endif
 endfunction"}}}
-function! s:jump_to_history_directory()"{{{
-  let l:cnt = 0
-  for l:directory in b:vimfiler.changed_dir
-    echo printf('%s[%s] %s',
-          \ (l:cnt == b:vimfiler.current_changed_dir_index ? '*' : ' '),
-          \ l:cnt, l:directory)
-    let l:cnt += 1
-  endfor
-
-  let l:key = input('Please input history number: ')
-  
-  if l:key == '' || l:key !~ '^\d\+$'
-    return
-  endif
-  
-  let l:num = str2nr(l:key)
-  if l:num < len(b:vimfiler.changed_dir)
-    call vimfiler#internal_commands#cd(b:vimfiler.changed_dir[l:num])
-  else
-    redraw
-    echo 'Invalid history number.'
-  endif
-endfunction"}}}
-function! s:jump_to_directory()"{{{
-  let l:dir = vimfiler#resolve(expand(input('Jump to: ', '', 'dir')))
-  if l:dir == ''
-    redraw
-    echo 'Canceled.'
-    return
-  elseif isdirectory(l:dir)
-    call vimfiler#internal_commands#cd(l:dir)
-  else
-    redraw
-    echo 'Invalid directory name.'
-    return
-  endif
+function! s:move_to_history_directory()"{{{
+  call unite#start([['vimfiler/history']])
 endfunction"}}}
 
 function! s:toggle_visible_dot_files()"{{{
@@ -717,43 +677,6 @@ function! s:unmapping_file_operations()"{{{
 endfunction"}}}
 function! s:disable_operation()"{{{
   call vimfiler#print_error('In safe mode, this operation is disabled.')
-endfunction"}}}
-
-function! s:history_forward()"{{{
-  if len(b:vimfiler.changed_dir) < 2
-    return
-  endif
-  if b:vimfiler.current_changed_dir_index ==# -1
-    return
-  endif
-
-  let b:vimfiler.current_changed_dir_index += 1
-  let l:dir = b:vimfiler.changed_dir[b:vimfiler.current_changed_dir_index]
-
-  " Reset b:vimfiler.current_changed_dir_index
-  if len(b:vimfiler.changed_dir) - 2 ==# b:vimfiler.current_changed_dir_index
-    let b:vimfiler.current_changed_dir_index = -1
-  endif
-
-  call vimfiler#internal_commands#cd(l:dir, 0)
-endfunction"}}}
-function! s:history_back()"{{{
-  if len(b:vimfiler.changed_dir) < 2
-    return
-  endif
-  if b:vimfiler.current_changed_dir_index ==# 0
-    return
-  endif
-
-  if b:vimfiler.current_changed_dir_index ==# -1
-    " Last item must be b:vimfiler.current_dir
-    let b:vimfiler.current_changed_dir_index = len(b:vimfiler.changed_dir) - 2
-  else
-    let b:vimfiler.current_changed_dir_index -= 1
-  endif
-
-  let l:dir = b:vimfiler.changed_dir[b:vimfiler.current_changed_dir_index]
-  call vimfiler#internal_commands#cd(l:dir, 0)
 endfunction"}}}
 
 function! s:custom_alternate_buffer()"{{{

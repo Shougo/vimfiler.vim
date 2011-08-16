@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Aug 2011.
+" Last Modified: 17 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -69,8 +69,8 @@ if !exists('g:vimfiler_detect_drives')
             \ 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 endif
 
-if !exists('g:vimfiler_max_directory_histories')
-  let g:vimfiler_max_directory_histories = 10
+if !exists('g:vimfiler_max_directories_history')
+  let g:vimfiler_max_directories_history = 10
 endif
 if !exists('g:vimfiler_enable_clipboard')
   let g:vimfiler_enable_clipboard = 0

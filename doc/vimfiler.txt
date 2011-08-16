@@ -121,7 +121,7 @@ g:vimfiler_detect_drives			*g:vimfiler_detect_drives*
 		
 		Default value is refer to plugin/vimfiler.vim.
 
-g:vimfiler_max_directory_histories		*g:vimfiler_max_directory_histories*
+g:vimfiler_max_history_directories		*g:vimfiler_max_history_directories*
 		This variable controls vimfiler max directory history entries.
 		
 		Default value is 10.
@@ -248,19 +248,7 @@ Normal mode mappings.
 		
 		
 
-<Plug>(vimfiler_move_to_history_back)		*<Plug>(vimfiler_move_to_history_back)*
-		
-		
-
-<Plug>(vimfiler_move_to_history_forward)	*<Plug>(vimfiler_move_to_history_forward)*
-		
-		
-
-<Plug>(vimfiler_jump_to_directory)		*<Plug>(vimfiler_jump_to_directory)*
-		
-		
-
-<Plug>(vimfiler_jump_to_history_directory)	*<Plug>(vimfiler_jump_to_history_directory)*
+<Plug>(vimfiler_move_to_history_directory)	*<Plug>(vimfiler_move_to_history_directory)*
 		
 		
 
@@ -360,12 +348,9 @@ l			<Plug>(vimfiler_smart_l)
 x			<Plug>(vimfiler_execute_file)
 h			<Plug>(vimfiler_smart_h)
 L			<Plug>(vimfiler_move_to_drive)
-J			<Plug>(vimfiler_jump_to_directory)
 ~			<Plug>(vimfiler_move_to_home_directory)
 \			<Plug>(vimfiler_move_to_root_directory)
-<C-p>			<Plug>(vimfiler_move_to_history_back)
-<C-n>			<Plug>(vimfiler_move_to_history_forward)
-<C-j>			<Plug>(vimfiler_jump_to_history_directory)
+<C-j>			<Plug>(vimfiler_move_to_history_directory)
 .			<Plug>(vimfiler_toggle_visible_dot_files)
 H			<Plug>(vimfiler_popup_shell)
 e			<Plug>(vimfiler_edit_file)
@@ -435,7 +420,6 @@ vimfiler/mask
 Actions of source original.
 
 vimfiler/history					*vimfiler-unite-action-vimfiler-history*
-	edit		Edit history
 	delete		Delete history
 
 vimfiler/sort						*vimfiler-unite-action-vimfiler-sort*
@@ -449,6 +433,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-08-17
 - Added vimfiler/mask source.
+- Added vimfiler/history source.
 
 2011-08-16
 - Improved actions.
