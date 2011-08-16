@@ -403,7 +403,7 @@ EXAMPLES					*vimfiler-examples*
 ==============================================================================
 UNITE SOURCES						*vimfiler-unite-sources*
 
-ここでは、vimshellに添付されている、|unite|用sourceについて解説を行なう。
+Here let me explain about a source for |unite| provided in vimfiler.
 
 							*vimfiler-unite-source-vimfiler-history*
 vimfiler/history
