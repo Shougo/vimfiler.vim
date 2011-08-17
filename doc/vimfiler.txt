@@ -440,6 +440,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added vimfiler/history source.
 - Added vimfiler/mapping source.
 - Changed g:vimfiler_sort_type default value.
+- Added vimfiler/mask matcher.
 
 2011-08-16
 - Improved actions.

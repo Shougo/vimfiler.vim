@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: vimfiler/mask.vim
+" FILE: matcher_vimfiler_mask.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " Last Modified: 17 Aug 2011.
 " License: MIT license  {{{
@@ -27,58 +27,61 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#vimfiler_mask#define()"{{{
-  return s:source
+function! unite#filters#matcher_vimfiler_mask#define()"{{{
+  return s:matcher
 endfunction"}}}
 
-let s:source = {
-      \ 'name' : 'vimfiler/mask',
-      \ 'description' : 'change vimfiler mask',
-      \ 'default_action' : 'change',
-      \ 'action_table' : {},
-      \ 'hooks' : {},
-      \ 'is_listed' : 0,
-      \ 'filters' : [ 'matcher_vimfiler/mask' ],
-      \ }
+let s:matcher = {
+      \ 'name' : 'matcher_vimfiler/mask',
+      \ 'description' : 'vimfiler mask matcher',
+      \}
 
-function! s:source.hooks.on_init(args, context)"{{{
-  if &filetype !=# 'vimfiler'
-    return
+function! s:matcher.filter(candidates, context)"{{{
+  if a:context.input == ''
+    return a:candidates
   endif
 
-  let a:context.source__mask = b:vimfiler.current_mask
-  let a:context.source__candidates = vimfiler#get_all_files()
+  let l:candidates = []
+  let l:masks = map(split(a:context.input, '\\\@<! '),
+          \ 'substitute(v:val, "\\\\ ", " ", "g")')
+  for l:candidate in a:candidates
+    let l:matched = 0
+    for l:mask in l:masks
+      if l:mask =~ '^!'
+        if l:mask == '!'
+          continue
+        endif
 
-  call unite#print_message('[vimfiler/mask] Current mask: ' . a:context.source__mask)
+        " Exclusion.
+        let l:mask = unite#escape_match(l:mask)
+        if l:candidate.word !~ l:mask
+          let l:matched = 1
+          break
+        endif
+      elseif l:mask =~ '\\\@<!\*'
+        " Wildcard.
+        let l:mask = unite#escape_match(l:mask)
+        if l:candidate.word =~ l:mask
+          let l:matched = 1
+          break
+        endif
+      else
+        let l:mask = substitute(l:mask, '\\\(.\)', '\1', 'g')
+        if stridx((&ignorecase ?
+              \ tolower(l:candidate.word) : l:candidate.word), l:mask) != -1
+          let l:matched = 1
+          break
+        endif
+      endif
+    endfor
+
+    if l:matched
+      call add(l:candidates, l:candidate)
+    endif
+  endfor
+
+  return l:candidates
 endfunction"}}}
-
-function! s:source.change_candidates(args, context)"{{{
-  if !has_key(a:context, 'source__mask')
-    return []
-  endif
-
-  return map(add(copy(a:context.source__candidates), {
-        \ 'vimfiler__abbr' : 'New mask: "' . a:context.input . '"',
-        \ 'vimfiler__is_directory' : 0,}), '{
-        \ "word" : v:val.vimfiler__abbr .
-        \        (v:val.vimfiler__is_directory ? "/" : ""),
-        \ }')
-endfunction"}}}
-
-" Actions"{{{
-let s:action_table = {}
-
-let s:action_table.change = {
-      \ 'description' : 'change current mask',
-      \ }
-function! s:action_table.change.func(candidate)"{{{
-  let b:vimfiler.current_mask = unite#get_context().input
-  call vimfiler#force_redraw_screen()
-endfunction"}}}
-
-let s:source.action_table['*'] = s:action_table
-unlet! s:action_table
-"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

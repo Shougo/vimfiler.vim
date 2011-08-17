@@ -239,7 +239,7 @@ endfunction"}}}
 function! vimfiler#force_redraw_screen()"{{{
   " Use matcher_glob.
   let b:vimfiler.current_files =
-        \ unite#filters#matcher_glob#define().filter(
+        \ unite#filters#matcher_vimfiler_mask#define().filter(
         \ vimfiler#get_all_files(), { 'input' : b:vimfiler.current_mask })
 
   call vimfiler#redraw_screen()
