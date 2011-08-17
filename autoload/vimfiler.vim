@@ -251,7 +251,6 @@ function! vimfiler#redraw_screen()"{{{
 
   setlocal modifiable
   let l:pos = getpos('.')
-  echomsg string(l:pos)
 
   " Clean up the screen.
   % delete _

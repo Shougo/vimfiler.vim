@@ -108,7 +108,7 @@ g:vimfiler_max_filename_width			*g:vimfiler_max_filename_width*
 g:vimfiler_sort_type				*g:vimfiler_sort_type*
 		This variable controls default vimfiler sort type.
 		
-		Default value is 'none'.
+		Default value is "filename".
 
 g:vimfiler_directory_display_top		*g:vimfiler_directory_display_top*
 		This variable controls vimfiler sorts directories as top.
@@ -439,6 +439,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added vimfiler/mask source.
 - Added vimfiler/history source.
 - Added vimfiler/mapping source.
+- Changed g:vimfiler_sort_type default value.
 
 2011-08-16
 - Improved actions.

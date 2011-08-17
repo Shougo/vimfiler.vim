@@ -58,7 +58,7 @@ if !exists('g:vimfiler_max_filename_width')
   let g:vimfiler_max_filename_width = 50
 endif
 if !exists('g:vimfiler_sort_type')
-  let g:vimfiler_sort_type = 'none'
+  let g:vimfiler_sort_type = 'filename'
 endif
 if !exists('g:vimfiler_directory_display_top')
   let g:vimfiler_directory_display_top = 1
