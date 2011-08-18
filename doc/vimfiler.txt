@@ -79,6 +79,8 @@ g:vimfiler_as_default_explorer			*g:vimfiler_as_default_explorer*
 
 g:vimfiler_execute_file_list			*g:vimfiler_execute_file_list*
 		This variable controls vimfiler execute.
+		The key is extension. The value is command name or
+		command name list. If value is "vim", edit file.
 
 g:vimfiler_split_action				*g:vimfiler_split_action*
 		This variable controls vimfiler split action.
@@ -226,8 +228,7 @@ Normal mode mappings.
 		
 
 <Plug>(vimfiler_execute)			*<Plug>(vimfiler_execute)*
-		
-		
+		Execute cursor file with |g:vimfiler_execute_file_list| command.
 
 <Plug>(vimfiler_execute_file)			*<Plug>(vimfiler_execute_file)*
 		
@@ -421,6 +422,10 @@ vimfiler/mask
 vimfiler/mapping
 		Candidates of vimfiler mappings.
 
+							*vimfiler-unite-source-vimfiler-execute*
+vimfiler/execute
+		Candidates from |g:vimfiler_execute_file_list|.
+
 Actions of source original.
 
 vimfiler/history					*vimfiler-unite-action-vimfiler-history*
@@ -441,6 +446,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added vimfiler/mapping source.
 - Changed g:vimfiler_sort_type default value.
 - Added vimfiler/mask matcher.
+- Added vimfiler/execute source.
 
 2011-08-16
 - Improved actions.

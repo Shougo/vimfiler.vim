@@ -299,18 +299,7 @@ function! s:execute()"{{{
     " Change directory.
     call s:cd(l:filename)
   else
-    " User execute file.
-    let l:ext = fnamemodify(l:filename, ':e')
-    if has_key(g:vimfiler_execute_file_list, l:ext)
-      let l:command = g:vimfiler_execute_file_list[l:ext]
-      if l:command == 'vim'
-        " Edit with vim.
-        call vimfiler#internal_commands#edit(vimfiler#get_filename(line('.')), 0)
-      else
-        call vimfiler#internal_commands#gexe(printf('%s ''%s''',
-              \ g:vimfiler_execute_file_list[l:ext], l:filename))
-      endif
-    endif
+    call unite#start([['vimfiler/execute']], {'immediately' : 1})
   endif
 endfunction"}}}
 function! s:execute_file()"{{{
