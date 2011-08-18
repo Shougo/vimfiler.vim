@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2011.
+" Last Modified: 18 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -100,13 +100,6 @@ if !has_key(g:vimfiler_extensions, 'image')
 endif
 if !has_key(g:vimfiler_extensions, 'archive')
   call vimfiler#set_extensions('archive', 'lzh,zip,gz,bz2,cab,rar,7z,tgz,tar')
-endif
-if !has_key(g:vimfiler_extensions, 'execute')
-  if s:iswin
-    call vimfiler#set_extensions('execute', substitute(substitute(tolower($PATHEXT), ';', ',', 'g'), '\.', '', 'g'))
-  else
-    let g:vimfiler_extensions.execute = {}
-  endif
 endif
 if !has_key(g:vimfiler_extensions, 'system')
   call vimfiler#set_extensions('system', 'inf,sys,reg,dat,spi,a,so,lib,dll')

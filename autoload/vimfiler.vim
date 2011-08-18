@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2011.
+" Last Modified: 18 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -502,8 +502,7 @@ function! vimfiler#get_filetype(file)"{{{
         \ || has_key(g:vimfiler_extensions.system, l:ext)
     " System.
     return '[SYS]'
-  elseif (!vimfiler#iswin() && a:file.vimfiler__is_executable)
-        \|| has_key(g:vimfiler_extensions.execute, l:ext)
+  elseif a:file.vimfiler__is_executable
     " Execute.
     return '[EXE]'
   else
