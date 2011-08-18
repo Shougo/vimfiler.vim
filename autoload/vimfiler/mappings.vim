@@ -59,7 +59,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_other_window)  :<C-u>call <SID>move_to_other_window()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)  :<C-u>call <SID>switch_vim_buffer_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call <SID>restore_vimfiler_mode()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>cd()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>change_vim_current_dir()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)  :<C-u>call <SID>toggle_safe_mode()<CR>
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call \<SID>cd('..')\<CR>"
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>mappings_caller('execute')\<CR>"
@@ -213,11 +213,11 @@ endfunction
 
 function! s:mappings_caller(funcname)"{{{
   let l:current_dir = getcwd()
-  call vimfiler#cd(b:vimfiler.current_dir)
+  execute g:vimfiler_cd_command '`=b:vimfiler.current_dir`'
 
   call call(s:SID_PREFIX().a:funcname, [])
 
-  call vimfiler#cd(l:current_dir)
+  execute g:vimfiler_cd_command '`=l:current_dir`'
 endfunction"}}}
 
 function! s:toggle_mark_current_line()"{{{
@@ -703,6 +703,9 @@ function! s:help()"{{{
   call unite#start([['vimfiler/mapping']])
 endfunction"}}}
 function! s:execute_external_filer()"{{{
+endfunction"}}}
+function! s:change_vim_current_dir()"{{{
+  execute g:vimfiler_cd_command '`=b:vimfiler.current_dir`'
 endfunction"}}}
 
 " For safe mode.

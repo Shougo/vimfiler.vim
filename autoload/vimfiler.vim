@@ -602,9 +602,6 @@ function! vimfiler#restore_variables(variables_save)"{{{
     execute 'let' key '= value'
   endfor
 endfunction"}}}
-function! vimfiler#cd(directory)"{{{
-  execute g:vimfiler_cd_command '`=a:directory`'
-endfunction"}}}
 "}}}
 
 " Detect drives.
