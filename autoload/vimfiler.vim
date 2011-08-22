@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Aug 2011.
+" Last Modified: 23 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -288,7 +288,7 @@ function! vimfiler#redraw_screen()"{{{
             \ l:file.vimfiler__datemark . strftime(g:vimfiler_time_format, l:file.vimfiler__filetime)
             \)
     else
-      let l:line = printf('%s %s %s', l:mark, l:filename, l:file.type)
+      let l:line = printf('%s %s %s', l:mark, l:filename, l:file.vimfiler__filetype)
     endif
 
     call append('$', l:line)
@@ -727,11 +727,12 @@ function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
   endif
 
   " Set current directory.
-  let l:current = (a:directory != '')? a:directory : getcwd()
-  let l:current = vimfiler#util#substitute_path_separator(l:current)
-  let b:vimfiler.current_dir = l:current
-  if b:vimfiler.current_dir !~ '/$'
-    let b:vimfiler.current_dir .= '/'
+  if a:directory != ''
+    let b:vimfiler.current_dir =
+          \ vimfiler#util#substitute_path_separator(a:directory)
+    if b:vimfiler.current_dir !~ '/$'
+      let b:vimfiler.current_dir .= '/'
+    endif
   endif
 
   call vimfiler#force_redraw_screen()
