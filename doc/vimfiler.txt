@@ -442,6 +442,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-08-23
 - Improved switch vimfiler behavior.
+- Fixed browser check.
 
 2011-08-17
 - Added vimfiler/mask source.
