@@ -220,7 +220,7 @@ function! vimfiler#get_all_files()"{{{
   " Save current files.
 
   let l:context = {
-        \ 'vimfiler__visible_dot_files' : b:vimfiler.is_visible_dot_files
+        \ 'vimfiler__is_dummy' : 0,
         \ }
   let l:current_files = unite#get_vimfiler_candidates(
         \ [['file', b:vimfiler.current_dir]], l:context)
@@ -232,6 +232,10 @@ function! vimfiler#get_all_files()"{{{
           \+ vimfiler#sort(l:files, b:vimfiler.sort_type)
   else
     let l:current_files = vimfiler#sort(l:files + l:dirs, b:vimfiler.sort_type)
+  endif
+
+  if !b:vimfiler.is_visible_dot_files
+    call filter(l:current_files, 'v:val.vimfiler__filename !~ "^\\."')
   endif
 
   return l:current_files

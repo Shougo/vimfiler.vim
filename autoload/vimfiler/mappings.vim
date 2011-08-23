@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Aug 2011.
+" Last Modified: 23 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,9 +35,9 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_clear_mark_all_lines)  :<C-u>call <SID>clear_mark_all_lines()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute)  :<C-u>call <SID>mappings_caller('execute')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_file)  :<C-u>call <SID>mappings_caller('execute_file')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_up_directory)  :<C-u>call <SID>cd('..')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call <SID>cd('~')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call <SID>cd('/')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_up_directory)  :<C-u>call vimfiler#mappings#cd('..')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call vimfiler#mappings#cd('~')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call vimfiler#mappings#cd('/')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call <SID>mappings_caller('move_to_drive')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_directory)  :<C-u>call <SID>mappings_caller('move_to_history_directory')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call <SID>toggle_visible_dot_files()<CR>
@@ -61,7 +61,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call <SID>restore_vimfiler_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>change_vim_current_dir()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)  :<C-u>call <SID>toggle_safe_mode()<CR>
-  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call \<SID>cd('..')\<CR>"
+  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>mappings_caller('execute')\<CR>"
 
   if b:vimfiler.is_safe_mode
@@ -207,6 +207,74 @@ function! vimfiler#mappings#open_next_file()"{{{
   endfor
 endfunction"}}}
 
+
+function! vimfiler#mappings#cd(dir, ...)"{{{
+  let l:save_history = a:0 ? a:1 : 1
+  let l:dir = vimfiler#util#substitute_path_separator(a:dir)
+
+  if l:dir == '..'
+    if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
+      " Ignore.
+      return
+    endif
+
+    let l:dir = fnamemodify(substitute(
+          \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
+  elseif l:dir == '/'
+    " Root.
+    let l:dir = vimfiler#iswin() ?
+          \ matchstr(fnamemodify(b:vimfiler.current_dir, ':p'),
+          \         '^\a\+:[/\\]') : l:dir
+  elseif l:dir == '~'
+    " Home.
+    let l:dir = expand('~')
+  elseif (vimfiler#iswin() && l:dir =~ '^//\|^\a\+:')
+        \ || (!vimfiler#iswin() && l:dir =~ '^/')
+    " Network drive or absolute path.
+  else
+    " Relative path.
+    let l:dir = simplify(b:vimfiler.current_dir . l:dir)
+  endif
+  let l:dir = vimfiler#util#substitute_path_separator(l:dir)
+
+  if vimfiler#iswin()
+    let l:dir = vimfiler#resolve(l:dir)
+  endif
+
+  if l:dir !~ '/$'
+    let l:dir .= '/'
+  endif
+
+  " Save current pos.
+  let l:save_pos = getpos('.')
+  let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = 
+        \ deepcopy(l:save_pos)
+  let l:prev_dir = b:vimfiler.current_dir
+  let b:vimfiler.current_dir = l:dir
+
+  " Save changed directories.
+  if l:save_history
+    call add(b:vimfiler.directories_history, l:prev_dir)
+
+    let l:max_save = g:vimfiler_max_directories_history > 0 ?
+          \ g:vimfiler_max_directories_history : 10
+    if len(b:vimfiler.directories_history) >= l:max_save
+      " Get last l:max_save num elements.
+      let b:vimfiler.directories_history =
+            \ b:vimfiler.directories_history[-l:max_save :]
+    endif
+  endif
+
+  " Redraw.
+  call vimfiler#force_redraw_screen()
+
+  " Restore cursor pos.
+  let l:save_pos[1] = 3
+  call setpos('.', (has_key(b:vimfiler.directory_cursor_pos, l:dir) ?
+        \ b:vimfiler.directory_cursor_pos[l:dir] : l:save_pos))
+  normal! zz
+endfunction"}}}
+
 function! s:SID_PREFIX()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
@@ -287,7 +355,7 @@ function! s:execute()"{{{
       " Change current directory.
       let l:cursor_next = matchstr(l:line[col('.') :], '.\{-}\ze[/\\]')
 
-      call s:cd(l:cursor_line . l:cursor_next)
+      call vimfiler#mappings#cd(l:cursor_line . l:cursor_next)
     endif
 
     return
@@ -297,7 +365,7 @@ function! s:execute()"{{{
 
   if isdirectory(l:filename)
     " Change directory.
-    call s:cd(l:filename)
+    call vimfiler#mappings#cd(l:filename)
   else
     call unite#start([['vimfiler/execute']], {'immediately' : 1})
   endif
@@ -341,9 +409,9 @@ function! s:move_to_drive()"{{{
   if l:key == ''
     return
   elseif has_key(l:drives, tolower(l:key))
-    call s:cd(l:drives[tolower(l:key)])
+    call vimfiler#mappings#cd(l:drives[tolower(l:key)])
   elseif isdirectory(l:key)
-    call s:cd(l:key)
+    call vimfiler#mappings#cd(l:key)
   else
     redraw
     echo 'Invalid directory name.'
@@ -436,7 +504,7 @@ function! s:sync_with_current_vimfiler()"{{{
     " Change another vimfiler directory.
     let l:current_dir = b:vimfiler.current_dir
     execute vimfiler#winnr_another_vimfiler() . 'wincmd w'
-    call s:cd(l:current_dir)
+    call vimfiler#mappings#cd(l:current_dir)
   endif
 
   wincmd p
@@ -453,7 +521,7 @@ function! s:sync_with_another_vimfiler()"{{{
     call vimfiler#redraw_screen()
   else
     " Change current vimfiler directory.
-    call s:cd(vimfiler#get_another_vimfiler().current_dir)
+    call vimfiler#mappings#cd(vimfiler#get_another_vimfiler().current_dir)
   endif
 endfunction"}}}
 
@@ -560,7 +628,7 @@ function! s:make_directory()"{{{
 
     call mkdir(l:dirname, 'p')
     call vimfiler#force_redraw_all_vimfiler()
-    call s:cd(l:dirname)
+    call vimfiler#mappings#cd(l:dirname)
   endif
 endfunction"}}}
 function! s:new_file()"{{{
@@ -629,83 +697,22 @@ function! s:restore_vimfiler_mode()"{{{
 
   echo 'Switched vimfiler mode'
 endfunction"}}}
-function! s:cd(dir, ...)"{{{
-  let l:save_history = a:0 ? a:1 : 1
-  let l:dir = vimfiler#util#substitute_path_separator(a:dir)
-
-  if l:dir == '..'
-    if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
-      " Ignore.
-      return
-    endif
-
-    let l:dir = fnamemodify(substitute(b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
-  elseif l:dir == '/'
-    " Root.
-    let l:dir = vimfiler#iswin() ?
-          \matchstr(fnamemodify(b:vimfiler.current_dir, ':p'), '^\a\+:[/\\]') : l:dir
-  elseif l:dir == '~'
-    " Home.
-    let l:dir = expand('~')
-  elseif (vimfiler#iswin() && l:dir =~ '^//\|^\a\+:')
-        \ || (!vimfiler#iswin() && l:dir =~ '^/')
-      " Network drive or absolute path.
-  else
-    " Relative path.
-    let l:dir = simplify(b:vimfiler.current_dir . l:dir)
-  endif
-  let l:dir = vimfiler#util#substitute_path_separator(l:dir)
-
-  if vimfiler#iswin()
-    let l:dir = vimfiler#resolve(l:dir)
-  endif
-
-  if !isdirectory(l:dir)
-    " Ignore.
-    call vimfiler#print_error('cd: "' . l:dir . '" is not a directory.')
-    return
-  endif
-
-  if l:dir !~ '/$'
-    let l:dir .= '/'
-  endif
-
-  " Save current pos.
-  let l:save_pos = getpos('.')
-  let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = 
-        \ deepcopy(l:save_pos)
-  let l:prev_dir = b:vimfiler.current_dir
-  let b:vimfiler.current_dir = l:dir
-
-  " Save changed directories.
-  if l:save_history
-    call add(b:vimfiler.directories_history, l:prev_dir)
-
-    let l:max_save = g:vimfiler_max_directories_history > 0 ?
-          \ g:vimfiler_max_directories_history : 10
-    if len(b:vimfiler.directories_history) >= l:max_save
-      " Get last l:max_save num elements.
-      let b:vimfiler.directories_history =
-            \ b:vimfiler.directories_history[-l:max_save :]
-    endif
-  endif
-
-  " Redraw.
-  call vimfiler#force_redraw_screen()
-
-  " Restore cursor pos.
-  let l:save_pos[1] = 3
-  call setpos('.', (has_key(b:vimfiler.directory_cursor_pos, l:dir) ?
-        \ b:vimfiler.directory_cursor_pos[l:dir] : l:save_pos))
-  normal! zz
-endfunction"}}}
 function! s:help()"{{{
   call unite#start([['vimfiler/mapping']])
 endfunction"}}}
 function! s:execute_external_filer()"{{{
 endfunction"}}}
 function! s:change_vim_current_dir()"{{{
-  execute g:vimfiler_cd_command '`=b:vimfiler.current_dir`'
+  let l:dummy_files = unite#get_vimfiler_candidates(
+        \ [['file', b:vimfiler.current_dir]], {
+        \ 'vimfiler__is_dummy' : 1,
+        \ })
+  if empty(l:dummy_files)
+    return
+  endif
+
+  " Execute cd.
+  call unite#mappings#do_action('lcd', l:dummy_files)
 endfunction"}}}
 
 " For safe mode.
