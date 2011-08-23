@@ -711,7 +711,8 @@ function! s:restore_vimfiler()"{{{
   endwhile
 
   " Restore another vimfiler.
-  if bufwinnr(b:vimfiler.another_vimfiler_bufnr) < 0
+  if bufnr('%') != b:vimfiler.another_vimfiler_bufnr
+        \ && bufwinnr(b:vimfiler.another_vimfiler_bufnr) < 0
         \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
     call s:switch_vimfiler(b:vimfiler.another_vimfiler_bufnr, 1, '')
     wincmd p
