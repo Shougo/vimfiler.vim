@@ -440,6 +440,9 @@ vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-08-24
+- Improved vimfiler actions.
+
 2011-08-23
 - Improved switch vimfiler behavior.
 - Fixed browser check.
