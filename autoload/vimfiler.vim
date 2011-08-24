@@ -146,40 +146,7 @@ function! vimfiler#create_filer(directory, options)"{{{
   endif
 
   let b:vimfiler = {}
-
-  " Set current directory.
-  let l:current = (a:directory != '')? a:directory : getcwd()
-  let l:current = vimfiler#util#substitute_path_separator(l:current)
-  let b:vimfiler.current_dir = l:current
-  if b:vimfiler.current_dir !~ '/$'
-    let b:vimfiler.current_dir .= '/'
-  endif
-
-  let b:vimfiler.directories_history = []
-  let b:vimfiler.is_visible_dot_files = 0
-  let b:vimfiler.is_simple = l:simple_flag
-  let b:vimfiler.directory_cursor_pos = {}
-  " Set mask.
-  let b:vimfiler.current_mask = ''
-  let b:vimfiler.sort_type = g:vimfiler_sort_type
-  let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
-  let b:vimfiler.another_vimfiler_bufnr = -1
-  let b:vimfiler.source = 'file'
-
-  call vimfiler#default_settings()
-  setfiletype vimfiler
-
-  if l:double_flag
-    " Create another vimfiler.
-    call vimfiler#create_filer(b:vimfiler.current_dir,
-          \ b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
-    let s:last_vimfiler_bufnr = bufnr('%')
-    let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
-    wincmd w
-  endif
-
-  call vimfiler#force_redraw_screen()
-  3
+  call s:initialize_vimfiler_directory(a:directory, l:simple_flag, l:double_flag)
 endfunction"}}}
 function! vimfiler#switch_filer(directory, options)"{{{
   if a:directory != '' && !isdirectory(a:directory)
@@ -742,6 +709,41 @@ function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
   endif
 
   call vimfiler#force_redraw_screen()
+endfunction"}}}
+function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag)"{{{
+  " Set current directory.
+  let l:current = (a:directory != '')? a:directory : getcwd()
+  let l:current = vimfiler#util#substitute_path_separator(l:current)
+  let b:vimfiler.current_dir = l:current
+  if b:vimfiler.current_dir !~ '/$'
+    let b:vimfiler.current_dir .= '/'
+  endif
+
+  let b:vimfiler.directories_history = []
+  let b:vimfiler.is_visible_dot_files = 0
+  let b:vimfiler.is_simple = a:simple_flag
+  let b:vimfiler.directory_cursor_pos = {}
+  " Set mask.
+  let b:vimfiler.current_mask = ''
+  let b:vimfiler.sort_type = g:vimfiler_sort_type
+  let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
+  let b:vimfiler.another_vimfiler_bufnr = -1
+  let b:vimfiler.source = 'file'
+
+  call vimfiler#default_settings()
+  setfiletype vimfiler
+
+  if a:double_flag
+    " Create another vimfiler.
+    call vimfiler#create_filer(b:vimfiler.current_dir,
+          \ b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+    let s:last_vimfiler_bufnr = bufnr('%')
+    let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
+    wincmd w
+  endif
+
+  call vimfiler#force_redraw_screen()
+  3
 endfunction"}}}
 
 " vim: foldmethod=marker
