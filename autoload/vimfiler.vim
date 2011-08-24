@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Aug 2011.
+" Last Modified: 25 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -107,10 +107,28 @@ endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions."{{{
-function! vimfiler#create_filer(directory, options)"{{{
-  if a:directory != '' && !isdirectory(a:directory)
+function! vimfiler#create_filer(path, options)"{{{
+  let l:path = (a:path == '') ?
+        \ vimfiler#util#substitute_path_separator(getcwd()) : a:path
+  " echomsg l:path
+
+  " Check path.
+  let l:source_name = matchstr(l:path, '^[^:]*\ze:')
+  if (vimfiler#iswin() && len(l:source_name) == 1)
+        \ || l:source_name == ''
+    " Default source.
+    let l:source_name = 'file'
+    let l:source_arg = l:path
+  else
+    let l:source_arg = l:path[len(l:source_name)+1 :]
+  endif
+  " echomsg string([l:source_name, l:source_arg])
+  let l:ret = unite#vimfiler_check_filetype([[l:source_name, l:source_arg]])
+  if empty(l:ret)
+    " File not found.
     return
   endif
+  let [l:type, l:lines, l:dict] = l:ret
 
   " Check options.
   let l:split_flag = 0
@@ -146,7 +164,14 @@ function! vimfiler#create_filer(directory, options)"{{{
   endif
 
   let b:vimfiler = {}
-  call s:initialize_vimfiler_directory(a:directory, l:simple_flag, l:double_flag)
+  let b:vimfiler.source = l:source_name
+  if l:type ==# 'directory'
+    call s:initialize_vimfiler_directory(l:path, l:simple_flag, l:double_flag)
+  elseif l:type ==# 'file'
+    call s:initialize_vimfiler_file(l:path, l:lines, l:dict)
+  else
+    call vimfiler#print_error('Unknown filetype.')
+  endif
 endfunction"}}}
 function! vimfiler#switch_filer(directory, options)"{{{
   if a:directory != '' && !isdirectory(a:directory)
@@ -712,8 +737,7 @@ function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
 endfunction"}}}
 function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag)"{{{
   " Set current directory.
-  let l:current = (a:directory != '')? a:directory : getcwd()
-  let l:current = vimfiler#util#substitute_path_separator(l:current)
+  let l:current = vimfiler#util#substitute_path_separator(a:directory)
   let b:vimfiler.current_dir = l:current
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
@@ -744,6 +768,16 @@ function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag)"{
 
   call vimfiler#force_redraw_screen()
   3
+endfunction"}}}
+function! s:initialize_vimfiler_file(path, lines, dict)"{{{
+  " Set current directory.
+  let b:vimfiler.current_path = a:path
+  let b:vimfiler.current_file = a:dict
+
+  " Clean up the screen.
+  % delete _
+
+  call setline(1, a:lines)
 endfunction"}}}
 
 " vim: foldmethod=marker

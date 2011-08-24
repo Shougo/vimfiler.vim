@@ -434,6 +434,9 @@ vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-08-25
+- Improved vimfiler file interface.
+
 2011-08-24
 - Improved vimfiler actions.
 - Deleted g:vimfiler_cd_command option.
