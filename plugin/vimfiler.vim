@@ -135,7 +135,7 @@ if g:vimfiler_as_default_explorer
 endif
 
 function! s:browse_check(path)
-  if a:path != '' && &filetype !=# 'vimfiler'
+  if a:path != '' && &filetype !=# 'vimfiler' && &filetype !=# 'unite'
     silent call vimfiler#create_filer(a:path, ['overwrite'])
     " call vimfiler#create_filer(a:path, ['overwrite'])
   endif
