@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Aug 2011.
+" Last Modified: 24 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -83,9 +83,6 @@ if !exists('g:vimfiler_safe_mode_by_default')
 endif
 if !exists('g:vimfiler_time_format')
   let g:vimfiler_time_format = '%y/%m/%d %H:%M'
-endif
-if !exists('g:vimfiler_cd_command')
-  let g:vimfiler_cd_command = 'lcd'
 endif
 
 " Set extensions.

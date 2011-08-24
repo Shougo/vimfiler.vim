@@ -59,7 +59,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_other_window)  :<C-u>call <SID>move_to_other_window()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)  :<C-u>call <SID>switch_vim_buffer_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call <SID>restore_vimfiler_mode()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>change_vim_current_dir()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>change_vim_current_dir(b:vimfiler.current_dir)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)  :<C-u>call <SID>toggle_safe_mode()<CR>
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>mappings_caller('execute')\<CR>"
@@ -146,70 +146,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
 endfunction"}}}
 
-" vimfiler key-mappings functions.
-function! vimfiler#mappings#open_previous_file()"{{{
-  if !exists('b:vimfiler')
-    return
-  endif
-
-  let i = 0
-  let l:bufname = fnamemodify(bufname('%'), ':p')
-  for l:file in b:vimfiler.current_files
-    if l:file.vimfiler__filename == l:bufname
-      " Get next file.
-      let i -= 1
-      while i >= 0
-        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].vimfiler__filename)
-        if l:filetype == '     ' || l:filetype == '[TXT]'
-          let l:vimfiler_save = b:vimfiler
-          edit `=b:vimfiler.current_files[i].vimfiler__filename`
-          let b:vimfiler = l:vimfiler_save
-          return
-        endif
-
-        let i -= 1
-      endwhile
-
-      break
-    endif
-
-    let i += 1
-  endfor
-endfunction"}}}
-function! vimfiler#mappings#open_next_file()"{{{
-  if !exists('b:vimfiler')
-    return
-  endif
-
-  let i = 0
-  let max = len(b:vimfiler.current_files)
-  let l:bufname = fnamemodify(bufname('%'), ':p')
-  for l:file in b:vimfiler.current_files
-    if l:file.vimfiler__filename == l:bufname
-      " Get next file.
-      let i += 1
-      while i < max
-        let l:filetype = vimfiler#get_filetype(b:vimfiler.current_files[i].vimfiler__filename)
-        if l:filetype == '     ' || l:filetype == '[TXT]'
-          let l:vimfiler_save = b:vimfiler
-          edit `=b:vimfiler.current_files[i].vimfiler__filename`
-          let b:vimfiler = l:vimfiler_save
-          return
-        endif
-
-        let i += 1
-      endwhile
-
-      break
-    endif
-
-    let i += 1
-  endfor
-endfunction"}}}
-
-
 function! vimfiler#mappings#cd(dir, ...)"{{{
-  let l:save_history = a:0 ? a:1 : 1
+  let l:save_history = get(a:000, 0, 1)
   let l:dir = vimfiler#util#substitute_path_separator(a:dir)
 
   if l:dir == '..'
@@ -280,12 +218,16 @@ function! s:SID_PREFIX()
 endfunction
 
 function! s:mappings_caller(funcname)"{{{
-  let l:current_dir = getcwd()
-  execute g:vimfiler_cd_command '`=b:vimfiler.current_dir`'
+  if b:vimfiler.source ==# 'file'
+    let l:current_dir = getcwd()
+    lcd `=b:vimfiler.current_dir`
+  endif
 
   call call(s:SID_PREFIX().a:funcname, [])
 
-  execute g:vimfiler_cd_command '`=l:current_dir`'
+  if b:vimfiler.source ==# 'file'
+    lcd `=l:current_dir`
+  endif
 endfunction"}}}
 
 function! s:toggle_mark_current_line()"{{{
@@ -514,7 +456,7 @@ function! s:execute_shell_command()"{{{
 
   " Execute shell command.
   call unite#mappings#do_action('vimfiler__shellcmd', l:dummy_files)
-  call s:clear_mark_all_lines()
+  silent call s:clear_mark_all_lines()
 endfunction"}}}
 function! s:exit()"{{{
   let l:vimfiler_buf = bufnr('%')
@@ -752,9 +694,9 @@ function! s:execute_external_filer()"{{{
   " Execute current directory.
   call unite#mappings#do_action('vimfiler__execute', l:dummy_files)
 endfunction"}}}
-function! s:change_vim_current_dir()"{{{
+function! s:change_vim_current_dir(directory)"{{{
   let l:dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', b:vimfiler.current_dir]], {
+        \ [['file', a:directory]], {
         \ 'vimfiler__is_dummy' : 1,
         \ })
   if empty(l:dummy_files)

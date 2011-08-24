@@ -146,12 +146,6 @@ g:vimfiler_time_format			*g:vimfiler_time_format*
 		
 		Default value is "%y/%m/%d %H:%M".
 
-g:vimfiler_cd_command			*g:vimfiler_cd_command*
-		This variable controls cd command when vimshell execute cd.
-		This command must interpret |`=|.
-		
-		Default value is "lcd".
-
 g:vimfiler_external_delete_command		*g:vimfiler_external_delete_command*
 		This variable controls vimfiler use delete command.
 		
@@ -442,6 +436,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-08-24
 - Improved vimfiler actions.
+- Deleted g:vimfiler_cd_command option.
 
 2011-08-23
 - Improved switch vimfiler behavior.
