@@ -437,6 +437,8 @@ CHANGELOG					*vimfiler-changelog*
 2011-08-24
 - Improved vimfiler actions.
 - Deleted g:vimfiler_cd_command option.
+- Deleted mappings_caller().
+- Improved exrename.
 
 2011-08-23
 - Improved switch vimfiler behavior.

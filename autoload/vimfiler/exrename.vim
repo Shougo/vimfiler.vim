@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Aug 2011.
+" Last Modified: 24 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,6 +57,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
 
   " Print files.
   let b:exrename.current_files = []
+  let b:exrename.current_filenames = []
   for l:file in a:files
     let l:filename = l:file.vimfiler__filename
     if l:file.vimfiler__is_directory
@@ -66,7 +67,8 @@ function! vimfiler#exrename#create_buffer(files)"{{{
     execute 'syn match ExrenameOriginal'
           \ string(printf('^\%%%dl%s$', line('$'), l:filename))
     call append('$', l:filename)
-    call add(b:exrename.current_files, l:filename)
+    call add(b:exrename.current_files, l:file)
+    call add(b:exrename.current_filenames, l:filename)
   endfor
 
   1delete
@@ -84,18 +86,19 @@ function! s:exit()"{{{
   execute 'bdelete!' l:exrename_buf
 endfunction"}}}
 function! s:do_rename()"{{{
-  if line('$') != len(b:exrename.current_files)
+  if line('$') != len(b:exrename.current_filenames)
     echohl Error | echo 'Invalid rename buffer!' | echohl None
     return
   endif
 
   " Rename files.
   let l:linenr = 1
-  let l:files = b:exrename.current_files
   while l:linenr <= line('$')
-    let l:filename = l:files[l:linenr - 1]
+    let l:filename = b:exrename.current_filenames[l:linenr - 1]
     if l:filename !=# getline(l:linenr)
-      call rename(l:filename, getline(l:linenr))
+      let l:file = b:exrename.current_files[l:linenr - 1]
+      call unite#mappings#do_action('vimfiler__rename', [l:file],
+            \ {'action__filename' : getline(l:linenr)})
     endif
 
     let l:linenr += 1
@@ -108,7 +111,7 @@ function! s:do_rename()"{{{
 endfunction"}}}
 
 function! s:check_lines()"{{{
-  if line('$') != len(b:exrename.current_files)
+  if line('$') != len(b:exrename.current_filenames)
     echohl Error | echo 'Invalid rename buffer!' | echohl None
     return
   endif
