@@ -434,6 +434,9 @@ vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-08-26
+- Implemented event handler.
+
 2011-08-25
 - Improved vimfiler file interface.
 - Fixed browse check.
@@ -671,7 +674,7 @@ ChangeLog 2.0
 - Improved move_to_drive().
 - Improved mask.
 - Fixed visible doted file bug.
-- Implemanted <Plug>(vimfiler_jump_to_history_directory).
+- Implemented <Plug>(vimfiler_jump_to_history_directory).
 - Revised documentation.
 
 2010-07-28
@@ -792,7 +795,7 @@ ChangeLog 1.50
 * popup shell clears markes.
 * Optimized display.
 * Added <Plug>(vimfiler_print_filename) keymapping.
-* Implemanted delete and force delete.
+* Implemented delete and force delete.
 * Implemented paste.
 * Implemented set mask patterns.
 

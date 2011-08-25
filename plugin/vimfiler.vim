@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Aug 2011.
+" Last Modified: 26 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -129,21 +129,12 @@ command! VimFilerDetectDrives call vimfiler#detect_drives()
 if g:vimfiler_as_default_explorer
   augroup vimfiler-FileExplorer
     autocmd!
-    autocmd VimEnter * silent! autocmd! FileExplorer
     autocmd BufEnter * call s:browse_check(expand('<amatch>'))
     autocmd BufReadCmd ??*:{*,*/*}  call vimfiler#create_filer(bufname('%'), ['overwrite'])
-    " autocmd BufReadCmd ??*:{*,*/*}  call vimfiler#_event_handler('BufReadCmd')
-    " autocmd BufWriteCmd ??*:{*,*/*}  call vimfiler#_event_handler('BufWriteCmd')
-    " autocmd FileAppendCmd ??*:{*,*/*}  call vimfiler#_event_handler('FileAppendCmd')
-    " autocmd FileReadCmd ??*:{*,*/*}  call vimfiler#_event_handler('FileReadCmd')
-    " autocmd FileWriteCmd ??*:{*,*/*}  call vimfiler#_event_handler('FileWriteCmd')
-    " autocmd SourceCmd ??*:{*,*/*}  call vimfiler#_event_handler('SourceCmd')
+    autocmd BufWriteCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('BufWriteCmd')
+    autocmd FileAppendCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('FileAppendCmd')
+    autocmd FileReadCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('FileReadCmd')
   augroup END
-
-  " Disable netrw.
-  " augroup FileExplorer
-  "   autocmd!
-  " augroup END
 endif
 
 function! s:browse_check(path)

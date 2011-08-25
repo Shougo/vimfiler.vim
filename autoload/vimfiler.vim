@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Aug 2011.
+" Last Modified: 26 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -130,15 +130,7 @@ function! vimfiler#create_filer(path, options)"{{{
   " echomsg l:path
 
   " Check path.
-  let l:source_name = matchstr(l:path, '^[^:]*\ze:')
-  if (vimfiler#iswin() && len(l:source_name) == 1)
-        \ || l:source_name == ''
-    " Default source.
-    let l:source_name = 'file'
-    let l:source_arg = l:path
-  else
-    let l:source_arg = l:path[len(l:source_name)+1 :]
-  endif
+  let [l:source_name, l:source_arg] = vimfiler#parse_path(l:path)
 
   " echomsg string([l:source_name, l:source_arg])
   silent let l:ret = unite#vimfiler_check_filetype([[l:source_name, l:source_arg]])
@@ -600,6 +592,19 @@ function! vimfiler#restore_variables(variables_save)"{{{
     execute 'let' key '= value'
   endfor
 endfunction"}}}
+function! vimfiler#parse_path(path)"{{{
+  let l:source_name = matchstr(a:path, '^[^:]*\ze:')
+  if (vimfiler#iswin() && len(l:source_name) == 1)
+        \ || l:source_name == ''
+    " Default source.
+    let l:source_name = 'file'
+    let l:source_arg = a:path
+  else
+    let l:source_arg = a:path[len(l:source_name)+1 :]
+  endif
+
+  return [l:source_name, l:source_arg]
+endfunction"}}}
 "}}}
 
 " Detect drives.
@@ -775,13 +780,16 @@ function! s:initialize_vimfiler_file(path, lines, dict)"{{{
   " Set current directory.
   let b:vimfiler.current_path = a:path
   let b:vimfiler.current_file = a:dict
-  if &modifiable
-    " Clean up the screen.
-    % delete _
 
-    call setline(1, a:lines)
-    setlocal nomodified
-  endif
+  " Clean up the screen.
+  % delete _
+
+  call setline(1, a:lines)
+  setlocal nomodified
+
+  filetype detect
+  setlocal buftype=acwrite
+  setlocal noswapfile
 endfunction"}}}
 
 " vim: foldmethod=marker
