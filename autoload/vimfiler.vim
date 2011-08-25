@@ -52,6 +52,8 @@ endif"}}}
 let s:last_vimfiler_bufnr = -1
 let s:last_system_is_vimproc = -1
 
+let s:checked_buffer_dict = {}
+
 " Global options definition."{{{
 if !exists('g:vimfiler_execute_file_list')
   let g:vimfiler_execute_file_list = {}
@@ -108,28 +110,6 @@ endfunction"}}}
 
 " vimfiler plugin utility functions."{{{
 function! vimfiler#create_filer(path, options)"{{{
-  let l:path = (a:path == '') ?
-        \ vimfiler#util#substitute_path_separator(getcwd()) : a:path
-  " echomsg l:path
-
-  " Check path.
-  let l:source_name = matchstr(l:path, '^[^:]*\ze:')
-  if (vimfiler#iswin() && len(l:source_name) == 1)
-        \ || l:source_name == ''
-    " Default source.
-    let l:source_name = 'file'
-    let l:source_arg = l:path
-  else
-    let l:source_arg = l:path[len(l:source_name)+1 :]
-  endif
-  " echomsg string([l:source_name, l:source_arg])
-  let l:ret = unite#vimfiler_check_filetype([[l:source_name, l:source_arg]])
-  if empty(l:ret)
-    " File not found.
-    return
-  endif
-  let [l:type, l:lines, l:dict] = l:ret
-
   " Check options.
   let l:split_flag = 0
   let l:overwrite_flag = 0
@@ -146,6 +126,38 @@ function! vimfiler#create_filer(path, options)"{{{
       let l:double_flag = 1
     endif
   endfor
+
+  if l:overwrite_flag
+    if has_key(s:checked_buffer_dict, bufnr('%'))
+      " Already checked.
+      return
+    endif
+
+    let s:checked_buffer_dict[bufnr('%')] = 1
+  endif
+
+  let l:path = (a:path == '') ?
+        \ vimfiler#util#substitute_path_separator(getcwd()) : a:path
+  " echomsg l:path
+
+  " Check path.
+  let l:source_name = matchstr(l:path, '^[^:]*\ze:')
+  if (vimfiler#iswin() && len(l:source_name) == 1)
+        \ || l:source_name == ''
+    " Default source.
+    let l:source_name = 'file'
+    let l:source_arg = l:path
+  else
+    let l:source_arg = l:path[len(l:source_name)+1 :]
+  endif
+
+  " echomsg string([l:source_name, l:source_arg])
+  let l:ret = unite#vimfiler_check_filetype([[l:source_name, l:source_arg]])
+  if empty(l:ret)
+    " File not found.
+    return
+  endif
+  let [l:type, l:lines, l:dict] = l:ret
 
   if !l:overwrite_flag
     " Create new buffer.
@@ -778,6 +790,7 @@ function! s:initialize_vimfiler_file(path, lines, dict)"{{{
   % delete _
 
   call setline(1, a:lines)
+  setlocal nomodified
 endfunction"}}}
 
 " vim: foldmethod=marker

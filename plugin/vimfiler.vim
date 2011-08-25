@@ -132,10 +132,15 @@ if g:vimfiler_as_default_explorer
     autocmd VimEnter * silent! autocmd! FileExplorer
     autocmd BufEnter * call s:browse_check(expand('<amatch>'))
   augroup END
+
+  " Disable netrw.
+  " augroup FileExplorer
+  "   autocmd!
+  " augroup END
 endif
 
 function! s:browse_check(path)
-  if a:path != '' && &filetype !=# 'vimfiler' && &filetype !=# 'unite'
+  if a:path != '' && &filetype != 'vimfiler' && &filetype !=# 'unite'
     silent call vimfiler#create_filer(a:path, ['overwrite'])
     " call vimfiler#create_filer(a:path, ['overwrite'])
   endif
