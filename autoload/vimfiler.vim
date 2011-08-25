@@ -178,9 +178,9 @@ function! vimfiler#create_filer(path, options)"{{{
   let b:vimfiler = {}
   let b:vimfiler.source = l:source_name
   if l:type ==# 'directory'
-    call s:initialize_vimfiler_directory(l:path, l:simple_flag, l:double_flag)
+    call s:initialize_vimfiler_directory(l:source_arg, l:simple_flag, l:double_flag)
   elseif l:type ==# 'file'
-    call s:initialize_vimfiler_file(l:path, l:lines, l:dict)
+    call s:initialize_vimfiler_file(l:source_arg, l:lines, l:dict)
   else
     call vimfiler#print_error('Unknown filetype.')
   endif
@@ -228,7 +228,7 @@ function! vimfiler#get_all_files()"{{{
         \ 'vimfiler__is_dummy' : 0,
         \ }
   let l:current_files = unite#get_vimfiler_candidates(
-        \ [['file', b:vimfiler.current_dir]], l:context)
+        \ [[b:vimfiler.source, b:vimfiler.current_dir]], l:context)
 
   let l:dirs = filter(copy(l:current_files), 'v:val.vimfiler__is_directory')
   let l:files = filter(copy(l:current_files), '!v:val.vimfiler__is_directory')
@@ -764,7 +764,6 @@ function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag)"{
   let b:vimfiler.sort_type = g:vimfiler_sort_type
   let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
   let b:vimfiler.another_vimfiler_bufnr = -1
-  let b:vimfiler.source = 'file'
 
   call vimfiler#default_settings()
   setfiletype vimfiler

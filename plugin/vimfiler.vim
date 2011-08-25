@@ -131,6 +131,13 @@ if g:vimfiler_as_default_explorer
     autocmd!
     autocmd VimEnter * silent! autocmd! FileExplorer
     autocmd BufEnter * call s:browse_check(expand('<amatch>'))
+    autocmd BufReadCmd ??*:{*,*/*}  call vimfiler#create_filer(bufname('%'), ['overwrite'])
+    " autocmd BufReadCmd ??*:{*,*/*}  call vimfiler#_event_handler('BufReadCmd')
+    " autocmd BufWriteCmd ??*:{*,*/*}  call vimfiler#_event_handler('BufWriteCmd')
+    " autocmd FileAppendCmd ??*:{*,*/*}  call vimfiler#_event_handler('FileAppendCmd')
+    " autocmd FileReadCmd ??*:{*,*/*}  call vimfiler#_event_handler('FileReadCmd')
+    " autocmd FileWriteCmd ??*:{*,*/*}  call vimfiler#_event_handler('FileWriteCmd')
+    " autocmd SourceCmd ??*:{*,*/*}  call vimfiler#_event_handler('SourceCmd')
   augroup END
 
   " Disable netrw.
@@ -140,8 +147,7 @@ if g:vimfiler_as_default_explorer
 endif
 
 function! s:browse_check(path)
-  if (isdirectory(a:path) || a:path =~ '^[^:]*:\f\+')
-        \ && &filetype != 'vimfiler'
+  if isdirectory(a:path) && &filetype != 'vimfiler'
     " echomsg a:path
     silent call vimfiler#create_filer(a:path, ['overwrite'])
     " call vimfiler#create_filer(a:path, ['overwrite'])
