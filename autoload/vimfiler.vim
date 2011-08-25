@@ -141,7 +141,7 @@ function! vimfiler#create_filer(path, options)"{{{
   endif
 
   " echomsg string([l:source_name, l:source_arg])
-  let l:ret = unite#vimfiler_check_filetype([[l:source_name, l:source_arg]])
+  silent let l:ret = unite#vimfiler_check_filetype([[l:source_name, l:source_arg]])
   if empty(l:ret)
     " File not found.
     return
