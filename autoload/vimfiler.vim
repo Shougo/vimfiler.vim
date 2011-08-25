@@ -785,12 +785,13 @@ function! s:initialize_vimfiler_file(path, lines, dict)"{{{
   " Set current directory.
   let b:vimfiler.current_path = a:path
   let b:vimfiler.current_file = a:dict
+  if &modifiable
+    " Clean up the screen.
+    % delete _
 
-  " Clean up the screen.
-  % delete _
-
-  call setline(1, a:lines)
-  setlocal nomodified
+    call setline(1, a:lines)
+    setlocal nomodified
+  endif
 endfunction"}}}
 
 " vim: foldmethod=marker
