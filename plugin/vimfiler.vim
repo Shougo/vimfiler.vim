@@ -149,8 +149,7 @@ endif
 function! s:browse_check(path)
   if isdirectory(a:path) && &filetype != 'vimfiler'
     " echomsg a:path
-    silent call vimfiler#create_filer(a:path, ['overwrite'])
-    " call vimfiler#create_filer(a:path, ['overwrite'])
+    call vimfiler#create_filer(a:path, ['overwrite'])
   endif
 endfunction
 

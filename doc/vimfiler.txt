@@ -437,6 +437,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-08-25
 - Improved vimfiler file interface.
 - Fixed browse check.
+- Improved behavior.
 
 2011-08-24
 - Improved vimfiler actions.

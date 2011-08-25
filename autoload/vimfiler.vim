@@ -52,8 +52,6 @@ endif"}}}
 let s:last_vimfiler_bufnr = -1
 let s:last_system_is_vimproc = -1
 
-let s:checked_buffer_dict = {}
-
 " Global options definition."{{{
 if !exists('g:vimfiler_execute_file_list')
   let g:vimfiler_execute_file_list = {}
@@ -126,15 +124,6 @@ function! vimfiler#create_filer(path, options)"{{{
       let l:double_flag = 1
     endif
   endfor
-
-  if l:overwrite_flag
-    if has_key(s:checked_buffer_dict, bufnr('%'))
-      " Already checked.
-      return
-    endif
-
-    let s:checked_buffer_dict[bufnr('%')] = 1
-  endif
 
   let l:path = (a:path == '') ?
         \ vimfiler#util#substitute_path_separator(getcwd()) : a:path
@@ -309,10 +298,10 @@ endfunction"}}}
 function! vimfiler#redraw_prompt()"{{{
   let l:modifiable_save = &l:modifiable
   setlocal modifiable
-  call setline(1, printf('%s%s%s[%s%s]',
+  call setline(1, printf('%s%s%s:%s[%s%s]',
         \ (b:vimfiler.is_safe_mode ? '' : b:vimfiler.is_simple ? '*u* ' : '*unsafe* '),
         \ (b:vimfiler.is_simple ? 'CD: ' : 'Current directory: '),
-        \ b:vimfiler.current_dir ,
+        \ b:vimfiler.source, b:vimfiler.current_dir,
         \ (b:vimfiler.is_visible_dot_files ? '.:' : ''),
         \ b:vimfiler.current_mask))
   let &l:modifiable = l:modifiable_save
@@ -700,6 +689,8 @@ function! s:event_bufwin_enter()"{{{
         \ && s:last_vimfiler_bufnr != bufnr('%')
     let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
   endif
+
+  call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
   let s:last_vimfiler_bufnr = bufnr('%')
