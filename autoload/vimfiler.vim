@@ -113,14 +113,11 @@ endfunction"}}}
 function! vimfiler#create_filer(path, options)"{{{
   " Check options.
   let l:split_flag = 0
-  let l:overwrite_flag = 0
   let l:simple_flag = 0
   let l:double_flag = 0
   for l:option in a:options
     if l:option ==# 'split'
       let l:split_flag = 1
-    elseif l:option ==# 'overwrite'
-      let l:overwrite_flag = 1
     elseif l:option ==# 'simple'
       let l:simple_flag = 1
     elseif l:option ==# 'double'
@@ -128,46 +125,29 @@ function! vimfiler#create_filer(path, options)"{{{
     endif
   endfor
 
+  " Create new buffer.
+  let l:bufname = '[1]vimfiler'
+  let l:cnt = 2
+  while buflisted(l:bufname)
+    let l:bufname = printf('[%d]vimfiler', l:cnt)
+    let l:cnt += 1
+  endwhile
+
+  if l:split_flag
+    vsplit `=l:bufname`
+  else
+    edit `=l:bufname`
+  endif
+
   let l:path = (a:path == '') ?
         \ vimfiler#util#substitute_path_separator(getcwd()) : a:path
   " echomsg l:path
 
-  " Check path.
-  let [l:source_name, l:source_arg] = vimfiler#parse_path(l:path)
-
-  " echomsg string([l:source_name, l:source_arg])
-  silent let l:ret = unite#vimfiler_check_filetype([[l:source_name, l:source_arg]])
-  if empty(l:ret)
-    " File not found.
-    return
-  endif
-  let [l:type, l:lines, l:dict] = l:ret
-
-  if !l:overwrite_flag
-    " Create new buffer.
-    let l:bufname = '[1]vimfiler'
-    let l:cnt = 2
-    while buflisted(l:bufname)
-      let l:bufname = printf('[%d]vimfiler', l:cnt)
-      let l:cnt += 1
-    endwhile
-
-    if l:split_flag
-      vsplit `=l:bufname`
-    else
-      edit `=l:bufname`
-    endif
-  endif
-
-  let b:vimfiler = {}
-  let b:vimfiler.source = l:source_name
-  if l:type ==# 'directory'
-    call s:initialize_vimfiler_directory(l:source_arg, l:simple_flag, l:double_flag)
-  elseif l:type ==# 'file'
-    call s:initialize_vimfiler_file(l:source_arg, l:lines, l:dict)
-  else
-    call vimfiler#print_error('Unknown filetype.')
-  endif
+  call vimfiler#handler#_event_handler('BufReadCmd', {
+        \ 'path' : l:path,
+        \ 'simple_flag' : l:simple_flag,
+        \ 'double_flag' : l:double_flag,
+        \ })
 endfunction"}}}
 function! vimfiler#switch_filer(directory, options)"{{{
   if a:directory != '' && !isdirectory(a:directory)
@@ -747,55 +727,6 @@ function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
   endif
 
   call vimfiler#force_redraw_screen()
-endfunction"}}}
-function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag)"{{{
-  " Set current directory.
-  let l:current = vimfiler#util#substitute_path_separator(a:directory)
-  let b:vimfiler.current_dir = l:current
-  if b:vimfiler.current_dir !~ '/$'
-    let b:vimfiler.current_dir .= '/'
-  endif
-
-  let b:vimfiler.directories_history = []
-  let b:vimfiler.is_visible_dot_files = 0
-  let b:vimfiler.is_simple = a:simple_flag
-  let b:vimfiler.directory_cursor_pos = {}
-  " Set mask.
-  let b:vimfiler.current_mask = ''
-  let b:vimfiler.sort_type = g:vimfiler_sort_type
-  let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
-  let b:vimfiler.another_vimfiler_bufnr = -1
-  let b:vimfiler.winwidth = winwidth(0)
-
-  call vimfiler#default_settings()
-  setfiletype vimfiler
-
-  if a:double_flag
-    " Create another vimfiler.
-    call vimfiler#create_filer(b:vimfiler.current_dir,
-          \ b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
-    let s:last_vimfiler_bufnr = bufnr('%')
-    let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
-    wincmd w
-  endif
-
-  call vimfiler#force_redraw_screen()
-  3
-endfunction"}}}
-function! s:initialize_vimfiler_file(path, lines, dict)"{{{
-  " Set current directory.
-  let b:vimfiler.current_path = a:path
-  let b:vimfiler.current_file = a:dict
-
-  " Clean up the screen.
-  % delete _
-
-  call setline(1, a:lines)
-  setlocal nomodified
-
-  filetype detect
-  setlocal buftype=acwrite
-  setlocal noswapfile
 endfunction"}}}
 
 " vim: foldmethod=marker

@@ -437,6 +437,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-08-26
 - Implemented event handler.
 - Improved redraw screen.
+- Improved event handler.
 
 2011-08-25
 - Improved vimfiler file interface.

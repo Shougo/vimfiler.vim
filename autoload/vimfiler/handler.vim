@@ -25,28 +25,54 @@
 "=============================================================================
 
 
-function! vimfiler#handler#_event_handler(event_name)  "{{{1
-  let l:path = expand('<afile>')
+function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
+  let l:args = get(a:000, 0, {})
+  let l:path = get(l:args, 'path', expand('<afile>'))
   let [l:source_name, l:source_arg] = vimfiler#parse_path(l:path)
 
-  return s:on_{a:event_name}(l:source_name, l:source_arg)
+  return s:on_{a:event_name}(l:source_name, l:source_arg, l:args)
 endfunction
 
 " Event Handlers.
 
-function! s:on_BufWriteCmd(source_name, source_arg)  "{{{1
+function! s:on_BufReadCmd(source_name, source_arg, args)  "{{{1
+  " Check path.
+
+  silent let l:ret = unite#vimfiler_check_filetype([[a:source_name, a:source_arg]])
+  if empty(l:ret)
+    " File not found.
+    return
+  endif
+  let [l:type, l:lines, l:dict] = l:ret
+
+  let l:simple_flag = get(a:args, 'simple_flag', 0)
+  let l:double_flag = get(a:args, 'double_flag', 0)
+
+  let b:vimfiler = {}
+  let b:vimfiler.source = a:source_name
+  if l:type ==# 'directory'
+    call s:initialize_vimfiler_directory(a:source_arg, l:simple_flag, l:double_flag)
+  elseif l:type ==# 'file'
+    call s:initialize_vimfiler_file(a:source_arg, l:lines, l:dict)
+  else
+    call vimfiler#print_error('Unknown filetype.')
+  endif
+endfunction
+
+
+function! s:on_BufWriteCmd(source_name, source_arg, args)  "{{{1
   " BufWriteCmd is published by :write or other commands with 1,$ range.
   return s:write(a:source_name, a:source_arg, 1, line('$'), 'BufWriteCmd')
 endfunction
 
 
-function! s:on_FileAppendCmd(source_name, source_arg)  "{{{1
+function! s:on_FileAppendCmd(source_name, source_arg, args)  "{{{1
   " FileAppendCmd is published by :write or other commands with >>.
   return s:write(a:source_name, a:source_arg, line("'["), line("']"), 'FileAppendCmd')
 endfunction
 
 
-function! s:on_FileWriteCmd(source_name, source_arg)  "{{{1
+function! s:on_FileWriteCmd(source_name, source_arg, args)  "{{{1
   " FileWriteCmd is published by :write or other commands with partial range
   " such as 1,2 where 2 < line('$').
   return s:write(a:source_name, a:source_arg, line("'["), line("']"), 'FileWriteCmd')
@@ -83,4 +109,55 @@ function! s:write(source_name, source_arg, line1, line2, event_name)  "{{{1
   endtry
 endfunction
 
+function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag) "{{{1
+  " Set current directory.
+  let l:current = vimfiler#util#substitute_path_separator(a:directory)
+  let b:vimfiler.current_dir = l:current
+  if b:vimfiler.current_dir !~ '/$'
+    let b:vimfiler.current_dir .= '/'
+  endif
+
+  let b:vimfiler.directories_history = []
+  let b:vimfiler.is_visible_dot_files = 0
+  let b:vimfiler.is_simple = a:simple_flag
+  let b:vimfiler.directory_cursor_pos = {}
+  " Set mask.
+  let b:vimfiler.current_mask = ''
+  let b:vimfiler.sort_type = g:vimfiler_sort_type
+  let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
+  let b:vimfiler.another_vimfiler_bufnr = -1
+  let b:vimfiler.winwidth = winwidth(0)
+
+  call vimfiler#default_settings()
+  setfiletype vimfiler
+
+  if a:double_flag
+    " Create another vimfiler.
+    call vimfiler#create_filer(b:vimfiler.current_dir,
+          \ b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+    let s:last_vimfiler_bufnr = bufnr('%')
+    let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
+    wincmd w
+  endif
+
+  call vimfiler#force_redraw_screen()
+  3
+endfunction"}}}
+function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
+  " Set current directory.
+  let b:vimfiler.current_path = a:path
+  let b:vimfiler.current_file = a:dict
+
+  " Clean up the screen.
+  % delete _
+
+  call setline(1, a:lines)
+  setlocal nomodified
+
+  filetype detect
+  setlocal buftype=acwrite
+  setlocal noswapfile
+endfunction"}}}
+
 " vim: foldmethod=marker
+
