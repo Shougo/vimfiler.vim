@@ -118,12 +118,18 @@ nnoremap <silent> <Plug>(vimfiler_open_previous_file)     :<C-u>call vimfiler#ma
 nnoremap <silent> <Plug>(vimfiler_open_next_file)     :<C-u>call vimfiler#mappings#open_next_file()<CR>
 "}}}
 
-command! -nargs=? -complete=dir VimFiler call vimfiler#switch_filer(<q-args>, [])
-command! -nargs=? -complete=dir VimFilerDouble call vimfiler#create_filer(<q-args>, ['double'])
-command! -nargs=? -complete=dir VimFilerCreate call vimfiler#create_filer(<q-args>, [])
-command! -nargs=? -complete=dir VimFilerSimple call vimfiler#create_filer(<q-args>, ['simple', 'split'])
-command! -nargs=? -complete=dir VimFilerSplit call vimfiler#create_filer(<q-args>, ['split'])
-command! -nargs=? -complete=dir VimFilerTab tabnew | call vimfiler#create_filer(<q-args>, [])
+command! -nargs=? -complete=customlist,vimfiler#complete VimFiler
+      \ call vimfiler#switch_filer(<q-args>, [])
+command! -nargs=? -complete=customlist,vimfiler#complete VimFilerDouble
+      \ call vimfiler#create_filer(<q-args>, ['double'])
+command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCreate
+      \ call vimfiler#create_filer(<q-args>, [])
+command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSimple
+      \ call vimfiler#create_filer(<q-args>, ['simple', 'split'])
+command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSplit
+      \ call vimfiler#create_filer(<q-args>, ['split'])
+command! -nargs=? -complete=customlist,vimfiler#complete VimFilerTab
+      \ tabnew | call vimfiler#create_filer(<q-args>, [])
 command! VimFilerDetectDrives call vimfiler#detect_drives()
 
 if g:vimfiler_as_default_explorer
@@ -135,6 +141,16 @@ if g:vimfiler_as_default_explorer
     autocmd FileAppendCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('FileAppendCmd')
     autocmd FileReadCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('FileReadCmd')
   augroup END
+
+  " Define wrapper commands.
+  command -bang -bar -complete=customlist,vimfiler#complete -nargs=*
+        \ Edit  edit<bang> <args>
+  command -bang -bar -complete=customlist,vimfiler#complete -nargs=*
+        \ Read  read<bang> <args>
+  command -bang -bar -complete=customlist,vimfiler#complete -nargs=1
+        \ Source  source<bang> <args>
+  command -bang -bar -complete=customlist,vimfiler#complete -nargs=* -range=%
+        \ Write  <line1>,<line2>write<bang> <args>
 
   " Disable netrw.
   augroup FileExplorer

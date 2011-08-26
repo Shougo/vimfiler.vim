@@ -149,12 +149,7 @@ function! vimfiler#create_filer(path, options)"{{{
         \ 'double_flag' : l:double_flag,
         \ })
 endfunction"}}}
-function! vimfiler#switch_filer(directory, options)"{{{
-  if a:directory != '' && !isdirectory(a:directory)
-    call vimfiler#print_error('Invalid directory name: ' . a:directory)
-    return
-  endif
-
+function! vimfiler#switch_filer(path, options)"{{{
   let l:split_flag = 0
   for l:option in a:options
     if l:option ==# 'split'
@@ -166,7 +161,7 @@ function! vimfiler#switch_filer(directory, options)"{{{
   if buflisted(s:last_vimfiler_bufnr)
         \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
         \ && (!exists('t:unite_buffer_dictionary') || has_key(t:unite_buffer_dictionary, s:last_vimfiler_bufnr))
-    call s:switch_vimfiler(s:last_vimfiler_bufnr, l:split_flag, a:directory)
+    call s:switch_vimfiler(s:last_vimfiler_bufnr, l:split_flag, a:path)
     return
   endif
 
@@ -175,7 +170,7 @@ function! vimfiler#switch_filer(directory, options)"{{{
   while l:cnt <= bufnr('$')
     if getbufvar(l:cnt, '&filetype') ==# 'vimfiler'
         \ && (!exists('t:unite_buffer_dictionary') || has_key(t:unite_buffer_dictionary, l:cnt))
-      call s:switch_vimfiler(l:cnt, l:split_flag, a:directory)
+      call s:switch_vimfiler(l:cnt, l:split_flag, a:path)
       return
     endif
 
@@ -183,7 +178,7 @@ function! vimfiler#switch_filer(directory, options)"{{{
   endwhile
 
   " Create window.
-  call vimfiler#create_filer(a:directory, a:options)
+  call vimfiler#create_filer(a:path, a:options)
 endfunction"}}}
 function! vimfiler#get_all_files()"{{{
   " Save current files.
@@ -665,6 +660,28 @@ function! s:compare_name(i1, i2)"{{{
 endfunction"}}}
 function! s:compare_time(i1, i2)"{{{
   return a:i1.vimfiler__filetime > a:i2.vimfiler__filetime ? 1 : a:i1.vimfiler__filetime == a:i2.vimfiler__filetime ? 0 : -1
+endfunction"}}}
+
+" Complete.
+function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
+  let [l:source_name, l:source_arg] = vimfiler#parse_path(a:arglead)
+
+  let _ = []
+
+  " Scheme args completion.
+  let _ += unite#vimfiler_complete([[l:source_name, l:source_arg]],
+        \ l:source_arg, a:cmdline, a:cursorpos)
+
+  if a:arglead !~ ':'
+    " Scheme name completion.
+    let _ += map(filter(unite#get_vimfiler_source_names(),
+          \ 'stridx(v:val, a:arglead) == 0'), 'v:val.":"')
+  else
+    " Add "{source-name}:".
+    let _  = map(_, 'l:source_name.":".v:val')
+  endif
+
+  return sort(_)
 endfunction"}}}
 
 " Event functions.
