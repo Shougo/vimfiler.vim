@@ -620,7 +620,7 @@ function! s:grep()"{{{
     return
   endif
 
-  call unite#mappings#do_action('grep', unite#get_marked_candidates())
+  call unite#mappings#do_action('grep', l:marked_files)
 endfunction"}}}
 function! s:select_sort_type()"{{{
   call unite#start([['vimfiler/sort']])
