@@ -439,6 +439,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved redraw screen.
 - Improved event handler.
 - Implemented completion interface.
+- Parse cd path.
 
 2011-08-25
 - Improved vimfiler file interface.
