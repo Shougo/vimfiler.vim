@@ -81,6 +81,9 @@ function! vimfiler#default_settings()"{{{
     setlocal conceallevel=3
     setlocal concealcursor=n
   endif
+  if exists('&colorcolumn')
+    setlocal colorcolumn=
+  endif
 
   " Set autocommands.
   augroup vimfiler"{{{
@@ -252,9 +255,9 @@ function! vimfiler#redraw_screen()"{{{
 
   " Print files.
   let l:is_simple = b:vimfiler.is_simple ||
-        \ winwidth(winnr()) < g:vimfiler_min_filename_width * 2
+        \ winwidth(0) < g:vimfiler_min_filename_width * 2
   let l:max_len = l:is_simple ?
-        \ g:vimfiler_min_filename_width : (winwidth(winnr()) - g:vimfiler_min_filename_width)
+        \ g:vimfiler_min_filename_width : (winwidth(0) - g:vimfiler_min_filename_width)
   if l:max_len > g:vimfiler_max_filename_width
     let l:max_len = g:vimfiler_max_filename_width
   endif
@@ -695,7 +698,9 @@ function! s:event_bufwin_enter()"{{{
     let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
   endif
 
-  call vimfiler#redraw_screen()
+  if b:vimfiler.winwidth != winwidth(0)
+    call vimfiler#redraw_screen()
+  endif
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
   let s:last_vimfiler_bufnr = bufnr('%')
@@ -760,6 +765,7 @@ function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag)"{
   let b:vimfiler.sort_type = g:vimfiler_sort_type
   let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
   let b:vimfiler.another_vimfiler_bufnr = -1
+  let b:vimfiler.winwidth = winwidth(0)
 
   call vimfiler#default_settings()
   setfiletype vimfiler

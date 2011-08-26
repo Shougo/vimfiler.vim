@@ -55,7 +55,7 @@ if !exists('g:vimfiler_min_filename_width')
   let g:vimfiler_min_filename_width = 30
 endif
 if !exists('g:vimfiler_max_filename_width')
-  let g:vimfiler_max_filename_width = 50
+  let g:vimfiler_max_filename_width = 80
 endif
 if !exists('g:vimfiler_sort_type')
   let g:vimfiler_sort_type = 'filename'
