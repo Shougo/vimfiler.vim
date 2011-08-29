@@ -126,9 +126,11 @@ function! vimfiler#create_filer(path, options)"{{{
   " Create new buffer.
   let l:bufname = '[1]vimfiler'
   let l:cnt = 1
-  while buflisted(vimfiler#util#escape_file_searching(l:bufname))
+  let l:bufnr = bufnr(vimfiler#util#escape_file_searching(l:bufname))
+  while buflisted(l:bufnr)
     let l:cnt += 1
     let l:bufname = printf('[%d]vimfiler', l:cnt)
+    let l:bufnr = bufnr(vimfiler#util#escape_file_searching(l:bufname))
   endwhile
 
   if l:split_flag
