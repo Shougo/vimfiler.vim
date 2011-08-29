@@ -437,6 +437,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-08-29
 - Fixed vimfiler buffer search.
 - Fixed preview error.
+- Fixed wrapper commands exists error.
 
 2011-08-26
 - Implemented event handler.
