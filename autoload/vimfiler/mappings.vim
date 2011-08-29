@@ -406,8 +406,7 @@ function! s:preview_file()"{{{
   endif
 
   let l:file = vimfiler#get_file(line('.'))
-  call unite#mappings#do_action(
-        \ (a:is_split ? g:vimfiler_preview_action : g:vimfiler_split_action), [l:file])
+  call unite#mappings#do_action(g:vimfiler_preview_action, [l:file])
 endfunction"}}}
 function! s:execute_shell_command()"{{{
   echo 'Marked files:'
