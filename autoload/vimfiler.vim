@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Aug 2011.
+" Last Modified: 29 Aug 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -66,7 +66,6 @@ augroup end"}}}
 function! vimfiler#default_settings()"{{{
   setlocal buftype=nofile
   setlocal noswapfile
-  setlocal bufhidden=hide
   setlocal noreadonly
   setlocal nomodifiable
   setlocal nowrap
@@ -90,7 +89,6 @@ function! vimfiler#default_settings()"{{{
     autocmd WinEnter,BufWinEnter <buffer> call s:event_bufwin_enter()
     autocmd BufWinEnter <buffer> call s:restore_vimfiler()
     autocmd WinLeave,BufWinLeave <buffer> call s:event_bufwin_leave()
-    autocmd BufReadCmd <buffer> call vimfiler#create_filer(expand('<amatch>'), ['overwrite'])
     autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
 
@@ -127,16 +125,16 @@ function! vimfiler#create_filer(path, options)"{{{
 
   " Create new buffer.
   let l:bufname = '[1]vimfiler'
-  let l:cnt = 2
-  while buflisted(l:bufname)
-    let l:bufname = printf('[%d]vimfiler', l:cnt)
+  let l:cnt = 1
+  while buflisted(vimfiler#util#escape_file_searching(l:bufname))
     let l:cnt += 1
+    let l:bufname = printf('[%d]vimfiler', l:cnt)
   endwhile
 
   if l:split_flag
-    vsplit `=l:bufname`
+    silent vsplit `=l:bufname`
   else
-    edit `=l:bufname`
+    silent edit `=l:bufname`
   endif
 
   let l:path = (a:path == '') ?

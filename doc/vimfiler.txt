@@ -434,6 +434,9 @@ vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-08-29
+- Fixed vimfiler buffer search.
+
 2011-08-26
 - Implemented event handler.
 - Improved redraw screen.
