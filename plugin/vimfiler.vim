@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2011.
+" Last Modified: 01 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -153,9 +153,9 @@ if g:vimfiler_as_default_explorer
         \ Write  <line1>,<line2>write<bang> <args>
 
   " Disable netrw.
-  augroup FileExplorer
-    autocmd!
-  augroup END
+  " augroup FileExplorer
+  "   autocmd!
+  " augroup END
 endif
 
 function! s:browse_check(path)

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2011.
+" Last Modified: 01 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -129,7 +129,7 @@ function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag) "
   let b:vimfiler.winwidth = winwidth(0)
 
   call vimfiler#default_settings()
-  setfiletype vimfiler
+  set filetype=vimfiler
 
   if a:double_flag
     " Create another vimfiler.
