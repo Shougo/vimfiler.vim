@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2011.
+" Last Modified: 03 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -157,7 +157,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   endif
 
   if l:dir == '..'
-    if b:vimfiler.current_dir =~ '^\a\+:[/\\]$\|^/$'
+    if count(split(b:vimfiler.current_dir, '\zs'), '/') <= 1
       " Ignore.
       return
     endif
@@ -216,7 +216,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   let l:save_pos[1] = 3
   call setpos('.', (has_key(b:vimfiler.directory_cursor_pos, l:dir) ?
         \ b:vimfiler.directory_cursor_pos[l:dir] : l:save_pos))
-  normal! zz
+  normal! zb
 endfunction"}}}
 
 function! s:SID_PREFIX()
