@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2011.
+" Last Modified: 03 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,7 +43,7 @@ function! s:on_BufReadCmd(source_name, source_arg, args)  "{{{1
     " File not found.
     return
   endif
-  let [l:type, l:lines, l:dict] = l:ret
+  let [l:type, l:info] = l:ret
 
   let l:simple_flag = get(a:args, 'simple_flag', 0)
   let l:double_flag = get(a:args, 'double_flag', 0)
@@ -51,9 +51,9 @@ function! s:on_BufReadCmd(source_name, source_arg, args)  "{{{1
   let b:vimfiler = {}
   let b:vimfiler.source = a:source_name
   if l:type ==# 'directory'
-    call s:initialize_vimfiler_directory(a:source_arg, l:simple_flag, l:double_flag)
+    call s:initialize_vimfiler_directory(l:info, l:simple_flag, l:double_flag)
   elseif l:type ==# 'file'
-    call s:initialize_vimfiler_file(a:source_arg, l:lines, l:dict)
+    call s:initialize_vimfiler_file(a:source_arg, l:info[0], l:info[1])
   else
     call vimfiler#print_error('Unknown filetype.')
   endif
@@ -151,6 +151,10 @@ function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
   " Clean up the screen.
   % delete _
 
+  augroup vimfiler
+    autocmd! * <buffer>
+  augroup end
+
   call setline(1, a:lines)
   setlocal nomodified
 
@@ -160,4 +164,3 @@ function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
 endfunction"}}}
 
 " vim: foldmethod=marker
-
