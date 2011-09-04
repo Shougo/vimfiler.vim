@@ -434,6 +434,9 @@ vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-09-04
+- Fixed vimfiler create.
+
 2011-09-03
 - Improved cd.
 - Improved expand directory.

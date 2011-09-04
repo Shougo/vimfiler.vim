@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2011.
+" Last Modified: 04 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,12 +125,10 @@ function! vimfiler#create_filer(path, options)"{{{
 
   " Create new buffer.
   let l:bufname = '[1]vimfiler'
-  let l:cnt = 1
-  let l:bufnr = bufnr(vimfiler#util#escape_file_searching(l:bufname))
-  while buflisted(l:bufnr)
-    let l:cnt += 1
+  let l:cnt = 2
+  while buflisted(l:bufname)
     let l:bufname = printf('[%d]vimfiler', l:cnt)
-    let l:bufnr = bufnr(vimfiler#util#escape_file_searching(l:bufname))
+    let l:cnt += 1
   endwhile
 
   if l:split_flag
