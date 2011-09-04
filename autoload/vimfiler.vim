@@ -124,12 +124,14 @@ function! vimfiler#create_filer(path, options)"{{{
   endfor
 
   " Create new buffer.
-  let l:bufname = '[1]vimfiler'
-  let l:cnt = 2
-  while buflisted(l:bufname)
-    let l:bufname = printf('[%d]vimfiler', l:cnt)
+  let l:prefix = vimfiler#iswin() ? '[vimfiler]' : '*vimfiler*'
+  let l:postfix = ' - 1'
+  let l:cnt = 1
+  while buflisted(l:prefix.l:postfix)
     let l:cnt += 1
+    let l:postfix = ' - ' . l:cnt
   endwhile
+  let l:bufname = l:prefix.l:postfix
 
   if l:split_flag
     silent vsplit `=l:bufname`

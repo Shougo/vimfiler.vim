@@ -436,6 +436,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-09-04
 - Fixed vimfiler create.
+- Improved buffer name.
 
 2011-09-03
 - Improved cd.
