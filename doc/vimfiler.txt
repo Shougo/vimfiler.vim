@@ -305,6 +305,9 @@ Normal mode mappings.
 <Plug>(vimfiler_cd)				*<Plug>(vimfiler_cd)*
 		
 
+<Plug>(vimfiler_choose_action)			*<Plug>(vimfiler_choose_action)*
+		
+
 <Plug>(vimfiler_smart_h)			*<Plug>(vimfiler_smart_h)*
 		
 
@@ -366,6 +369,7 @@ S			<Plug>(vimfiler_select_sort_type)
 <C-v>			<Plug>(vimfiler_switch_vim_buffer_mode)
 gc			<Plug>(vimfiler_cd)
 gs			<Plug>(vimfiler_toggle_safe_mode)
+a			<Plug>(vimfiler_choose_action)
 
 Visual mode mappings.
 {lhs}			{rhs}

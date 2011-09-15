@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2011.
+" Last Modified: 15 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,6 +60,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)  :<C-u>call <SID>switch_vim_buffer_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call <SID>restore_vimfiler_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>change_vim_current_dir(b:vimfiler.current_dir)<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_choose_action)  :<C-u>call <SID>choose_action()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)  :<C-u>call <SID>toggle_safe_mode()<CR>
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>execute()\<CR>"
@@ -128,6 +129,9 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> e <Plug>(vimfiler_edit_file)
   nmap <buffer> E <Plug>(vimfiler_split_edit_file)
   nmap <buffer> B <Plug>(vimfiler_edit_binary_file)
+
+  " Choose action.
+  nmap <buffer> a <Plug>(vimfiler_choose_action)
 
   nmap <buffer> ge <Plug>(vimfiler_execute_external_filer)
   nmap <buffer> t <Plug>(vimfiler_execute_external_command)
@@ -491,6 +495,14 @@ function! s:sync_with_another_vimfiler()"{{{
     " Change current vimfiler directory.
     call vimfiler#mappings#cd(vimfiler#get_another_vimfiler().current_dir)
   endif
+endfunction"}}}
+function! s:choose_action()"{{{
+  let l:marked_files = vimfiler#get_marked_files()
+  if empty(l:marked_files)
+    let l:marked_files = [ vimfiler#get_file(line('.')) ]
+  endif
+
+  call unite#mappings#_choose_action(l:marked_files)
 endfunction"}}}
 
 " File operations.
