@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Sep 2011.
+" Last Modified: 16 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,6 +159,11 @@ if g:vimfiler_as_default_explorer
 endif
 
 function! s:browse_check(path)
+  " Disable netrw.
+  augroup FileExplorer
+    autocmd!
+  augroup END
+
   if isdirectory(a:path) && &filetype != 'vimfiler'
     call vimfiler#handler#_event_handler('BufReadCmd')
   endif
