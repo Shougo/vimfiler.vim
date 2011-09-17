@@ -107,15 +107,16 @@ endif
 "}}}
 
 " Plugin keymappings"{{{
-nnoremap <silent> <Plug>(vimfiler_split_switch)  :<C-u>call vimfiler#switch_filer('', ['split'])<CR>
-nnoremap <silent> <Plug>(vimfiler_split_create)  :<C-u>call vimfiler#create_filer('', ['split'])<CR>
-nnoremap <silent> <Plug>(vimfiler_switch)  :<C-u>call vimfiler#switch_filer('', [])<CR>
-nnoremap <silent> <Plug>(vimfiler_create)  :<C-u>call vimfiler#create_filer('', [])<CR>
-nnoremap <silent> <Plug>(vimfiler_simple)  :<C-u>call vimfiler#create_filer('', ['simple', 'split'])<CR>
-
-" Edited file only.
-nnoremap <silent> <Plug>(vimfiler_open_previous_file)     :<C-u>call vimfiler#mappings#open_previous_file()<CR>
-nnoremap <silent> <Plug>(vimfiler_open_next_file)     :<C-u>call vimfiler#mappings#open_next_file()<CR>
+nnoremap <silent> <Plug>(vimfiler_split_switch)
+      \ :<C-u>call vimfiler#switch_filer('', { 'is_split' : 1 })<CR>
+nnoremap <silent> <Plug>(vimfiler_split_create)
+      \ :<C-u>call vimfiler#create_filer('', { 'is_split' : 1 })<CR>
+nnoremap <silent> <Plug>(vimfiler_switch)
+      \ :<C-u>call vimfiler#switch_filer('')<CR>
+nnoremap <silent> <Plug>(vimfiler_create)
+      \ :<C-u>call vimfiler#create_filer('')<CR>
+nnoremap <silent> <Plug>(vimfiler_simple)
+      \ :<C-u>call vimfiler#create_filer('', {'is_simple' : 1, 'split' : 1})<CR>
 "}}}
 
 command! -nargs=? -complete=customlist,vimfiler#complete VimFiler
