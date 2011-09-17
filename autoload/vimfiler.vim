@@ -717,7 +717,8 @@ function! s:restore_vimfiler()"{{{
   if bufnr('%') != b:vimfiler.another_vimfiler_bufnr
         \ && bufwinnr(b:vimfiler.another_vimfiler_bufnr) < 0
         \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
-    call s:switch_vimfiler(b:vimfiler.another_vimfiler_bufnr, 1, '')
+    call s:switch_vimfiler(b:vimfiler.another_vimfiler_bufnr,
+          \ { 'is_split' : 1 }, '')
     wincmd p
     call vimfiler#redraw_screen()
   endif
