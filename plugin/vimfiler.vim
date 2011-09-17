@@ -162,6 +162,11 @@ if g:vimfiler_as_default_explorer
 endif
 
 function! s:browse_check(path)
+  " Disable netrw.
+  augroup FileExplorer
+    autocmd!
+  augroup END
+
   if isdirectory(a:path) && &filetype != 'vimfiler'
     call vimfiler#handler#_event_handler('BufReadCmd')
   endif

@@ -441,6 +441,9 @@ CHANGELOG					*vimfiler-changelog*
 2011-09-17
 - Implemented context.
 
+2011-09-15
+- Fixed for netrw.
+
 2011-09-04
 - Fixed vimfiler create.
 - Improved buffer name.
