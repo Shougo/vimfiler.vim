@@ -438,6 +438,9 @@ vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-09-17
+- Implemented context.
+
 2011-09-04
 - Fixed vimfiler create.
 - Improved buffer name.

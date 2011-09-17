@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Sep 2011.
+" Last Modified: 17 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -108,20 +108,8 @@ endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions."{{{
-function! vimfiler#create_filer(path, options)"{{{
-  " Check options.
-  let l:split_flag = 0
-  let l:simple_flag = 0
-  let l:double_flag = 0
-  for l:option in a:options
-    if l:option ==# 'split'
-      let l:split_flag = 1
-    elseif l:option ==# 'simple'
-      let l:simple_flag = 1
-    elseif l:option ==# 'double'
-      let l:double_flag = 1
-    endif
-  endfor
+function! vimfiler#create_filer(path, ...)"{{{
+  let l:context = vimfiler#init_context(get(a:000, 0, {}))
 
   " Create new buffer.
   let l:prefix = vimfiler#iswin() ? '[vimfiler]' : '*vimfiler*'
@@ -133,7 +121,7 @@ function! vimfiler#create_filer(path, options)"{{{
   endwhile
   let l:bufname = l:prefix.l:postfix
 
-  if l:split_flag
+  if l:context.is_split
     silent vsplit `=l:bufname`
   else
     silent edit `=l:bufname`
@@ -141,27 +129,20 @@ function! vimfiler#create_filer(path, options)"{{{
 
   let l:path = (a:path == '') ?
         \ vimfiler#util#substitute_path_separator(getcwd()) : a:path
+  let l:context.path = l:path
   " echomsg l:path
 
-  call vimfiler#handler#_event_handler('BufReadCmd', {
-        \ 'path' : l:path,
-        \ 'simple_flag' : l:simple_flag,
-        \ 'double_flag' : l:double_flag,
-        \ })
+  call vimfiler#handler#_event_handler('BufReadCmd', l:context)
 endfunction"}}}
-function! vimfiler#switch_filer(path, options)"{{{
-  let l:split_flag = 0
-  for l:option in a:options
-    if l:option ==# 'split'
-      let l:split_flag = 1
-    endif
-  endfor
+function! vimfiler#switch_filer(path, ...)"{{{
+  let l:context = vimfiler#init_context(get(a:000, 0, {}))
 
   " Search vimfiler buffer.
   if buflisted(s:last_vimfiler_bufnr)
         \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
-        \ && (!exists('t:unite_buffer_dictionary') || has_key(t:unite_buffer_dictionary, s:last_vimfiler_bufnr))
-    call s:switch_vimfiler(s:last_vimfiler_bufnr, l:split_flag, a:path)
+        \ && (!exists('t:unite_buffer_dictionary')
+        \      || has_key(t:unite_buffer_dictionary, s:last_vimfiler_bufnr))
+    call s:switch_vimfiler(s:last_vimfiler_bufnr, l:context, a:path)
     return
   endif
 
@@ -169,8 +150,9 @@ function! vimfiler#switch_filer(path, options)"{{{
   let l:cnt = 1
   while l:cnt <= bufnr('$')
     if getbufvar(l:cnt, '&filetype') ==# 'vimfiler'
-        \ && (!exists('t:unite_buffer_dictionary') || has_key(t:unite_buffer_dictionary, l:cnt))
-      call s:switch_vimfiler(l:cnt, l:split_flag, a:path)
+        \ && (!exists('t:unite_buffer_dictionary')
+        \     || has_key(t:unite_buffer_dictionary, l:cnt))
+      call s:switch_vimfiler(l:cnt, l:context, a:path)
       return
     endif
 
@@ -178,7 +160,7 @@ function! vimfiler#switch_filer(path, options)"{{{
   endwhile
 
   " Create window.
-  call vimfiler#create_filer(a:path, a:options)
+  call vimfiler#create_filer(a:path, l:context)
 endfunction"}}}
 function! vimfiler#get_all_files()"{{{
   " Save current files.
@@ -583,6 +565,20 @@ function! vimfiler#parse_path(path)"{{{
 
   return [l:source_name, l:source_arg]
 endfunction"}}}
+function! vimfiler#init_context(context)"{{{
+  if !has_key(a:context, 'is_split')
+    let a:context.is_split = 0
+  endif
+  if !has_key(a:context, 'is_simple')
+    let a:context.is_simple = 0
+  endif
+  if !has_key(a:context, 'is_double')
+    let a:context.is_double = 0
+  endif
+
+  return a:context
+endfunction"}}}
+
 "}}}
 
 " Detect drives.
@@ -727,8 +723,8 @@ function! s:restore_vimfiler()"{{{
   endif
 endfunction"}}}
 
-function! s:switch_vimfiler(bufnr, split_flag, directory)"{{{
-  if a:split_flag
+function! s:switch_vimfiler(bufnr, context, directory)"{{{
+  if a:context.is_split
     execute 'vertical sbuffer' . a:bufnr
   else
     execute 'buffer' . a:bufnr

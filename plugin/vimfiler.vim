@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Sep 2011.
+" Last Modified: 17 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -119,17 +119,20 @@ nnoremap <silent> <Plug>(vimfiler_open_next_file)     :<C-u>call vimfiler#mappin
 "}}}
 
 command! -nargs=? -complete=customlist,vimfiler#complete VimFiler
-      \ call vimfiler#switch_filer(<q-args>, [])
+      \ call vimfiler#switch_filer(<q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerDouble
-      \ call vimfiler#create_filer(<q-args>, ['double'])
+      \ call vimfiler#create_filer(<q-args>,
+      \   { 'is_double' : 1 })
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCreate
-      \ call vimfiler#create_filer(<q-args>, [])
+      \ call vimfiler#create_filer(<q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSimple
-      \ call vimfiler#create_filer(<q-args>, ['simple', 'split'])
+      \ call vimfiler#create_filer(<q-args>,
+      \   { 'is_simple' : 1, 'is_split' : 1 })
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSplit
-      \ call vimfiler#create_filer(<q-args>, ['split'])
+      \ call vimfiler#create_filer(<q-args>,
+      \   { 'is_split' : 1 })
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerTab
-      \ tabnew | call vimfiler#create_filer(<q-args>, [])
+      \ tabnew | call vimfiler#create_filer(<q-args>)
 command! VimFilerDetectDrives call vimfiler#detect_drives()
 
 if g:vimfiler_as_default_explorer

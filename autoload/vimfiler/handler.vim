@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2011.
+" Last Modified: 17 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,16 +26,16 @@
 
 
 function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
-  let l:args = get(a:000, 0, {})
-  let l:path = get(l:args, 'path', expand('<afile>'))
+  let l:context = vimfiler#init_context(get(a:000, 0, {}))
+  let l:path = get(l:context, 'path', expand('<afile>'))
   let [l:source_name, l:source_arg] = vimfiler#parse_path(l:path)
 
-  return s:on_{a:event_name}(l:source_name, l:source_arg, l:args)
+  return s:on_{a:event_name}(l:source_name, l:source_arg, l:context)
 endfunction
 
 " Event Handlers.
 
-function! s:on_BufReadCmd(source_name, source_arg, args)  "{{{1
+function! s:on_BufReadCmd(source_name, source_arg, context)  "{{{1
   " Check path.
 
   silent let l:ret = unite#vimfiler_check_filetype([[a:source_name, a:source_arg]])
@@ -45,13 +45,10 @@ function! s:on_BufReadCmd(source_name, source_arg, args)  "{{{1
   endif
   let [l:type, l:info] = l:ret
 
-  let l:simple_flag = get(a:args, 'simple_flag', 0)
-  let l:double_flag = get(a:args, 'double_flag', 0)
-
   let b:vimfiler = {}
   let b:vimfiler.source = a:source_name
   if l:type ==# 'directory'
-    call s:initialize_vimfiler_directory(l:info, l:simple_flag, l:double_flag)
+    call s:initialize_vimfiler_directory(l:info, a:context)
   elseif l:type ==# 'file'
     call s:initialize_vimfiler_file(a:source_arg, l:info[0], l:info[1])
   else
@@ -60,19 +57,19 @@ function! s:on_BufReadCmd(source_name, source_arg, args)  "{{{1
 endfunction
 
 
-function! s:on_BufWriteCmd(source_name, source_arg, args)  "{{{1
+function! s:on_BufWriteCmd(source_name, source_arg, context)  "{{{1
   " BufWriteCmd is published by :write or other commands with 1,$ range.
   return s:write(a:source_name, a:source_arg, 1, line('$'), 'BufWriteCmd')
 endfunction
 
 
-function! s:on_FileAppendCmd(source_name, source_arg, args)  "{{{1
+function! s:on_FileAppendCmd(source_name, source_arg, context)  "{{{1
   " FileAppendCmd is published by :write or other commands with >>.
   return s:write(a:source_name, a:source_arg, line("'["), line("']"), 'FileAppendCmd')
 endfunction
 
 
-function! s:on_FileWriteCmd(source_name, source_arg, args)  "{{{1
+function! s:on_FileWriteCmd(source_name, source_arg, context)  "{{{1
   " FileWriteCmd is published by :write or other commands with partial range
   " such as 1,2 where 2 < line('$').
   return s:write(a:source_name, a:source_arg, line("'["), line("']"), 'FileWriteCmd')
@@ -109,7 +106,7 @@ function! s:write(source_name, source_arg, line1, line2, event_name)  "{{{1
   endtry
 endfunction
 
-function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag) "{{{1
+function! s:initialize_vimfiler_directory(directory, context) "{{{1
   " Set current directory.
   let l:current = vimfiler#util#substitute_path_separator(a:directory)
   let b:vimfiler.current_dir = l:current
@@ -119,7 +116,7 @@ function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag) "
 
   let b:vimfiler.directories_history = []
   let b:vimfiler.is_visible_dot_files = 0
-  let b:vimfiler.is_simple = a:simple_flag
+  let b:vimfiler.is_simple = a:context.is_simple
   let b:vimfiler.directory_cursor_pos = {}
   " Set mask.
   let b:vimfiler.current_mask = ''
@@ -131,7 +128,7 @@ function! s:initialize_vimfiler_directory(directory, simple_flag, double_flag) "
   call vimfiler#default_settings()
   set filetype=vimfiler
 
-  if a:double_flag
+  if a:context.is_double
     " Create another vimfiler.
     call vimfiler#create_filer(b:vimfiler.current_dir,
           \ b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
