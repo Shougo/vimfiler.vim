@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/execute.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Aug 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,31 +52,31 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
 
   " Search user execute file.
-  let l:ext = a:context.source__file.vimfiler__extension
-  if !has_key(g:vimfiler_execute_file_list, l:ext)
+  let ext = a:context.source__file.vimfiler__extension
+  if !has_key(g:vimfiler_execute_file_list, ext)
     return []
   endif
 
-  let l:candidates = []
-  let l:commands = g:vimfiler_execute_file_list[l:ext]
-  for l:command in type(l:commands) == type([]) ?
-        \ l:commands : [l:commands]
-    let l:dict = { 'word' : l:command }
+  let candidates = []
+  let commands = g:vimfiler_execute_file_list[ext]
+  for command in type(commands) == type([]) ?
+        \ commands : [commands]
+    let dict = { 'word' : command }
 
-    if l:command ==# 'vim'
+    if command ==# 'vim'
       " Edit with vim.
-      let l:dict.kind = 'file'
-      let l:dict.action__path = a:context.source__file.action__path
+      let dict.kind = 'file'
+      let dict.action__path = a:context.source__file.action__path
     else
-      let l:dict.kind = 'guicmd'
-      let l:dict.action__path = l:command
-      let l:dict.action__args = [a:context.source__file.action__path]
+      let dict.kind = 'guicmd'
+      let dict.action__path = command
+      let dict.action__args = [a:context.source__file.action__path]
     endif
 
-    call add(l:candidates, l:dict)
+    call add(candidates, dict)
   endfor
 
-  return l:candidates
+  return candidates
 endfunction"}}}
 
 let &cpo = s:save_cpo

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_vimfiler_mask.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,46 +41,46 @@ function! s:matcher.filter(candidates, context)"{{{
     return a:candidates
   endif
 
-  let l:candidates = []
-  let l:masks = map(split(a:context.input, '\\\@<! '),
+  let candidates = []
+  let masks = map(split(a:context.input, '\\\@<! '),
           \ 'substitute(v:val, "\\\\ ", " ", "g")')
-  for l:candidate in a:candidates
-    let l:matched = 0
-    for l:mask in l:masks
-      if l:mask =~ '^!'
-        if l:mask == '!'
+  for candidate in a:candidates
+    let matched = 0
+    for mask in masks
+      if mask =~ '^!'
+        if mask == '!'
           continue
         endif
 
         " Exclusion.
-        let l:mask = unite#escape_match(l:mask)
-        if l:candidate.word !~ l:mask
-          let l:matched = 1
+        let mask = unite#escape_match(mask)
+        if candidate.word !~ mask
+          let matched = 1
           break
         endif
-      elseif l:mask =~ '\\\@<!\*'
+      elseif mask =~ '\\\@<!\*'
         " Wildcard.
-        let l:mask = unite#escape_match(l:mask)
-        if l:candidate.word =~ l:mask
-          let l:matched = 1
+        let mask = unite#escape_match(mask)
+        if candidate.word =~ mask
+          let matched = 1
           break
         endif
       else
-        let l:mask = substitute(l:mask, '\\\(.\)', '\1', 'g')
+        let mask = substitute(mask, '\\\(.\)', '\1', 'g')
         if stridx((&ignorecase ?
-              \ tolower(l:candidate.word) : l:candidate.word), l:mask) != -1
-          let l:matched = 1
+              \ tolower(candidate.word) : candidate.word), mask) != -1
+          let matched = 1
           break
         endif
       endif
     endfor
 
-    if l:matched
-      call add(l:candidates, l:candidate)
+    if matched
+      call add(candidates, candidate)
     endif
   endfor
 
-  return l:candidates
+  return candidates
 endfunction"}}}
 
 let &cpo = s:save_cpo

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Aug 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -25,8 +25,8 @@
 "=============================================================================
 
 function! vimfiler#exrename#create_buffer(files)"{{{
-  let l:vimfiler_save = deepcopy(b:vimfiler)
-  let l:bufnr = bufnr('%')
+  let vimfiler_save = deepcopy(b:vimfiler)
+  let bufnr = bufnr('%')
 
   vsplit
   edit exrename
@@ -34,8 +34,8 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   syntax clear
 
   setlocal buftype=acwrite
-  let b:exrename = l:vimfiler_save
-  let b:exrename.bufnr = l:bufnr
+  let b:exrename = vimfiler_save
+  let b:exrename.bufnr = bufnr
 
   lcd `=b:exrename.current_dir`
 
@@ -58,17 +58,17 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   " Print files.
   let b:exrename.current_files = []
   let b:exrename.current_filenames = []
-  for l:file in a:files
-    let l:filename = l:file.vimfiler__filename
-    if l:file.vimfiler__is_directory
-      let l:filename .= '/'
+  for file in a:files
+    let filename = file.vimfiler__filename
+    if file.vimfiler__is_directory
+      let filename .= '/'
     endif
 
     execute 'syn match ExrenameOriginal'
-          \ string(printf('^\%%%dl%s$', line('$'), l:filename))
-    call append('$', l:filename)
-    call add(b:exrename.current_files, l:file)
-    call add(b:exrename.current_filenames, l:filename)
+          \ string(printf('^\%%%dl%s$', line('$'), filename))
+    call append('$', filename)
+    call add(b:exrename.current_files, file)
+    call add(b:exrename.current_filenames, filename)
   endfor
 
   1delete
@@ -76,14 +76,14 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   setlocal nomodified
 endfunction"}}}
 function! s:exit()"{{{
-  let l:exrename_buf = bufnr('%')
+  let exrename_buf = bufnr('%')
   " Switch buffer.
   if winnr('$') != 1
     close
   else
     call s:custom_alternate_buffer()
   endif
-  execute 'bdelete!' l:exrename_buf
+  execute 'bdelete!' exrename_buf
 endfunction"}}}
 function! s:do_rename()"{{{
   if line('$') != len(b:exrename.current_filenames)
@@ -92,16 +92,16 @@ function! s:do_rename()"{{{
   endif
 
   " Rename files.
-  let l:linenr = 1
-  while l:linenr <= line('$')
-    let l:filename = b:exrename.current_filenames[l:linenr - 1]
-    if l:filename !=# getline(l:linenr)
-      let l:file = b:exrename.current_files[l:linenr - 1]
-      call unite#mappings#do_action('vimfiler__rename', [l:file],
-            \ {'action__filename' : getline(l:linenr)})
+  let linenr = 1
+  while linenr <= line('$')
+    let filename = b:exrename.current_filenames[linenr - 1]
+    if filename !=# getline(linenr)
+      let file = b:exrename.current_files[linenr - 1]
+      call unite#mappings#do_action('vimfiler__rename', [file],
+            \ {'action__filename' : getline(linenr)})
     endif
 
-    let l:linenr += 1
+    let linenr += 1
   endwhile
 
   setlocal nomodified
@@ -121,22 +121,22 @@ function! s:custom_alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
     buffer #
   else
-    let l:cnt = 0
-    let l:pos = 1
-    let l:current = 0
-    while l:pos <= bufnr('$')
-      if buflisted(l:pos)
-        if l:pos == bufnr('%')
-          let l:current = l:cnt
+    let cnt = 0
+    let pos = 1
+    let current = 0
+    while pos <= bufnr('$')
+      if buflisted(pos)
+        if pos == bufnr('%')
+          let current = cnt
         endif
 
-        let l:cnt += 1
+        let cnt += 1
       endif
 
-      let l:pos += 1
+      let pos += 1
     endwhile
 
-    if l:current > l:cnt / 2
+    if current > cnt / 2
       bprevious
     else
       bnext

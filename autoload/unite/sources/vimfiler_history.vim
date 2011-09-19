@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/history.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,23 +54,23 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
 
   let num = 0
-  let l:candidates = []
-  for l:history in map(reverse(copy(a:context.source__directories_history)),
+  let candidates = []
+  for history in map(reverse(copy(a:context.source__directories_history)),
         \ 'unite#util#substitute_path_separator(v:val)')
 
-    call add(l:candidates, {
-          \ 'word' : l:history,
+    call add(candidates, {
+          \ 'word' : history,
           \ 'kind' : 'directory',
-          \ 'action__path' : l:history,
-          \ 'action__directory' : l:history,
-          \ 'action__nr' : l:num,
+          \ 'action__path' : history,
+          \ 'action__directory' : history,
+          \ 'action__nr' : num,
           \ 'action__history' : a:context.source__directories_history,
           \ })
 
     let num += 1
   endfor
 
-  return l:candidates
+  return candidates
 endfunction"}}}
 
 " Actions"{{{
@@ -83,9 +83,9 @@ let s:action_table.delete = {
       \ 'is_quit' : 0,
       \ }
 function! s:action_table.delete.func(candidates)"{{{
-  for l:candidate in sort(a:candidates, 's:compare')
-    call remove(l:candidate.action__history,
-          \ l:candidate.action__nr)
+  for candidate in sort(a:candidates, 's:compare')
+    call remove(candidate.action__history,
+          \ candidate.action__nr)
   endfor
 endfunction"}}}
 

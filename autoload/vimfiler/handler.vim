@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Sep 2011.
+" Last Modified: 19 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,11 +26,11 @@
 
 
 function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
-  let l:context = vimfiler#init_context(get(a:000, 0, {}))
-  let l:path = get(l:context, 'path', expand('<afile>'))
-  let [l:source_name, l:source_arg] = vimfiler#parse_path(l:path)
+  let context = vimfiler#init_context(get(a:000, 0, {}))
+  let path = get(context, 'path', expand('<afile>'))
+  let [source_name, source_arg] = vimfiler#parse_path(path)
 
-  return s:on_{a:event_name}(l:source_name, l:source_arg, l:context)
+  return s:on_{a:event_name}(source_name, source_arg, context)
 endfunction
 
 " Event Handlers.
@@ -38,19 +38,19 @@ endfunction
 function! s:on_BufReadCmd(source_name, source_arg, context)  "{{{1
   " Check path.
 
-  silent let l:ret = unite#vimfiler_check_filetype([[a:source_name, a:source_arg]])
-  if empty(l:ret)
+  silent let ret = unite#vimfiler_check_filetype([[a:source_name, a:source_arg]])
+  if empty(ret)
     " File not found.
     return
   endif
-  let [l:type, l:info] = l:ret
+  let [type, info] = ret
 
   let b:vimfiler = {}
   let b:vimfiler.source = a:source_name
-  if l:type ==# 'directory'
-    call s:initialize_vimfiler_directory(l:info, a:context)
-  elseif l:type ==# 'file'
-    call s:initialize_vimfiler_file(a:source_arg, l:info[0], l:info[1])
+  if type ==# 'directory'
+    call s:initialize_vimfiler_directory(info, a:context)
+  elseif type ==# 'file'
+    call s:initialize_vimfiler_file(a:source_arg, info[0], info[1])
   else
     call vimfiler#print_error('Unknown filetype.')
   endif
@@ -76,22 +76,22 @@ function! s:on_FileWriteCmd(source_name, source_arg, context)  "{{{1
 endfunction
 
 function! s:write(source_name, source_arg, line1, line2, event_name)  "{{{1
-  silent let l:ret = unite#vimfiler_check_filetype(
+  silent let ret = unite#vimfiler_check_filetype(
         \ [[a:source_name, a:source_arg]])
-  if empty(l:ret)
+  if empty(ret)
     " File not found.
     return
   endif
-  let [l:type, l:lines, l:dict] = l:ret
+  let [type, lines, dict] = ret
 
-  if l:type !=# 'file'
+  if type !=# 'file'
     " Invalid filetype.
-    call vimfiler#print_error('Invalid filetype: ' . l:source . l:source_arg)
+    call vimfiler#print_error('Invalid filetype: ' . source . source_arg)
     return
   endif
 
   try
-    call unite#mappings#do_action('vimfiler__write', [l:dict], {
+    call unite#mappings#do_action('vimfiler__write', [dict], {
           \ 'vimfiler__line1' : a:line1,
           \ 'vimfiler__line2' : a:line2,
           \ 'vimfiler__eventname' : a:event_name,
@@ -108,8 +108,8 @@ endfunction
 
 function! s:initialize_vimfiler_directory(directory, context) "{{{1
   " Set current directory.
-  let l:current = vimfiler#util#substitute_path_separator(a:directory)
-  let b:vimfiler.current_dir = l:current
+  let current = vimfiler#util#substitute_path_separator(a:directory)
+  let b:vimfiler.current_dir = current
   if b:vimfiler.current_dir !~ '/$'
     let b:vimfiler.current_dir .= '/'
   endif
