@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 21 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -223,6 +223,20 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   normal! zb
 endfunction"}}}
 
+function! vimfiler#mappings#search_cursor(path)"{{{
+  let max = line('$')
+  let cnt = 1
+  while cnt <= max
+    if vimfiler#check_filename_line(getline(cnt))
+          \ && vimfiler#get_file(cnt).action__path ==# a:path
+      " Move cursor.
+      call cursor(cnt, 0)
+    endif
+
+    let cnt += 1
+  endwhile
+endfunction"}}}
+
 function! s:SID_PREFIX()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
@@ -235,7 +249,7 @@ function! s:toggle_mark_current_line()"{{{
 
   let file = vimfiler#get_file(line('.'))
   let file.vimfiler__is_marked = !file.vimfiler__is_marked
-  
+
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:toggle_mark_all_lines()"{{{
@@ -251,7 +265,7 @@ function! s:toggle_mark_all_lines()"{{{
 
     let cnt += 1
   endwhile
-  
+
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:toggle_mark_lines(start, end)"{{{
@@ -266,7 +280,7 @@ function! s:toggle_mark_lines(start, end)"{{{
 
     let cnt += 1
   endwhile
-  
+
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:clear_mark_all_lines()"{{{
