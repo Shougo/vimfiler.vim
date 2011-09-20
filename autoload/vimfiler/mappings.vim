@@ -330,7 +330,9 @@ function! s:execute_file()"{{{
   endif
 
   " Execute cursor file.
-  call unite#mappings#do_action('vimfiler__execute', [file])
+  call unite#mappings#do_action('vimfiler__execute', [file], {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
 endfunction"}}}
 function! s:move_to_other_window()"{{{
   if winnr('$') == 1
@@ -395,7 +397,9 @@ function! s:popup_shell()"{{{
   endif
 
   " Execute shell.
-  call unite#mappings#do_action('vimfiler__shell', dummy_files)
+  call unite#mappings#do_action('vimfiler__shell', dummy_files, {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
 endfunction"}}}
 function! s:edit_file(is_split)"{{{
   if !vimfiler#check_filename_line()
@@ -405,7 +409,9 @@ function! s:edit_file(is_split)"{{{
   let file = vimfiler#get_file(line('.'))
   call unite#mappings#do_action(
         \ (a:is_split ? g:vimfiler_split_action
-        \             : g:vimfiler_edit_action), [file])
+        \             : g:vimfiler_edit_action), [file], {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
 endfunction"}}}
 function! s:edit_binary_file(is_split)"{{{
   if !vimfiler#check_filename_line()
@@ -425,7 +431,9 @@ function! s:preview_file()"{{{
   endif
 
   let file = vimfiler#get_file(line('.'))
-  call unite#mappings#do_action(g:vimfiler_preview_action, [file])
+  call unite#mappings#do_action(g:vimfiler_preview_action, [file], {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
 endfunction"}}}
 function! s:execute_shell_command()"{{{
   echo 'Marked files:'
@@ -468,7 +476,9 @@ function! s:execute_shell_command()"{{{
   endif
 
   " Execute shell command.
-  call unite#mappings#do_action('vimfiler__shellcmd', dummy_files)
+  call unite#mappings#do_action('vimfiler__shellcmd', dummy_files, {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
   silent call s:clear_mark_all_lines()
 endfunction"}}}
 function! s:exit()"{{{
@@ -548,8 +558,10 @@ function! s:move()"{{{
   endif
 
   " Execute move.
-  call unite#mappings#do_action('vimfiler__move', marked_files,
-        \ { 'action__directory' : dest_dir })
+  call unite#mappings#do_action('vimfiler__move', marked_files, {
+        \ 'action__directory' : dest_dir,
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
   call s:clear_mark_all_lines()
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
@@ -566,8 +578,10 @@ function! s:copy()"{{{
         \ vimfiler#get_another_vimfiler().current_dir : ''
 
   " Execute copy.
-  call unite#mappings#do_action('vimfiler__copy', marked_files,
-        \ { 'action__directory' : dest_dir })
+  call unite#mappings#do_action('vimfiler__copy', marked_files, {
+        \ 'action__directory' : dest_dir,
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
   call s:clear_mark_all_lines()
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
@@ -586,7 +600,9 @@ function! s:delete()"{{{
   endif
 
   " Execute delete.
-  call unite#mappings#do_action('vimfiler__delete', marked_files)
+  call unite#mappings#do_action('vimfiler__delete', marked_files, {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
   call s:clear_mark_all_lines()
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
@@ -603,7 +619,9 @@ function! s:rename()"{{{
   endif
 
   let file = vimfiler#get_file(line('.'))
-  call unite#mappings#do_action('vimfiler__rename', [file])
+  call unite#mappings#do_action('vimfiler__rename', [file], {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:make_directory()"{{{
@@ -617,7 +635,9 @@ function! s:make_directory()"{{{
   endif
 
   " Execute mkdir action.
-  call unite#mappings#do_action('vimfiler__mkdir', dummy_files)
+  call unite#mappings#do_action('vimfiler__mkdir', dummy_files, {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
 
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
@@ -632,7 +652,9 @@ function! s:new_file()"{{{
   endif
 
   " Make new file.
-  call unite#mappings#do_action('vimfiler__newfile', dummy_files)
+  call unite#mappings#do_action('vimfiler__newfile', dummy_files, {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
 
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
@@ -648,7 +670,9 @@ function! s:grep()"{{{
     return
   endif
 
-  call unite#mappings#do_action('grep', marked_files)
+  call unite#mappings#do_action('grep', marked_files, {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
 endfunction"}}}
 function! s:select_sort_type()"{{{
   call unite#start([['vimfiler/sort']])
@@ -693,7 +717,9 @@ function! s:execute_external_filer()"{{{
   endif
 
   " Execute current directory.
-  call unite#mappings#do_action('vimfiler__execute', dummy_files)
+  call unite#mappings#do_action('vimfiler__execute', dummy_files, {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
 endfunction"}}}
 function! s:change_vim_current_dir(directory)"{{{
   let dummy_files = unite#get_vimfiler_candidates(
@@ -706,7 +732,9 @@ function! s:change_vim_current_dir(directory)"{{{
   endif
 
   " Execute cd.
-  call unite#mappings#do_action('lcd', dummy_files)
+  call unite#mappings#do_action('lcd', dummy_files, {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
 endfunction"}}}
 
 " For safe mode.
