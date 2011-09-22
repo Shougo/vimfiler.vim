@@ -388,31 +388,7 @@ function! s:move_to_other_window()"{{{
 endfunction"}}}
 
 function! s:move_to_drive()"{{{
-  let drives = vimfiler#get_drives()
-
-  if empty(drives)
-    " No drives.
-    return
-  endif
-
-  for [key, drive] in items(drives)
-    echo printf('[%s] %s', key, drive)
-  endfor
-
-  let key = vimfiler#resolve(expand(
-        \ input('Please input drive alphabet or other directory: ', '', 'dir')))
-
-  if key == ''
-    return
-  elseif has_key(drives, tolower(key))
-    call vimfiler#mappings#cd(drives[tolower(key)])
-  elseif isdirectory(key)
-    call vimfiler#mappings#cd(key)
-  else
-    redraw
-    echo 'Invalid directory name.'
-    return
-  endif
+  call unite#start([['vimfiler/drive']])
 endfunction"}}}
 function! s:move_to_history_directory()"{{{
   call unite#start([['vimfiler/history']])

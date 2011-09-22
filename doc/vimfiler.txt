@@ -264,7 +264,8 @@ Normal mode mappings.
 		Move to up directory.
 
 <Plug>(vimfiler_move_to_drive)			*<Plug>(vimfiler_move_to_drive)*
-		Move to other drive(Windows) or mount point(Mac/Linux).
+		Move to other drive(Windows) or mount point(Mac/Linux) by
+		|unite| interface.
 
 <Plug>(vimfiler_move_to_home_directory)		*<Plug>(vimfiler_move_to_home_directory)*
 		Move to home directory.
@@ -431,6 +432,10 @@ Here let me explain about a source for |unite| provided in vimfiler.
 vimfiler/history
 		Candidates of vimfiler history.
 
+							*vimfiler-unite-source-vimfiler-drive*
+vimfiler/drive
+		Candidates of vimfiler drives.
+
 							*vimfiler-unite-source-vimfiler-sort*
 vimfiler/sort
 		Candidates of vimfiler sort method.
@@ -463,6 +468,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-09-22
 - Revised documentation.
+- Added vimfiler/drive source.
 
 2011-09-21
 - Added vimfiler#mappings#search_cursor() function.
