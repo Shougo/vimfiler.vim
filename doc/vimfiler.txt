@@ -245,13 +245,20 @@ Normal mode mappings.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_make_directory)			*<Plug>(vimfiler_make_directory)*
-		
+		Create new directory.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_new_file)			*<Plug>(vimfiler_new_file)*
-		
+		Create new files.
 		This mappings is disabled in vimfiler safe mode.
-		
+
+<Plug>(vimfiler_rename_file)			*<Plug>(vimfiler_rename_file)*
+		Rename cursor file or selected files.
+		If selected files, vimfiler will open exrename buffer.
+		In exrename buffer, you can rename with Vim features like
+		|renamer.vim|.
+		http://www.vim.org/scripts/script.php?script_id=1721
+		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_execute)			*<Plug>(vimfiler_execute)*
 		Execute cursor file with |g:vimfiler_execute_file_list| command.
@@ -323,7 +330,8 @@ Normal mode mappings.
 		Set current file mask by |unite| interface.
 
 <Plug>(vimfiler_grep)				*<Plug>(vimfiler_grep)*
-		Grep word in selected files by |unite| interface.
+		Grep word in selected files or all current files by |unite|
+		interface.
 
 <Plug>(vimfiler_select_sort_type)		*<Plug>(vimfiler_select_sort_type)*
 		Select current vimfiler sort type by |unite| interface.
@@ -465,6 +473,9 @@ vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-09-23
+- Improved documentation.
 
 2011-09-22
 - Revised documentation.
