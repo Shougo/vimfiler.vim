@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 23 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -580,43 +580,6 @@ function! vimfiler#init_context(context)"{{{
 endfunction"}}}
 
 "}}}
-
-" Detect drives.
-function! vimfiler#detect_drives()"{{{
-  " Initialize.
-  let s:drives = {}
-
-  if vimfiler#iswin()
-    " Detect drive.
-    for drive in g:vimfiler_detect_drives
-      if isdirectory(drive . ':/')
-        let s:drives[tolower(drive)] = drive . ':/'
-      endif
-    endfor
-  else
-    let drive_key = 'abcdefghijklmnopqrstuvwxyz'
-
-    if has('macunix') || system('uname') =~? '^darwin'
-      let drive_list = split(glob('/Volumes/*'), '\n')
-    else
-      let drive_list = split(glob('/mnt/*'), '\n') + split(glob('/media/*'), '\n')
-    endif
-    " Detect mounted drive.
-    let cnt = 0
-    for drive in drive_list[:25]
-      let s:drives[drive_key[cnt]] = drive
-
-      let cnt += 1
-    endfor
-  endif
-endfunction"}}}
-function! vimfiler#get_drives()"{{{
-  if !exists('s:drives')
-    call vimfiler#detect_drives()
-  endif
-
-  return s:drives
-endfunction"}}}
 
 " Sort.
 function! vimfiler#sort(files, type)"{{{
