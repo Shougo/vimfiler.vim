@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2011.
+" Last Modified: 22 Sep 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,44 +26,82 @@
 
 function! vimfiler#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
-  nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)  (line('.') == line('$'))? 'gg' : 'j'
-  nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_up)  (line('.') == 1)? 'G' : 'k'
-  nnoremap <buffer><silent> <Plug>(vimfiler_redraw_screen)  :<C-u>call vimfiler#force_redraw_screen()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_current_line)  :<C-u>call <SID>toggle_mark_current_line()<CR>j
-  vnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_selected_lines)  :<C-u>call <SID>toggle_mark_lines(getpos("'<")[1], getpos("'>")[1])<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_all_lines)  :<C-u>call <SID>toggle_mark_all_lines()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_clear_mark_all_lines)  :<C-u>call <SID>clear_mark_all_lines()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_execute)  :<C-u>call <SID>execute()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_execute_file)  :<C-u>call <SID>execute_file()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_up_directory)  :<C-u>call vimfiler#mappings#cd('..')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_home_directory)  :<C-u>call vimfiler#mappings#cd('~')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_root_directory)  :<C-u>call vimfiler#mappings#cd('/')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_drive)  :<C-u>call <SID>move_to_drive()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_directory)  :<C-u>call <SID>move_to_history_directory()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_visible_dot_files)  :<C-u>call <SID>toggle_visible_dot_files()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)  :<C-u>call <SID>popup_shell()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)  :<C-u>call <SID>edit_file(0)<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)  :<C-u>call <SID>edit_file(1)<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)  :<C-u>call <SID>edit_binary_file(0)<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_filer)  :<C-u>call <SID>execute_external_filer()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_execute_shell_command)  :<C-u>call <SID>execute_shell_command()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_exit)  :<C-u>call <SID>exit()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_help)  :<C-u>call <SID>help()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_preview_file)  :<C-u>call <SID>preview_file()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_current_vimfiler)  :<C-u>call <SID>sync_with_current_vimfiler()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_another_vimfiler)  :<C-u>call <SID>sync_with_another_vimfiler()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_print_filename)  :<C-u>echo vimfiler#get_filename(line('.'))<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_set_current_mask)  :<C-u>call <SID>set_current_mask()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_grep)  :<C-u>call <SID>grep()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)  :<C-u>call <SID>select_sort_type()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_other_window)  :<C-u>call <SID>move_to_other_window()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)  :<C-u>call <SID>switch_vim_buffer_mode()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)  :<C-u>call <SID>restore_vimfiler_mode()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_cd)  :<C-u>call <SID>change_vim_current_dir(b:vimfiler.current_dir)<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_choose_action)  :<C-u>call <SID>choose_action()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)  :<C-u>call <SID>toggle_safe_mode()<CR>
-  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)  line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
-  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)  line('.') == 1 ? 'l' : ":\<C-u>call \<SID>execute()\<CR>"
+  nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)
+        \ (line('.') == line('$'))? 'gg' : 'j'
+  nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_up)
+        \ (line('.') == 1)? 'G' : 'k'
+  nnoremap <buffer><silent> <Plug>(vimfiler_redraw_screen)
+        \ :<C-u>call vimfiler#force_redraw_screen()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_current_line)
+        \ :<C-u>call <SID>toggle_mark_current_line()<CR>j
+  vnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_selected_lines)
+        \ :<C-u>call <SID>toggle_mark_lines(getpos("'<")[1], getpos("'>")[1])<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_all_lines)
+        \ :<C-u>call <SID>toggle_mark_all_lines()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_clear_mark_all_lines)
+        \ :<C-u>call <SID>clear_mark_all_lines()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_execute)
+        \ :<C-u>call <SID>execute()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_execute_file)
+        \ :<C-u>call <SID>execute_file()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_up_directory)
+        \ :<C-u>call vimfiler#mappings#cd('..')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_home_directory)
+        \ :<C-u>call vimfiler#mappings#cd('~')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_root_directory)
+        \ :<C-u>call vimfiler#mappings#cd('/')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_drive)
+        \ :<C-u>call <SID>move_to_drive()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_directory)
+        \ :<C-u>call <SID>move_to_history_directory()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_visible_dot_files)
+        \ :<C-u>call <SID>toggle_visible_dot_files()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)
+        \ :<C-u>call <SID>popup_shell()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)
+        \ :<C-u>call <SID>edit_file(0)<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)
+        \ :<C-u>call <SID>edit_file(1)<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)
+        \ :<C-u>call <SID>edit_binary_file(0)<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_filer)
+        \ :<C-u>call <SID>execute_external_filer()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_execute_shell_command)
+        \ :<C-u>call <SID>execute_shell_command()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_exit)
+        \ :<C-u>call <SID>exit()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_help)
+        \ :<C-u>call <SID>help()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_preview_file)
+        \ :<C-u>call <SID>preview_file()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_current_vimfiler)
+        \ :<C-u>call <SID>sync_with_current_vimfiler()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_another_vimfiler)
+        \ :<C-u>call <SID>sync_with_another_vimfiler()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_print_filename)
+        \ :<C-u>echo vimfiler#get_filename(line('.'))<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_set_current_mask)
+        \ :<C-u>call <SID>set_current_mask()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_grep)
+        \ :<C-u>call <SID>grep()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)
+        \ :<C-u>call <SID>select_sort_type()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_other_window)
+        \ :<C-u>call <SID>move_to_other_window()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)
+        \ :<C-u>call <SID>switch_vim_buffer_mode()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)
+        \ :<C-u>call <SID>restore_vimfiler_mode()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_cd)
+        \ :<C-u>call <SID>change_vim_current_dir(b:vimfiler.current_dir)<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_choose_action)
+        \ :<C-u>call <SID>choose_action()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)
+        \ :<C-u>call <SID>toggle_safe_mode()<CR>
+  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
+        \ line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
+  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
+        \ line('.') == 1 ? 'l' : ":\<C-u>call \<SID>execute()\<CR>"
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()
@@ -72,7 +110,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   endif
   "}}}
 
-  if exists('g:vimfiler_no_default_key_mappings') && g:vimfiler_no_default_key_mappings
+  if exists('g:vimfiler_no_default_key_mappings')
+        \ && g:vimfiler_no_default_key_mappings
     return
   endif
 
@@ -360,7 +399,8 @@ function! s:move_to_drive()"{{{
     echo printf('[%s] %s', key, drive)
   endfor
 
-  let key = vimfiler#resolve(expand(input('Please input drive alphabet or other directory: ', '', 'dir')))
+  let key = vimfiler#resolve(expand(
+        \ input('Please input drive alphabet or other directory: ', '', 'dir')))
 
   if key == ''
     return
