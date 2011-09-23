@@ -203,7 +203,7 @@ g:unite_kind_file_move_command			*g:unite_kind_file_move_command*
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
 
-Normal mode mappings.
+Normal mode key mappings.
 
 <Plug>(vimfiler_move_to_other_window)		*<Plug>(vimfiler_move_to_other_window)*
 		Move to other vimfiler window.
@@ -355,7 +355,7 @@ Normal mode mappings.
 <Plug>(vimfiler_toggle_safe_mode)		*<Plug>(vimfiler_toggle_safe_mode)*
 		Toggle safe mode. In safe mode, dangerous command is disabled.
 
-Visual mode mappings.
+Visual mode key mappings.
 
 <Plug>(vimfiler_toggle_mark_selected_lines)	*<Plug>(vimfiler_toggle_selected_lines)*
 		Toggle marks in selected lines.
@@ -363,7 +363,7 @@ Visual mode mappings.
 						*g:vimfiler_default_key_mappings*
 Following keymappings are default keymappings.
 
-Normal mode mappings.
+Normal mode default mappings.
 {lhs}			{rhs}
 --------		-----------------------------
 <TAB>			<Plug>(vimfiler_move_to_other_window)
@@ -413,9 +413,6 @@ Visual mode mappings.
 {lhs}			{rhs}
 --------		-----------------------------
 <Space>			<Plug>(vimfiler_toggle_mark_selected_lines)
-
-	Please refer to vimfiler#mappings#define_default_mappings() in
-	autoload/vimfiler/mappings.vim.
 
 ==============================================================================
 EXAMPLES					*vimfiler-examples*
