@@ -471,6 +471,9 @@ vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-09-27
+- Set bufhidden.
+
 2011-09-24
 - Added README.
 
