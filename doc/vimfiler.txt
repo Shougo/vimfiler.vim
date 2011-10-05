@@ -355,6 +355,14 @@ Normal mode key mappings.
 <Plug>(vimfiler_toggle_safe_mode)		*<Plug>(vimfiler_toggle_safe_mode)*
 		Toggle safe mode. In safe mode, dangerous command is disabled.
 
+<Plug>(vimfiler_pushd)				*<Plug>(vimfiler_pushd)*
+		Push current directory(and another vimfiler current directory)
+		to directory stack.
+
+<Plug>(vimfiler_popd)				*<Plug>(vimfiler_popd)*
+		Pop current directory(and another vimfiler current directory)
+		from directory stack.
+
 Visual mode key mappings.
 
 <Plug>(vimfiler_toggle_mark_selected_lines)	*<Plug>(vimfiler_toggle_selected_lines)*
@@ -408,6 +416,8 @@ S			<Plug>(vimfiler_select_sort_type)
 gc			<Plug>(vimfiler_cd)
 gs			<Plug>(vimfiler_toggle_safe_mode)
 a			<Plug>(vimfiler_choose_action)
+Y			<Plug>(vimfiler_pushd)
+P			<Plug>(vimfiler_popd)
 
 Visual mode mappings.
 {lhs}			{rhs}
@@ -457,6 +467,10 @@ vimfiler/mapping
 vimfiler/execute
 		Candidates from |g:vimfiler_execute_file_list|.
 
+							*vimfiler-unite-source-vimfiler-popd*
+vimfiler/popd
+		Candidates from vimfiler directory stack.
+
 Actions of source original.
 
 vimfiler/history					*vimfiler-unite-action-vimfiler-history*
@@ -468,8 +482,14 @@ vimfiler/sort						*vimfiler-unite-action-vimfiler-sort*
 vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 	change		Change vimfiler mask
 
+vimfiler/popd						*vimfiler-unite-action-vimfiler-mask*
+	delete		Delete directory from directory stack
+
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-10-05
+- Added vimfiler/popd source.
 
 2011-09-27
 - Set bufhidden.

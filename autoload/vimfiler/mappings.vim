@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2011.
+" Last Modified: 05 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -98,6 +98,10 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>choose_action()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)
         \ :<C-u>call <SID>toggle_safe_mode()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_pushd)
+        \ :<C-u>call <SID>pushd()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_popd)
+        \ :<C-u>call <SID>popd()<CR>
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
         \ line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
@@ -187,6 +191,10 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
   nmap <buffer> gc <Plug>(vimfiler_cd)
   nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
+
+  " pushd/popd
+  nmap <buffer> Y <Plug>(vimfiler_pushd)
+  nmap <buffer> P <Plug>(vimfiler_popd)
 endfunction"}}}
 
 function! vimfiler#mappings#cd(dir, ...)"{{{
@@ -392,6 +400,12 @@ function! s:move_to_drive()"{{{
 endfunction"}}}
 function! s:move_to_history_directory()"{{{
   call unite#start([['vimfiler/history']])
+endfunction"}}}
+function! s:pushd()"{{{
+  call unite#sources#vimfiler_popd#pushd()
+endfunction"}}}
+function! s:popd()"{{{
+  call unite#start([['vimfiler/popd']])
 endfunction"}}}
 
 function! s:toggle_visible_dot_files()"{{{
