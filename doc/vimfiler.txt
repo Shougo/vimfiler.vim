@@ -490,6 +490,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-10-05
 - Added vimfiler/popd source.
+- Improved execute file.
 
 2011-09-27
 - Set bufhidden.

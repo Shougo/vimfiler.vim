@@ -371,10 +371,12 @@ function! s:execute()"{{{
   endif
 endfunction"}}}
 function! s:execute_file()"{{{
-  let file = vimfiler#get_file(line('.'))
-  if file.vimfiler__filename != '..' && !vimfiler#check_filename_line()
+  if !vimfiler#check_filename_line()
+    call s:execute_external_filer()
     return
   endif
+
+  let file = vimfiler#get_file(line('.'))
 
   " Execute cursor file.
   call unite#mappings#do_action('vimfiler__execute', [file], {
