@@ -482,7 +482,7 @@ vimfiler/sort						*vimfiler-unite-action-vimfiler-sort*
 vimfiler/mask						*vimfiler-unite-action-vimfiler-mask*
 	change		Change vimfiler mask
 
-vimfiler/popd						*vimfiler-unite-action-vimfiler-mask*
+vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 	delete		Delete directory from directory stack
 
 ==============================================================================
