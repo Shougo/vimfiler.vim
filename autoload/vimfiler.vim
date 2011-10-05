@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Sep 2011.
+" Last Modified: 05 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -231,12 +231,15 @@ function! vimfiler#redraw_screen()"{{{
 
     let mark = file.vimfiler__is_marked ? '*' : '-'
     if !is_simple
+      let time = file.vimfiler__filetime <= 0 ? '' :
+            \ file.vimfiler__datemark .
+            \ strftime(g:vimfiler_time_format, file.vimfiler__filetime)
       let line = printf('%s %s %s %s %s',
             \ mark,
             \ filename,
             \ file.vimfiler__filetype,
             \ vimfiler#get_filesize(file),
-            \ file.vimfiler__datemark . strftime(g:vimfiler_time_format, file.vimfiler__filetime)
+            \ time,
             \)
     else
       let line = printf('%s %s %s', mark, filename, file.vimfiler__filetype)

@@ -52,7 +52,7 @@ syn match   VimFilerTypeDirectory     '\%(\f\s\?\)\+\s\+\[DIR\]'
 syn match   VimFilerTypeSystem        '\%(\f\s\?\)\+\s\+\[SYS\]'
 syn match   VimFilerTypeLink          '\%(\f\s\?\)\+\s\+\[LNK\]'
 
-syn match   VimFilerSize              '\s\zs[0-9.]\a*\s'
+syn match   VimFilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]'
 
 syn match   VimFilerDate              '\s\zs#[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
 syn match   VimFilerDateToday         '\s\zs\~[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
