@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Sep 2011.
+" Last Modified: 10 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,73 +36,63 @@ set cpo&vim
 let s:iswin = has('win32') || has('win64')
 
 " Global options definition."{{{
-if !exists('g:vimfiler_as_default_explorer')
-  let g:vimfiler_as_default_explorer = 0
-endif
-if !exists('g:vimfiler_execute_file_list')
-  let g:vimfiler_execute_file_list = {}
-endif
-if !exists('g:vimfiler_split_action')
-  let g:vimfiler_split_action = 'vsplit'
-endif
-if !exists('g:vimfiler_edit_action')
-  let g:vimfiler_edit_action = 'open'
-endif
-if !exists('g:vimfiler_preview_action')
-  let g:vimfiler_preview_action = 'preview'
-endif
-if !exists('g:vimfiler_min_filename_width')
-  let g:vimfiler_min_filename_width = 30
-endif
-if !exists('g:vimfiler_max_filename_width')
-  let g:vimfiler_max_filename_width = 80
-endif
-if !exists('g:vimfiler_sort_type')
-  let g:vimfiler_sort_type = 'filename'
-endif
-if !exists('g:vimfiler_directory_display_top')
-  let g:vimfiler_directory_display_top = 1
-endif
-if !exists('g:vimfiler_detect_drives')
-  let g:vimfiler_detect_drives = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
-            \ 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-            \ 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-endif
+let g:vimfiler_as_default_explorer =
+      \ get(g:, 'vimfiler_as_default_explorer', 0)
+let g:vimfiler_execute_file_list =
+      \ get(g:, 'vimfiler_execute_file_list', {})
+let g:vimfiler_split_action =
+      \ get(g:, 'vimfiler_split_action', 'vsplit')
+let g:vimfiler_edit_action =
+      \ get(g:, 'vimfiler_edit_action', 'open')
+let g:vimfiler_preview_action =
+      \ get(g:, 'vimfiler_preview_action', 'preview')
+let g:vimfiler_min_filename_width =
+      \ get(g:, 'vimfiler_min_filename_width', 30)
+let g:vimfiler_max_filename_width =
+      \ get(g:, 'vimfiler_max_filename_width', 80)
+let g:vimfiler_sort_type =
+      \ get(g:, 'vimfiler_sort_type', 'filename')
+let g:vimfiler_directory_display_top =
+      \ get(g:, 'vimfiler_directory_display_top', 1)
+let g:vimfiler_detect_drives =
+      \ get(g:, 'vimfiler_detect_drives', [
+      \     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+      \     'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+      \     'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+      \ ])
 
-if !exists('g:vimfiler_max_directories_history')
-  let g:vimfiler_max_directories_history = 10
-endif
-if !exists('g:vimfiler_enable_clipboard')
-  let g:vimfiler_enable_clipboard = 0
-endif
-if !exists('g:vimfiler_wildignore')
-    let g:vimfiler_wildignore = &l:wildignore
-endif
-if !exists('g:vimfiler_safe_mode_by_default')
-  let g:vimfiler_safe_mode_by_default = 1
-endif
-if !exists('g:vimfiler_time_format')
-  let g:vimfiler_time_format = '%y/%m/%d %H:%M'
-endif
+let g:vimfiler_max_directories_history =
+      \ get(g:, 'vimfiler_max_directories_history', 10)
+let g:vimfiler_safe_mode_by_default =
+      \ get(g:, 'vimfiler_safe_mode_by_default', 1)
+let g:vimfiler_time_format =
+      \ get(g:, 'vimfiler_time_format', '%y/%m/%d %H:%M')
 
 " Set extensions.
-if !exists('g:vimfiler_extensions')
-  let g:vimfiler_extensions = {}
-endif
+let g:vimfiler_extensions =
+      \ get(g:, 'vimfiler_extensions', {})
 if !has_key(g:vimfiler_extensions, 'text')
-  call vimfiler#set_extensions('text', 'txt,cfg,ini')
+  call vimfiler#set_extensions('text',
+        \ 'txt,cfg,ini')
 endif
 if !has_key(g:vimfiler_extensions, 'image')
-  call vimfiler#set_extensions('image', 'bmp,png,gif,jpg,jpeg,jp2,tif,ico,wdp,cur,ani')
+  call vimfiler#set_extensions('image',
+        \ 'bmp,png,gif,jpg,jpeg,jp2,tif,ico,wdp,cur,ani')
 endif
 if !has_key(g:vimfiler_extensions, 'archive')
-  call vimfiler#set_extensions('archive', 'lzh,zip,gz,bz2,cab,rar,7z,tgz,tar')
+  call vimfiler#set_extensions('archive',
+        \ 'lzh,zip,gz,bz2,cab,rar,7z,tgz,tar')
 endif
 if !has_key(g:vimfiler_extensions, 'system')
-  call vimfiler#set_extensions('system', 'inf,sys,reg,dat,spi,a,so,lib,dll')
+  call vimfiler#set_extensions('system',
+        \ 'inf,sys,reg,dat,spi,a,so,lib,dll')
 endif
 if !has_key(g:vimfiler_extensions, 'multimedia')
-  call vimfiler#set_extensions('multimedia', 'avi,asf,wmv,mpg,flv,swf,divx,mov,mpa,m1a,m2p,m2a,mpeg,m1v,m2v,mp2v,mp4,qt,ra,rm,ram,rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au')
+  call vimfiler#set_extensions('multimedia',
+        \ 'avi,asf,wmv,mpg,flv,swf,divx,mov,mpa,m1a,'.
+        \ 'm2p,m2a,mpeg,m1v,m2v,mp2v,mp4,qt,ra,rm,ram,'.
+        \ 'rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au'
+        \ )
 endif
 "}}}
 

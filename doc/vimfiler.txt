@@ -137,12 +137,6 @@ g:vimfiler_detect_drives			*g:vimfiler_detect_drives*
 		
 		Default value is refer to plugin/vimfiler.vim.
 
-g:vimfiler_wildignore		*g:vimfiler_wildignore*
-		This variable influences file list.
-		See 'wildignore' for the value.
-
-		Default value is same to 'wildignore'.
-
 g:vimfiler_safe_mode_by_default		*g:vimfiler_safe_mode_by_default*
 		This variable controls vimfiler enter safe mode by default. In
 		safe mode, dangerous command is disabled.
@@ -487,6 +481,10 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-10-10
+- Fixed variables initialize.
+- Delted obsolute options.
 
 2011-10-05
 - Added vimfiler/popd source.
