@@ -44,7 +44,9 @@ function! s:source.gather_candidates(args, context)"{{{
   endif
 
   if !exists('s:drives') || a:context.is_redraw
-    call s:detect_drives()
+    " Detect mounted drive.
+    let s:drives = filter(copy(g:vimfiler_detect_drives),
+          \ 'isdirectory(v:val)')
   endif
 
   return map(copy(s:drives), '{
@@ -54,18 +56,6 @@ function! s:source.gather_candidates(args, context)"{{{
         \ "kind" : "directory",
         \ }')
 endfunction"}}}
-
-function! s:detect_drives()
-  if vimfiler#iswin()
-    " Detect drives.
-    let s:drives = filter(map(copy(g:vimfiler_detect_drives),
-          \ 'v:val.":/"'), 'isdirectory(v:val)')
-  else
-    " Detect mounted drive.
-    let s:drives = filter(copy(g:vimfiler_detect_drives),
-          \ 'isdirectory(v:val)')
-  endif
-endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

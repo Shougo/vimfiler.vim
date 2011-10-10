@@ -56,9 +56,10 @@ let g:vimfiler_directory_display_top =
       \ get(g:, 'vimfiler_directory_display_top', 1)
 let g:vimfiler_detect_drives =
       \ get(g:, 'vimfiler_detect_drives', (has('win32') || has('win64')) ? [
-      \     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
-      \     'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-      \     'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+      \     'A:/', 'B:/', 'C:/', 'D:/', 'E:/', 'F:/', 'G:/',
+      \     'H:/', 'I:/', 'J:/', 'K:/', 'L:/', 'M:/', 'N:/',
+      \     'O:/', 'P:/', 'Q:/', 'R:/', 'S:/', 'T:/', 'U:/',
+      \     'V:/', 'W:/', 'X:/', 'Y:/', 'Z:/'
       \ ] : (has('macunix') || system('uname') =~? '^darwin') ?
       \ split(glob('/Volumes/*'), '\n') :
       \ split(glob('/mnt/*'), '\n') + split(glob('/media/*'), '\n'))
