@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/drive.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Sep 2011.
+" Last Modified: 10 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,30 +35,18 @@ let s:source = {
       \ 'name' : 'vimfiler/drive',
       \ 'description' : 'candidates from vimfiler drive',
       \ 'default_action' : 'lcd',
-      \ 'hooks' : {},
       \ 'is_listed' : 0,
       \ }
 
-function! s:source.hooks.on_init(args, context)"{{{
-  if &filetype !=# 'vimfiler'
-    return
-  endif
-
-  if !exists('s:drives')
-    if vimfiler#iswin()
-      " Detect drives.
-      let s:drives = filter(map(copy(g:vimfiler_detect_drives),
-            \ 'v:val.":/"'), 'isdirectory(v:val)')
-    else
-      " Detect mounted drive.
-      let s:drives = (has('macunix') || system('uname') =~? '^darwin') ?
-            \ split(glob('/Volumes/*'), '\n') :
-            \ split(glob('/mnt/*'), '\n') + split(glob('/media/*'), '\n')
-    endif
-  endif
-endfunction"}}}
-
 function! s:source.gather_candidates(args, context)"{{{
+  if &filetype !=# 'vimfiler'
+    return []
+  endif
+
+  if !exists('s:drives') || a:context.is_redraw
+    call s:detect_drives()
+  endif
+
   return map(copy(s:drives), '{
         \ "word" : v:val,
         \ "action__path" : v:val,
@@ -66,6 +54,18 @@ function! s:source.gather_candidates(args, context)"{{{
         \ "kind" : "directory",
         \ }')
 endfunction"}}}
+
+function! s:detect_drives()
+  if vimfiler#iswin()
+    " Detect drives.
+    let s:drives = filter(map(copy(g:vimfiler_detect_drives),
+          \ 'v:val.":/"'), 'isdirectory(v:val)')
+  else
+    " Detect mounted drive.
+    let s:drives = filter(copy(g:vimfiler_detect_drives),
+          \ 'isdirectory(v:val)')
+  endif
+endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

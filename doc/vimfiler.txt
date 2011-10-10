@@ -132,7 +132,7 @@ g:vimfiler_directory_display_top		*g:vimfiler_directory_display_top*
 		Default value is 1.
 
 g:vimfiler_detect_drives			*g:vimfiler_detect_drives*
-		 (Windows only) This variable controls vimfiler uses drives
+		This variable controls vimfiler uses drives
 		 when |<Plug>(vimfiler_move_to_drive)|.
 		
 		Default value is refer to plugin/vimfiler.vim.
@@ -485,6 +485,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-10-10
 - Fixed variables initialize.
 - Delted obsolute options.
+- Improved vimfiler/drive source.
 
 2011-10-05
 - Added vimfiler/popd source.
