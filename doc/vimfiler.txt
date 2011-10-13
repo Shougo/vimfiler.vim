@@ -482,6 +482,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-10-13
+- Detect sudo vim.
+
 2011-10-11
 - Fixed for Vim 7.2.
 
