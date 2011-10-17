@@ -485,6 +485,9 @@ CHANGELOG					*vimfiler-changelog*
 2011-10-17
 - Improved vimfiler mappings source.
 
+2011-10-13
+- Detect sudo vim.
+
 2011-10-11
 - Fixed for Vim 7.2.
 
