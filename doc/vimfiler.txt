@@ -431,7 +431,7 @@ EXAMPLES					*vimfiler-examples*
 	
 	" Enable file operation commands.
 	"let g:vimfiler_safe_mode_by_default = 0
->
+<
 ==============================================================================
 UNITE SOURCES						*vimfiler-unite-sources*
 
@@ -481,6 +481,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-10-17
+- Improved vimfiler mappings source.
 
 2011-10-11
 - Fixed for Vim 7.2.

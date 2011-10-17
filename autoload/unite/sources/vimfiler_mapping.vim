@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/mapping.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 17 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,8 @@ function! s:source.hooks.on_init(args, context)"{{{
   redir END
 
   let s:cached_result = []
-  for line in split(redir, '\n')
+  for line in map(split(redir, '\n'),
+        \ "substitute(v:val, '<NL>', '<C-J>', 'g')")
     let map = matchstr(line, '^\a*\s*\zs\S\+')
     if map !~ '^<' || map =~ '^<SNR>'
       continue
@@ -59,7 +60,7 @@ function! s:source.hooks.on_init(args, context)"{{{
     let map = substitute(map, '\(<.*>\)', '\\\1', 'g')
 
     call add(s:cached_result, {
-          \ 'word' : line,
+          \ 'word' : substitute(line, '<NL>', '<C-j>', 'g'),
           \ 'kind' : 'command',
           \ 'action__command' : 'execute "normal ' . map . '"',
           \ })
