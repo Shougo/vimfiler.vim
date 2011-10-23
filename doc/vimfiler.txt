@@ -484,6 +484,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-10-23
 - Improved check link.
+- Fixed for ":edit ~".
 
 2011-10-17
 - Improved vimfiler mappings source.
