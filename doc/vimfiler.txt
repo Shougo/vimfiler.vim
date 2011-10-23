@@ -482,6 +482,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-10-23
+- Improved check link.
+
 2011-10-13
 - Detect sudo vim.
 
