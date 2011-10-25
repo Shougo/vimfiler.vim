@@ -482,6 +482,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-10-25
+- Fixed s:browse_check().
+
 2011-10-23
 - Improved check link.
 - Fixed for ":edit ~".

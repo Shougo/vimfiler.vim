@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 May 2011.
+" Last Modified: 25 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -91,6 +91,9 @@ function! vimfiler#util#get_last_status(...)
 endfunction
 function! vimfiler#util#sort_by(...)
   return call(s:V.Data.List.sort_by, a:000)
+endfunction
+function! vimfiler#util#escape_file_searching(...)
+  return call(s:V.escape_file_searching, a:000)
 endfunction
 
 let &cpo = s:save_cpo
