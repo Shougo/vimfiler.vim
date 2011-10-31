@@ -27,6 +27,7 @@ CONTENTS					*vimfiler-contents*
 Introduction		|vimfiler-introduction|
 Interface		|vimfiler-interface|
   Commands		  |vimfiler-commands|
+  Functions		  |vimfiler-functions|
   Variables		  |vimfiler-variables|
     Sources variables	    |vimfiler-sources-variables|
   Key mappings		  |vimfiler-key-mappings|
@@ -81,6 +82,28 @@ COMMANDS 					*vimfiler-commands*
 :VimFilerDouble					*:VimFilerDouble*
 		Create double vimfiler buffers.
 
+==============================================================================
+FUNCTIONS					*vimfiler-functions*
+
+vimfiler#do_action({action-name})		*vimfiler#do_action()*
+		Execute {action-name} action for the marked candidates.
+		This causes a runtime error if {action-name} doesn't exist or
+		the action is invalid.
+
+		This is handy for defining a key mapping to run an action by
+		yourself.
+
+		This runs the default action when you specify "default" on
+		{action-name}.
+
+		This runs an action on the candidates of the current line or
+		the top of the candidates when none of the candidates are marked.
+
+		This is usually used as nnoremap <silent><buffer><expr>.
+		For example,
+>
+		nnoremap <silent><buffer><expr> v vimfiler#do_action('vsplit')
+>
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
 
@@ -481,6 +504,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-10-31
+- Added vimfiler#do_action().
 
 2011-10-25
 - Fixed s:browse_check().

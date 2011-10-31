@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Oct 2011.
+" Last Modified: 31 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,9 +59,9 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)
         \ :<C-u>call <SID>popup_shell()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)
-        \ :<C-u>call <SID>edit_file(0)<CR>
+        \ :<C-u>call vimfiler#mappings#do_action(g:vimfiler_edit_action)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)
-        \ :<C-u>call <SID>edit_file(1)<CR>
+        \ :<C-u>call vimfiler#mappings#do_action(g:vimfiler_split_action)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)
         \ :<C-u>call <SID>edit_binary_file(0)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_filer)
@@ -73,7 +73,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_help)
         \ :<C-u>call <SID>help()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_preview_file)
-        \ :<C-u>call <SID>preview_file()<CR>
+        \ :<C-u>call vimfiler#mappings#do_action(g:vimfiler_preview_action)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_current_vimfiler)
         \ :<C-u>call <SID>sync_with_current_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_another_vimfiler)
@@ -83,7 +83,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_set_current_mask)
         \ :<C-u>call <SID>set_current_mask()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_grep)
-        \ :<C-u>call <SID>grep()<CR>
+        \ :<C-u>call vimfiler#mappings#do_action('grep')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)
         \ :<C-u>call <SID>select_sort_type()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_other_window)
@@ -195,6 +195,21 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   " pushd/popd
   nmap <buffer> Y <Plug>(vimfiler_pushd)
   nmap <buffer> P <Plug>(vimfiler_popd)
+endfunction"}}}
+
+function! vimfiler#mappings#do_action(action)"{{{
+  let marked_files = vimfiler#get_marked_files()
+  if empty(marked_files)
+    let marked_files = [ vimfiler#get_file(line('.')) ]
+  endif
+
+  call s:clear_mark_all_lines()
+
+  " Execute action.
+  let current_dir = b:vimfiler.current_dir
+  call unite#mappings#do_action(a:action, marked_files, {
+        \ 'vimfiler__current_directory' : current_dir,
+        \ })
 endfunction"}}}
 
 function! vimfiler#mappings#cd(dir, ...)"{{{
@@ -433,18 +448,6 @@ function! s:popup_shell()"{{{
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
 endfunction"}}}
-function! s:edit_file(is_split)"{{{
-  if !vimfiler#check_filename_line()
-    return
-  endif
-
-  let file = vimfiler#get_file(line('.'))
-  call unite#mappings#do_action(
-        \ (a:is_split ? g:vimfiler_split_action
-        \             : g:vimfiler_edit_action), [file], {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-endfunction"}}}
 function! s:edit_binary_file(is_split)"{{{
   if !vimfiler#check_filename_line()
     return
@@ -456,16 +459,6 @@ function! s:edit_binary_file(is_split)"{{{
   endif
 
   Vinarise `=vimfiler#get_filename(line('.'))`
-endfunction"}}}
-function! s:preview_file()"{{{
-  if !vimfiler#check_filename_line()
-    return
-  endif
-
-  let file = vimfiler#get_file(line('.'))
-  call unite#mappings#do_action(g:vimfiler_preview_action, [file], {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
 endfunction"}}}
 function! s:execute_shell_command()"{{{
   echo 'Marked files:'
@@ -693,18 +686,6 @@ endfunction"}}}
 
 function! s:set_current_mask()"{{{
   call unite#start([['vimfiler/mask']], { 'start_insert' : 1 })
-endfunction"}}}
-function! s:grep()"{{{
-  let marked_files = vimfiler#get_marked_files()
-  if empty(marked_files)
-    redraw
-    echo 'Canceled.'
-    return
-  endif
-
-  call unite#mappings#do_action('grep', marked_files, {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
 endfunction"}}}
 function! s:select_sort_type()"{{{
   call unite#start([['vimfiler/sort']])

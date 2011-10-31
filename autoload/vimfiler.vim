@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Oct 2011.
+" Last Modified: 31 Oct 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -105,6 +105,10 @@ function! vimfiler#set_extensions(kind, exts)"{{{
   for ext in split(a:exts, ',')
     let g:vimfiler_extensions[a:kind][ext] = 1
   endfor
+endfunction"}}}
+function! vimfiler#do_action(action)"{{{
+  return printf(":\<C-u>call vimfiler#mappings#do_action(%s)\<CR>",
+        \             string(a:action))
 endfunction"}}}
 "}}}
 
