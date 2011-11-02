@@ -52,6 +52,9 @@ endif"}}}
 let s:last_vimfiler_bufnr = -1
 let s:last_system_is_vimproc = -1
 
+let s:min_padding_width = 10
+let s:max_padding_width = 35
+
 " Global options definition."{{{
 if !exists('g:vimfiler_execute_file_list')
   let g:vimfiler_execute_file_list = {}
@@ -76,7 +79,7 @@ function! vimfiler#default_settings()"{{{
   if has('netbeans_intg') || has('sun_workshop')
     setlocal noautochdir
   endif
-  let &l:winwidth = g:vimfiler_min_filename_width + 10
+  let &l:winwidth = g:vimfiler_min_filename_width + s:min_padding_width
   if has('conceal')
     setlocal conceallevel=3
     setlocal concealcursor=n
@@ -215,13 +218,13 @@ function! vimfiler#redraw_screen()"{{{
   " Append up directory.
   call append('$', '..')
 
-  let is_simple = b:vimfiler.is_simple ||
-        \ winwidth(0) < (g:vimfiler_min_filename_width + g:vimfiler_padding_width)
-  let max_len = is_simple ?
-        \ g:vimfiler_min_filename_width :
-        \ (winwidth(0) - g:vimfiler_padding_width)
+  let is_simple = b:vimfiler.is_simple
+  let max_len = winwidth(0) -
+        \ (is_simple ? s:min_padding_width : s:max_padding_width)
   if max_len > g:vimfiler_max_filename_width
     let max_len = g:vimfiler_max_filename_width
+  elseif max_len < g:vimfiler_min_filename_width
+    let max_len = g:vimfiler_min_filename_width
   endif
   let max_len -= 1
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2011.
+" Last Modified: 02 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -98,6 +98,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>choose_action()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)
         \ :<C-u>call <SID>toggle_safe_mode()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_simple_mode)
+        \ :<C-u>call <SID>toggle_simple_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_pushd)
         \ :<C-u>call <SID>pushd()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_popd)
@@ -191,6 +193,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
   nmap <buffer> gc <Plug>(vimfiler_cd)
   nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
+  nmap <buffer> gS <Plug>(vimfiler_toggle_simple_mode)
 
   " pushd/popd
   nmap <buffer> Y <Plug>(vimfiler_pushd)
@@ -717,7 +720,7 @@ function! s:restore_vimfiler_mode()"{{{
   echo 'Switched vimfiler mode'
 endfunction"}}}
 function! s:help()"{{{
-  call unite#start([['vimfiler/mapping']])
+  call unite#start([['mapping']])
 endfunction"}}}
 function! s:execute_external_filer()"{{{
   let dummy_files = unite#get_vimfiler_candidates(
@@ -809,6 +812,12 @@ function! s:custom_alternate_buffer()"{{{
   endif
 
   silent call vimfiler#force_redraw_all_vimfiler()
+endfunction"}}}
+
+function! s:toggle_simple_mode()"{{{
+  let b:vimfiler.is_simple = !b:vimfiler.is_simple
+  call vimfiler#redraw_screen()
+  echo 'Simple mode is ' . (b:vimfiler.is_simple ? 'enabled' : 'disabled')
 endfunction"}}}
 
 " vim: foldmethod=marker

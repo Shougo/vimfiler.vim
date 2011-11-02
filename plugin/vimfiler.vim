@@ -50,8 +50,6 @@ let g:vimfiler_edit_action =
       \ get(g:, 'vimfiler_edit_action', 'open')
 let g:vimfiler_preview_action =
       \ get(g:, 'vimfiler_preview_action', 'preview')
-let g:vimfiler_padding_width =
-      \ get(g:, 'vimfiler_padding_width', 35)
 let g:vimfiler_min_filename_width =
       \ get(g:, 'vimfiler_min_filename_width', 30)
 let g:vimfiler_max_filename_width =

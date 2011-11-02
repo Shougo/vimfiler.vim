@@ -82,7 +82,7 @@ COMMANDS 					*vimfiler-commands*
 :VimFilerDouble					*:VimFilerDouble*
 		Create double vimfiler buffers.
 
-==============================================================================
+------------------------------------------------------------------------------
 FUNCTIONS					*vimfiler-functions*
 
 vimfiler#do_action({action-name})		*vimfiler#do_action()*
@@ -372,6 +372,9 @@ Normal mode key mappings.
 <Plug>(vimfiler_toggle_safe_mode)		*<Plug>(vimfiler_toggle_safe_mode)*
 		Toggle safe mode. In safe mode, dangerous command is disabled.
 
+<Plug>(vimfiler_toggle_simple_mode)		*<Plug>(vimfiler_toggle_simple_mode)*
+		Toggle simple mode. In simple mode, dispayed information is simple.
+
 <Plug>(vimfiler_pushd)				*<Plug>(vimfiler_pushd)*
 		Push current directory(and another vimfiler current directory)
 		to directory stack.
@@ -432,6 +435,7 @@ S			<Plug>(vimfiler_select_sort_type)
 <C-v>			<Plug>(vimfiler_switch_vim_buffer_mode)
 gc			<Plug>(vimfiler_cd)
 gs			<Plug>(vimfiler_toggle_safe_mode)
+gS			<Plug>(vimfiler_toggle_simple_mode)
 a			<Plug>(vimfiler_choose_action)
 Y			<Plug>(vimfiler_pushd)
 P			<Plug>(vimfiler_popd)
@@ -508,6 +512,8 @@ CHANGELOG					*vimfiler-changelog*
 2011-11-02
 - Improved vimfiler/mapping source.
 - Improved redraw behavior.
+- Deleted vimfiler/mapping source.
+- Added <Plug>(vimfiler_toggle_simple_mode) mapping.
 
 2011-10-31
 - Added vimfiler#do_action().
