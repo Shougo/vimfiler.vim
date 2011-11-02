@@ -368,7 +368,7 @@ function! s:execute()"{{{
   let line = getline('.')
   let filename = vimfiler#get_filename(line('.'))
   if filename != '..' && !vimfiler#check_filename_line()
-    let cursor_line = matchstr(line[: col('.') - 1], '^Current directory: \zs.*')
+    let cursor_line = matchstr(line[: col('.') - 1], ' Current directory: \zs.*')
     if cursor_line != ''
       " Change current directory.
       let cursor_next = matchstr(line[col('.') :], '.\{-}\ze[/\\]')

@@ -514,6 +514,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved redraw behavior.
 - Deleted vimfiler/mapping source.
 - Added <Plug>(vimfiler_toggle_simple_mode) mapping.
+- Fixed change current directory.
 
 2011-10-31
 - Added vimfiler#do_action().
