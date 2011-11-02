@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Oct 2011.
+" Last Modified: 02 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -215,15 +215,17 @@ function! vimfiler#redraw_screen()"{{{
   " Append up directory.
   call append('$', '..')
 
-  " Print files.
   let is_simple = b:vimfiler.is_simple ||
-        \ winwidth(0) < g:vimfiler_min_filename_width * 2
+        \ winwidth(0) < (g:vimfiler_min_filename_width + g:vimfiler_padding_width)
   let max_len = is_simple ?
-        \ g:vimfiler_min_filename_width : (winwidth(0) - g:vimfiler_min_filename_width)
+        \ g:vimfiler_min_filename_width :
+        \ (winwidth(0) - g:vimfiler_padding_width)
   if max_len > g:vimfiler_max_filename_width
     let max_len = g:vimfiler_max_filename_width
   endif
   let max_len -= 1
+
+  " Print files.
   for file in b:vimfiler.current_files
     let filename = file.vimfiler__abbr
     if file.vimfiler__is_directory

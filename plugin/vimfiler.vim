@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Oct 2011.
+" Last Modified: 02 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,6 +50,8 @@ let g:vimfiler_edit_action =
       \ get(g:, 'vimfiler_edit_action', 'open')
 let g:vimfiler_preview_action =
       \ get(g:, 'vimfiler_preview_action', 'preview')
+let g:vimfiler_padding_width =
+      \ get(g:, 'vimfiler_padding_width', 35)
 let g:vimfiler_min_filename_width =
       \ get(g:, 'vimfiler_min_filename_width', 30)
 let g:vimfiler_max_filename_width =

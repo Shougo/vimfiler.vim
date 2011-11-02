@@ -505,6 +505,10 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-11-02
+- Improved vimfiler/mapping source.
+- Improved redraw behavior.
+
 2011-10-31
 - Added vimfiler#do_action().
 
