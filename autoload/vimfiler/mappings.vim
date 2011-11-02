@@ -79,7 +79,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_another_vimfiler)
         \ :<C-u>call <SID>sync_with_another_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_print_filename)
-        \ :<C-u>echo vimfiler#get_filename(line('.'))<CR>
+        \ :<C-u>call <SID>print_filename()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_set_current_mask)
         \ :<C-u>call <SID>set_current_mask()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_grep)
@@ -368,7 +368,8 @@ function! s:execute()"{{{
   let line = getline('.')
   let filename = vimfiler#get_filename(line('.'))
   if filename != '..' && !vimfiler#check_filename_line()
-    let cursor_line = matchstr(line[: col('.') - 1], ' Current directory: \zs.*')
+    let cursor_line = matchstr(line[: col('.') - 1],
+          \ ' Current directory: \zs.*')
     if cursor_line != ''
       " Change current directory.
       let cursor_next = matchstr(line[col('.') :], '.\{-}\ze[/\\]')
@@ -413,6 +414,15 @@ function! s:move_to_other_window()"{{{
   endif
 
   wincmd w
+endfunction"}}}
+function! s:print_filename()"{{{
+  let filename = vimfiler#get_filename(line('.'))
+  if filename != '..' && !vimfiler#check_filename_line()
+    let filename = matchstr(getline('.'),
+          \ ' Current directory: \zs.*\ze[/\\]')
+  endif
+
+  echo filename
 endfunction"}}}
 
 function! s:move_to_drive()"{{{

@@ -515,6 +515,7 @@ CHANGELOG					*vimfiler-changelog*
 - Deleted vimfiler/mapping source.
 - Added <Plug>(vimfiler_toggle_simple_mode) mapping.
 - Fixed change current directory.
+- Improved <Plug>(vimfiler_print_filename) mapping.
 
 2011-10-31
 - Added vimfiler#do_action().
