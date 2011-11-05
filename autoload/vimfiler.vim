@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Nov 2011.
+" Last Modified: 05 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -693,7 +693,8 @@ function! s:restore_vimfiler()"{{{
   endwhile
 
   " Restore another vimfiler.
-  if bufnr('%') != b:vimfiler.another_vimfiler_bufnr
+  if winnr('$') == 1
+        \ && bufnr('%') != b:vimfiler.another_vimfiler_bufnr
         \ && bufwinnr(b:vimfiler.another_vimfiler_bufnr) < 0
         \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
     call s:switch_vimfiler(b:vimfiler.another_vimfiler_bufnr,
