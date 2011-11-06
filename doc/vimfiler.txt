@@ -156,7 +156,7 @@ g:vimfiler_directory_display_top		*g:vimfiler_directory_display_top*
 
 g:vimfiler_detect_drives			*g:vimfiler_detect_drives*
 		This variable controls vimfiler uses drives
-		 when |<Plug>(vimfiler_move_to_drive)|.
+		 when |<Plug>(vimfiler_switch_to_drive)|.
 		
 		Default value is refer to plugin/vimfiler.vim.
 
@@ -207,8 +207,8 @@ g:unite_kind_file_copy_directory_command	*g:unite_kind_file_copy_directory_comma
 		
 		Default value is refer to autoload/unite/kinds/file.vim.
 
-g:unite_kind_file_move_command			*g:unite_kind_file_move_command*
-		This variable controls vimfiler (and kind file) use move
+g:unite_kind_file_switch_command			*g:unite_kind_file_switch_command*
+		This variable controls vimfiler (and kind file) use switch
 		files command.
 		
 		This variable substitute special arguments:
@@ -222,14 +222,14 @@ KEY MAPPINGS 					*vimfiler-key-mappings*
 
 Normal mode key mappings.
 
-<Plug>(vimfiler_move_to_other_window)		*<Plug>(vimfiler_move_to_other_window)*
-		Move to other vimfiler window.
+<Plug>(vimfiler_switch_to_other_window)		*<Plug>(vimfiler_switch_to_other_window)*
+		Switch to other vimfiler window.
 
 <Plug>(vimfiler_loop_cursor_down)		*<Plug>(vimfiler_loop_cursor_down)*
-		Move to next line with loop.
+		Switch to next line with loop.
 
 <Plug>(vimfiler_loop_cursor_up)			*<Plug>(vimfiler_loop_cursor_up)*
-		Move to previous line with loop.
+		Switch to previous line with loop.
 
 <Plug>(vimfiler_redraw_screen)			*<Plug>(vimfiler_redraw_screen)*
 		Redraw vimfiler screen.
@@ -284,21 +284,21 @@ Normal mode key mappings.
 <Plug>(vimfiler_execute_file)			*<Plug>(vimfiler_execute_file)*
 		Execute cursor file by system associated command.
 
-<Plug>(vimfiler_move_to_parent_directory)	*<Plug>(vimfiler_move_to_parent_directory)*
-		Move to parent directory.
+<Plug>(vimfiler_switch_to_parent_directory)	*<Plug>(vimfiler_switch_to_parent_directory)*
+		Switch to parent directory.
 
-<Plug>(vimfiler_move_to_drive)			*<Plug>(vimfiler_move_to_drive)*
-		Move to other drive(Windows) or mount point(Mac/Linux) by
+<Plug>(vimfiler_switch_to_drive)			*<Plug>(vimfiler_switch_to_drive)*
+		Switch to other drive(Windows) or mount point(Mac/Linux) by
 		|unite| interface.
 
-<Plug>(vimfiler_move_to_home_directory)		*<Plug>(vimfiler_move_to_home_directory)*
-		Move to home directory.
+<Plug>(vimfiler_switch_to_home_directory)		*<Plug>(vimfiler_switch_to_home_directory)*
+		Switch to home directory.
 
-<Plug>(vimfiler_move_to_root_directory)		*<Plug>(vimfiler_move_to_root_directory)*
-		Move to root directory.
+<Plug>(vimfiler_switch_to_root_directory)		*<Plug>(vimfiler_switch_to_root_directory)*
+		Switch to root directory.
 
-<Plug>(vimfiler_move_to_history_directory)	*<Plug>(vimfiler_move_to_history_directory)*
-		Move to history directory by |unite| interface.
+<Plug>(vimfiler_switch_to_history_directory)	*<Plug>(vimfiler_switch_to_history_directory)*
+		Switch to history directory by |unite| interface.
 
 <Plug>(vimfiler_toggle_visible_dot_files)	*<Plug>(vimfiler_toggle_visible_dot_files)*
 		Toggle visible dot files.
@@ -364,7 +364,7 @@ Normal mode key mappings.
 		Choose |unite| action in selected files.
 
 <Plug>(vimfiler_smart_h)			*<Plug>(vimfiler_smart_h)*
-		Move to updirectory or normal! "h".
+		Switch to parent directory or normal! "h".
 
 <Plug>(vimfiler_smart_l)			*<Plug>(vimfiler_smart_l)*
 		Execute cursor file or normal! "l".
@@ -394,7 +394,7 @@ Following keymappings are default keymappings.
 Normal mode default mappings.
 {lhs}			{rhs}
 --------		-----------------------------
-<TAB>			<Plug>(vimfiler_move_to_other_window)
+<TAB>			<Plug>(vimfiler_switch_to_other_window)
 j			<Plug>(vimfiler_loop_cursor_down)
 k			<Plug>(vimfiler_loop_cursor_up)
 <C-l>			<Plug>(vimfiler_redraw_screen)
@@ -411,10 +411,10 @@ N			<Plug>(vimfiler_new_file)
 l			<Plug>(vimfiler_smart_l)
 x			<Plug>(vimfiler_execute_file)
 h			<Plug>(vimfiler_smart_h)
-L			<Plug>(vimfiler_move_to_drive)
-~			<Plug>(vimfiler_move_to_home_directory)
-\			<Plug>(vimfiler_move_to_root_directory)
-<C-j>			<Plug>(vimfiler_move_to_history_directory)
+L			<Plug>(vimfiler_switch_to_drive)
+~			<Plug>(vimfiler_switch_to_home_directory)
+\			<Plug>(vimfiler_switch_to_root_directory)
+<C-j>			<Plug>(vimfiler_switch_to_history_directory)
 .			<Plug>(vimfiler_toggle_visible_dot_files)
 H			<Plug>(vimfiler_popup_shell)
 e			<Plug>(vimfiler_edit_file)
@@ -510,7 +510,7 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 CHANGELOG					*vimfiler-changelog*
 
 2011-11-06
-- Renamed <Plug>(vimfiler_move_to_up_directory) to <Plug>(vimfiler_move_to_parent_directory).
+- Fixed mappings name.
 
 2011-11-05
 - Improved restore another vimfiler behavior.

@@ -44,16 +44,16 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>execute()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_file)
         \ :<C-u>call <SID>execute_file()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_parent_directory)
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_parent_directory)
         \ :<C-u>call vimfiler#mappings#cd('..')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_home_directory)
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_home_directory)
         \ :<C-u>call vimfiler#mappings#cd('~')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_root_directory)
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_root_directory)
         \ :<C-u>call vimfiler#mappings#cd('/')<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_drive)
-        \ :<C-u>call <SID>move_to_drive()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_history_directory)
-        \ :<C-u>call <SID>move_to_history_directory()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_drive)
+        \ :<C-u>call <SID>switch_to_drive()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_history_directory)
+        \ :<C-u>call <SID>switch_to_history_directory()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_visible_dot_files)
         \ :<C-u>call <SID>toggle_visible_dot_files()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)
@@ -86,8 +86,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call vimfiler#mappings#do_action('grep')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)
         \ :<C-u>call <SID>select_sort_type()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_other_window)
-        \ :<C-u>call <SID>move_to_other_window()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_other_window)
+        \ :<C-u>call <SID>switch_to_other_window()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)
         \ :<C-u>call <SID>switch_vim_buffer_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)
@@ -121,7 +121,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
     return
   endif
 
-  nmap <buffer> <TAB> <Plug>(vimfiler_move_to_other_window)
+  nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_other_window)
   nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
   nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
 
@@ -161,10 +161,10 @@ function! vimfiler#mappings#define_default_mappings()"{{{
 
   " Move to directory.
   nmap <buffer> h <Plug>(vimfiler_smart_h)
-  nmap <buffer> L <Plug>(vimfiler_move_to_drive)
-  nmap <buffer> ~ <Plug>(vimfiler_move_to_home_directory)
-  nmap <buffer> \ <Plug>(vimfiler_move_to_root_directory)
-  nmap <buffer> <C-j> <Plug>(vimfiler_move_to_history_directory)
+  nmap <buffer> L <Plug>(vimfiler_switch_to_drive)
+  nmap <buffer> ~ <Plug>(vimfiler_switch_to_home_directory)
+  nmap <buffer> \ <Plug>(vimfiler_switch_to_root_directory)
+  nmap <buffer> <C-j> <Plug>(vimfiler_switch_to_history_directory)
 
   nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
   nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
@@ -402,7 +402,7 @@ function! s:execute_file()"{{{
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
 endfunction"}}}
-function! s:move_to_other_window()"{{{
+function! s:switch_to_other_window()"{{{
   if winnr('$') == 1
     " Create another vimfiler.
     call vimfiler#create_filer(b:vimfiler.current_dir,
@@ -425,10 +425,10 @@ function! s:print_filename()"{{{
   echo filename
 endfunction"}}}
 
-function! s:move_to_drive()"{{{
+function! s:switch_to_drive()"{{{
   call unite#start([['vimfiler/drive']])
 endfunction"}}}
-function! s:move_to_history_directory()"{{{
+function! s:switch_to_history_directory()"{{{
   call unite#start([['vimfiler/history']])
 endfunction"}}}
 function! s:pushd()"{{{
