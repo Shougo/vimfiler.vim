@@ -284,8 +284,8 @@ Normal mode key mappings.
 <Plug>(vimfiler_execute_file)			*<Plug>(vimfiler_execute_file)*
 		Execute cursor file by system associated command.
 
-<Plug>(vimfiler_move_to_up_directory)		*<Plug>(vimfiler_move_to_up_directory)*
-		Move to up directory.
+<Plug>(vimfiler_move_to_parent_directory)	*<Plug>(vimfiler_move_to_parent_directory)*
+		Move to parent directory.
 
 <Plug>(vimfiler_move_to_drive)			*<Plug>(vimfiler_move_to_drive)*
 		Move to other drive(Windows) or mount point(Mac/Linux) by
@@ -508,6 +508,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-11-06
+- Renamed <Plug>(vimfiler_move_to_up_directory) to <Plug>(vimfiler_move_to_parent_directory).
 
 2011-11-05
 - Improved restore another vimfiler behavior.

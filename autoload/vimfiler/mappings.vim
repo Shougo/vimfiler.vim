@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Nov 2011.
+" Last Modified: 06 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,7 +44,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>execute()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_file)
         \ :<C-u>call <SID>execute_file()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_up_directory)
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_to_parent_directory)
         \ :<C-u>call vimfiler#mappings#cd('..')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_move_to_home_directory)
         \ :<C-u>call vimfiler#mappings#cd('~')<CR>
