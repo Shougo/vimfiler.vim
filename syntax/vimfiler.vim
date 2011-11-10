@@ -30,67 +30,72 @@ elseif exists("b:current_syntax")
   finish
 endif
 
-syn match   VimFilerNonMarkedFile     '^-'
-syn match   VimFilerMarkedFile        '^\* .*$'
-syn match   VimFilerDirectory         '^..$'
+syn match   vimfilerNonMarkedFile     '^- \zs.*'
+      \ contains=vimfilerTypeText,vimfilerTypeImage,vimfilerTypeArchive,
+      \vimfilerTypeExecute,vimfilerTypeMultimedia,vimfilerTypeDirectory,vimfilerTypeSystem,vimfilerTypeLink,
+      \vimfilerSize,vimfilerDate,vimfilerDateToday,vimfilerDateWeek
+syn match   vimfilerMarkedFile        '^\* .*$'
+      \ contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek
+syn match   vimfilerDirectory         '^..$'
 
-syn match   VimFilerPrompt            '^\%(Current directory\|CD\): .*$'
-      \ contains=VimFilerSpecial,VimFilerCurrentDirectory
-syn match   VimFilerPromptSafe        '^\*u\%[nsafe]\* \%(Current directory\|CD\): .*$'
-      \ contains=VimFilerSpecial,VimFilerSpecialSafe,VimFilerCurrentDirectory
-syn match   VimFilerSpecialSafe       '^\*u\%[nsafe]\* ' contained
-syn match   VimFilerSpecial           '\%(Current directory\|CD\):' contained
-syn match   VimFilerCurrentDirectory  '\s\zs.*$' contained contains=VimFilerMask
-syn match   VimFilerMask  '\[.*\]$' contained
+syn match   vimfilerPrompt            '^\%(Current directory\|CD\): .*$'
+      \ contains=vimfilerSpecial,vimfilerCurrentDirectory
+syn match   vimfilerPromptSafe        '^\*u\%[nsafe]\* \%(Current directory\|CD\): .*$'
+      \ contains=vimfilerSpecial,vimfilerSpecialSafe,vimfilerCurrentDirectory
+syn match   vimfilerSpecialSafe       '^\*u\%[nsafe]\* ' contained
+syn match   vimfilerSpecial           '\%(Current directory\|CD\):' contained
+syn match   vimfilerCurrentDirectory  '\s\zs.*$' contained contains=vimfilerMask
+syn match   vimfilerMask  '\[.*\]$' contained
+syn match   vimfilerFileLine          '\[.*\]$' contained
 
-syn match   VimFilerTypeText          '\%(\f\s\?\)\+\s\+\[TXT\]'
-syn match   VimFilerTypeImage         '\%(\f\s\?\)\+\s\+\[IMG\]'
-syn match   VimFilerTypeArchive       '\%(\f\s\?\)\+\s\+\[ARC\]'
-syn match   VimFilerTypeExecute       '\%(\f\s\?\)\+\s\+\[EXE\]'
-syn match   VimFilerTypeMultimedia    '\%(\f\s\?\)\+\s\+\[MUL\]'
-syn match   VimFilerTypeDirectory     '\%(\f\s\?\)\+\s\+\[DIR\]'
-syn match   VimFilerTypeSystem        '\%(\f\s\?\)\+\s\+\[SYS\]'
-syn match   VimFilerTypeLink          '\%(\f\s\?\)\+\s\+\[LNK\]'
+syn match   vimfilerTypeText          '.*\[TXT\]' contained
+syn match   vimfilerTypeImage         '.*\[IMG\]' contained
+syn match   vimfilerTypeArchive       '.*\[ARC\]' contained
+syn match   vimfilerTypeExecute       '.*\[EXE\]' contained
+syn match   vimfilerTypeMultimedia    '.*\[MUL\]' contained
+syn match   vimfilerTypeDirectory     '.*\[DIR\]' contained
+syn match   vimfilerTypeSystem        '.*\[SYS\]' contained
+syn match   vimfilerTypeLink          '.*\[LNK\]' contained
 
-syn match   VimFilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]'
+syn match   vimfilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]' contained
 
-syn match   VimFilerDate              '\s\zs#[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
-syn match   VimFilerDateToday         '\s\zs\~[[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
-syn match   VimFilerDateWeek          '\s\zs![[:digit:]/]\+\s\+\d\+:\d\+$' contains=VimFilerDateIgnore
+syn match   vimfilerDate              '#[[:digit:]/]\+\s\+\d\+:\d\+$' contains=vimfilerDateIgnore contained
+syn match   vimfilerDateToday         '\~[[:digit:]/]\+\s\+\d\+:\d\+$' contains=vimfilerDateIgnore contained
+syn match   vimfilerDateWeek          '![[:digit:]/]\+\s\+\d\+:\d\+$' contains=vimfilerDateIgnore contained
 if has('conceal')
   " Supported conceal features.
-  syn match   VimFilerDateIgnore        '[#~!]' contained conceal
+  syn match   vimfilerDateIgnore        '[#~!]' contained conceal
 else
-  syn match   VimFilerDateIgnore        '[#~!]' contained
+  syn match   vimfilerDateIgnore        '[#~!]' contained
 endif
 
 if has('gui_running')
-    hi VimFilerCurrentDirectory  gui=UNDERLINE guifg=#80ffff guibg=NONE
+    hi vimfilerCurrentDirectory  gui=UNDERLINE guifg=#80ffff guibg=NONE
 else
-    hi def link VimFilerCurrentDirectory Identifier
+    hi def link vimfilerCurrentDirectory Identifier
 endif
-hi def link VimFilerMask Statement
+hi def link vimfilerMask Statement
 
-hi def link VimFilerSpecial Special
-hi def link VimFilerSpecialSafe Statement
-hi def link VimFilerNonMarkedFile Special
-"hi VimFilerMarkedFile  gui=REVERSE term=REVERSE
-hi def link VimFilerMarkedFile Type
-hi def link VimFilerDirectory Preproc
-hi def link VimFilerSize Constant
+hi def link vimfilerSpecial Special
+hi def link vimfilerSpecialSafe Statement
+hi def link vimfilerNonMark Special
+"hi vimfilerMarkedFile  gui=REVERSE term=REVERSE
+hi def link vimfilerMarkedFile Type
+hi def link vimfilerDirectory Preproc
+hi def link vimfilerSize Constant
 
-hi def link VimFilerDateToday Statement
-hi def link VimFilerDateWeek Special
-hi def link VimFilerDate Identifier
-hi def link VimFilerDateIgnore Ignore
+hi def link vimfilerDateToday Statement
+hi def link vimfilerDateWeek Special
+hi def link vimfilerDate Identifier
+hi def link vimfilerDateIgnore Ignore
 
-hi def link VimFilerTypeText Constant
-hi def link VimFilerTypeImage Type
-hi def link VimFilerTypeArchive Special
-hi def link VimFilerTypeExecute Statement
-hi def link VimFilerTypeMultimedia Identifier
-hi def link VimFilerTypeDirectory Preproc
-hi def link VimFilerTypeSystem Comment
-hi def link VimFilerTypeLink Comment
+hi def link vimfilerTypeText Constant
+hi def link vimfilerTypeImage Type
+hi def link vimfilerTypeArchive Special
+hi def link vimfilerTypeExecute Statement
+hi def link vimfilerTypeMultimedia Identifier
+hi def link vimfilerTypeDirectory Preproc
+hi def link vimfilerTypeSystem Comment
+hi def link vimfilerTypeLink Comment
 
 let b:current_syntax = "vimfiler"

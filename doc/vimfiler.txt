@@ -513,6 +513,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-11-11
+- Improved syntax highlight.
+
 2011-11-10
 - Fixed :VimFilerDouble error.
 - Fixed vimfiler/drive source.
