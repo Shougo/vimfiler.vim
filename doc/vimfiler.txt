@@ -517,6 +517,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed :VimFilerDouble error.
 - Fixed vimfiler/drive source.
 - Added <Plug>(vimfiler_cursor_top) mapping.
+- Improved switch to other window.
 
 2011-11-06
 - Fixed mappings name.

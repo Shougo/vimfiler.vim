@@ -413,6 +413,7 @@ function! s:switch_to_other_window()"{{{
           \ { 'is_split' : 1, 'is_simple' : 1 } : { 'is_split' : 1 })
     let s:last_vimfiler_bufnr = bufnr('%')
     wincmd w
+    normal! 3G
     call vimfiler#force_redraw_screen()
   endif
 
