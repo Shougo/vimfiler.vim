@@ -511,6 +511,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-11-10
 - Fixed :VimFilerDouble error.
+- Fixed vimfiler/drive source.
 
 2011-11-06
 - Fixed mappings name.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/drive.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Oct 2011.
+" Last Modified: 10 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,10 +39,6 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context)"{{{
-  if &filetype !=# 'vimfiler'
-    return []
-  endif
-
   if !exists('s:drives') || a:context.is_redraw
     " Detect mounted drive.
     let s:drives = filter(copy(g:vimfiler_detect_drives),
