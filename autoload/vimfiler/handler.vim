@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Oct 2011.
+" Last Modified: 10 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -131,7 +131,9 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   if a:context.is_double
     " Create another vimfiler.
     call vimfiler#create_filer(b:vimfiler.current_dir,
-          \ b:vimfiler.is_simple ? ['split', 'simple'] : ['split'])
+          \ b:vimfiler.is_simple ?
+          \ {'is_split' : 1, 'is_simple' : 1} :
+          \ {'is_split' : 1})
     let s:last_vimfiler_bufnr = bufnr('%')
     let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
     wincmd w

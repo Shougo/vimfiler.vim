@@ -509,6 +509,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-11-10
+- Fixed :VimFilerDouble error.
+
 2011-11-06
 - Fixed mappings name.
 
