@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Nov 2011.
+" Last Modified: 10 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -27,7 +27,7 @@
 function! vimfiler#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)
-        \ (line('.') == line('$'))? 'gg' : 'j'
+        \ (line('.') == line('$'))? '3Gzb' : 'j'
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_up)
         \ (line('.') == 1)? 'G' : 'k'
   nnoremap <buffer><silent> <Plug>(vimfiler_redraw_screen)
@@ -108,6 +108,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
         \ line('.') == 1 ? 'l' : ":\<C-u>call \<SID>execute()\<CR>"
+  nnoremap <buffer><silent> <Plug>(vimfiler_cursor_top)
+        \ 3Gzb
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()
@@ -194,6 +196,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> gc <Plug>(vimfiler_cd)
   nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
   nmap <buffer> gS <Plug>(vimfiler_toggle_simple_mode)
+  nmap <buffer> gg <Plug>(vimfiler_cursor_top)
 
   " pushd/popd
   nmap <buffer> Y <Plug>(vimfiler_pushd)

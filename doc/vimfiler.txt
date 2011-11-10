@@ -231,6 +231,9 @@ Normal mode key mappings.
 <Plug>(vimfiler_loop_cursor_up)			*<Plug>(vimfiler_loop_cursor_up)*
 		Switch to previous line with loop.
 
+<Plug>(vimfiler_cursor_top)			*<Plug>(vimfiler_cursor_top)*
+		Moves the cursor to the top of the vimfiler.
+
 <Plug>(vimfiler_redraw_screen)			*<Plug>(vimfiler_redraw_screen)*
 		Redraw vimfiler screen.
 
@@ -397,6 +400,7 @@ Normal mode default mappings.
 <TAB>			<Plug>(vimfiler_switch_to_other_window)
 j			<Plug>(vimfiler_loop_cursor_down)
 k			<Plug>(vimfiler_loop_cursor_up)
+gg			<Plug>(vimfiler_cursor_top)
 <C-l>			<Plug>(vimfiler_redraw_screen)
 <Space>			<Plug>(vimfiler_toggle_mark_current_line)
 *			<Plug>(vimfiler_toggle_mark_all_lines)
@@ -512,6 +516,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-11-10
 - Fixed :VimFilerDouble error.
 - Fixed vimfiler/drive source.
+- Added <Plug>(vimfiler_cursor_top) mapping.
 
 2011-11-06
 - Fixed mappings name.
