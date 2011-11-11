@@ -30,13 +30,15 @@ elseif exists("b:current_syntax")
   finish
 endif
 
-syn match   vimfilerNonMarkedFile     '^- \zs.*'
-      \ contains=vimfilerTypeText,vimfilerTypeImage,vimfilerTypeArchive,
+syn match   vimfilerNonMarkedFile     '^-.*'
+      \ contains=vimfilerNonMark,vimfilerTypeText,vimfilerTypeImage,vimfilerTypeArchive,
       \vimfilerTypeExecute,vimfilerTypeMultimedia,vimfilerTypeDirectory,vimfilerTypeSystem,vimfilerTypeLink,
       \vimfilerSize,vimfilerDate,vimfilerDateToday,vimfilerDateWeek
 syn match   vimfilerMarkedFile        '^\* .*$'
       \ contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek
 syn match   vimfilerDirectory         '^..$'
+
+syn match   vimfilerNonMark         '^-' contained
 
 syn match   vimfilerPrompt            '^\%(Current directory\|CD\): .*$'
       \ contains=vimfilerSpecial,vimfilerCurrentDirectory
@@ -48,14 +50,14 @@ syn match   vimfilerCurrentDirectory  '\s\zs.*$' contained contains=vimfilerMask
 syn match   vimfilerMask  '\[.*\]$' contained
 syn match   vimfilerFileLine          '\[.*\]$' contained
 
-syn match   vimfilerTypeText          '.*\[TXT\]' contained
-syn match   vimfilerTypeImage         '.*\[IMG\]' contained
-syn match   vimfilerTypeArchive       '.*\[ARC\]' contained
-syn match   vimfilerTypeExecute       '.*\[EXE\]' contained
-syn match   vimfilerTypeMultimedia    '.*\[MUL\]' contained
-syn match   vimfilerTypeDirectory     '.*\[DIR\]' contained
-syn match   vimfilerTypeSystem        '.*\[SYS\]' contained
-syn match   vimfilerTypeLink          '.*\[LNK\]' contained
+syn match   vimfilerTypeText          '\s.*\[TXT\]' contained
+syn match   vimfilerTypeImage         '\s.*\[IMG\]' contained
+syn match   vimfilerTypeArchive       '\s.*\[ARC\]' contained
+syn match   vimfilerTypeExecute       '\s.*\[EXE\]' contained
+syn match   vimfilerTypeMultimedia    '\s.*\[MUL\]' contained
+syn match   vimfilerTypeDirectory     '\s.*\[DIR\]' contained
+syn match   vimfilerTypeSystem        '\s.*\[SYS\]' contained
+syn match   vimfilerTypeLink          '\s.*\[LNK\]' contained
 
 syn match   vimfilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]' contained
 
