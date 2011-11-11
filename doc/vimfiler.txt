@@ -353,6 +353,10 @@ Normal mode key mappings.
 		Grep word in selected files or all current files by |unite|
 		interface.
 
+<Plug>(vimfiler_find)				*<Plug>(vimfiler_find)*
+		Find files in selected files or all current files by |unite|
+		interface.
+
 <Plug>(vimfiler_select_sort_type)		*<Plug>(vimfiler_select_sort_type)*
 		Select current vimfiler sort type by |unite| interface.
 
@@ -435,6 +439,7 @@ O			<Plug>(vimfiler_sync_with_another_vimfiler)
 <C-g>			<Plug>(vimfiler_print_filename)
 M			<Plug>(vimfiler_set_current_mask)
 gr			<Plug>(vimfiler_grep)
+gf			<Plug>(vimfiler_find)
 S			<Plug>(vimfiler_select_sort_type)
 <C-v>			<Plug>(vimfiler_switch_vim_buffer_mode)
 gc			<Plug>(vimfiler_cd)
@@ -515,6 +520,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-11-11
 - Improved syntax highlight.
+- Added <Plug>(vimfiler_find) mapping.
 
 2011-11-10
 - Fixed :VimFilerDouble error.

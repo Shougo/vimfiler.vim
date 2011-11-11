@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Nov 2011.
+" Last Modified: 11 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,6 +84,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>set_current_mask()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_grep)
         \ :<C-u>call vimfiler#mappings#do_action('grep')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_find)
+        \ :<C-u>call vimfiler#mappings#do_action('find')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)
         \ :<C-u>call <SID>select_sort_type()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_other_window)
@@ -191,6 +193,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
   nmap <buffer> M <Plug>(vimfiler_set_current_mask)
   nmap <buffer> gr <Plug>(vimfiler_grep)
+  nmap <buffer> gf <Plug>(vimfiler_find)
   nmap <buffer> S <Plug>(vimfiler_select_sort_type)
   nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
   nmap <buffer> gc <Plug>(vimfiler_cd)
