@@ -24,6 +24,8 @@
 " }}}
 "=============================================================================
 
+let s:Cache = vital#of('vimfiler').import('System.Cache')
+
 function! vimfiler#mappings#define_default_mappings()"{{{
   " Plugin keymappings"{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)
@@ -282,6 +284,15 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
       let b:vimfiler.directories_history =
             \ b:vimfiler.directories_history[-max_save :]
     endif
+  endif
+
+  " Check sort type.
+  let cache_dir = g:vimfiler_data_directory . '/' . 'sort'
+  let path = b:vimfiler.source.'/'.b:vimfiler.current_dir
+  if s:Cache.filereadable(cache_dir, path)
+    let b:vimfiler.local_sort_type = s:Cache.readfile(cache_dir, path)[0]
+  else
+    let b:vimfiler.local_sort_type = b:vimfiler.global_sort_type
   endif
 
   " Redraw.

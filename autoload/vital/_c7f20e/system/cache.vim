@@ -35,10 +35,14 @@ function! s:_encode_name(cache_dir, filename)
   if !isdirectory(a:cache_dir)
     call mkdir(a:cache_dir, 'p')
   endif
+  let cache_dir = a:cache_dir
+  if cache_dir !~ '/$'
+    let cache_dir .= '/'
+  endif
 
-  return a:cache_dir . s:create_hash(dir, a:filename)
+  return cache_dir . s:create_hash(cache_dir, a:filename)
 endfunction
-function! s:check_old_cache(cache_dir, filename)"{{{
+function! s:check_old_cache(cache_dir, filename)
   " Check old cache file.
   let cache_name = s:_encode_name(a:cache_dir, a:filename)
   let ret = getftime(cache_name) == -1
@@ -49,7 +53,7 @@ function! s:check_old_cache(cache_dir, filename)"{{{
   endif
 
   return ret
-endfunction"}}}
+endfunction
 
 " Check md5.
 try

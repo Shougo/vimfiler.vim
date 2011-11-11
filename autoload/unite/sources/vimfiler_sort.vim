@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/sort.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Aug 2011.
+" Last Modified: 11 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,6 +31,8 @@ function! unite#sources#vimfiler_sort#define()"{{{
   return s:source
 endfunction"}}}
 
+let s:Cache = vital#of('vimfiler').import('System.Cache')
+
 let s:source = {
       \ 'name' : 'vimfiler/sort',
       \ 'description' : 'candidates from vimfiler sort method',
@@ -45,7 +47,7 @@ function! s:source.hooks.on_init(args, context)"{{{
     return
   endif
 
-  let a:context.source__sort = b:vimfiler.sort_type
+  let a:context.source__sort = b:vimfiler.local_sort_type
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{
@@ -53,11 +55,18 @@ function! s:source.gather_candidates(args, context)"{{{
     return []
   endif
 
-  call unite#print_message('[vimfiler/sort] Current sort type: ' . a:context.source__sort)
-  call unite#print_message('[vimfiler/sort] (Upper case is descending order)')
+  let cache_dir = g:vimfiler_data_directory . '/' . 'sort'
+  let path = b:vimfiler.source.'/'.b:vimfiler.current_dir
 
-  return map([ 'none', 'size', 'extension', 'filename', 'time', 'manual',
-        \ 'None', 'Size', 'Extension', 'Filename', 'Time', 'Manual', ], '{
+  call unite#print_message(
+        \ '[vimfiler/sort] Current sort type: ' . a:context.source__sort
+        \ . (s:Cache.filereadable(cache_dir, path) ? '(saved)' : ''))
+  call unite#print_message(
+        \ '[vimfiler/sort] (Upper case is descending order)')
+
+  return map(add([ 'none', 'size', 'extension', 'filename', 'time', 'manual',
+        \ 'None', 'Size', 'Extension', 'Filename', 'Time', 'Manual'],
+        \  s:Cache.filereadable(cache_dir, path) ? 'nosave' : 'save'), '{
         \ "word" : v:val,
         \ "action__sort" : v:val,
         \ }')
@@ -70,8 +79,29 @@ let s:action_table.sort = {
       \ 'description' : 'sort vimfiler items',
       \ }
 function! s:action_table.sort.func(candidate)"{{{
-  let b:vimfiler.sort_type = a:candidate.action__sort
-  call vimfiler#force_redraw_screen()
+  if &filetype != 'vimfiler'
+    call unite#print_error('Current vimfiler is not found.')
+    return
+  endif
+
+  let cache_dir = g:vimfiler_data_directory . '/' . 'sort'
+  let path = b:vimfiler.source.'/'.b:vimfiler.current_dir
+  if a:candidate.action__sort ==# 'save'
+    " Save current sort type.
+    call s:Cache.writefile(cache_dir, path, [b:vimfiler.local_sort_type])
+  elseif a:candidate.action__sort ==# 'nosave'
+    " Nosave current sort type.
+    if s:Cache.filereadable(cache_dir, path)
+      call s:Cache.delete(cache_dir, path)
+    endif
+  else
+    let b:vimfiler.local_sort_type = a:candidate.action__sort
+    if s:Cache.filereadable(cache_dir, path)
+      call s:Cache.writefile(cache_dir, path, [b:vimfiler.local_sort_type])
+    endif
+
+    call vimfiler#force_redraw_screen()
+  endif
 endfunction"}}}
 
 let s:source.action_table['*'] = s:action_table

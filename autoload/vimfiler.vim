@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Nov 2011.
+" Last Modified: 11 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,10 +182,10 @@ function! vimfiler#get_all_files()"{{{
   let dirs = filter(copy(current_files), 'v:val.vimfiler__is_directory')
   let files = filter(copy(current_files), '!v:val.vimfiler__is_directory')
   if g:vimfiler_directory_display_top
-    let current_files = vimfiler#sort(dirs, b:vimfiler.sort_type)
-          \+ vimfiler#sort(files, b:vimfiler.sort_type)
+    let current_files = vimfiler#sort(dirs, b:vimfiler.local_sort_type)
+          \+ vimfiler#sort(files, b:vimfiler.local_sort_type)
   else
-    let current_files = vimfiler#sort(files + dirs, b:vimfiler.sort_type)
+    let current_files = vimfiler#sort(files + dirs, b:vimfiler.local_sort_type)
   endif
 
   if !b:vimfiler.is_visible_dot_files

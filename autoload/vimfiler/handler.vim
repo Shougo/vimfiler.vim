@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Nov 2011.
+" Last Modified: 11 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -120,7 +120,9 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.directory_cursor_pos = {}
   " Set mask.
   let b:vimfiler.current_mask = ''
-  let b:vimfiler.sort_type = g:vimfiler_sort_type
+
+  let b:vimfiler.global_sort_type = g:vimfiler_sort_type
+  let b:vimfiler.local_sort_type = g:vimfiler_sort_type
   let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
   let b:vimfiler.another_vimfiler_bufnr = -1
   let b:vimfiler.winwidth = winwidth(0)

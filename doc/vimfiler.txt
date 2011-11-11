@@ -160,17 +160,24 @@ g:vimfiler_detect_drives			*g:vimfiler_detect_drives*
 		
 		Default value is refer to plugin/vimfiler.vim.
 
-g:vimfiler_safe_mode_by_default		*g:vimfiler_safe_mode_by_default*
+g:vimfiler_safe_mode_by_default			*g:vimfiler_safe_mode_by_default*
 		This variable controls vimfiler enter safe mode by default. In
 		safe mode, dangerous command is disabled.
 		
 		Default value is 1.
 
-g:vimfiler_time_format			*g:vimfiler_time_format*
+g:vimfiler_time_format				*g:vimfiler_time_format*
 		This variable controls displayed time format.
 		The time format option is compatible |strftime()|.
 		
 		Default value is "%y/%m/%d %H:%M".
+
+g:vimfiler_data_directory			*g:vimfiler_data_directory*
+		Specifies directories for configurations internally used in
+		vimfiler itself or its sources.  If the directory doesn't exist
+		the directory will be automatically generated.
+		
+		Default value is expand('~/.vimfiler'); the absolute path of it.
 
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
@@ -359,6 +366,8 @@ Normal mode key mappings.
 
 <Plug>(vimfiler_select_sort_type)		*<Plug>(vimfiler_select_sort_type)*
 		Select current vimfiler sort type by |unite| interface.
+		If you selected "save", save current sort type.
+		If you selected "nosave", no save current sort type.
 
 <Plug>(vimfiler_switch_vim_buffer_mode)		*<Plug>(vimfiler_switch_vim_buffer_mode)*
 		Switch to vimfiler buffer mode. All vimfiler mappings is
@@ -522,6 +531,9 @@ CHANGELOG					*vimfiler-changelog*
 - Improved syntax highlight.
 - Added <Plug>(vimfiler_find) mapping.
 - Vitalized.
+- Changed sort behavior.
+- Added g:vimfiler_data_directory option.
+- Implemented save sort type.
 
 2011-11-10
 - Fixed :VimFilerDouble error.

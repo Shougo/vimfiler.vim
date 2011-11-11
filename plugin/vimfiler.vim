@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Nov 2011.
+" Last Modified: 11 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,6 +74,12 @@ let g:vimfiler_safe_mode_by_default =
       \ get(g:, 'vimfiler_safe_mode_by_default', 1)
 let g:vimfiler_time_format =
       \ get(g:, 'vimfiler_time_format', '%y/%m/%d %H:%M')
+let g:vimfiler_data_directory =
+      \ get(g:, 'vimfiler_data_directory', expand('~/.vimfiler'))
+if !isdirectory(fnamemodify(g:vimfiler_data_directory, ':p'))
+  call mkdir(iconv(fnamemodify(g:vimfiler_data_directory, ':p'),
+        \    &encoding, &termencoding), 'p')
+endif
 
 " Set extensions.
 let g:vimfiler_extensions =
