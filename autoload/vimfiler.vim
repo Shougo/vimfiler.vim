@@ -55,32 +55,6 @@ let s:last_system_is_vimproc = -1
 let s:min_padding_width = 10
 let s:max_padding_width = 35
 
-" Global options definition."{{{
-if !has_key(g:vimfiler_extensions, 'text')
-  call vimfiler#set_extensions('text',
-        \ 'txt,cfg,ini')
-endif
-if !has_key(g:vimfiler_extensions, 'image')
-  call vimfiler#set_extensions('image',
-        \ 'bmp,png,gif,jpg,jpeg,jp2,tif,ico,wdp,cur,ani')
-endif
-if !has_key(g:vimfiler_extensions, 'archive')
-  call vimfiler#set_extensions('archive',
-        \ 'lzh,zip,gz,bz2,cab,rar,7z,tgz,tar')
-endif
-if !has_key(g:vimfiler_extensions, 'system')
-  call vimfiler#set_extensions('system',
-        \ 'inf,sys,reg,dat,spi,a,so,lib,dll')
-endif
-if !has_key(g:vimfiler_extensions, 'multimedia')
-  call vimfiler#set_extensions('multimedia',
-        \ 'avi,asf,wmv,mpg,flv,swf,divx,mov,mpa,m1a,'.
-        \ 'm2p,m2a,mpeg,m1v,m2v,mp2v,mp4,qt,ra,rm,ram,'.
-        \ 'rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au'
-        \ )
-endif
-"}}}
-
 augroup vimfiler"{{{
   autocmd!
 augroup end"}}}
@@ -614,7 +588,6 @@ function! vimfiler#init_context(context)"{{{
 
   return a:context
 endfunction"}}}
-
 "}}}
 
 " Sort.
@@ -742,5 +715,35 @@ function! s:switch_vimfiler(bufnr, context, directory)"{{{
 
   call vimfiler#force_redraw_screen()
 endfunction"}}}
+
+" Global options definition."{{{
+let g:vimfiler_execute_file_list =
+      \ get(g:, 'vimfiler_execute_file_list', {})
+let g:vimfiler_extensions =
+      \ get(g:, 'vimfiler_extensions', {})
+if !has_key(g:vimfiler_extensions, 'text')
+  call vimfiler#set_extensions('text',
+        \ 'txt,cfg,ini')
+endif
+if !has_key(g:vimfiler_extensions, 'image')
+  call vimfiler#set_extensions('image',
+        \ 'bmp,png,gif,jpg,jpeg,jp2,tif,ico,wdp,cur,ani')
+endif
+if !has_key(g:vimfiler_extensions, 'archive')
+  call vimfiler#set_extensions('archive',
+        \ 'lzh,zip,gz,bz2,cab,rar,7z,tgz,tar')
+endif
+if !has_key(g:vimfiler_extensions, 'system')
+  call vimfiler#set_extensions('system',
+        \ 'inf,sys,reg,dat,spi,a,so,lib,dll')
+endif
+if !has_key(g:vimfiler_extensions, 'multimedia')
+  call vimfiler#set_extensions('multimedia',
+        \ 'avi,asf,wmv,mpg,flv,swf,divx,mov,mpa,m1a,'.
+        \ 'm2p,m2a,mpeg,m1v,m2v,mp2v,mp4,qt,ra,rm,ram,'.
+        \ 'rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au'
+        \ )
+endif
+"}}}
 
 " vim: foldmethod=marker

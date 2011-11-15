@@ -119,6 +119,14 @@ g:vimfiler_execute_file_list			*g:vimfiler_execute_file_list*
 		The key is extension. The value is command name or
 		command name list. If value is "vim", edit file.
 
+g:vimfiler_extensions				*g:vimfiler_extensions*
+		This variable controls vimfiler color syntax.
+		The key is "text", "image", "archive", "system", "multimedia".
+		The value is extensions.
+
+		Default value is complicated, please refer to
+		autoload/vimfiler.vim.
+
 g:vimfiler_split_action				*g:vimfiler_split_action*
 		This variable controls vimfiler split action in |unite|.
 		
