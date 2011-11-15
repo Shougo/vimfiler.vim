@@ -527,6 +527,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-11-15
+- Fixed initialization.
+
 2011-11-11
 - Improved syntax highlight.
 - Added <Plug>(vimfiler_find) mapping.

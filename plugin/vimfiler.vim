@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Nov 2011.
+" Last Modified: 15 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -84,29 +84,6 @@ endif
 " Set extensions.
 let g:vimfiler_extensions =
       \ get(g:, 'vimfiler_extensions', {})
-if !has_key(g:vimfiler_extensions, 'text')
-  call vimfiler#set_extensions('text',
-        \ 'txt,cfg,ini')
-endif
-if !has_key(g:vimfiler_extensions, 'image')
-  call vimfiler#set_extensions('image',
-        \ 'bmp,png,gif,jpg,jpeg,jp2,tif,ico,wdp,cur,ani')
-endif
-if !has_key(g:vimfiler_extensions, 'archive')
-  call vimfiler#set_extensions('archive',
-        \ 'lzh,zip,gz,bz2,cab,rar,7z,tgz,tar')
-endif
-if !has_key(g:vimfiler_extensions, 'system')
-  call vimfiler#set_extensions('system',
-        \ 'inf,sys,reg,dat,spi,a,so,lib,dll')
-endif
-if !has_key(g:vimfiler_extensions, 'multimedia')
-  call vimfiler#set_extensions('multimedia',
-        \ 'avi,asf,wmv,mpg,flv,swf,divx,mov,mpa,m1a,'.
-        \ 'm2p,m2a,mpeg,m1v,m2v,mp2v,mp4,qt,ra,rm,ram,'.
-        \ 'rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au'
-        \ )
-endif
 "}}}
 
 " Plugin keymappings"{{{
