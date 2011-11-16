@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/history.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 16 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,27 +44,20 @@ function! s:source.hooks.on_init(args, context)"{{{
   if &filetype !=# 'vimfiler'
     return
   endif
-
-  let a:context.source__directories_history = b:vimfiler.directories_history
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context)"{{{
-  if !has_key(a:context, 'source__directories_history')
-    return []
-  endif
-
   let num = 0
   let candidates = []
-  for history in map(reverse(copy(a:context.source__directories_history)),
-        \ 'unite#util#substitute_path_separator(v:val)')
+  for [bufname, history] in reverse(vimfiler#get_histories())
+    let history = unite#util#substitute_path_separator(history)
 
     call add(candidates, {
-          \ 'word' : history,
+          \ 'word' : bufname . ' '  . history,
           \ 'kind' : 'directory',
           \ 'action__path' : history,
           \ 'action__directory' : history,
           \ 'action__nr' : num,
-          \ 'action__history' : a:context.source__directories_history,
           \ })
 
     let num += 1
@@ -83,10 +76,12 @@ let s:action_table.delete = {
       \ 'is_quit' : 0,
       \ }
 function! s:action_table.delete.func(candidates)"{{{
+  let histories = vimfiler#get_histories()
   for candidate in sort(a:candidates, 's:compare')
-    call remove(candidate.action__history,
-          \ candidate.action__nr)
+    call remove(histories, candidate.action__nr)
   endfor
+
+  call vimfiler#set_histories(histories)
 endfunction"}}}
 
 let s:source.action_table['*'] = s:action_table

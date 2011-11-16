@@ -292,15 +292,17 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
 
   " Save changed directories.
   if save_history
-    call add(b:vimfiler.directories_history, prev_dir)
+    let histories = vimfiler#get_histories()
+    call add(histories, [bufname('%'), prev_dir])
 
     let max_save = g:vimfiler_max_directories_history > 0 ?
           \ g:vimfiler_max_directories_history : 10
-    if len(b:vimfiler.directories_history) >= max_save
+    if len(histories) >= max_save
       " Get last max_save num elements.
-      let b:vimfiler.directories_history =
-            \ b:vimfiler.directories_history[-max_save :]
+      let histories = histories[-max_save :]
     endif
+
+    call vimfiler#set_histories(histories)
   endif
 
   " Check sort type.

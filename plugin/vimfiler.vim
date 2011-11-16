@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Nov 2011.
+" Last Modified: 16 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -69,7 +69,7 @@ let g:vimfiler_detect_drives =
       \ split(glob('/mnt/*'), '\n') + split(glob('/media/*'), '\n'))
 
 let g:vimfiler_max_directories_history =
-      \ get(g:, 'vimfiler_max_directories_history', 10)
+      \ get(g:, 'vimfiler_max_directories_history', 50)
 let g:vimfiler_safe_mode_by_default =
       \ get(g:, 'vimfiler_safe_mode_by_default', 1)
 let g:vimfiler_time_format =

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Nov 2011.
+" Last Modified: 16 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,6 +54,7 @@ let s:last_system_is_vimproc = -1
 
 let s:min_padding_width = 10
 let s:max_padding_width = 35
+let s:vimfiler_current_histories = []
 
 augroup vimfiler"{{{
   autocmd!
@@ -587,6 +588,12 @@ function! vimfiler#init_context(context)"{{{
   endif
 
   return a:context
+endfunction"}}}
+function! vimfiler#get_histories()"{{{
+  return copy(s:vimfiler_current_histories)
+endfunction"}}}
+function! vimfiler#set_histories(histories)"{{{
+  let s:vimfiler_current_histories = a:histories
 endfunction"}}}
 "}}}
 

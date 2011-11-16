@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Nov 2011.
+" Last Modified: 16 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -114,7 +114,6 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
     let b:vimfiler.current_dir .= '/'
   endif
 
-  let b:vimfiler.directories_history = []
   let b:vimfiler.is_visible_dot_files = 0
   let b:vimfiler.is_simple = a:context.is_simple
   let b:vimfiler.directory_cursor_pos = {}
