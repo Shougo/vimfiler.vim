@@ -445,18 +445,30 @@ function! s:execute_file()"{{{
         \ })
 endfunction"}}}
 function! s:switch_to_other_window()"{{{
-  if winnr('$') == 1
-    " Create another vimfiler.
-    call vimfiler#create_filer(b:vimfiler.current_dir,
-          \ b:vimfiler.is_simple ?
-          \ { 'is_split' : 1, 'is_simple' : 1 } : { 'is_split' : 1 })
-    let s:last_vimfiler_bufnr = bufnr('%')
+  if winnr('$') != 1
     wincmd w
-    normal! 3G
-    call vimfiler#force_redraw_screen()
+    return
   endif
 
-  wincmd w
+  let pos = getpos('.')
+
+  if bufnr('%') != b:vimfiler.another_vimfiler_bufnr
+        \ && bufwinnr(b:vimfiler.another_vimfiler_bufnr) < 0
+        \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
+    " Restore another vimfiler.
+    call vimfiler#_switch_vimfiler(
+          \ b:vimfiler.another_vimfiler_bufnr,
+          \ { 'is_split' : 1 }, '')
+  else
+    " Create another vimfiler.
+    call s:create_another_vimfiler()
+  endif
+
+  wincmd p
+
+  call setpos('.', pos)
+
+  call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:print_filename()"{{{
   let filename = vimfiler#get_filename(line('.'))
@@ -543,30 +555,35 @@ endfunction"}}}
 function! s:hide()"{{{
   let bufnr = bufnr('%')
 
-  let b:vimfiler.another_vimfiler_bufnr = -1
-
   " Switch buffer.
   if winnr('$') != 1
     close
   else
     call vimfiler#util#alternate_buffer()
   endif
-
-  if &filetype == 'vimfiler'
-        \ && b:vimfiler.another_vimfiler_bufnr == bufnr
-    let b:vimfiler.another_vimfiler_bufnr = -1
-  endif
 endfunction"}}}
 function! s:exit()"{{{
   call vimfiler#util#delete_buffer()
 endfunction"}}}
+function! s:create_another_vimfiler()"{{{
+  let current_bufnr = bufnr('%')
+
+  " Create another vimfiler.
+  call vimfiler#create_filer(b:vimfiler.current_dir,
+        \ b:vimfiler.is_simple ?
+        \ { 'is_split' : 1, 'is_simple' : 1 } : { 'is_split' : 1 })
+
+  let b:vimfiler.another_vimfiler_bufnr = current_bufnr
+  let another_vimfiler_bufnr = bufnr('%')
+endfunction"}}}
 function! s:sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
+  let current_bufnr = bufnr('%')
   if !vimfiler#exists_another_vimfiler()
     call vimfiler#create_filer(b:vimfiler.current_dir,
           \ b:vimfiler.is_simple ?
           \ { 'is_split' : 1, 'is_simple' : 1 } : { 'is_split' : 1 })
-    let s:last_vimfiler_bufnr = bufnr('%')
+    let b:vimfiler.another_vimfiler_bufnr = current_bufnr
   else
     " Change another vimfiler directory.
     let current_dir = b:vimfiler.current_dir
@@ -580,11 +597,8 @@ endfunction"}}}
 function! s:sync_with_another_vimfiler()"{{{
   " Search vimfiler window.
   if !vimfiler#exists_another_vimfiler()
-    call vimfiler#create_filer(b:vimfiler.current_dir,
-          \ b:vimfiler.is_simple ?
-          \ { 'is_split' : 1, 'is_simple' : 1 } : { 'is_split' : 1 })
-    let s:last_vimfiler_bufnr = bufnr('%')
-    let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
+    call s:create_another_vimfiler()
+
     wincmd p
     call vimfiler#redraw_screen()
   else

@@ -86,7 +86,6 @@ function! vimfiler#default_settings()"{{{
   " Set autocommands.
   augroup vimfiler"{{{
     autocmd WinEnter,BufWinEnter <buffer> call s:event_bufwin_enter()
-    autocmd BufWinEnter <buffer> call s:restore_vimfiler()
     autocmd WinLeave,BufWinLeave <buffer> call s:event_bufwin_leave()
     autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
@@ -145,7 +144,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
         \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
         \ && (!exists('t:unite_buffer_dictionary')
         \      || has_key(t:unite_buffer_dictionary, s:last_vimfiler_bufnr))
-    call s:switch_vimfiler(s:last_vimfiler_bufnr, context, a:path)
+    call vimfiler#_switch_vimfiler(s:last_vimfiler_bufnr, context, a:path)
     return
   endif
 
@@ -155,7 +154,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
     if getbufvar(cnt, '&filetype') ==# 'vimfiler'
         \ && (!exists('t:unite_buffer_dictionary')
         \     || has_key(t:unite_buffer_dictionary, cnt))
-      call s:switch_vimfiler(cnt, context, a:path)
+      call vimfiler#_switch_vimfiler(cnt, context, a:path)
       return
     endif
 
@@ -677,34 +676,8 @@ endfunction"}}}
 function! s:event_bufwin_leave()"{{{
   let s:last_vimfiler_bufnr = bufnr('%')
 endfunction"}}}
-function! s:restore_vimfiler()"{{{
-  if !exists('b:vimfiler')
-    return
-  endif
 
-  " Search other vimfiler window.
-  let cnt = 1
-  while cnt <= winnr('$')
-    if cnt != winnr() && getwinvar(cnt, '&filetype') ==# 'vimfiler'
-      return
-    endif
-
-    let cnt += 1
-  endwhile
-
-  " Restore another vimfiler.
-  if winnr('$') == 1
-        \ && bufnr('%') != b:vimfiler.another_vimfiler_bufnr
-        \ && bufwinnr(b:vimfiler.another_vimfiler_bufnr) < 0
-        \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
-    call s:switch_vimfiler(b:vimfiler.another_vimfiler_bufnr,
-          \ { 'is_split' : 1 }, '')
-    wincmd p
-    call vimfiler#redraw_screen()
-  endif
-endfunction"}}}
-
-function! s:switch_vimfiler(bufnr, context, directory)"{{{
+function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   if a:context.is_split
     execute 'vertical sbuffer' . a:bufnr
   else

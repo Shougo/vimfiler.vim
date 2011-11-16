@@ -553,6 +553,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved vimfiler history behavior.
 - Added <Plug>(vimfiler_hide) mapping.
 - Changed default mappings.
+- Improved another vimfiler behavior.
 
 2011-11-15
 - Fixed initialization.
