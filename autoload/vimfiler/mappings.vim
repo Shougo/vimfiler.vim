@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Nov 2011.
+" Last Modified: 16 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -87,7 +87,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_grep)
         \ :<C-u>call vimfiler#mappings#do_action('grep')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_find)
-        \ :<C-u>call vimfiler#mappings#do_action('find')<CR>
+        \ :<C-u>call vimfiler#mappings#do_dummy_action('find')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)
         \ :<C-u>call <SID>select_sort_type()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_other_window)
@@ -220,6 +220,23 @@ function! vimfiler#mappings#do_action(action)"{{{
   let current_dir = b:vimfiler.current_dir
   call unite#mappings#do_action(a:action, marked_files, {
         \ 'vimfiler__current_directory' : current_dir,
+        \ })
+endfunction"}}}
+
+function! vimfiler#mappings#do_dummy_action(action, ...)"{{{
+  let context = get(a:000, 0, {})
+  let dummy_files = unite#get_vimfiler_candidates(
+        \ [['file', b:vimfiler.current_dir]], extend(context, {
+        \ 'vimfiler__is_dummy' : 1,
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ }))
+  if empty(dummy_files)
+    return
+  endif
+
+  " Execute mkdir action.
+  call unite#mappings#do_action(a:action, dummy_files, {
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
 endfunction"}}}
 
@@ -464,20 +481,9 @@ function! s:popup_shell()"{{{
   let files = vimfiler#get_escaped_marked_files()
   call s:clear_mark_all_lines()
 
-  let dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', b:vimfiler.current_dir]], {
-        \ 'vimfiler__is_dummy' : 1,
+  call vimfiler#mappings#do_dummy_action('vimfiler__shell', {
         \ 'vimfiler__files' : files,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-  if empty(dummy_files)
-    return
-  endif
-
-  " Execute shell.
-  call unite#mappings#do_action('vimfiler__shell', dummy_files, {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
+        \)
 endfunction"}}}
 function! s:edit_binary_file(is_split)"{{{
   if !vimfiler#check_filename_line()
@@ -521,20 +527,9 @@ function! s:execute_shell_command()"{{{
     endfor
   endif
 
-  let dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', b:vimfiler.current_dir]], {
-        \ 'vimfiler__is_dummy' : 1,
+  call vimfiler#mappings#do_dummy_action('vimfiler__shellcmd', {
         \ 'vimfiler__command' : command,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-  if empty(dummy_files)
-    return
-  endif
-
-  " Execute shell command.
-  call unite#mappings#do_action('vimfiler__shellcmd', dummy_files, {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
+        \)
   silent call s:clear_mark_all_lines()
 endfunction"}}}
 function! s:exit()"{{{
@@ -681,37 +676,11 @@ function! s:rename()"{{{
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:make_directory()"{{{
-  let dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', b:vimfiler.current_dir]], {
-        \ 'vimfiler__is_dummy' : 1,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-  if empty(dummy_files)
-    return
-  endif
-
-  " Execute mkdir action.
-  call unite#mappings#do_action('vimfiler__mkdir', dummy_files, {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-
+  call vimfiler#mappings#do_dummy_action('vimfiler__mkdir')
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:new_file()"{{{
-  let dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', b:vimfiler.current_dir]], {
-        \ 'vimfiler__is_dummy' : 1,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-  if empty(dummy_files)
-    continue
-  endif
-
-  " Make new file.
-  call unite#mappings#do_action('vimfiler__newfile', dummy_files, {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-
+  call vimfiler#mappings#do_dummy_action('vimfiler__newfile')
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 
@@ -751,19 +720,7 @@ function! s:help()"{{{
   call unite#start([['mapping']])
 endfunction"}}}
 function! s:execute_external_filer()"{{{
-  let dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', b:vimfiler.current_dir]], {
-        \ 'vimfiler__is_dummy' : 1,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-  if empty(dummy_files)
-    return
-  endif
-
-  " Execute current directory.
-  call unite#mappings#do_action('vimfiler__execute', dummy_files, {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
+  call vimfiler#mappings#do_dummy_action('vimfiler__execute')
 endfunction"}}}
 function! s:change_vim_current_dir(directory)"{{{
   let dummy_files = unite#get_vimfiler_candidates(
