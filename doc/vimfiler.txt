@@ -369,8 +369,9 @@ Normal mode key mappings.
 		interface.
 
 <Plug>(vimfiler_find)				*<Plug>(vimfiler_find)*
-		Find files in selected files or all current files by |unite|
-		interface.
+		Find from selected directory(not selected directories) by
+		command line. Command line format is refer to find command.
+		Using find source and |unite| interface.
 
 <Plug>(vimfiler_select_sort_type)		*<Plug>(vimfiler_select_sort_type)*
 		Select current vimfiler sort type by |unite| interface.
@@ -534,6 +535,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-11-16
+- Fixed documentation.
 
 2011-11-15
 - Fixed initialization.
