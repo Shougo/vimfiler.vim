@@ -346,6 +346,9 @@ Normal mode key mappings.
 <Plug>(vimfiler_execute_shell_command)		*<Plug>(vimfiler_execute_shell_command)*
 		Execute shell command by |vimshell|.
 
+<Plug>(vimfiler_hide)				*<Plug>(vimfiler_hide)*
+		Hide current vimfiler.
+
 <Plug>(vimfiler_exit)				*<Plug>(vimfiler_exit)*
 		Exit current vimfiler.
 
@@ -455,7 +458,8 @@ B			<Plug>(vimfiler_edit_binary_file)
 ge			<Plug>(vimfiler_execute_external_filer)
 t			<Plug>(vimfiler_execute_external_command)
 !			<Plug>(vimfiler_execute_shell_command)
-q			<Plug>(vimfiler_exit)
+q			<Plug>(vimfiler_hide)
+Q			<Plug>(vimfiler_exit)
 ?			<Plug>(vimfiler_help)
 v			<Plug>(vimfiler_preview_file)
 o			<Plug>(vimfiler_sync_with_current_vimfiler)
@@ -547,6 +551,8 @@ CHANGELOG					*vimfiler-changelog*
 - Improved dummy action.
 - Fixed grep behavior.
 - Improved vimfiler history behavior.
+- Added <Plug>(vimfiler_hide) mapping.
+- Changed default mappings.
 
 2011-11-15
 - Fixed initialization.

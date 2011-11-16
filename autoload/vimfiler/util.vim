@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Oct 2011.
+" Last Modified: 16 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -95,6 +95,46 @@ endfunction
 function! vimfiler#util#escape_file_searching(...)
   return call(s:V.escape_file_searching, a:000)
 endfunction
+
+function! vimfiler#util#alternate_buffer()"{{{
+  if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
+    buffer #
+    return
+  endif
+
+  let listed_buffer_len = len(filter(range(1, bufnr('$')),
+        \ 'buflisted(v:val) && v:val != bufnr("%")'))
+  if listed_buffer_len <= 1
+    enew
+    return
+  endif
+
+  let cnt = 0
+  let pos = 1
+  let current = 0
+  while pos <= bufnr('$')
+    if buflisted(pos)
+      if pos == bufnr('%')
+        let current = cnt
+      endif
+
+      let cnt += 1
+    endif
+
+    let pos += 1
+  endwhile
+
+  if current > cnt / 2
+    bprevious
+  else
+    bnext
+  endif
+endfunction"}}}
+function! vimfiler#util#delete_buffer(...)"{{{
+  let bufnr = get(a:000, 0, bufnr('%'))
+  call vimfiler#util#alternate_buffer()
+  execute 'bdelete!' bufnr
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

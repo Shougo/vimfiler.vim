@@ -70,6 +70,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>execute_external_filer()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_shell_command)
         \ :<C-u>call <SID>execute_shell_command()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_hide)
+        \ :<C-u>call <SID>hide()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_exit)
         \ :<C-u>call <SID>exit()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_help)
@@ -184,10 +186,14 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   " Choose action.
   nmap <buffer> a <Plug>(vimfiler_choose_action)
 
+  " Hide vimfiler.
+  nmap <buffer> q <Plug>(vimfiler_hide)
+  " Exit vimfiler.
+  nmap <buffer> Q <Plug>(vimfiler_exit)
+
   nmap <buffer> ge <Plug>(vimfiler_execute_external_filer)
   nmap <buffer> t <Plug>(vimfiler_execute_external_command)
   nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
-  nmap <buffer> q <Plug>(vimfiler_exit)
   nmap <buffer> ? <Plug>(vimfiler_help)
   nmap <buffer> v <Plug>(vimfiler_preview_file)
   nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
