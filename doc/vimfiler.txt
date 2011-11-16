@@ -538,6 +538,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-11-16
 - Fixed documentation.
 - Improved dummy action.
+- Fixed grep behavior.
 
 2011-11-15
 - Fixed initialization.

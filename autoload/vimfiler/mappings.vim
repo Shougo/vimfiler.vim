@@ -85,7 +85,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_set_current_mask)
         \ :<C-u>call <SID>set_current_mask()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_grep)
-        \ :<C-u>call vimfiler#mappings#do_action('grep')<CR>
+        \ :<C-u>call <SID>grep()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_find)
         \ :<C-u>call vimfiler#mappings#do_dummy_action('find')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)
@@ -736,6 +736,13 @@ function! s:change_vim_current_dir(directory)"{{{
   call unite#mappings#do_action('cd', dummy_files, {
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
+endfunction"}}}
+function! s:grep()"{{{
+  if empty(vimfiler#get_marked_files())
+    call vimfiler#mappings#do_dummy_action('grep')
+  else
+    call vimfiler#mappings#do_action('grep')
+  endif
 endfunction"}}}
 
 " For safe mode.
