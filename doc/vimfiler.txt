@@ -371,6 +371,8 @@ Normal mode key mappings.
 <Plug>(vimfiler_find)				*<Plug>(vimfiler_find)*
 		Find from current directory by |unite| interface. Command line
 		format is refer to find command.
+		Note: Windows "find" command is not supported.
+		Please install UNIX Tools find for Windows.
 
 <Plug>(vimfiler_select_sort_type)		*<Plug>(vimfiler_select_sort_type)*
 		Select current vimfiler sort type by |unite| interface.
