@@ -180,6 +180,11 @@ g:vimfiler_time_format				*g:vimfiler_time_format*
 		
 		Default value is "%y/%m/%d %H:%M".
 
+g:vimfiler_max_directories_history		*g:vimfiler_max_directories_history*
+		This variable controls max directories history.
+		
+		Default value is 50.
+
 g:vimfiler_data_directory			*g:vimfiler_data_directory*
 		Specifies directories for configurations internally used in
 		vimfiler itself or its sources.  If the directory doesn't exist
