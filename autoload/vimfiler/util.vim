@@ -97,38 +97,24 @@ function! vimfiler#util#escape_file_searching(...)
 endfunction
 
 function! vimfiler#util#alternate_buffer()"{{{
-  if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
+  if getbufvar('#', "&filetype") !=# "vimfiler"
     buffer #
     return
   endif
 
-  let listed_buffer_len = len(filter(range(1, bufnr('$')),
-        \ 'buflisted(v:val) && v:val != bufnr("%")'))
-  if listed_buffer_len <= 1
+  let listed_buffer = filter(range(1, bufnr('$')),
+        \ 'buflisted(v:val) &&
+        \  (v:val == bufnr("%") || getbufvar(v:val, "&filetype") !=# "vimfiler")')
+  let current = index(listed_buffer, bufnr('%'))
+  if current < 0 || len(listed_buffer) < 3
     enew
     return
   endif
 
-  let cnt = 0
-  let pos = 1
-  let current = 0
-  while pos <= bufnr('$')
-    if buflisted(pos)
-      if pos == bufnr('%')
-        let current = cnt
-      endif
+  execute 'buffer' ((current < len(listed_buffer) / 2) ?
+        \ listed_buffer[current+1] : listed_buffer[current-1])
 
-      let cnt += 1
-    endif
-
-    let pos += 1
-  endwhile
-
-  if current > cnt / 2
-    bprevious
-  else
-    bnext
-  endif
+  silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! vimfiler#util#delete_buffer(...)"{{{
   let bufnr = get(a:000, 0, bufnr('%'))

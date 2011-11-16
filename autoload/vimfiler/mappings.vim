@@ -540,15 +540,25 @@ function! s:execute_shell_command()"{{{
         \)
   silent call s:clear_mark_all_lines()
 endfunction"}}}
-function! s:exit()"{{{
-  let vimfiler_buf = bufnr('%')
+function! s:hide()"{{{
+  let bufnr = bufnr('%')
+
+  let b:vimfiler.another_vimfiler_bufnr = -1
+
   " Switch buffer.
   if winnr('$') != 1
     close
   else
-    call s:custom_alternate_buffer()
+    call vimfiler#util#alternate_buffer()
   endif
-  silent execute 'bdelete!' vimfiler_buf
+
+  if &filetype == 'vimfiler'
+        \ && b:vimfiler.another_vimfiler_bufnr == bufnr
+    let b:vimfiler.another_vimfiler_bufnr = -1
+  endif
+endfunction"}}}
+function! s:exit()"{{{
+  call vimfiler#util#delete_buffer()
 endfunction"}}}
 function! s:sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
@@ -783,35 +793,6 @@ function! s:unmapping_file_operations()"{{{
 endfunction"}}}
 function! s:disable_operation()"{{{
   call vimfiler#print_error('In safe mode, this operation is disabled.')
-endfunction"}}}
-
-function! s:custom_alternate_buffer()"{{{
-  if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
-    buffer #
-  else
-    let cnt = 0
-    let pos = 1
-    let current = 0
-    while pos <= bufnr('$')
-      if buflisted(pos)
-        if pos == bufnr('%')
-          let current = cnt
-        endif
-
-        let cnt += 1
-      endif
-
-      let pos += 1
-    endwhile
-
-    if current > cnt / 2
-      bprevious
-    else
-      bnext
-    endif
-  endif
-
-  silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 
 function! s:toggle_simple_mode()"{{{
