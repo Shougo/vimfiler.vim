@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Nov 2011.
+" Last Modified: 17 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -503,7 +503,7 @@ function! s:popup_shell()"{{{
 
   call vimfiler#mappings#do_dummy_action('vimfiler__shell', {
         \ 'vimfiler__files' : files,
-        \)
+        \})
 endfunction"}}}
 function! s:edit_binary_file(is_split)"{{{
   if !vimfiler#check_filename_line()
@@ -549,7 +549,7 @@ function! s:execute_shell_command()"{{{
 
   call vimfiler#mappings#do_dummy_action('vimfiler__shellcmd', {
         \ 'vimfiler__command' : command,
-        \)
+        \})
   silent call s:clear_mark_all_lines()
 endfunction"}}}
 function! s:hide()"{{{

@@ -546,6 +546,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-11-17
+- Fixed dummy action error.
+
 2011-11-16
 - Fixed documentation.
 - Improved dummy action.
