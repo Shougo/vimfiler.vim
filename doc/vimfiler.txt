@@ -548,6 +548,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-11-17
 - Ver.3.1 development is started.
+- Improved syntax.
 
 ------------------------------------------------------------------------------
 ChangeLog 3.0

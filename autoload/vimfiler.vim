@@ -232,7 +232,8 @@ function! vimfiler#redraw_screen()"{{{
     let filename = vimfiler#util#truncate_smart(
           \ filename, max_len, max_len/3, '..')
 
-    let mark = file.vimfiler__is_marked ? '*' : '-'
+    let mark = file.vimfiler__is_marked ? '*' :
+          \ file.vimfiler__is_directory ? '+' : '-'
     if !is_simple
       let time = file.vimfiler__filetime <= 0 ? '' :
             \ file.vimfiler__datemark .
@@ -360,7 +361,7 @@ function! vimfiler#get_escaped_marked_files()"{{{
 endfunction"}}}
 function! vimfiler#check_filename_line(...)"{{{
   let line = (a:0 == 0)? getline('.') : a:1
-  return line =~ '^[*-]\s'
+  return line =~ '^[*-+]\s'
 endfunction"}}}
 function! vimfiler#get_filename(line_num)"{{{
   return a:line_num == 1 ? '' :

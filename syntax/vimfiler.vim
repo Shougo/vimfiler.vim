@@ -30,7 +30,7 @@ elseif exists("b:current_syntax")
   finish
 endif
 
-syn match   vimfilerNonMarkedFile     '^-.*'
+syn match   vimfilerNonMarkedFile     '^[-+].*'
       \ contains=vimfilerNonMark,vimfilerTypeText,vimfilerTypeImage,vimfilerTypeArchive,
       \vimfilerTypeExecute,vimfilerTypeMultimedia,vimfilerTypeDirectory,vimfilerTypeSystem,vimfilerTypeLink,
       \vimfilerSize,vimfilerDate,vimfilerDateToday,vimfilerDateWeek
@@ -38,7 +38,7 @@ syn match   vimfilerMarkedFile        '^\* .*$'
       \ contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek
 syn match   vimfilerDirectory         '^..$'
 
-syn match   vimfilerNonMark         '^-' contained
+syn match   vimfilerNonMark         '^[-+]' contained
 
 syn match   vimfilerPrompt            '^\%(Current directory\|CD\): .*$'
       \ contains=vimfilerSpecial,vimfilerCurrentDirectory
