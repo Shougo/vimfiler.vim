@@ -1,6 +1,6 @@
 *vimfiler.txt*	Powerful file explorer implemented by Vim script
 
-Version: 3.0
+Version: 3.1
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -545,6 +545,12 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-11-17
+- Ver.3.1 development is started.
+
+------------------------------------------------------------------------------
+ChangeLog 3.0
 
 2011-11-17
 - Fixed dummy action error.
