@@ -332,7 +332,7 @@ function! vimfiler#get_escaped_marked_files()"{{{
   return files
 endfunction"}}}
 function! vimfiler#check_filename_line(...)"{{{
-  let line = (a:0 == 0)? getline('.') : getline(a:1)
+  let line = (a:0 == 0)? getline('.') : a:1
   return line =~ '^\s*|\?[*+-]'
 endfunction"}}}
 function! vimfiler#get_filename(line_num)"{{{
@@ -341,8 +341,9 @@ function! vimfiler#get_filename(line_num)"{{{
    \ b:vimfiler.current_files[vimfiler#get_file_index(a:line_num)].action__path
 endfunction"}}}
 function! vimfiler#get_file(line_num)"{{{
-  return getline(a:line_num) == '..' ?
-        \ {} : b:vimfiler.current_files[vimfiler#get_file_index(a:line_num)]
+  let index = vimfiler#get_file_index(a:line_num)
+  return index < 0 ?
+        \ {} : b:vimfiler.current_files[index]
 endfunction"}}}
 function! vimfiler#get_file_index(line_num)"{{{
   return a:line_num - 3

@@ -339,8 +339,8 @@ function! vimfiler#mappings#search_cursor(path)"{{{
   let max = line('$')
   let cnt = 1
   while cnt <= max
-    if vimfiler#check_filename_line(getline(cnt))
-          \ && vimfiler#get_file(cnt).action__path ==# a:path
+    let file = vimfiler#get_file(cnt)
+    if !empty(file) && file.action__path ==# a:path
       " Move cursor.
       call cursor(cnt, 0)
     endif
@@ -354,12 +354,12 @@ function! s:SID_PREFIX()
 endfunction
 
 function! s:toggle_mark_current_line()"{{{
-  if !vimfiler#check_filename_line()
+  let file = vimfiler#get_file(line('.'))
+  if empty(file)
     " Don't toggle.
     return
   endif
 
-  let file = vimfiler#get_file(line('.'))
   let file.vimfiler__is_marked = !file.vimfiler__is_marked
 
   setlocal modifiable
@@ -370,10 +370,9 @@ function! s:toggle_mark_all_lines()"{{{
   let max = line('$')
   let cnt = 1
   while cnt <= max
-    let line = getline(cnt)
-    if vimfiler#check_filename_line(line)
+    let file = vimfiler#get_file(cnt)
+    if !empty(file)
       " Toggle mark.
-      let file = vimfiler#get_file(cnt)
       let file.vimfiler__is_marked = !file.vimfiler__is_marked
     endif
 
@@ -385,10 +384,9 @@ endfunction"}}}
 function! s:toggle_mark_lines(start, end)"{{{
   let cnt = a:start
   while cnt <= a:end
-    let line = getline(cnt)
-    if vimfiler#check_filename_line(line)
+    let file = vimfiler#get_file(cnt)
+    if !empty(file)
       " Toggle mark.
-      let file = vimfiler#get_file(cnt)
       let file.vimfiler__is_marked = !file.vimfiler__is_marked
     endif
 
@@ -401,11 +399,9 @@ function! s:clear_mark_all_lines()"{{{
   let max = line('$')
   let cnt = 1
   while cnt <= max
-    let line = getline(cnt)
-    if vimfiler#check_filename_line(line)
+    let file = vimfiler#get_file(cnt)
+    if !empty(file)
       " Clear mark.
-
-      let file = vimfiler#get_file(cnt)
       let file.vimfiler__is_marked = 0
     endif
 
@@ -439,12 +435,11 @@ function! s:execute()"{{{
   endif
 endfunction"}}}
 function! s:execute_file()"{{{
-  if !vimfiler#check_filename_line()
+  let file = vimfiler#get_file(line('.'))
+  if empty(file)
     call s:execute_external_filer()
     return
   endif
-
-  let file = vimfiler#get_file(line('.'))
 
   " Execute cursor file.
   call unite#mappings#do_action('vimfiler__execute', [file], {
@@ -487,12 +482,8 @@ function! s:print_filename()"{{{
   echo filename
 endfunction"}}}
 function! s:expand_tree()"{{{
-  if !vimfiler#check_filename_line()
-    return
-  endif
-
   let file = vimfiler#get_file(line('.'))
-  if !file.vimfiler__is_directory
+  if empty(file) || !file.vimfiler__is_directory
     return
   endif
 
@@ -528,12 +519,8 @@ function! s:expand_tree()"{{{
   setlocal nomodifiable
 endfunction"}}}
 function! s:expand_tree_recursive()"{{{
-  if !vimfiler#check_filename_line()
-    return
-  endif
-
   let file = vimfiler#get_file(line('.'))
-  if !file.vimfiler__is_directory
+  if empty(file) || !file.vimfiler__is_directory
     return
   endif
 
@@ -820,10 +807,6 @@ function! s:delete()"{{{
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:rename()"{{{
-  if !vimfiler#check_filename_line()
-    return
-  endif
-
   let marked_files = vimfiler#get_marked_filenames()
   if !empty(marked_files)
     " Extended rename.
@@ -832,6 +815,10 @@ function! s:rename()"{{{
   endif
 
   let file = vimfiler#get_file(line('.'))
+  if empty(file)
+    return
+  endif
+
   call unite#mappings#do_action('vimfiler__rename', [file], {
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
