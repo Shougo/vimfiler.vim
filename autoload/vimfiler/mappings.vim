@@ -118,6 +118,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ 3Gzb
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree)
         \ :<C-u>call <SID>expand_tree()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree_recursive)
+        \ :<C-u>call <SID>expand_tree_recursive()<CR>
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()
@@ -210,6 +212,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> gS <Plug>(vimfiler_toggle_simple_mode)
   nmap <buffer> gg <Plug>(vimfiler_cursor_top)
   nmap <buffer> t <Plug>(vimfiler_expand_tree)
+  nmap <buffer> T <Plug>(vimfiler_expand_tree_recursive)
 
   " pushd/popd
   nmap <buffer> Y <Plug>(vimfiler_pushd)
@@ -493,13 +496,10 @@ function! s:expand_tree()"{{{
     return
   endif
 
-
   setlocal modifiable
 
   let file.vimfiler__is_opened = !file.vimfiler__is_opened
   call setline('.', vimfiler#get_print_lines([file]))
-
-  let index = vimfiler#get_file_index(line('.'))
 
   if file.vimfiler__is_opened
     " Expand tree.
@@ -515,35 +515,99 @@ function! s:expand_tree()"{{{
       let file.vimfiler__nest_level = nestlevel
     endfor
 
+    let index = vimfiler#get_file_index(line('.'))
+
     let b:vimfiler.current_files = b:vimfiler.current_files[: index]
           \ + files + b:vimfiler.current_files[index+1 :]
 
     call append('.', vimfiler#get_print_lines(files))
   else
-    " Unexpand tree.
-    let nestlevel = file.vimfiler__nest_level
-
-    " Search children.
-    let end = index
-    for file in b:vimfiler.current_files[index+1 :]
-      if file.vimfiler__nest_level <= nestlevel
-        break
-      endif
-
-      let end += 1
-    endfor
-
-    if end - index > 0
-      " Delete children.
-      let b:vimfiler.current_files = b:vimfiler.current_files[: index]
-            \ + b:vimfiler.current_files[end+1 :]
-      let pos = getpos('.')
-      execute (line('.')+1).','.(vimfiler#get_line_number(end)).'delete _'
-      call setpos('.', pos)
-    endif
+    call s:unexpand_tree()
   endif
 
   setlocal nomodifiable
+endfunction"}}}
+function! s:expand_tree_recursive()"{{{
+  if !vimfiler#check_filename_line()
+    return
+  endif
+
+  let file = vimfiler#get_file(line('.'))
+  if !file.vimfiler__is_directory
+    return
+  endif
+
+  setlocal modifiable
+
+  if file.vimfiler__is_opened
+    call s:unexpand_tree()
+  endif
+
+  let file.vimfiler__is_opened = 1
+  call setline('.', vimfiler#get_print_lines([file]))
+
+  " Expand tree.
+  let nestlevel = file.vimfiler__nest_level + 1
+
+  let files = s:expand_tree_rec(file)
+
+  let index = vimfiler#get_file_index(line('.'))
+
+  let b:vimfiler.current_files = b:vimfiler.current_files[: index]
+        \ + files
+        \ + b:vimfiler.current_files[index+1 :]
+
+  call append('.', vimfiler#get_print_lines(files))
+
+  setlocal nomodifiable
+endfunction"}}}
+function! s:expand_tree_rec(file)"{{{
+  let a:file.vimfiler__is_opened = 1
+
+  " Expand tree.
+  let nestlevel = a:file.vimfiler__nest_level + 1
+
+  let _ = []
+  for file in unite#filters#matcher_vimfiler_mask#define().filter(
+        \ vimfiler#get_directory_files(a:file.action__path),
+        \ { 'input' : b:vimfiler.current_mask })
+    " Initialize.
+    let file.vimfiler__nest_level = nestlevel
+
+    call add(_, file)
+
+    if file.vimfiler__is_directory
+      let _ += s:expand_tree_rec(file)
+    endif
+  endfor
+
+  return _
+endfunction"}}}
+function! s:unexpand_tree()"{{{
+  let file = vimfiler#get_file(line('.'))
+  let index = vimfiler#get_file_index(line('.'))
+
+  " Unexpand tree.
+  let nestlevel = file.vimfiler__nest_level
+
+  " Search children.
+  let end = index
+  for file in b:vimfiler.current_files[index+1 :]
+    if file.vimfiler__nest_level <= nestlevel
+      break
+    endif
+
+    let end += 1
+  endfor
+
+  if end - index > 0
+    " Delete children.
+    let b:vimfiler.current_files = b:vimfiler.current_files[: index]
+          \ + b:vimfiler.current_files[end+1 :]
+    let pos = getpos('.')
+    silent execute (line('.')+1).','.(vimfiler#get_line_number(end)).'delete _'
+    call setpos('.', pos)
+  endif
 endfunction"}}}
 
 function! s:switch_to_drive()"{{{

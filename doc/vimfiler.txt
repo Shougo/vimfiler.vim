@@ -417,7 +417,10 @@ Normal mode key mappings.
 		Pop current directory(and another vimfiler current directory)
 		from directory stack.
 
-<Plug>(vimfiler_expand_tree)		*<Plug>(vimfiler_expand_tree)*
+<Plug>(vimfiler_expand_tree)			*<Plug>(vimfiler_expand_tree)*
+		Expand/Unexpand directory tree.
+
+<Plug>(vimfiler_expand_tree_recursive)		*<Plug>(vimfiler_expand_tree_recursive)*
 		Expand/Close directory tree.
 
 Visual mode key mappings.
@@ -479,6 +482,7 @@ a			<Plug>(vimfiler_choose_action)
 Y			<Plug>(vimfiler_pushd)
 P			<Plug>(vimfiler_popd)
 t			<Plug>(vimfiler_expand_tree)
+T			<Plug>(vimfiler_expand_tree_recursive)
 
 Visual mode mappings.
 {lhs}			{rhs}
@@ -552,6 +556,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-11-18
 - Improved redraw.
 - Expand tree is implemented!
+- Added expand tree recursive mapping.
 
 2011-11-17
 - Ver.3.1 development is started.
