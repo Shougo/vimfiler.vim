@@ -245,7 +245,7 @@ function! vimfiler#mappings#do_dummy_action(action, ...)"{{{
     return
   endif
 
-  " Execute mkdir action.
+  " Execute action.
   call unite#mappings#do_action(a:action, dummy_files, {
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
