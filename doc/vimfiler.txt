@@ -546,6 +546,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-11-18
+- Improved redraw.
+
 2011-11-17
 - Ver.3.1 development is started.
 - Improved syntax.

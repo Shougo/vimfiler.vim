@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Nov 2011.
+" Last Modified: 18 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -173,6 +173,12 @@ function! vimfiler#get_all_files()"{{{
   let current_files = unite#get_vimfiler_candidates(
         \ [[b:vimfiler.source, b:vimfiler.current_dir]], context)
 
+  for file in current_files
+    " Initialize.
+    let file.vimfiler__is_marked = 0
+    let file.vimfiler__nest_level = 0
+  endfor
+
   let dirs = filter(copy(current_files), 'v:val.vimfiler__is_directory')
   let files = filter(copy(current_files), '!v:val.vimfiler__is_directory')
   if g:vimfiler_directory_display_top
@@ -212,45 +218,9 @@ function! vimfiler#redraw_screen()"{{{
   " Append up directory.
   call append('$', '..')
 
-  let is_simple = b:vimfiler.is_simple
-  let max_len = winwidth(0) -
-        \ (is_simple ? s:min_padding_width : s:max_padding_width)
-  if max_len > g:vimfiler_max_filename_width
-    let max_len = g:vimfiler_max_filename_width
-  elseif max_len < g:vimfiler_min_filename_width
-    let max_len = g:vimfiler_min_filename_width
-  endif
-  let max_len -= 1
-
   " Print files.
-  for file in b:vimfiler.current_files
-    let filename = file.vimfiler__abbr
-    if file.vimfiler__is_directory
-          \ && filename !~ '/$'
-      let filename .= '/'
-    endif
-    let filename = vimfiler#util#truncate_smart(
-          \ filename, max_len, max_len/3, '..')
-
-    let mark = file.vimfiler__is_marked ? '*' :
-          \ file.vimfiler__is_directory ? '+' : '-'
-    if !is_simple
-      let time = file.vimfiler__filetime <= 0 ? '' :
-            \ file.vimfiler__datemark .
-            \ strftime(g:vimfiler_time_format, file.vimfiler__filetime)
-      let line = printf('%s %s %s %s %s',
-            \ mark,
-            \ filename,
-            \ file.vimfiler__filetype,
-            \ vimfiler#get_filesize(file),
-            \ time,
-            \)
-    else
-      let line = printf('%s %s %s', mark, filename, file.vimfiler__filetype)
-    endif
-
-    call append('$', line)
-  endfor
+  call append('$',
+        \ s:get_print_lines(b:vimfiler.current_files))
 
   call setpos('.', pos)
   setlocal nomodifiable
@@ -594,6 +564,54 @@ function! vimfiler#get_histories()"{{{
 endfunction"}}}
 function! vimfiler#set_histories(histories)"{{{
   let s:vimfiler_current_histories = a:histories
+endfunction"}}}
+function! s:get_print_lines(files)"{{{
+  let is_simple = b:vimfiler.is_simple
+  let max_len = winwidth(0) -
+        \ (is_simple ? s:min_padding_width : s:max_padding_width)
+  if max_len > g:vimfiler_max_filename_width
+    let max_len = g:vimfiler_max_filename_width
+  elseif max_len < g:vimfiler_min_filename_width
+    let max_len = g:vimfiler_min_filename_width
+  endif
+  let max_len += 1
+
+  " Print files.
+  let lines = []
+  for file in a:files
+    let filename = file.vimfiler__abbr
+    if file.vimfiler__is_directory
+          \ && filename !~ '/$'
+      let filename .= '/'
+    endif
+
+    let mark = ''
+    if file.vimfiler__nest_level > 0
+      let mark .= repeat(' ', file.vimfiler__nest_level - 1) . '|'
+    endif
+    let mark .= file.vimfiler__is_marked ? '*' :
+          \ file.vimfiler__is_directory ? '+' : '-'
+    let mark .= ' '
+    let filename = vimfiler#util#truncate_smart(
+          \ mark . filename, max_len, max_len/3, '..')
+    if !is_simple
+      let time = file.vimfiler__filetime <= 0 ? '' :
+            \ file.vimfiler__datemark .
+            \ strftime(g:vimfiler_time_format, file.vimfiler__filetime)
+      let line = printf('%s %s %s %s',
+            \ filename,
+            \ file.vimfiler__filetype,
+            \ vimfiler#get_filesize(file),
+            \ time,
+            \)
+    else
+      let line = printf('%s %s', filename, file.vimfiler__filetype)
+    endif
+
+    call add(lines, line)
+  endfor
+
+  return lines
 endfunction"}}}
 "}}}
 
