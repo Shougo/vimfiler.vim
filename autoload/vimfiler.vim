@@ -164,18 +164,19 @@ function! vimfiler#switch_filer(path, ...)"{{{
   " Create window.
   call vimfiler#create_filer(a:path, context)
 endfunction"}}}
-function! vimfiler#get_all_files()"{{{
+function! vimfiler#get_directory_files(directory)"{{{
   " Save current files.
 
   let context = {
         \ 'vimfiler__is_dummy' : 0,
         \ }
   let current_files = unite#get_vimfiler_candidates(
-        \ [[b:vimfiler.source, b:vimfiler.current_dir]], context)
+        \ [[b:vimfiler.source, a:directory]], context)
 
   for file in current_files
     " Initialize.
     let file.vimfiler__is_marked = 0
+    let file.vimfiler__is_opened = 0
     let file.vimfiler__nest_level = 0
   endfor
 
@@ -198,7 +199,8 @@ function! vimfiler#force_redraw_screen()"{{{
   " Use matcher_glob.
   let b:vimfiler.current_files =
         \ unite#filters#matcher_vimfiler_mask#define().filter(
-        \ vimfiler#get_all_files(), { 'input' : b:vimfiler.current_mask })
+        \ vimfiler#get_directory_files(b:vimfiler.current_dir),
+        \ { 'input' : b:vimfiler.current_mask })
 
   call vimfiler#redraw_screen()
 endfunction"}}}
@@ -220,7 +222,7 @@ function! vimfiler#redraw_screen()"{{{
 
   " Print files.
   call append('$',
-        \ s:get_print_lines(b:vimfiler.current_files))
+        \ vimfiler#get_print_lines(b:vimfiler.current_files))
 
   call setpos('.', pos)
   setlocal nomodifiable
@@ -331,15 +333,22 @@ function! vimfiler#get_escaped_marked_files()"{{{
 endfunction"}}}
 function! vimfiler#check_filename_line(...)"{{{
   let line = (a:0 == 0)? getline('.') : a:1
-  return line =~ '^[+*-]\s'
+  return line =~ '^\s*|\?[*+-]'
 endfunction"}}}
 function! vimfiler#get_filename(line_num)"{{{
   return a:line_num == 1 ? '' :
    \ getline(a:line_num) == '..' ? '..' :
-   \ b:vimfiler.current_files[a:line_num - 3].action__path
+   \ b:vimfiler.current_files[vimfiler#get_file_index(a:line_num)].action__path
 endfunction"}}}
 function! vimfiler#get_file(line_num)"{{{
-  return getline(a:line_num) == '..' ? {} : b:vimfiler.current_files[a:line_num - 3]
+  return getline(a:line_num) == '..' ?
+        \ {} : b:vimfiler.current_files[vimfiler#get_file_index(a:line_num)]
+endfunction"}}}
+function! vimfiler#get_file_index(line_num)"{{{
+  return a:line_num - 3
+endfunction"}}}
+function! vimfiler#get_line_number(index)"{{{
+  return a:index + 3
 endfunction"}}}
 function! vimfiler#input_directory(message)"{{{
   echo a:message
@@ -565,7 +574,7 @@ endfunction"}}}
 function! vimfiler#set_histories(histories)"{{{
   let s:vimfiler_current_histories = a:histories
 endfunction"}}}
-function! s:get_print_lines(files)"{{{
+function! vimfiler#get_print_lines(files)"{{{
   let is_simple = b:vimfiler.is_simple
   let max_len = winwidth(0) -
         \ (is_simple ? s:min_padding_width : s:max_padding_width)
@@ -590,7 +599,8 @@ function! s:get_print_lines(files)"{{{
       let mark .= repeat(' ', file.vimfiler__nest_level - 1) . '|'
     endif
     let mark .= file.vimfiler__is_marked ? '*' :
-          \ file.vimfiler__is_directory ? '+' : '-'
+          \ (file.vimfiler__is_directory && !file.vimfiler__is_opened) ?
+          \   '+' : '-'
     let mark .= ' '
     let filename = vimfiler#util#truncate_smart(
           \ mark . filename, max_len, max_len/3, '..')

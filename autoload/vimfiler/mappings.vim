@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Nov 2011.
+" Last Modified: 18 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -116,6 +116,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ line('.') == 1 ? 'l' : ":\<C-u>call \<SID>execute()\<CR>"
   nnoremap <buffer><silent> <Plug>(vimfiler_cursor_top)
         \ 3Gzb
+  nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree)
+        \ :<C-u>call <SID>expand_tree()<CR>
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()
@@ -192,7 +194,6 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> Q <Plug>(vimfiler_exit)
 
   nmap <buffer> ge <Plug>(vimfiler_execute_external_filer)
-  nmap <buffer> t <Plug>(vimfiler_execute_external_command)
   nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
   nmap <buffer> ? <Plug>(vimfiler_help)
   nmap <buffer> v <Plug>(vimfiler_preview_file)
@@ -208,6 +209,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
   nmap <buffer> gS <Plug>(vimfiler_toggle_simple_mode)
   nmap <buffer> gg <Plug>(vimfiler_cursor_top)
+  nmap <buffer> t <Plug>(vimfiler_expand_tree)
 
   " pushd/popd
   nmap <buffer> Y <Plug>(vimfiler_pushd)
@@ -357,7 +359,9 @@ function! s:toggle_mark_current_line()"{{{
   let file = vimfiler#get_file(line('.'))
   let file.vimfiler__is_marked = !file.vimfiler__is_marked
 
-  call vimfiler#redraw_screen()
+  setlocal modifiable
+  call setline('.', vimfiler#get_print_lines([file]))
+  setlocal nomodifiable
 endfunction"}}}
 function! s:toggle_mark_all_lines()"{{{
   let max = line('$')
@@ -478,6 +482,68 @@ function! s:print_filename()"{{{
   endif
 
   echo filename
+endfunction"}}}
+function! s:expand_tree()"{{{
+  if !vimfiler#check_filename_line()
+    return
+  endif
+
+  let file = vimfiler#get_file(line('.'))
+  if !file.vimfiler__is_directory
+    return
+  endif
+
+
+  setlocal modifiable
+
+  let file.vimfiler__is_opened = !file.vimfiler__is_opened
+  call setline('.', vimfiler#get_print_lines([file]))
+
+  let index = vimfiler#get_file_index(line('.'))
+
+  if file.vimfiler__is_opened
+    " Expand tree.
+    let nestlevel = file.vimfiler__nest_level + 1
+
+    let files =
+          \ unite#filters#matcher_vimfiler_mask#define().filter(
+          \ vimfiler#get_directory_files(file.action__path),
+          \ { 'input' : b:vimfiler.current_mask })
+
+    for file in files
+      " Initialize.
+      let file.vimfiler__nest_level = nestlevel
+    endfor
+
+    let b:vimfiler.current_files = b:vimfiler.current_files[: index]
+          \ + files + b:vimfiler.current_files[index+1 :]
+
+    call append('.', vimfiler#get_print_lines(files))
+  else
+    " Unexpand tree.
+    let nestlevel = file.vimfiler__nest_level
+
+    " Search children.
+    let end = index
+    for file in b:vimfiler.current_files[index+1 :]
+      if file.vimfiler__nest_level <= nestlevel
+        break
+      endif
+
+      let end += 1
+    endfor
+
+    if end - index > 0
+      " Delete children.
+      let b:vimfiler.current_files = b:vimfiler.current_files[: index]
+            \ + b:vimfiler.current_files[end+1 :]
+      let pos = getpos('.')
+      execute (line('.')+1).','.(vimfiler#get_line_number(end)).'delete _'
+      call setpos('.', pos)
+    endif
+  endif
+
+  setlocal nomodifiable
 endfunction"}}}
 
 function! s:switch_to_drive()"{{{

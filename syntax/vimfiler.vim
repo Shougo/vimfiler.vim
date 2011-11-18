@@ -30,15 +30,15 @@ elseif exists("b:current_syntax")
   finish
 endif
 
-syn match   vimfilerNonMarkedFile     '^[-+].*'
+syn match   vimfilerNonMarkedFile     '^\s*|\?[+-].*'
       \ contains=vimfilerNonMark,vimfilerTypeText,vimfilerTypeImage,vimfilerTypeArchive,
       \vimfilerTypeExecute,vimfilerTypeMultimedia,vimfilerTypeDirectory,vimfilerTypeSystem,vimfilerTypeLink,
       \vimfilerSize,vimfilerDate,vimfilerDateToday,vimfilerDateWeek
-syn match   vimfilerMarkedFile        '^\* .*$'
+syn match   vimfilerMarkedFile        '^\s*|\?\* .*$'
       \ contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek
 syn match   vimfilerDirectory         '^..$'
 
-syn match   vimfilerNonMark         '^[-+]' contained
+syn match   vimfilerNonMark         '^\s*|\?[+-]' contained
 
 syn match   vimfilerPrompt            '^\%(Current directory\|CD\): .*$'
       \ contains=vimfilerSpecial,vimfilerCurrentDirectory
@@ -50,14 +50,14 @@ syn match   vimfilerCurrentDirectory  '\s\zs.*$' contained contains=vimfilerMask
 syn match   vimfilerMask  '\[.*\]$' contained
 syn match   vimfilerFileLine          '\[.*\]$' contained
 
-syn match   vimfilerTypeText          '\s.*\[TXT\]' contained
-syn match   vimfilerTypeImage         '\s.*\[IMG\]' contained
-syn match   vimfilerTypeArchive       '\s.*\[ARC\]' contained
-syn match   vimfilerTypeExecute       '\s.*\[EXE\]' contained
-syn match   vimfilerTypeMultimedia    '\s.*\[MUL\]' contained
-syn match   vimfilerTypeDirectory     '\s.*\[DIR\]' contained
-syn match   vimfilerTypeSystem        '\s.*\[SYS\]' contained
-syn match   vimfilerTypeLink          '\s.*\[LNK\]' contained
+syn match   vimfilerTypeText          '[^[:space:]|+-].*\[TXT\]' contained
+syn match   vimfilerTypeImage         '[^[:space:]|+-].*\[IMG\]' contained
+syn match   vimfilerTypeArchive       '[^[:space:]|+-].*\[ARC\]' contained
+syn match   vimfilerTypeExecute       '[^[:space:]|+-].*\[EXE\]' contained
+syn match   vimfilerTypeMultimedia    '[^[:space:]|+-].*\[MUL\]' contained
+syn match   vimfilerTypeDirectory     '[^[:space:]|+-].*\[DIR\]' contained
+syn match   vimfilerTypeSystem        '[^[:space:]|+-].*\[SYS\]' contained
+syn match   vimfilerTypeLink          '[^[:space:]|+-].*\[LNK\]' contained
 
 syn match   vimfilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]' contained
 
