@@ -680,7 +680,7 @@ function! s:execute_shell_command()"{{{
   call vimfiler#mappings#do_dummy_action('vimfiler__shellcmd', {
         \ 'vimfiler__command' : command,
         \})
-  silent call s:clear_mark_all_lines()
+  call s:clear_mark_all_lines()
 endfunction"}}}
 function! s:hide()"{{{
   let bufnr = bufnr('%')

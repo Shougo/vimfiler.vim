@@ -557,6 +557,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved redraw.
 - Expand tree is implemented!
 - Added expand tree recursive mapping.
+- Fixed clear mark lines error.
 
 2011-11-17
 - Ver.3.1 development is started.
