@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2011.
+" Last Modified: 25 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -111,6 +111,11 @@ endfunction"}}}
 
 " vimfiler plugin utility functions."{{{
 function! vimfiler#create_filer(path, ...)"{{{
+  if &l:modified && !&l:hidden
+    echoerr 'Your buffer is modified! Can''t switch vimfiler.'
+    return
+  endif
+
   let context = vimfiler#init_context(get(a:000, 0, {}))
 
   " Create new buffer.
@@ -137,6 +142,11 @@ function! vimfiler#create_filer(path, ...)"{{{
   call vimfiler#handler#_event_handler('BufReadCmd', context)
 endfunction"}}}
 function! vimfiler#switch_filer(path, ...)"{{{
+  if &l:modified && !&l:hidden
+    echoerr 'Your buffer is modified! Can''t switch vimfiler.'
+    return
+  endif
+
   let context = vimfiler#init_context(get(a:000, 0, {}))
 
   " Search vimfiler buffer.
