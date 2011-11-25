@@ -51,7 +51,7 @@ function! vimfiler#util#wcswidth(...)
   return call(s:V.wcswidth, a:000)
 endfunction
 function! vimfiler#util#is_win(...)
-  return call(s:V.is_win, a:000)
+  return call(s:V.is_windows, a:000)
 endfunction
 function! vimfiler#util#print_error(...)
   return call(s:V.print_error, a:000)
@@ -72,8 +72,8 @@ function! vimfiler#util#set_dictionary_helper(...)
   return call(s:V.set_dictionary_helper, a:000)
 endfunction
 function! vimfiler#util#substitute_path_separator(path)
-  return vimfiler#util#is_win() ?
-        \ substitute(a:path, '[^\\]\zs\\', '/', 'g') : a:path
+  return vimfiler#util#is_win() && a:path !~ '^\\\\' ?
+        \ substitute(a:path, '\\', '/', 'g') : a:path
 endfunction
 function! vimfiler#util#path2directory(...)
   return call(s:V.path2directory, a:000)
