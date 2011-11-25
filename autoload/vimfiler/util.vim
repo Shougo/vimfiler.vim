@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Nov 2011.
+" Last Modified: 25 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -72,7 +72,8 @@ function! vimfiler#util#set_dictionary_helper(...)
   return call(s:V.set_dictionary_helper, a:000)
 endfunction
 function! vimfiler#util#substitute_path_separator(...)
-  return call(s:V.substitute_path_separator, a:000)
+  return vimfiler#util#is_win() ?
+        \ substitute(a:path, '[^\\]\zs\\', '/', 'g') : a:path
 endfunction
 function! vimfiler#util#path2directory(...)
   return call(s:V.path2directory, a:000)

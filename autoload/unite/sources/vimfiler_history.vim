@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/history.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Nov 2011.
+" Last Modified: 25 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -50,7 +50,7 @@ function! s:source.gather_candidates(args, context)"{{{
   let num = 0
   let candidates = []
   for [bufname, history] in reverse(vimfiler#get_histories())
-    let history = unite#util#substitute_path_separator(history)
+    let history = vimfiler#util#substitute_path_separator(history)
 
     call add(candidates, {
           \ 'word' : bufname . ' '  . history,

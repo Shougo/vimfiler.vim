@@ -555,6 +555,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-11-25
 - Detect modified buffer.
+- Improved substitute path separator.
 
 2011-11-18
 - Improved redraw.
