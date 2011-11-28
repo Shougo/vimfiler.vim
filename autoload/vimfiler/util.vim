@@ -73,8 +73,8 @@ function! vimfiler#util#set_dictionary_helper(...)
 endfunction
 function! vimfiler#util#substitute_path_separator(path)
   return !vimfiler#util#is_win() ? a:path
-        \ : substitute(substitute(a:path, '\\', '/', 'g'),
-        \     '^//', '\\\\', '')
+        \ : a:path =~ '^\\\\' ? substitute(a:path, '/', '\\', 'g')
+        \ : substitute(a:path, '\\', '/', 'g')
 endfunction
 function! vimfiler#util#path2directory(...)
   return call(s:V.path2directory, a:000)
