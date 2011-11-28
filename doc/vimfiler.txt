@@ -555,6 +555,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-11-28
 - Fixed for UNC path.
+- Implemented no quit option.
 
 2011-11-25
 - Detect modified buffer.

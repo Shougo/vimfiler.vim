@@ -61,7 +61,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)
         \ :<C-u>call <SID>popup_shell()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)
-        \ :<C-u>call vimfiler#mappings#do_action(g:vimfiler_edit_action)<CR>
+        \ :<C-u>call <SID>edit()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)
         \ :<C-u>call vimfiler#mappings#do_action(g:vimfiler_split_action)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)
@@ -89,7 +89,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_grep)
         \ :<C-u>call <SID>grep()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_find)
-        \ :<C-u>call vimfiler#mappings#do_dummy_action('find')<CR>
+        \ :<C-u>call <SID>find()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_select_sort_type)
         \ :<C-u>call <SID>select_sort_type()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_other_window)
@@ -219,16 +219,18 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> P <Plug>(vimfiler_popd)
 endfunction"}}}
 
-function! vimfiler#mappings#do_action(action)"{{{
+function! vimfiler#mappings#do_action(action, ...)"{{{
+  let cursor_linenr = get(a:000, 0, line('.'))
+  let vimfiler = vimfiler#get_current_vimfiler()
   let marked_files = vimfiler#get_marked_files()
   if empty(marked_files)
-    let marked_files = [ vimfiler#get_file(line('.')) ]
+    let marked_files = [ vimfiler#get_file(cursor_linenr) ]
   endif
 
   call s:clear_mark_all_lines()
 
   " Execute action.
-  let current_dir = b:vimfiler.current_dir
+  let current_dir = vimfiler.current_dir
   call unite#mappings#do_action(a:action, marked_files, {
         \ 'vimfiler__current_directory' : current_dir,
         \ })
@@ -236,10 +238,12 @@ endfunction"}}}
 
 function! vimfiler#mappings#do_dummy_action(action, ...)"{{{
   let context = get(a:000, 0, {})
+  let vimfiler = vimfiler#get_current_vimfiler()
+
   let dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', b:vimfiler.current_dir]], extend(context, {
+        \ [['file', vimfiler.current_dir]], extend(context, {
         \ 'vimfiler__is_dummy' : 1,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ 'vimfiler__current_directory' : vimfiler.current_dir,
         \ }))
   if empty(dummy_files)
     return
@@ -247,7 +251,7 @@ function! vimfiler#mappings#do_dummy_action(action, ...)"{{{
 
   " Execute action.
   call unite#mappings#do_action(a:action, dummy_files, {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ 'vimfiler__current_directory' : vimfiler.current_dir,
         \ })
 endfunction"}}}
 
@@ -353,6 +357,22 @@ function! s:SID_PREFIX()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
 
+function! s:switch_no_quit()"{{{
+  let context = vimfiler#get_context()
+  if context.no_quit
+    let vimfiler = vimfiler#get_current_vimfiler()
+    let vimfiler.winnr = winnr()
+
+    call vimfiler#set_current_vimfiler(vimfiler)
+
+    if winnr('$') == 1
+      vnew
+      wincmd w
+    endif
+
+    wincmd w
+  endif
+endfunction"}}}
 function! s:toggle_mark_current_line()"{{{
   let file = vimfiler#get_file(line('.'))
   if empty(file)
@@ -396,17 +416,10 @@ function! s:toggle_mark_lines(start, end)"{{{
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:clear_mark_all_lines()"{{{
-  let max = line('$')
-  let cnt = 1
-  while cnt <= max
-    let file = vimfiler#get_file(cnt)
-    if !empty(file)
-      " Clear mark.
-      let file.vimfiler__is_marked = 0
-    endif
+  for file in vimfiler#get_current_vimfiler().current_files
+    let file.vimfiler__is_marked = 0
+  endfor
 
-    let cnt += 1
-  endwhile
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:execute()"{{{
@@ -622,6 +635,12 @@ function! s:popup_shell()"{{{
         \ 'vimfiler__files' : files,
         \})
 endfunction"}}}
+function! s:edit()"{{{
+  let current_linenr = line('.')
+  call s:switch_no_quit()
+
+  call vimfiler#mappings#do_action(g:vimfiler_edit_action, current_linenr)
+endfunction"}}}
 function! s:edit_binary_file(is_split)"{{{
   if !vimfiler#check_filename_line()
     return
@@ -631,6 +650,8 @@ function! s:edit_binary_file(is_split)"{{{
     call vimfiler#print_error('vinarise is not found. Please install it.')
     return
   endif
+
+  call s:switch_no_quit()
 
   Vinarise `=vimfiler#get_filename(line('.'))`
 endfunction"}}}
@@ -891,11 +912,18 @@ function! s:change_vim_current_dir(directory)"{{{
         \ })
 endfunction"}}}
 function! s:grep()"{{{
+  call s:switch_no_quit()
+
   if empty(vimfiler#get_marked_files())
     call vimfiler#mappings#do_dummy_action('grep')
   else
     call vimfiler#mappings#do_action('grep')
   endif
+endfunction"}}}
+function! s:find()"{{{
+  call s:switch_no_quit()
+
+  call vimfiler#mappings#do_dummy_action('find')
 endfunction"}}}
 
 " For safe mode.

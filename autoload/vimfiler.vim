@@ -249,6 +249,14 @@ function! vimfiler#force_redraw_screen()"{{{
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! vimfiler#redraw_screen()"{{{
+  let is_switch = &filetype != 'vimfiler'
+  if is_switch
+    " Switch vimfiler.
+    let vimfiler = vimfiler#get_current_vimfiler()
+
+    execute vimfiler.winnr . 'wincmd w'
+  endif
+
   if !has_key(b:vimfiler, 'current_files')
     return
   endif
@@ -270,6 +278,10 @@ function! vimfiler#redraw_screen()"{{{
 
   call setpos('.', pos)
   setlocal nomodifiable
+
+  if is_switch
+    wincmd p
+  endif
 endfunction"}}}
 function! vimfiler#redraw_prompt()"{{{
   let modifiable_save = &l:modifiable
@@ -329,52 +341,16 @@ function! vimfiler#get_system_error()"{{{
   endif
 endfunction"}}}
 function! vimfiler#get_marked_files()"{{{
-  let files = []
-  let max = line('$')
-  let cnt = 1
-  while cnt <= max
-    let line = getline(cnt)
-    if line =~ '^[*] '
-      " Marked.
-      call add(files, vimfiler#get_file(cnt))
-    endif
-
-    let cnt += 1
-  endwhile
-
-  return files
+  return filter(copy(vimfiler#get_current_vimfiler().current_files),
+        \ 'v:val.vimfiler__is_marked')
 endfunction"}}}
 function! vimfiler#get_marked_filenames()"{{{
-  let files = []
-  let max = line('$')
-  let cnt = 1
-  while cnt <= max
-    let line = getline(cnt)
-    if line =~ '^[*] '
-      " Marked.
-      call add(files, vimfiler#get_filename(cnt))
-    endif
-
-    let cnt += 1
-  endwhile
-
-  return files
+  return map(filter(copy(vimfiler#get_current_vimfiler().current_files),
+        \ 'v:val.vimfiler__is_marked'), 'v:val.action__path')
 endfunction"}}}
 function! vimfiler#get_escaped_marked_files()"{{{
-  let files = []
-  let max = line('$')
-  let cnt = 1
-  while cnt <= max
-    let line = getline(cnt)
-    if line =~ '^[*] '
-      " Marked.
-      call add(files, '"' . vimfiler#get_filename(cnt) . '"')
-    endif
-
-    let cnt += 1
-  endwhile
-
-  return files
+  return map(vimfiler#get_marked_filenames(),
+        \ '"\"" . v:val . "\""')
 endfunction"}}}
 function! vimfiler#check_filename_line(...)"{{{
   let line = (a:0 == 0)? getline('.') : a:1
@@ -386,9 +362,10 @@ function! vimfiler#get_filename(line_num)"{{{
    \ b:vimfiler.current_files[vimfiler#get_file_index(a:line_num)].action__path
 endfunction"}}}
 function! vimfiler#get_file(line_num)"{{{
+  let vimfiler = vimfiler#get_current_vimfiler()
   let index = vimfiler#get_file_index(a:line_num)
   return index < 0 ?
-        \ {} : b:vimfiler.current_files[index]
+        \ {} : vimfiler.current_files[index]
 endfunction"}}}
 function! vimfiler#get_file_index(line_num)"{{{
   return a:line_num - 3
@@ -790,6 +767,7 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
     endif
   endif
 
+  let b:vimfiler.context = extend(b:vimfiler.context, a:context)
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#force_redraw_screen()

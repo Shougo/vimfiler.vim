@@ -48,6 +48,8 @@ function! s:on_BufReadCmd(source_name, source_arg, context)  "{{{1
   let b:vimfiler = {}
   let b:vimfiler.source = a:source_name
   let b:vimfiler.context = a:context
+  let b:vimfiler.bufnr = bufnr('%')
+  let b:vimfiler.winnr = winnr()
   if type ==# 'directory'
     call s:initialize_vimfiler_directory(info, a:context)
   elseif type ==# 'file'
