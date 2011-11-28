@@ -387,17 +387,9 @@ function! s:toggle_mark_current_line()"{{{
   setlocal nomodifiable
 endfunction"}}}
 function! s:toggle_mark_all_lines()"{{{
-  let max = line('$')
-  let cnt = 1
-  while cnt <= max
-    let file = vimfiler#get_file(cnt)
-    if !empty(file)
-      " Toggle mark.
-      let file.vimfiler__is_marked = !file.vimfiler__is_marked
-    endif
-
-    let cnt += 1
-  endwhile
+  for file in vimfiler#get_current_vimfiler().current_files
+    let file.vimfiler__is_marked = !file.vimfiler__is_marked
+  endfor
 
   call vimfiler#redraw_screen()
 endfunction"}}}

@@ -557,6 +557,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed for UNC path.
 - Implemented no quit option.
 - Refactored.
+- Fixed toggle mark lines error.
 
 2011-11-25
 - Detect modified buffer.
