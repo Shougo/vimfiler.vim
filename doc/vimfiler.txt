@@ -553,6 +553,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-11-28
+- Fixed for UNC path.
+
 2011-11-25
 - Detect modified buffer.
 - Improved substitute path separator.
