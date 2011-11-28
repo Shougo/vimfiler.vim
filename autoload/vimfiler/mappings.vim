@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2011.
+" Last Modified: 28 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -277,7 +277,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   elseif dir == '~'
     " Home.
     let dir = expand('~')
-  elseif (vimfiler#iswin() && dir =~ '^//\|^\a\+:')
+  elseif (vimfiler#iswin() && dir =~ '^\\\\\|^\a\+:')
         \ || (!vimfiler#iswin() && dir =~ '^/')
     " Network drive or absolute path.
   else
@@ -296,7 +296,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
 
   " Save current pos.
   let save_pos = getpos('.')
-  let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] = 
+  let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] =
         \ deepcopy(save_pos)
   let prev_dir = b:vimfiler.current_dir
   let b:vimfiler.current_dir = dir
