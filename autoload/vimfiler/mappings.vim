@@ -454,11 +454,6 @@ function! s:execute_file()"{{{
     return
   endif
 
-  if vimfiler#util#is_win() && file.action__path =~ '^//'
-    " substitute separator for UNC.
-    let file.action__path = substitute(file.action__path, '/', '\\', 'g')
-  endif
-
   " Execute cursor file.
   call unite#mappings#do_action('vimfiler__execute', [file], {
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
