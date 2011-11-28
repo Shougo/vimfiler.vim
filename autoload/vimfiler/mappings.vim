@@ -475,6 +475,7 @@ function! s:switch_to_other_window()"{{{
 
   call setpos('.', pos)
 
+  call vimfiler#set_current_vimfiler(b:vimfiler)
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:print_filename()"{{{
@@ -707,6 +708,7 @@ function! s:create_another_vimfiler()"{{{
 
   let b:vimfiler.another_vimfiler_bufnr = current_bufnr
   let another_vimfiler_bufnr = bufnr('%')
+  call vimfiler#set_current_vimfiler(b:vimfiler)
 endfunction"}}}
 function! s:sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
@@ -726,6 +728,7 @@ function! s:sync_with_current_vimfiler()"{{{
   endif
 
   wincmd p
+  call vimfiler#set_current_vimfiler(b:vimfiler)
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:sync_with_another_vimfiler()"{{{
@@ -739,6 +742,8 @@ function! s:sync_with_another_vimfiler()"{{{
     " Change current vimfiler directory.
     call vimfiler#mappings#cd(vimfiler#get_another_vimfiler().current_dir)
   endif
+
+  call vimfiler#set_current_vimfiler(b:vimfiler)
 endfunction"}}}
 function! s:choose_action()"{{{
   let marked_files = vimfiler#get_marked_files()
