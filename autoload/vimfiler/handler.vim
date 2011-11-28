@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Nov 2011.
+" Last Modified: 28 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -47,6 +47,7 @@ function! s:on_BufReadCmd(source_name, source_arg, context)  "{{{1
 
   let b:vimfiler = {}
   let b:vimfiler.source = a:source_name
+  let b:vimfiler.context = a:context
   if type ==# 'directory'
     call s:initialize_vimfiler_directory(info, a:context)
   elseif type ==# 'file'
@@ -54,6 +55,8 @@ function! s:on_BufReadCmd(source_name, source_arg, context)  "{{{1
   else
     call vimfiler#print_error('Unknown filetype.')
   endif
+
+  call vimfiler#set_current_vimfiler(b:vimfiler)
 endfunction
 
 
@@ -115,7 +118,7 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   endif
 
   let b:vimfiler.is_visible_dot_files = 0
-  let b:vimfiler.is_simple = a:context.is_simple
+  let b:vimfiler.simple = a:context.simple
   let b:vimfiler.directory_cursor_pos = {}
   " Set mask.
   let b:vimfiler.current_mask = ''
@@ -129,12 +132,12 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   call vimfiler#default_settings()
   set filetype=vimfiler
 
-  if a:context.is_double
+  if a:context.double
     " Create another vimfiler.
-    call vimfiler#create_filer(b:vimfiler.current_dir,
-          \ b:vimfiler.is_simple ?
-          \ {'is_split' : 1, 'is_simple' : 1} :
-          \ {'is_split' : 1})
+    let context = deepcopy(b:vimfiler.context)
+    let context.split = 1
+    let context.double = 0
+    call vimfiler#create_filer(b:vimfiler.current_dir, context)
     let s:last_vimfiler_bufnr = bufnr('%')
     let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
     wincmd w

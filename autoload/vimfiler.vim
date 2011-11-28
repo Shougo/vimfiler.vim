@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Nov 2011.
+" Last Modified: 28 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,6 +49,8 @@ if s:exists_unite_version < 300
   finish
 endif"}}}
 
+let s:current_vimfiler = {}
+let s:use_current_vimfiler = 1
 let s:last_vimfiler_bufnr = -1
 let s:last_system_is_vimproc = -1
 
@@ -110,6 +112,13 @@ endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions."{{{
+function! vimfiler#get_current_vimfiler()"{{{
+  return exists('b:vimfiler') && !s:use_current_vimfiler ?
+        \ b:vimfiler : s:current_vimfiler
+endfunction"}}}
+function! vimfiler#set_current_vimfiler(vimfiler)"{{{
+  let s:current_unite = a:vimfiler
+endfunction"}}}
 function! vimfiler#create_filer(path, ...)"{{{
   if &l:modified && !&l:hidden
     echoerr 'Your buffer is modified! Can''t switch vimfiler.'
@@ -128,7 +137,7 @@ function! vimfiler#create_filer(path, ...)"{{{
   endwhile
   let bufname = prefix.postfix
 
-  if context.is_split
+  if context.split
     silent vsplit `=bufname`
   else
     silent edit `=bufname`
@@ -241,8 +250,9 @@ function! vimfiler#redraw_prompt()"{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
   call setline(1, printf('%s%s%s:%s[%s%s]',
-        \ (b:vimfiler.is_safe_mode ? '' : b:vimfiler.is_simple ? '*u* ' : '*unsafe* '),
-        \ (b:vimfiler.is_simple ? 'CD: ' : 'Current directory: '),
+        \ (b:vimfiler.is_safe_mode ? '' :
+        \   b:vimfiler.context.simple ? '*u* ' : '*unsafe* '),
+        \ (b:vimfiler.context.simple ? 'CD: ' : 'Current directory: '),
         \ b:vimfiler.source, b:vimfiler.current_dir,
         \ (b:vimfiler.is_visible_dot_files ? '.:' : ''),
         \ b:vimfiler.current_mask))
@@ -567,14 +577,14 @@ function! vimfiler#parse_path(path)"{{{
   return [source_name, source_arg]
 endfunction"}}}
 function! vimfiler#init_context(context)"{{{
-  if !has_key(a:context, 'is_split')
-    let a:context.is_split = 0
+  if !has_key(a:context, 'split')
+    let a:context.split = 0
   endif
-  if !has_key(a:context, 'is_simple')
-    let a:context.is_simple = 0
+  if !has_key(a:context, 'simple')
+    let a:context.simple = 0
   endif
-  if !has_key(a:context, 'is_double')
-    let a:context.is_double = 0
+  if !has_key(a:context, 'double')
+    let a:context.double = 0
   endif
 
   return a:context
@@ -586,7 +596,7 @@ function! vimfiler#set_histories(histories)"{{{
   let s:vimfiler_current_histories = a:histories
 endfunction"}}}
 function! vimfiler#get_print_lines(files)"{{{
-  let is_simple = b:vimfiler.is_simple
+  let is_simple = b:vimfiler.context.simple
   let max_len = winwidth(0) -
         \ (is_simple ? s:min_padding_width : s:max_padding_width)
   if max_len > g:vimfiler_max_filename_width
@@ -718,7 +728,7 @@ function! s:event_bufwin_leave()"{{{
 endfunction"}}}
 
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
-  if a:context.is_split
+  if a:context.split
     execute 'vertical sbuffer' . a:bufnr
   else
     execute 'buffer' . a:bufnr
@@ -732,6 +742,8 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
       let b:vimfiler.current_dir .= '/'
     endif
   endif
+
+  call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#force_redraw_screen()
 endfunction"}}}

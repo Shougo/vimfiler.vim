@@ -686,9 +686,10 @@ function! s:create_another_vimfiler()"{{{
   let current_bufnr = bufnr('%')
 
   " Create another vimfiler.
-  call vimfiler#create_filer(b:vimfiler.current_dir,
-        \ b:vimfiler.is_simple ?
-        \ { 'is_split' : 1, 'is_simple' : 1 } : { 'is_split' : 1 })
+  let context = deepcopy(b:vimfiler.context)
+  let context.split = 1
+  let context.double = 0
+  call vimfiler#create_filer(b:vimfiler.current_dir, context)
 
   let b:vimfiler.another_vimfiler_bufnr = current_bufnr
   let another_vimfiler_bufnr = bufnr('%')
@@ -697,9 +698,10 @@ function! s:sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
   let current_bufnr = bufnr('%')
   if !vimfiler#exists_another_vimfiler()
-    call vimfiler#create_filer(b:vimfiler.current_dir,
-          \ b:vimfiler.is_simple ?
-          \ { 'is_split' : 1, 'is_simple' : 1 } : { 'is_split' : 1 })
+    let context = deepcopy(b:vimfiler.context)
+    let context.split = 1
+    let context.double = 0
+    call vimfiler#create_filer(b:vimfiler.current_dir, context)
     let b:vimfiler.another_vimfiler_bufnr = current_bufnr
   else
     " Change another vimfiler directory.
@@ -927,9 +929,10 @@ function! s:disable_operation()"{{{
 endfunction"}}}
 
 function! s:toggle_simple_mode()"{{{
-  let b:vimfiler.is_simple = !b:vimfiler.is_simple
+  let b:vimfiler.context.simple = !b:vimfiler.context.simple
   call vimfiler#redraw_screen()
-  echo 'Simple mode is ' . (b:vimfiler.is_simple ? 'enabled' : 'disabled')
+  echo 'Simple mode is ' .
+        \ (b:vimfiler.context.simple ? 'enabled' : 'disabled')
 endfunction"}}}
 
 " vim: foldmethod=marker
