@@ -25,14 +25,6 @@
 " Version: 3.1, for Vim 7.2
 "=============================================================================
 
-" Check vimproc.
-try
-  call vimproc#version()
-  let s:exists_vimproc = 1
-catch
-  let s:exists_vimproc = 0
-endtry
-
 " Check unite.vim."{{{
 try
   let s:exists_unite_version = unite#version()
@@ -151,7 +143,7 @@ function! vimfiler#create_filer(path, ...)"{{{
   let context = vimfiler#init_context(get(a:000, 0, {}))
 
   " Create new buffer.
-  let prefix = vimfiler#iswin() ? '[vimfiler]' : '*vimfiler*'
+  let prefix = vimfiler#util#is_win() ? '[vimfiler]' : '*vimfiler*'
   let postfix = ' - 1'
   let cnt = 1
   while buflisted(prefix.postfix)
@@ -295,28 +287,8 @@ function! vimfiler#redraw_prompt()"{{{
         \ b:vimfiler.current_mask))
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! vimfiler#iswin()"{{{
-  return has('win32') || has('win64')
-endfunction"}}}
-function! vimfiler#exists_vimproc()"{{{
-  return s:exists_vimproc
-endfunction"}}}
-function! vimfiler#system(str, ...)"{{{
-  let s:last_system_is_vimproc = vimfiler#exists_vimproc()
-
-  let command = a:str
-  let input = join(a:000)
-  if &termencoding != '' && &termencoding != &encoding
-    let command = iconv(command, &encoding, &termencoding)
-    let input = iconv(input, &encoding, &termencoding)
-  endif
-
-  let output = vimfiler#exists_vimproc() ? (a:0 == 0 ? vimproc#system(command) : vimproc#system(command, input))
-        \: (a:0 == 0 ? system(command) : system(command, input))
-  if &termencoding != '' && &termencoding != &encoding
-    let output = iconv(output, &termencoding, &encoding)
-  endif
-  return output
+function! vimfiler#system(...)"{{{
+  return vimfiler#util#system(a:000)
 endfunction"}}}
 function! vimfiler#force_system(str, ...)"{{{
   let s:last_system_is_vimproc = 0
@@ -442,7 +414,7 @@ endfunction"}}}
 function! vimfiler#get_filetype(file)"{{{
   let ext = tolower(a:file.vimfiler__extension)
 
-  if (vimfiler#iswin() && ext ==? 'LNK')
+  if (vimfiler#util#is_win() && ext ==? 'LNK')
         \ || get(a:file, 'vimfiler__ftype', '') ==# 'link'
     " Symbolic link.
     return '[LNK]'
@@ -543,7 +515,7 @@ function! vimfiler#get_another_vimfiler()"{{{
         \ getbufvar(b:vimfiler.another_vimfiler_bufnr, 'vimfiler') : ''
 endfunction"}}}
 function! vimfiler#resolve(filename)"{{{
-  return ((vimfiler#iswin() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
+  return ((vimfiler#util#is_win() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
         \ vimfiler#util#substitute_path_separator(resolve(a:filename)) : a:filename
 endfunction"}}}
 function! vimfiler#print_error(message)"{{{
@@ -567,7 +539,7 @@ function! vimfiler#restore_variables(variables_save)"{{{
 endfunction"}}}
 function! vimfiler#parse_path(path)"{{{
   let source_name = matchstr(a:path, '^[^:]*\ze:')
-  if (vimfiler#iswin() && len(source_name) == 1)
+  if (vimfiler#util#is_win() && len(source_name) == 1)
         \ || source_name == ''
     " Default source.
     let source_name = 'file'

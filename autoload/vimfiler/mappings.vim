@@ -275,14 +275,14 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
           \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
   elseif dir == '/'
     " Root.
-    let dir = vimfiler#iswin() ?
+    let dir = vimfiler#util#is_win() ?
           \ matchstr(fnamemodify(b:vimfiler.current_dir, ':p'),
           \         '^\a\+:[/\\]') : dir
   elseif dir == '~'
     " Home.
     let dir = expand('~')
-  elseif (vimfiler#iswin() && dir =~ '^//\|^\a\+:')
-        \ || (!vimfiler#iswin() && dir =~ '^/')
+  elseif (vimfiler#util#is_win() && dir =~ '^//\|^\a\+:')
+        \ || (!vimfiler#util#is_win() && dir =~ '^/')
     " Network drive or absolute path.
   else
     " Relative path.
@@ -290,7 +290,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   endif
   let dir = vimfiler#util#substitute_path_separator(dir)
 
-  if vimfiler#iswin()
+  if vimfiler#util#is_win()
     let dir = vimfiler#resolve(dir)
   endif
 
@@ -452,6 +452,11 @@ function! s:execute_file()"{{{
   if empty(file)
     call s:execute_external_filer()
     return
+  endif
+
+  if vimfiler#util#is_win() && file.action__path =~ '^//'
+    " substitute separator for UNC.
+    let file.action__path = substitute(file.action__path, '/', '\\', 'g')
   endif
 
   " Execute cursor file.

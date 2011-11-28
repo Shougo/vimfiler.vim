@@ -37,7 +37,6 @@ endif
 
 let s:save_cpo = &cpo
 set cpo&vim
-let s:iswin = has('win32') || has('win64')
 
 " Global options definition."{{{
 let g:vimfiler_as_default_explorer =
