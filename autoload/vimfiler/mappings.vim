@@ -689,7 +689,8 @@ function! s:create_another_vimfiler()"{{{
   let context = deepcopy(b:vimfiler.context)
   let context.split = 1
   let context.double = 0
-  call vimfiler#create_filer(b:vimfiler.current_dir, context)
+  let context.create = 1
+  call vimfiler#switch_filer(b:vimfiler.current_dir, context)
 
   let b:vimfiler.another_vimfiler_bufnr = current_bufnr
   let another_vimfiler_bufnr = bufnr('%')
@@ -701,7 +702,8 @@ function! s:sync_with_current_vimfiler()"{{{
     let context = deepcopy(b:vimfiler.context)
     let context.split = 1
     let context.double = 0
-    call vimfiler#create_filer(b:vimfiler.current_dir, context)
+    let context.create = 1
+    call vimfiler#switch_filer(b:vimfiler.current_dir, context)
     let b:vimfiler.another_vimfiler_bufnr = current_bufnr
   else
     " Change another vimfiler directory.

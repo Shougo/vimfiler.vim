@@ -58,6 +58,12 @@ let s:min_padding_width = 10
 let s:max_padding_width = 35
 let s:vimfiler_current_histories = []
 
+let s:vimfiler_options = [
+      \ '-buffer-name=', '-no-quit', '-toggle', '-create',
+      \ '-simple', '-double', '-split',
+      \ '-winwidth=', '-winheight=',
+      \]
+
 augroup vimfiler"{{{
   autocmd!
 augroup end"}}}
@@ -117,7 +123,24 @@ function! vimfiler#get_current_vimfiler()"{{{
         \ b:vimfiler : s:current_vimfiler
 endfunction"}}}
 function! vimfiler#set_current_vimfiler(vimfiler)"{{{
-  let s:current_unite = a:vimfiler
+  let s:current_vimfiler = a:vimfiler
+endfunction"}}}
+function! vimfiler#get_context()"{{{
+  return vimfiler#get_current_vimfiler().context
+endfunction"}}}
+function! vimfiler#set_context(context)"{{{
+  let old_context = vimfiler#get_context()
+
+  if exists('b:vimfiler') && !s:use_current_vimfiler
+    let b:vimfiler.context = a:context
+  else
+    let s:current_vimfiler.context = a:context
+  endif
+
+  return old_context
+endfunction"}}}
+function! vimfiler#get_options()"{{{
+  return s:vimfiler_options
 endfunction"}}}
 function! vimfiler#create_filer(path, ...)"{{{
   if &l:modified && !&l:hidden
@@ -158,27 +181,29 @@ function! vimfiler#switch_filer(path, ...)"{{{
 
   let context = vimfiler#init_context(get(a:000, 0, {}))
 
-  " Search vimfiler buffer.
-  if buflisted(s:last_vimfiler_bufnr)
-        \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
-        \ && (!exists('t:unite_buffer_dictionary')
-        \      || has_key(t:unite_buffer_dictionary, s:last_vimfiler_bufnr))
-    call vimfiler#_switch_vimfiler(s:last_vimfiler_bufnr, context, a:path)
-    return
-  endif
-
-  " Search vimfiler buffer.
-  let cnt = 1
-  while cnt <= bufnr('$')
-    if getbufvar(cnt, '&filetype') ==# 'vimfiler'
-        \ && (!exists('t:unite_buffer_dictionary')
-        \     || has_key(t:unite_buffer_dictionary, cnt))
-      call vimfiler#_switch_vimfiler(cnt, context, a:path)
+  if !context.create
+    " Search vimfiler buffer.
+    if buflisted(s:last_vimfiler_bufnr)
+          \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
+          \ && (!exists('t:unite_buffer_dictionary')
+          \      || has_key(t:unite_buffer_dictionary, s:last_vimfiler_bufnr))
+      call vimfiler#_switch_vimfiler(s:last_vimfiler_bufnr, context, a:path)
       return
     endif
 
-    let cnt += 1
-  endwhile
+    " Search vimfiler buffer.
+    let cnt = 1
+    while cnt <= bufnr('$')
+      if getbufvar(cnt, '&filetype') ==# 'vimfiler'
+            \ && (!exists('t:unite_buffer_dictionary')
+            \     || has_key(t:unite_buffer_dictionary, cnt))
+        call vimfiler#_switch_vimfiler(cnt, context, a:path)
+        return
+      endif
+
+      let cnt += 1
+    endwhile
+  endif
 
   " Create window.
   call vimfiler#create_filer(a:path, context)
@@ -577,14 +602,32 @@ function! vimfiler#parse_path(path)"{{{
   return [source_name, source_arg]
 endfunction"}}}
 function! vimfiler#init_context(context)"{{{
-  if !has_key(a:context, 'split')
-    let a:context.split = 0
+  if !has_key(a:context, 'buffer_name')
+    let a:context.buffer_name = 'default'
+  endif
+  if !has_key(a:context, 'no_quit')
+    let a:context.no_quit = 0
+  endif
+  if !has_key(a:context, 'toggle')
+    let a:context.toggle = 0
+  endif
+  if !has_key(a:context, 'create')
+    let a:context.create = 0
   endif
   if !has_key(a:context, 'simple')
     let a:context.simple = 0
   endif
   if !has_key(a:context, 'double')
     let a:context.double = 0
+  endif
+  if !has_key(a:context, 'split')
+    let a:context.split = 0
+  endif
+  if !has_key(a:context, 'winwidth')
+    let a:context.winwidth = 0
+  endif
+  if !has_key(a:context, 'winheight')
+    let a:context.winwidth = 0
   endif
 
   return a:context
@@ -691,6 +734,10 @@ function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
   let [source_name, source_arg] = vimfiler#parse_path(a:arglead)
 
   let _ = []
+
+  " Option names completion.
+  let _ +=  filter(s:vimfiler_options,
+        \ 'stridx(v:val, a:arglead) == 0')
 
   " Scheme args completion.
   let _ += unite#vimfiler_complete([[source_name, source_arg]],

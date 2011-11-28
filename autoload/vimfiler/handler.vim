@@ -137,7 +137,8 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
     let context = deepcopy(b:vimfiler.context)
     let context.split = 1
     let context.double = 0
-    call vimfiler#create_filer(b:vimfiler.current_dir, context)
+    let context.create = 1
+    call vimfiler#switch_filer(b:vimfiler.current_dir, context)
     let s:last_vimfiler_bufnr = bufnr('%')
     let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
     wincmd w

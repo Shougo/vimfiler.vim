@@ -88,35 +88,32 @@ let g:vimfiler_extensions =
 
 " Plugin keymappings"{{{
 nnoremap <silent> <Plug>(vimfiler_split_switch)
-      \ :<C-u>call vimfiler#switch_filer('', { 'is_split' : 1 })<CR>
+      \ :<C-u>s:call_vimfiler({ 'split' : 1 }, '')<CR>
 nnoremap <silent> <Plug>(vimfiler_split_create)
-      \ :<C-u>call vimfiler#create_filer('', { 'is_split' : 1 })<CR>
+      \ :<C-u>VimFilerSplit<CR>
 nnoremap <silent> <Plug>(vimfiler_switch)
-      \ :<C-u>call vimfiler#switch_filer('')<CR>
+      \ :<C-u>VimFiler<CR>
 nnoremap <silent> <Plug>(vimfiler_create)
-      \ :<C-u>call vimfiler#create_filer('')<CR>
+      \ :<C-u>VimFilerCreate<CR>
 nnoremap <silent> <Plug>(vimfiler_simple)
-      \ :<C-u>call vimfiler#create_filer('', {'is_simple' : 1, 'split' : 1})<CR>
+      \ :<C-u>VimFilerSimple<CR>
 "}}}
 
 command! -nargs=? -complete=customlist,vimfiler#complete VimFiler
-      \ call vimfiler#switch_filer(<q-args>)
+      \ call s:call_vimfiler({}, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerDouble
-      \ call vimfiler#create_filer(<q-args>,
-      \   { 'double' : 1 })
+      \ call s:call_vimfiler({ 'double' : 1, 'create' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCreate
-      \ call vimfiler#create_filer(<q-args>)
+      \ call s:call_vimfiler({ 'create' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSimple
-      \ call vimfiler#create_filer(<q-args>,
-      \   { 'simple' : 1, 'split' : 1 })
+      \ call s:call_vimfiler({ 'simple' : 1, 'split' : 1, 'create' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSplit
-      \ call vimfiler#create_filer(<q-args>,
-      \   { 'split' : 1 })
+      \ call s:call_vimfiler({ 'split' : 1, 'create' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerTab
-      \ tabnew | call vimfiler#create_filer(<q-args>)
+      \ tabnew | call s:call_vimfiler({ 'create' : 1 }, <q-args>)
 command! VimFilerDetectDrives call vimfiler#detect_drives()
 
-if g:vimfiler_as_default_explorer
+if g:vimfiler_as_default_explorer"{{{
   augroup vimfiler-FileExplorer
     autocmd!
     autocmd BufEnter * call s:browse_check(expand('<amatch>'))
@@ -140,9 +137,9 @@ if g:vimfiler_as_default_explorer
   augroup FileExplorer
     autocmd!
   augroup END
-endif
+endif"}}}
 
-function! s:browse_check(path)
+function! s:browse_check(path)"{{{
   " Disable netrw.
   augroup FileExplorer
     autocmd!
@@ -158,7 +155,31 @@ function! s:browse_check(path)
         \ && &filetype != 'vimfiler'
     call vimfiler#handler#_event_handler('BufReadCmd')
   endif
-endfunction
+endfunction"}}}
+
+function! s:call_vimfiler(default, args)"{{{
+  let args = []
+  let options = a:default
+  for arg in split(a:args, '\%(\\\@<!\s\)\+')
+    let arg = substitute(arg, '\\\( \)', '\1', 'g')
+
+    let matched_list = filter(copy(vimfiler#get_options()),
+          \  'stridx(arg, v:val) == 0')
+    for option in matched_list
+      let key = substitute(substitute(option, '-', '_', 'g'),
+            \ '=$', '', '')[1:]
+      let options[key] = (option =~ '=$') ?
+            \ arg[len(option) :] : 1
+      break
+    endfor
+
+    if empty(matched_list)
+      call add(args, arg)
+    endif
+  endfor
+
+  call vimfiler#switch_filer(join(args), options)
+endfunction"}}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
