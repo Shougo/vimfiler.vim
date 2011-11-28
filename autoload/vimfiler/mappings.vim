@@ -281,7 +281,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   elseif dir == '~'
     " Home.
     let dir = expand('~')
-  elseif (vimfiler#iswin() && dir =~ '^\\\\\|^\a\+:')
+  elseif (vimfiler#iswin() && dir =~ '^//\|^\a\+:')
         \ || (!vimfiler#iswin() && dir =~ '^/')
     " Network drive or absolute path.
   else
