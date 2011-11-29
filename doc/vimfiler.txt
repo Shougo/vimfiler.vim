@@ -553,6 +553,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-11-29
+- Fixed vimfiler#set_current_vimfiler() problem.
+
 2011-11-28
 - Fixed for UNC path.
 - Implemented no quit option.
