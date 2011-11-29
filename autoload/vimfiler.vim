@@ -271,7 +271,7 @@ function! vimfiler#redraw_screen()"{{{
   call setpos('.', pos)
   setlocal nomodifiable
 
-  let vimfiler.winwidth = winwidth(0)
+  let b:vimfiler.winwidth = winwidth(0)
 
   if is_switch
     wincmd p
