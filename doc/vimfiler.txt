@@ -621,6 +621,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added <2-LeftMouse> mapping.
 - Added <RightMouse> mapping.
 - Improved options.
+- Implemented buffer_name option.
 
 2011-11-29
 - Fixed vimfiler#set_current_vimfiler() problem.

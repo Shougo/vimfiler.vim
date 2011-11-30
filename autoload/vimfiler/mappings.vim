@@ -65,7 +65,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)
         \ :<C-u>call vimfiler#mappings#do_action(g:vimfiler_split_action)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)
-        \ :<C-u>call <SID>edit_binary_file(0)<CR>
+        \ :<C-u>call <SID>edit_binary_file()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_filer)
         \ :<C-u>call <SID>execute_external_filer()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_shell_command)
@@ -468,7 +468,7 @@ function! s:switch_to_other_window()"{{{
     " Restore another vimfiler.
     call vimfiler#_switch_vimfiler(
           \ b:vimfiler.another_vimfiler_bufnr,
-          \ { 'is_split' : 1 }, '')
+          \ { 'split' : 1 }, '')
   else
     " Create another vimfiler.
     call s:create_another_vimfiler()
@@ -637,7 +637,7 @@ function! s:edit()"{{{
 
   call vimfiler#mappings#do_action(g:vimfiler_edit_action, current_linenr)
 endfunction"}}}
-function! s:edit_binary_file(is_split)"{{{
+function! s:edit_binary_file()"{{{
   if !vimfiler#check_filename_line()
     return
   endif

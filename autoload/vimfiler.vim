@@ -142,19 +142,27 @@ function! vimfiler#create_filer(path, ...)"{{{
 
   let context = vimfiler#init_context(get(a:000, 0, {}))
 
-  " Create new buffer.
-  let prefix = vimfiler#util#is_win() ? '[vimfiler]' : '*vimfiler*'
-  let postfix = ' - 1'
-  let cnt = 1
-  while buflisted(prefix.postfix)
-    let cnt += 1
-    let postfix = ' - ' . cnt
-  endwhile
-  let bufname = prefix.postfix
+  " Create new buffer name.
+  let prefix = vimfiler#util#is_win() ? '[vimfiler] - ' : '*vimfiler* - '
+  let prefix .= context.buffer_name
 
-    if context.split
-      execute context.direction 'vnew'
+  let postfix = '@1'
+  let cnt = 1
+  let tabnr = 1
+  while tabnr <= tabpagenr('$')
+    let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
+    if index(buflist, prefix.postfix) >= 0
+      let cnt += 1
+      let postfix = '@' . cnt
     endif
+
+    let tabnr += 1
+  endwhile
+  let bufname = prefix . postfix
+
+  if context.split
+    execute context.direction 'vnew'
+  endif
 
   silent edit `=bufname`
 
@@ -173,28 +181,39 @@ function! vimfiler#switch_filer(path, ...)"{{{
 
   let context = vimfiler#init_context(get(a:000, 0, {}))
 
-  if !context.create
-    " Search vimfiler buffer.
-    if buflisted(s:last_vimfiler_bufnr)
-          \ && getbufvar(s:last_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
-          \ && (!exists('t:unite_buffer_dictionary')
-          \      || has_key(t:unite_buffer_dictionary, s:last_vimfiler_bufnr))
-      call vimfiler#_switch_vimfiler(s:last_vimfiler_bufnr, context, a:path)
+  if context.toggle"{{{
+    let quit_winnr = 0
+
+    " Search vimfiler window.
+    " Note: must escape file-pattern.
+    let buffer_name =
+          \ vimfiler#util#escape_file_searching(context.buffer_name)
+
+    if bufwinnr(buffer_name) > 0
+      " Hide unite buffer.
+      silent execute quit_winnr 'wincmd w'
+
+      if winnr('$') != 1
+        close
+      else
+        call vimfiler#util#alternate_buffer()
+      endif
       return
     endif
+  endif"}}}
 
+  if !context.create
     " Search vimfiler buffer.
-    let cnt = 1
-    while cnt <= bufnr('$')
-      if getbufvar(cnt, '&filetype') ==# 'vimfiler'
+    for bufnr in filter(insert(range(1, bufnr('$')),
+          \ s:last_vimfiler_bufnr), 'buflisted(v:val)')
+      let vimfiler = getbufvar(bufnr, 'vimfiler')
+      if vimfiler.context.buffer_name ==# context.buffer_name
             \ && (!exists('t:unite_buffer_dictionary')
-            \     || has_key(t:unite_buffer_dictionary, cnt))
-        call vimfiler#_switch_vimfiler(cnt, context, a:path)
+            \      || has_key(t:unite_buffer_dictionary, bufnr))
+        call vimfiler#_switch_vimfiler(bufnr, context, a:path)
         return
       endif
-
-      let cnt += 1
-    endwhile
+    endfor
   endif
 
   " Create window.
@@ -734,8 +753,10 @@ function! s:event_bufwin_leave()"{{{
 endfunction"}}}
 
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
-  if a:context.split
-    execute a:context.direction 'vnew'
+  let context = vimfiler#init_context(a:context)
+
+  if context.split
+    execute context.direction 'vnew'
   endif
 
   execute 'buffer' . a:bufnr
@@ -749,7 +770,7 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
     endif
   endif
 
-  let b:vimfiler.context = extend(b:vimfiler.context, a:context)
+  let b:vimfiler.context = extend(b:vimfiler.context, context)
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#force_redraw_screen()
