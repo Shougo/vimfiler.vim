@@ -451,6 +451,7 @@ N			<Plug>(vimfiler_new_file)
 <Enter>			<Plug>(vimfiler_execute)
 l			<Plug>(vimfiler_smart_l)
 x			<Plug>(vimfiler_execute_file)
+<2-LeftMouse>		<Plug>(vimfiler_execute_file)
 h			<Plug>(vimfiler_smart_h)
 L			<Plug>(vimfiler_switch_to_drive)
 ~			<Plug>(vimfiler_switch_to_home_directory)
@@ -552,6 +553,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-11-30
+- Added <2-LeftMouse> mapping.
 
 2011-11-29
 - Fixed vimfiler#set_current_vimfiler() problem.
