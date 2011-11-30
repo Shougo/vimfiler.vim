@@ -207,12 +207,15 @@ function! vimfiler#switch_filer(path, ...)"{{{
     for bufnr in filter(insert(range(1, bufnr('$')),
           \ s:last_vimfiler_bufnr), 'buflisted(v:val)')
       let vimfiler = getbufvar(bufnr, 'vimfiler')
-      if vimfiler.context.buffer_name ==# context.buffer_name
+      if type(vimfiler) == type({})
+            \ && vimfiler.context.buffer_name ==# context.buffer_name
             \ && (!exists('t:unite_buffer_dictionary')
             \      || has_key(t:unite_buffer_dictionary, bufnr))
         call vimfiler#_switch_vimfiler(bufnr, context, a:path)
         return
       endif
+
+      unlet vimfiler
     endfor
   endif
 
