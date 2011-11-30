@@ -197,6 +197,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> Q <Plug>(vimfiler_exit)
 
   nmap <buffer> ge <Plug>(vimfiler_execute_external_filer)
+  nmap <buffer> <RightMouse> <Plug>(vimfiler_execute_external_filer)
+
   nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
   nmap <buffer> ? <Plug>(vimfiler_help)
   nmap <buffer> v <Plug>(vimfiler_preview_file)

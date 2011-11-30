@@ -463,6 +463,7 @@ e			<Plug>(vimfiler_edit_file)
 E			<Plug>(vimfiler_split_edit_file)
 B			<Plug>(vimfiler_edit_binary_file)
 ge			<Plug>(vimfiler_execute_external_filer)
+<RightMouse>		<Plug>(vimfiler_execute_external_filer)
 !			<Plug>(vimfiler_execute_shell_command)
 q			<Plug>(vimfiler_hide)
 Q			<Plug>(vimfiler_exit)
@@ -556,6 +557,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-11-30
 - Added <2-LeftMouse> mapping.
+- Added <RightMouse> mapping.
 
 2011-11-29
 - Fixed vimfiler#set_current_vimfiler() problem.
