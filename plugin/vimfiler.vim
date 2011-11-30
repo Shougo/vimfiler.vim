@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Nov 2011.
+" Last Modified: 30 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -57,6 +57,8 @@ let g:vimfiler_sort_type =
       \ get(g:, 'vimfiler_sort_type', 'filename')
 let g:vimfiler_directory_display_top =
       \ get(g:, 'vimfiler_directory_display_top', 1)
+let g:vimfiler_split_rule =
+      \ get(g:, 'vimfiler_split_rule', 'topleft')
 let g:vimfiler_detect_drives =
       \ get(g:, 'vimfiler_detect_drives', (has('win32') || has('win64')) ? [
       \     'A:/', 'B:/', 'C:/', 'D:/', 'E:/', 'F:/', 'G:/',

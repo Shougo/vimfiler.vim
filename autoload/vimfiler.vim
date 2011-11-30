@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Nov 2011.
+" Last Modified: 30 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,8 +52,8 @@ let s:vimfiler_current_histories = []
 
 let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-toggle', '-create',
-      \ '-simple', '-double', '-split',
-      \ '-winwidth=', '-winheight=',
+      \ '-simple', '-double', '-split', '-direction=',
+      \ '-winwidth=',
       \]
 
 augroup vimfiler"{{{
@@ -132,7 +132,7 @@ function! vimfiler#set_context(context)"{{{
   return old_context
 endfunction"}}}
 function! vimfiler#get_options()"{{{
-  return s:vimfiler_options
+  return copy(s:vimfiler_options)
 endfunction"}}}
 function! vimfiler#create_filer(path, ...)"{{{
   if &l:modified && !&l:hidden
@@ -152,11 +152,11 @@ function! vimfiler#create_filer(path, ...)"{{{
   endwhile
   let bufname = prefix.postfix
 
-  if context.split
-    silent vsplit `=bufname`
-  else
-    silent edit `=bufname`
-  endif
+    if context.split
+      execute context.direction 'vnew'
+    endif
+
+  silent edit `=bufname`
 
   let path = (a:path == '') ?
         \ vimfiler#util#substitute_path_separator(getcwd()) : a:path
@@ -253,6 +253,13 @@ function! vimfiler#redraw_screen()"{{{
     return
   endif
 
+  let winwidth = b:vimfiler.context.winwidth
+  if winwidth != 0
+    execute 'vertical resize' winwidth
+  endif
+
+  let b:vimfiler.winwidth = winwidth(0)
+
   setlocal modifiable
   let pos = getpos('.')
 
@@ -270,8 +277,6 @@ function! vimfiler#redraw_screen()"{{{
 
   call setpos('.', pos)
   setlocal nomodifiable
-
-  let b:vimfiler.winwidth = winwidth(0)
 
   if is_switch
     wincmd p
@@ -577,8 +582,8 @@ function! vimfiler#init_context(context)"{{{
   if !has_key(a:context, 'winwidth')
     let a:context.winwidth = 0
   endif
-  if !has_key(a:context, 'winheight')
-    let a:context.winwidth = 0
+  if !has_key(a:context, 'direction')
+    let a:context.direction = g:vimfiler_split_rule
   endif
 
   return a:context
@@ -595,7 +600,8 @@ function! vimfiler#get_print_lines(files)"{{{
         \ (is_simple ? s:min_padding_width : s:max_padding_width)
   if max_len > g:vimfiler_max_filename_width
     let max_len = g:vimfiler_max_filename_width
-  elseif max_len < g:vimfiler_min_filename_width
+  elseif !is_simple &&
+        \ max_len < g:vimfiler_min_filename_width
     let max_len = g:vimfiler_min_filename_width
   endif
   let max_len += 1
@@ -687,7 +693,7 @@ function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
   let _ = []
 
   " Option names completion.
-  let _ +=  filter(s:vimfiler_options,
+  let _ +=  filter(vimfiler#get_options(),
         \ 'stridx(v:val, a:arglead) == 0')
 
   " Scheme args completion.
@@ -729,10 +735,10 @@ endfunction"}}}
 
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   if a:context.split
-    execute 'vertical sbuffer' . a:bufnr
-  else
-    execute 'buffer' . a:bufnr
+    execute a:context.direction 'vnew'
   endif
+
+  execute 'buffer' . a:bufnr
 
   " Set current directory.
   if a:directory != ''
