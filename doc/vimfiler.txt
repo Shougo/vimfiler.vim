@@ -76,7 +76,7 @@ COMMANDS 					*vimfiler-commands*
 		                ["foo"].
 >
 		" File explorer like behavior.
-		:VimFiler -simple -winwidth=30
+		:VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle
 <
 						*vimfiler-options*
 		{options} are options for a vimfiler buffer.  You may give the
