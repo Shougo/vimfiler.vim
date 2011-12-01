@@ -617,6 +617,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-12-01
+- Fixed for UNC path.
+
 2011-11-30
 - Added <2-LeftMouse> mapping.
 - Added <RightMouse> mapping.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Nov 2011.
+" Last Modified: 01 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -269,7 +269,13 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   endif
 
   if dir == '..'
-    if count(split(b:vimfiler.current_dir, '\zs'), '/') <= 1
+    let current_dir = b:vimfiler.current_dir
+    if unite#util#is_win() && current_dir =~ '^//'
+      " For UNC path.
+      let current_dir = current_dir[1:]
+    endif
+
+    if count(split(current_dir, '\zs'), '/') <= 1
       " Ignore.
       return
     endif
