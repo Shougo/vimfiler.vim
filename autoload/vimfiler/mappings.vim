@@ -272,7 +272,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
     let current_dir = b:vimfiler.current_dir
     if unite#util#is_win() && current_dir =~ '^//'
       " For UNC path.
-      let current_dir = current_dir[1:]
+      let current_dir = substitute(current_dir, '^//[^/]*', '', '')
     endif
 
     if count(split(current_dir, '\zs'), '/') <= 1
