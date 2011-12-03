@@ -54,6 +54,8 @@ function! s:source.gather_candidates(args, context)"{{{
   " Search user execute file.
   let ext = a:context.source__file.vimfiler__extension
   if !has_key(g:vimfiler_execute_file_list, ext)
+    call unite#print_error(
+          \ '[vimfiler/execute] Associated programs are not found.')
     return []
   endif
 
@@ -72,7 +74,6 @@ function! s:source.gather_candidates(args, context)"{{{
         call unite#print_error(printf(
               \ '[vimfiler/execute] Command "%s" is not executable file.', command))
         return []
-      endif
     else
       let dict.kind = 'guicmd'
       let dict.action__path = command
