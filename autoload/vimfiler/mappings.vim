@@ -268,11 +268,12 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
     let [b:vimfiler.source, dir] = vimfiler#parse_path(dir)
   endif
 
+  let current_dir = b:vimfiler.current_dir
   if dir == '..'
-    let current_dir = b:vimfiler.current_dir
     if unite#util#is_win() && current_dir =~ '^//'
       " For UNC path.
-      let current_dir = substitute(current_dir, '^//[^/]*', '', '')
+      let current_dir = substitute(current_dir,
+            \ '^//[^/]*/[^/]*', '', '')
     endif
 
     if count(split(current_dir, '\zs'), '/') <= 1
@@ -284,9 +285,15 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
           \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
   elseif dir == '/'
     " Root.
-    let dir = vimfiler#util#is_win() ?
-          \ matchstr(fnamemodify(b:vimfiler.current_dir, ':p'),
-          \         '^\a\+:[/\\]') : dir
+
+    if unite#util#is_win() && current_dir =~ '^//'
+      " For UNC path.
+      let dir = matchstr(current_dir, '^//[^/]*/[^/]*')
+    else
+      let dir = vimfiler#util#is_win() ?
+            \ matchstr(fnamemodify(current_dir, ':p'),
+            \         '^\a\+:[/\\]') : dir
+    endif
   elseif dir == '~'
     " Home.
     let dir = expand('~')
@@ -295,7 +302,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
     " Network drive or absolute path.
   else
     " Relative path.
-    let dir = simplify(b:vimfiler.current_dir . dir)
+    let dir = simplify(current_dir . dir)
   endif
   let dir = vimfiler#util#substitute_path_separator(dir)
 

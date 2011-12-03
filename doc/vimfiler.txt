@@ -622,6 +622,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-12-01
 - Fixed for UNC path.
+- Fixed UNC root directory.
 
 2011-11-30
 - Added <2-LeftMouse> mapping.
