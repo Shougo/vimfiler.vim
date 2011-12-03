@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/mask.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Nov 2011.
+" Last Modified: 03 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -74,7 +74,7 @@ let s:action_table.change = {
       \ }
 function! s:action_table.change.func(candidate)"{{{
   let b:vimfiler.current_mask = unite#get_context().input
-  call vimfiler#force_redraw_screen()
+  call vimfiler#redraw_screen()
 endfunction"}}}
 
 let s:source.action_table['*'] = s:action_table

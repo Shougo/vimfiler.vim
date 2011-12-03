@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Dec 2011.
+" Last Modified: 03 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -507,29 +507,38 @@ function! s:expand_tree()"{{{
   let file.vimfiler__is_opened = !file.vimfiler__is_opened
   call setline('.', vimfiler#get_print_lines([file]))
 
-  if file.vimfiler__is_opened
-    " Expand tree.
-    let nestlevel = file.vimfiler__nest_level + 1
-
-    let files =
-          \ unite#filters#matcher_vimfiler_mask#define().filter(
-          \ vimfiler#get_directory_files(file.action__path),
-          \ { 'input' : b:vimfiler.current_mask })
-
-    for file in files
-      " Initialize.
-      let file.vimfiler__nest_level = nestlevel
-    endfor
-
-    let index = vimfiler#get_file_index(line('.'))
-
-    let b:vimfiler.current_files = b:vimfiler.current_files[: index]
-          \ + files + b:vimfiler.current_files[index+1 :]
-
-    call append('.', vimfiler#get_print_lines(files))
-  else
+  if !file.vimfiler__is_opened
     call s:unexpand_tree()
+    setlocal nomodifiable
+    return
   endif
+
+  " Expand tree.
+  let nestlevel = file.vimfiler__nest_level + 1
+
+  let original_files = vimfiler#get_directory_files(file.action__path)
+  for file in original_files
+    " Initialize.
+    let file.vimfiler__nest_level = nestlevel
+  endfor
+
+  let files =
+        \ unite#filters#matcher_vimfiler_mask#define().filter(
+        \ copy(original_files),
+        \ { 'input' : b:vimfiler.current_mask })
+  if !b:vimfiler.is_visible_dot_files
+    call filter(files, 'v:val.vimfiler__filename !~ "^\\."')
+  endif
+
+  let index = vimfiler#get_file_index(line('.'))
+  let index_orig = vimfiler#get_original_file_index(line('.'))
+
+  let b:vimfiler.current_files = b:vimfiler.current_files[: index]
+        \ + files + b:vimfiler.current_files[index+1 :]
+  let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
+        \ + original_files + b:vimfiler.original_files[index_orig+1 :]
+
+  call append('.', vimfiler#get_print_lines(files))
 
   setlocal nomodifiable
 endfunction"}}}
@@ -551,13 +560,20 @@ function! s:expand_tree_recursive()"{{{
   " Expand tree.
   let nestlevel = file.vimfiler__nest_level + 1
 
-  let files = s:expand_tree_rec(file)
+  let original_files = s:expand_tree_rec(file)
+
+  let files =
+        \ unite#filters#matcher_vimfiler_mask#define().filter(
+        \ copy(original_files),
+        \ { 'input' : b:vimfiler.current_mask })
 
   let index = vimfiler#get_file_index(line('.'))
+  let index_orig = vimfiler#get_original_file_index(line('.'))
 
   let b:vimfiler.current_files = b:vimfiler.current_files[: index]
-        \ + files
-        \ + b:vimfiler.current_files[index+1 :]
+        \ + files + b:vimfiler.current_files[index+1 :]
+  let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
+        \ + original_files + b:vimfiler.original_files[index_orig+1 :]
 
   call append('.', vimfiler#get_print_lines(files))
 
@@ -570,11 +586,14 @@ function! s:expand_tree_rec(file)"{{{
   let nestlevel = a:file.vimfiler__nest_level + 1
 
   let _ = []
-  for file in unite#filters#matcher_vimfiler_mask#define().filter(
-        \ vimfiler#get_directory_files(a:file.action__path),
-        \ { 'input' : b:vimfiler.current_mask })
+  for file in vimfiler#get_directory_files(a:file.action__path)
     " Initialize.
     let file.vimfiler__nest_level = nestlevel
+
+    if !b:vimfiler.is_visible_dot_files
+          \ && file.vimfiler__filename =~ '^\.'
+      continue
+    endif
 
     call add(_, file)
 
@@ -588,6 +607,7 @@ endfunction"}}}
 function! s:unexpand_tree()"{{{
   let file = vimfiler#get_file(line('.'))
   let index = vimfiler#get_file_index(line('.'))
+  let index_orig = vimfiler#get_original_file_index(line('.'))
 
   " Unexpand tree.
   let nestlevel = file.vimfiler__nest_level
@@ -602,10 +622,21 @@ function! s:unexpand_tree()"{{{
     let end += 1
   endfor
 
+  let end_orig = index_orig
+  for file in b:vimfiler.original_files[index_orig+1 :]
+    if file.vimfiler__nest_level <= nestlevel
+      break
+    endif
+
+    let end_orig += 1
+  endfor
+
   if end - index > 0
     " Delete children.
     let b:vimfiler.current_files = b:vimfiler.current_files[: index]
           \ + b:vimfiler.current_files[end+1 :]
+    let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
+          \ + b:vimfiler.current_files[end_orig+1 :]
     let pos = getpos('.')
     silent execute (line('.')+1).','.(vimfiler#get_line_number(end)).'delete _'
     call setpos('.', pos)
@@ -627,7 +658,9 @@ endfunction"}}}
 
 function! s:toggle_visible_dot_files()"{{{
   let b:vimfiler.is_visible_dot_files = !b:vimfiler.is_visible_dot_files
-  call vimfiler#force_redraw_screen()
+  let current_line = getline('.')
+  call vimfiler#redraw_screen()
+  call search(vimfiler#util#escape_pattern(current_line))
 endfunction"}}}
 function! s:popup_shell()"{{{
   let files = vimfiler#get_escaped_marked_files()
@@ -858,10 +891,14 @@ endfunction"}}}
 function! s:make_directory()"{{{
   call vimfiler#mappings#do_dummy_action('vimfiler__mkdir')
   silent call vimfiler#force_redraw_all_vimfiler()
+  redraw
+  echo ''
 endfunction"}}}
 function! s:new_file()"{{{
   call vimfiler#mappings#do_dummy_action('vimfiler__newfile')
   silent call vimfiler#force_redraw_all_vimfiler()
+  redraw
+  echo ''
 endfunction"}}}
 
 function! s:set_current_mask()"{{{

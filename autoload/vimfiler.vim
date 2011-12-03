@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Nov 2011.
+" Last Modified: 03 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -247,18 +247,12 @@ function! vimfiler#get_directory_files(directory)"{{{
     let current_files = vimfiler#sort(files + dirs, b:vimfiler.local_sort_type)
   endif
 
-  if !b:vimfiler.is_visible_dot_files
-    call filter(current_files, 'v:val.vimfiler__filename !~ "^\\."')
-  endif
-
   return current_files
 endfunction"}}}
 function! vimfiler#force_redraw_screen()"{{{
   " Use matcher_glob.
-  let b:vimfiler.current_files =
-        \ unite#filters#matcher_vimfiler_mask#define().filter(
-        \ vimfiler#get_directory_files(b:vimfiler.current_dir),
-        \ { 'input' : b:vimfiler.current_mask })
+  let b:vimfiler.original_files =
+        \ vimfiler#get_directory_files(b:vimfiler.current_dir)
 
   call vimfiler#redraw_screen()
 endfunction"}}}
@@ -271,8 +265,16 @@ function! vimfiler#redraw_screen()"{{{
     execute vimfiler.winnr . 'wincmd w'
   endif
 
-  if !has_key(b:vimfiler, 'current_files')
+  if !has_key(b:vimfiler, 'original_files')
     return
+  endif
+
+  let b:vimfiler.current_files =
+        \ unite#filters#matcher_vimfiler_mask#define().filter(
+        \ copy(b:vimfiler.original_files),
+        \ { 'input' : b:vimfiler.current_mask })
+  if !b:vimfiler.is_visible_dot_files
+    call filter(b:vimfiler.current_files, 'v:val.vimfiler__filename !~ "^\\."')
   endif
 
   let winwidth = b:vimfiler.context.winwidth
@@ -370,6 +372,9 @@ function! vimfiler#get_file(line_num)"{{{
 endfunction"}}}
 function! vimfiler#get_file_index(line_num)"{{{
   return a:line_num - 3
+endfunction"}}}
+function! vimfiler#get_original_file_index(line_num)"{{{
+  return index(b:vimfiler.original_files, vimfiler#get_file(a:line_num))
 endfunction"}}}
 function! vimfiler#get_line_number(index)"{{{
   return a:index + 3
@@ -776,7 +781,7 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   let b:vimfiler.context = extend(b:vimfiler.context, context)
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
-  call vimfiler#force_redraw_screen()
+  call vimfiler#redraw_screen()
 endfunction"}}}
 
 " Global options definition."{{{
