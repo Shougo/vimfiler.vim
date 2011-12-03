@@ -619,6 +619,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-12-03
 - Improved redraw candidates.
+- Improved vimfiler/execute source.
 
 2011-12-01
 - Fixed for UNC path.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/execute.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 03 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -66,11 +66,18 @@ function! s:source.gather_candidates(args, context)"{{{
     if command ==# 'vim'
       " Edit with vim.
       let dict.kind = 'file'
-      let dict.action__path = a:context.source__file.action__path
+      let dict.action__path =
+            \ a:context.source__file.action__path
+    elseif !executable(command)
+        call unite#print_error(printf(
+              \ '[vimfiler/execute] Command "%s" is not executable file.', command))
+        return []
+      endif
     else
       let dict.kind = 'guicmd'
       let dict.action__path = command
-      let dict.action__args = [a:context.source__file.action__path]
+      let dict.action__args =
+            \ [a:context.source__file.action__path]
     endif
 
     call add(candidates, dict)
