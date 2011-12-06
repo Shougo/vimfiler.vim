@@ -617,6 +617,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-12-06
+- Improved create filer behavior.
+
 2011-12-03
 - Improved redraw candidates.
 - Improved vimfiler/execute source.
