@@ -161,6 +161,17 @@ vimfiler#do_action({action-name})		*vimfiler#do_action()*
 >
 		nnoremap <silent><buffer><expr> v vimfiler#do_action('vsplit')
 >
+vimfiler#smart_cursor_map({directory-map}, {file-map})
+						*vimfiler#smart_cursor_map()*
+		Returns the key sequence with respect to the given
+		directory-map and file-map.  This will be used with
+		nmap <buffer><expr> usually.
+		Example:
+>
+		nmap <buffer><expr> e vimfiler#smart_cursor_map(
+				\  "\<Plug>(vimfiler_cd_file)",
+				\  "\<Plug>(vimfiler_edit_file)")
+
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
 
@@ -369,8 +380,14 @@ Normal mode key mappings.
 		Execute cursor file with |g:vimfiler_execute_file_list| command.
 		If cursor file is directory, change directory.
 
+<Plug>(vimfiler_execute_system_associated)	*<Plug>(vimfiler_execute_system_associated)*
 <Plug>(vimfiler_execute_file)			*<Plug>(vimfiler_execute_file)*
 		Execute cursor file by system associated command.
+		Note: <Plug>(vimfiler_execute_file) is obsolute name.
+
+<Plug>(vimfiler_execute_vimfiler_associated)	*<Plug>(vimfiler_execute_vimfiler_associated)*
+		Execute cursor file by vimfiler associated command.
+		Refer to |g:vimfiler_execute_file_list|.
 
 <Plug>(vimfiler_switch_to_parent_directory)	*<Plug>(vimfiler_switch_to_parent_directory)*
 		Switch to parent directory.
@@ -459,6 +476,9 @@ Normal mode key mappings.
 <Plug>(vimfiler_cd)				*<Plug>(vimfiler_cd)*
 		Change system current directory to vimfiler current directory.
 
+<Plug>(vimfiler_cd_file)			*<Plug>(vimfiler_cd_file)*
+		Change vimfiler current directory.
+
 <Plug>(vimfiler_choose_action)			*<Plug>(vimfiler_choose_action)*
 		Choose |unite| action in selected files.
 
@@ -516,8 +536,8 @@ K			<Plug>(vimfiler_make_directory)
 N			<Plug>(vimfiler_new_file)
 <Enter>			<Plug>(vimfiler_execute)
 l			<Plug>(vimfiler_smart_l)
-x			<Plug>(vimfiler_execute_file)
-<2-LeftMouse>		<Plug>(vimfiler_execute_file)
+x			<Plug>(vimfiler_execute_system_associated)
+<2-LeftMouse>		<Plug>(vimfiler_execute_system_associated)
 h			<Plug>(vimfiler_smart_h)
 L			<Plug>(vimfiler_switch_to_drive)
 ~			<Plug>(vimfiler_switch_to_home_directory)
@@ -543,7 +563,7 @@ gr			<Plug>(vimfiler_grep)
 gf			<Plug>(vimfiler_find)
 S			<Plug>(vimfiler_select_sort_type)
 <C-v>			<Plug>(vimfiler_switch_vim_buffer_mode)
-gc			<Plug>(vimfiler_cd)
+gc			<Plug>(vimfiler_cd_vim_current_dir)
 gs			<Plug>(vimfiler_toggle_safe_mode)
 gS			<Plug>(vimfiler_toggle_simple_mode)
 a			<Plug>(vimfiler_choose_action)
@@ -623,6 +643,8 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-12-08
 - Added <Plug>(vimfiler_toggle_mark_current_line_up) mapping.
+- Added some mappings.
+- Added vimfiler#smart_cursor_map().
 
 2011-12-06
 - Improved create filer behavior.

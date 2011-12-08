@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Dec 2011.
+" Last Modified: 08 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -107,6 +107,10 @@ function! vimfiler#do_action(action)"{{{
   return printf(":\<C-u>call vimfiler#mappings#do_action(%s)\<CR>",
         \             string(a:action))
 endfunction"}}}
+function! vimfiler#smart_cursor_map(directory_map, file_map)"{{{
+  return vimfiler#mappings#smart_cursor_map(a:directory_map, a:file_map)
+endfunction"}}}
+
 "}}}
 
 " vimfiler plugin utility functions."{{{
@@ -357,7 +361,7 @@ function! vimfiler#get_escaped_marked_files()"{{{
 endfunction"}}}
 function! vimfiler#check_filename_line(...)"{{{
   let line = (a:0 == 0)? getline('.') : a:1
-  return line =~ '^\s*|\?[*+-]'
+  return line =~ '^[*+-]\s\+'
 endfunction"}}}
 function! vimfiler#get_filename(line_num)"{{{
   return a:line_num == 1 ? '' :
