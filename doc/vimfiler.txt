@@ -476,8 +476,10 @@ Normal mode key mappings.
 		Switch to vimfiler buffer mode. All vimfiler mappings is
 		disabled. If press <ESC>, settings will be restored.
 
+<Plug>(vimfiler_cd_vim_current_dir)		*<Plug>(vimfiler_cd_vim_current_dir)*
 <Plug>(vimfiler_cd)				*<Plug>(vimfiler_cd)*
 		Change system current directory to vimfiler current directory.
+		Note: |<Plug>(vimfiler_cd)| is obsolute name.
 
 <Plug>(vimfiler_cd_file)			*<Plug>(vimfiler_cd_file)*
 		Change vimfiler current directory.
