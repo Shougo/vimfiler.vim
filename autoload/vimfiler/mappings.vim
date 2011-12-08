@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Dec 2011.
+" Last Modified: 08 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,6 +36,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call vimfiler#force_redraw_screen()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_current_line)
         \ :<C-u>call <SID>toggle_mark_current_line()<CR>j
+  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_current_line_up)
+        \ :<C-u>call <SID>toggle_mark_current_line()<CR>k
   vnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_selected_lines)
         \ :<C-u>call <SID>toggle_mark_lines(getpos("'<")[1], getpos("'>")[1])<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_all_lines)
@@ -140,6 +142,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   " Toggle mark.
   nmap <buffer> <C-l> <Plug>(vimfiler_redraw_screen)
   nmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_current_line)
+  nmap <buffer> <S-Space> <Plug>(vimfiler_toggle_mark_current_line_up)
   vmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_selected_lines)
 
   " Toggle marks in all lines.

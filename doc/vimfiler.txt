@@ -320,7 +320,10 @@ Normal mode key mappings.
 		Redraw vimfiler screen.
 
 <Plug>(vimfiler_toggle_mark_current_line)	*<Plug>(vimfiler_toggle_mark_current_line)*
-		Toggle mark in cursor line.
+		Toggle mark in cursor line and move down.
+
+<Plug>(vimfiler_toggle_mark_current_line_up)	*<Plug>(vimfiler_toggle_mark_current_line_up)*
+		Toggle mark in cursor line and move up.
 
 <Plug>(vimfiler_toggle_mark_all_lines)		*<Plug>(vimfiler_toggle_mark_all_lines)*
 		Toggle marks in all lines.
@@ -502,6 +505,7 @@ k			<Plug>(vimfiler_loop_cursor_up)
 gg			<Plug>(vimfiler_cursor_top)
 <C-l>			<Plug>(vimfiler_redraw_screen)
 <Space>			<Plug>(vimfiler_toggle_mark_current_line)
+<S-Space>		<Plug>(vimfiler_toggle_mark_current_line_up)
 *			<Plug>(vimfiler_toggle_mark_all_lines)
 U			<Plug>(vimfiler_clear_mark_all_lines)
 c			<Plug>(vimfiler_copy_file)
@@ -616,6 +620,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-12-08
+- Added <Plug>(vimfiler_toggle_mark_current_line_up) mapping.
 
 2011-12-06
 - Improved create filer behavior.
