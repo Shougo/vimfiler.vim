@@ -186,22 +186,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
   let context = vimfiler#init_context(get(a:000, 0, {}))
 
   if context.toggle"{{{
-    let quit_winnr = 0
-
-    " Search vimfiler window.
-    " Note: must escape file-pattern.
-    let buffer_name =
-          \ vimfiler#util#escape_file_searching(context.buffer_name)
-
-    if bufwinnr(buffer_name) > 0
-      " Hide unite buffer.
-      silent execute quit_winnr 'wincmd w'
-
-      if winnr('$') != 1
-        close
-      else
-        call vimfiler#util#alternate_buffer()
-      endif
+    if vimfiler#close(context.buffer_name)
       return
     endif
   endif"}}}
@@ -675,6 +660,31 @@ function! vimfiler#get_print_lines(files)"{{{
   endfor
 
   return lines
+endfunction"}}}
+function! vimfiler#close(buffer_name)"{{{
+  let buffer_name = a:buffer_name
+  if buffer_name !~ '@\d\+$'
+    " Add postfix.
+    let buffer_name .= '@1'
+  endif
+
+  " Note: must escape file-pattern.
+  let buffer_name =
+        \ vimfiler#util#escape_file_searching(buffer_name)
+
+  let quit_winnr = bufwinnr(buffer_name)
+  if quit_winnr > 0
+    " Hide unite buffer.
+    silent execute quit_winnr 'wincmd w'
+
+    if winnr('$') != 1
+      close
+    else
+      call vimfiler#util#alternate_buffer()
+    endif
+  endif
+
+  return quit_winnr > 0
 endfunction"}}}
 "}}}
 

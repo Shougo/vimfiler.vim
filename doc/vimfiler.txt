@@ -139,6 +139,9 @@ COMMANDS 					*vimfiler-commands*
 		Equivalent to |:Unite| except that it creates double vimfiler
 		buffers.
 
+:VimFilerClose {buffer-name}			*:VimFilerClose*
+		Close vimfiler buffer named {buffer-name}.
+
 ------------------------------------------------------------------------------
 FUNCTIONS					*vimfiler-functions*
 
@@ -645,6 +648,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added <Plug>(vimfiler_toggle_mark_current_line_up) mapping.
 - Added some mappings.
 - Added vimfiler#smart_cursor_map().
+- Added :VimFilerClose command.
 
 2011-12-06
 - Improved create filer behavior.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Nov 2011.
+" Last Modified: 08 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -113,6 +113,7 @@ command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSplit
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerTab
       \ tabnew | call s:call_vimfiler({ 'create' : 1 }, <q-args>)
 command! VimFilerDetectDrives call vimfiler#detect_drives()
+command! -nargs=1 VimFilerClose call vimfiler#close(<q-args>)
 
 if g:vimfiler_as_default_explorer"{{{
   augroup vimfiler-FileExplorer
