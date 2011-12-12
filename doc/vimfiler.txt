@@ -429,7 +429,21 @@ Normal mode key mappings.
 		...).
 
 <Plug>(vimfiler_execute_shell_command)		*<Plug>(vimfiler_execute_shell_command)*
-		Execute shell command by |vimshell|.
+		Execute shell command by |vimproc#system()| or |system()|.
+		If the argument is "?", substitute one file.
+		If the argument is "*", substitute the selected files.
+		Otherwise, append one file to the last argument.
+		
+		Example:
+		You selected files "foo", "bar", "baz".
+		(Input)   "echo"
+		(Command) "echo foo; echo bar; echo baz"
+		
+		(Input)   "echo ? hoge"
+		(Command) "echo foo hoge; echo bar hoge; echo baz hoge"
+		
+		(Input) "echo *"
+		(Command) "echo foo bar baz"
 
 <Plug>(vimfiler_hide)				*<Plug>(vimfiler_hide)*
 		Hide current vimfiler.
@@ -645,6 +659,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-12-12
+- Improved <Plug>(vimfiler_execute_shell_command) documentation.
 
 2011-12-08
 - Added <Plug>(vimfiler_toggle_mark_current_line_up) mapping.
