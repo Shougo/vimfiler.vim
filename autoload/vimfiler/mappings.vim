@@ -281,6 +281,9 @@ function! vimfiler#mappings#do_current_dir_action(action, ...)"{{{
 endfunction"}}}
 
 function! vimfiler#mappings#cd(dir, ...)"{{{
+  if &filetype !=# 'vimfiler'
+    return
+  endif
   let save_history = get(a:000, 0, 1)
 
   let dir = vimfiler#util#substitute_path_separator(a:dir)
@@ -290,7 +293,12 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
     let [b:vimfiler.source, dir] = vimfiler#parse_path(dir)
   endif
 
+  let previous_current_dir = b:vimfiler.current_dir
+  if previous_current_dir =~ '/$'
+    let previous_current_dir = previous_current_dir[: -2]
+  endif
   let current_dir = b:vimfiler.current_dir
+
   if dir == '..'
     if unite#util#is_win() && current_dir =~ '^//'
       " For UNC path.
@@ -326,14 +334,14 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
     " Relative path.
     let dir = simplify(current_dir . dir)
   endif
-  let dir = vimfiler#util#substitute_path_separator(dir)
+  let fullpath = vimfiler#util#substitute_path_separator(dir)
 
   if vimfiler#util#is_win()
-    let dir = vimfiler#resolve(dir)
+    let fullpath = vimfiler#resolve(fullpath)
   endif
 
-  if dir !~ '/$'
-    let dir .= '/'
+  if fullpath !~ '/$'
+    let fullpath .= '/'
   endif
 
   " Save current pos.
@@ -341,7 +349,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] =
         \ deepcopy(save_pos)
   let prev_dir = b:vimfiler.current_dir
-  let b:vimfiler.current_dir = dir
+  let b:vimfiler.current_dir = fullpath
 
   " Save changed directories.
   if save_history
@@ -370,12 +378,31 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   " Redraw.
   call vimfiler#force_redraw_screen()
 
-  " Restore cursor pos.
-  let save_pos[1] = 3
-  call setpos('.', (has_key(b:vimfiler.directory_cursor_pos, dir) ?
-        \ b:vimfiler.directory_cursor_pos[dir] : save_pos))
-  normal! zb
+  call s:restore_cursor(a:dir, fullpath, save_pos, previous_current_dir)
 endfunction"}}}
+function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)
+  " Restore cursor pos.
+  if a:dir ==# '..'
+    " Search previous current directory.
+    let num = 1
+    let max = len(b:vimfiler.current_files)
+    while num < max
+      if b:vimfiler.current_files[num].action__path
+            \ ==# a:previous_current_dir
+        call cursor(vimfiler#get_line_number(num), 1)
+        break
+      endif
+
+      let num += 1
+    endwhile
+  else
+    let a:save_pos[1] = 3
+    call setpos('.', (has_key(b:vimfiler.directory_cursor_pos, a:fullpath) ?
+          \ b:vimfiler.directory_cursor_pos[a:fullpath] : a:save_pos))
+  endif
+
+  normal! zb
+endfunction
 
 function! vimfiler#mappings#search_cursor(path)"{{{
   let max = line('$')
