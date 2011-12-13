@@ -660,6 +660,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-12-13
+- Improved execute shellcmd behavior.
+
 2011-12-12
 - Improved <Plug>(vimfiler_execute_shell_command) documentation.
 
