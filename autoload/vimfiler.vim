@@ -583,7 +583,11 @@ function! vimfiler#parse_path(path)"{{{
     let source_arg = a:path[len(source_name)+1 :]
   endif
 
-  return [source_name, source_arg]
+  let source_args = source_arg  == '' ? [] :
+        \  map(split(source_arg, '\\\@<!:', 1),
+        \      'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
+
+  return insert(source_args, source_name)
 endfunction"}}}
 function! vimfiler#init_context(context)"{{{
   if !has_key(a:context, 'buffer_name')

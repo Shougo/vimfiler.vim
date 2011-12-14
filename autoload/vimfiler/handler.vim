@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Dec 2011.
+" Last Modified: 14 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,16 +28,20 @@
 function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
   let context = vimfiler#init_context(get(a:000, 0, {}))
   let path = get(context, 'path', expand('<afile>'))
-  let [source_name, source_arg] = vimfiler#parse_path(path)
 
-  return s:on_{a:event_name}(source_name, source_arg, context)
+  let ret = vimfiler#parse_path(path)
+  let source_name = ret[0]
+  let source_args = ret[1:]
+
+  return s:on_{a:event_name}(source_name, source_args, context)
 endfunction
 
 " Event Handlers.
 
-function! s:on_BufReadCmd(source_name, source_arg, context)  "{{{1
+function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
   " Check path.
-  let ret = unite#vimfiler_check_filetype([[a:source_name, a:source_arg]])
+  let ret = unite#vimfiler_check_filetype(
+        \ [insert(a:source_args, a:source_name)])
   if empty(ret)
     " File not found.
     return
@@ -52,7 +56,7 @@ function! s:on_BufReadCmd(source_name, source_arg, context)  "{{{1
   if type ==# 'directory'
     call s:initialize_vimfiler_directory(info, a:context)
   elseif type ==# 'file'
-    call s:initialize_vimfiler_file(a:source_arg, info[0], info[1])
+    call s:initialize_vimfiler_file(a:source_args, info[0], info[1])
   else
     call vimfiler#print_error('Unknown filetype.')
   endif
@@ -60,28 +64,27 @@ function! s:on_BufReadCmd(source_name, source_arg, context)  "{{{1
   call vimfiler#set_current_vimfiler(b:vimfiler)
 endfunction
 
-
-function! s:on_BufWriteCmd(source_name, source_arg, context)  "{{{1
+function! s:on_BufWriteCmd(source_name, source_args, context)  "{{{1
   " BufWriteCmd is published by :write or other commands with 1,$ range.
-  return s:write(a:source_name, a:source_arg, 1, line('$'), 'BufWriteCmd')
+  return s:write(a:source_name, a:source_args, 1, line('$'), 'BufWriteCmd')
 endfunction
 
 
-function! s:on_FileAppendCmd(source_name, source_arg, context)  "{{{1
+function! s:on_FileAppendCmd(source_name, source_args, context)  "{{{1
   " FileAppendCmd is published by :write or other commands with >>.
-  return s:write(a:source_name, a:source_arg, line("'["), line("']"), 'FileAppendCmd')
+  return s:write(a:source_name, a:source_args, line("'["), line("']"), 'FileAppendCmd')
 endfunction
 
 
-function! s:on_FileWriteCmd(source_name, source_arg, context)  "{{{1
+function! s:on_FileWriteCmd(source_name, source_args, context)  "{{{1
   " FileWriteCmd is published by :write or other commands with partial range
   " such as 1,2 where 2 < line('$').
-  return s:write(a:source_name, a:source_arg, line("'["), line("']"), 'FileWriteCmd')
+  return s:write(a:source_name, a:source_args, line("'["), line("']"), 'FileWriteCmd')
 endfunction
 
-function! s:write(source_name, source_arg, line1, line2, event_name)  "{{{1
+function! s:write(source_name, source_args, line1, line2, event_name)  "{{{1
   let ret = unite#vimfiler_check_filetype(
-        \ [[a:source_name, a:source_arg]])
+        \ [insert(a:source_args, a:source_name)])
   if empty(ret)
     " File not found.
     return
@@ -90,7 +93,8 @@ function! s:write(source_name, source_arg, line1, line2, event_name)  "{{{1
 
   if type !=# 'file'
     " Invalid filetype.
-    call vimfiler#print_error('Invalid filetype: ' . source . source_arg)
+    call vimfiler#print_error('Invalid filetype: '
+          \ . source . join(source_args, ':'))
     return
   endif
 
@@ -101,7 +105,7 @@ function! s:write(source_name, source_arg, line1, line2, event_name)  "{{{1
           \ 'vimfiler__eventname' : a:event_name,
           \ })
     if a:event_name ==# 'BufWriteCmd'
-          \ && (a:source_name.':'.a:source_arg) ==# bufname('%')
+          \ && (a:source_name.':'.join(a:source_args, ':')) ==# bufname('%')
       " Reset modified flag.
       setlocal nomodified
     endif

@@ -663,6 +663,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-12-14
 - Improved datemark.
 - Improved winwidth.
+- Changed vimfiler interface.
 
 2011-12-13
 - Improved execute shellcmd behavior.
