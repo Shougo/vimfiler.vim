@@ -271,7 +271,7 @@ function! vimfiler#redraw_screen()"{{{
     execute 'vertical resize' winwidth
   endif
 
-  let b:vimfiler.winwidth = winwidth(0)
+  let b:vimfiler.winwidth = (winwidth(0)+1)/2*2
 
   setlocal modifiable
   let pos = getpos('.')
@@ -775,7 +775,8 @@ function! s:event_bufwin_enter()"{{{
 
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
-  if b:vimfiler.winwidth != winwidth(0)
+  let winwidth = (winwidth(0)+1)/2*2
+  if b:vimfiler.winwidth != winwidth
     call vimfiler#redraw_screen()
   endif
 endfunction"}}}
