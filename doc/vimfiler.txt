@@ -660,6 +660,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-12-14
+- Improved datemark.
+
 2011-12-13
 - Improved execute shellcmd behavior.
 - Improved cd.

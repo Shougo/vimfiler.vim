@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Nov 2011.
+" Last Modified: 13 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,7 +37,6 @@ endfunction
 
 function! s:on_BufReadCmd(source_name, source_arg, context)  "{{{1
   " Check path.
-
   let ret = unite#vimfiler_check_filetype([[a:source_name, a:source_arg]])
   if empty(ret)
     " File not found.
@@ -81,7 +80,7 @@ function! s:on_FileWriteCmd(source_name, source_arg, context)  "{{{1
 endfunction
 
 function! s:write(source_name, source_arg, line1, line2, event_name)  "{{{1
-  silent let ret = unite#vimfiler_check_filetype(
+  let ret = unite#vimfiler_check_filetype(
         \ [[a:source_name, a:source_arg]])
   if empty(ret)
     " File not found.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Dec 2011.
+" Last Modified: 14 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -506,7 +506,18 @@ function! vimfiler#get_filesize(file)"{{{
 
   return printf('%s%s%s', pattern[:5], repeat(' ', 6-len(pattern)), suffix)
 endfunction"}}}
+function! vimfiler#get_filetime(file)"{{{
+  return a:file.vimfiler__datemark .
+        \ (a:file.vimfiler__filetime =~ '^\d\+$' ?
+        \  (a:file.vimfiler__filetime <= 0 ? '' :
+        \  strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
+        \ : a:file.vimfiler__filetime)
+endfunction"}}}
 function! vimfiler#get_datemark(file)"{{{
+  if a:file.vimfiler__filetime !~ '^\d\+$'
+    return '~'
+  endif
+
   let time = localtime() - a:file.vimfiler__filetime
   if time < 86400
     " 60 * 60 * 24
@@ -643,14 +654,11 @@ function! vimfiler#get_print_lines(files)"{{{
     let filename = vimfiler#util#truncate_smart(
           \ mark . filename, max_len, max_len/3, '..')
     if !is_simple
-      let time = file.vimfiler__filetime <= 0 ? '' :
-            \ file.vimfiler__datemark .
-            \ strftime(g:vimfiler_time_format, file.vimfiler__filetime)
       let line = printf('%s %s %s %s',
             \ filename,
             \ file.vimfiler__filetype,
             \ vimfiler#get_filesize(file),
-            \ time,
+            \ vimfiler#get_filetime(file),
             \)
     else
       let line = printf('%s %s', filename, file.vimfiler__filetype)

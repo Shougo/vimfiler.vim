@@ -61,9 +61,9 @@ syn match   vimfilerTypeLink          '[^[:space:]|+-].*\[LNK\]' contained
 
 syn match   vimfilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]' contained
 
-syn match   vimfilerDate              '#[[:digit:]/]\+\s\+\d\+:\d\+$' contains=vimfilerDateIgnore contained
-syn match   vimfilerDateToday         '\~[[:digit:]/]\+\s\+\d\+:\d\+$' contains=vimfilerDateIgnore contained
-syn match   vimfilerDateWeek          '![[:digit:]/]\+\s\+\d\+:\d\+$' contains=vimfilerDateIgnore contained
+syn match   vimfilerDate              '\s\zs#[^#]\+$' contains=vimfilerDateIgnore contained
+syn match   vimfilerDateToday         '\s\zs\~[^~]\+$' contains=vimfilerDateIgnore contained
+syn match   vimfilerDateWeek          '\s\zs![^!]\+$' contains=vimfilerDateIgnore contained
 if has('conceal')
   " Supported conceal features.
   syn match   vimfilerDateIgnore        '[#~!]' contained conceal
