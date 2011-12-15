@@ -309,12 +309,16 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
     endif
 
     if count(split(current_dir, '\zs'), '/') <= 1
-      " Ignore.
-      return
+      if count(split(current_dir, '\zs'), ':') > 0
+        let dir = substitute(b:vimfiler.current_dir, ':[^:]*$', '', '')
+      else
+        " Ignore.
+        return
+      endif
+    else
+      let dir = fnamemodify(substitute(
+            \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
     endif
-
-    let dir = fnamemodify(substitute(
-          \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
   elseif dir == '/'
     " Root.
 
@@ -329,7 +333,8 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   elseif dir == '~'
     " Home.
     let dir = expand('~')
-  elseif (vimfiler#util#is_win() && dir =~ '^//\|^\a\+:')
+  elseif dir =~ ':'
+        \ || (vimfiler#util#is_win() && dir =~ '^//')
         \ || (!vimfiler#util#is_win() && dir =~ '^/')
     " Network drive or absolute path.
   else
@@ -1019,7 +1024,8 @@ endfunction"}}}
 function! s:change_directory_file()"{{{
   let filename = vimfiler#get_filename(line('.'))
 
-  if filename != '..' && !vimfiler#check_filename_line()
+  if filename == '..'
+  elseif !vimfiler#check_filename_line()
     let line = getline('.')
     let cursor_line = matchstr(line[: col('.') - 1],
           \ ' Current directory: \zs.*')

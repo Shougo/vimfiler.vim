@@ -662,6 +662,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-12-15
 - Fixed cd error.
+- Improved parse path.
 
 2011-12-14
 - Improved datemark.

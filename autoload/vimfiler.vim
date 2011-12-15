@@ -217,8 +217,8 @@ function! vimfiler#get_directory_files(directory)"{{{
   let context = {
         \ 'vimfiler__is_dummy' : 0,
         \ }
-  let current_files = unite#get_vimfiler_candidates(
-        \ [[b:vimfiler.source, a:directory]], context)
+  let args = vimfiler#parse_path(b:vimfiler.source . ':' . a:directory)
+  let current_files = unite#get_vimfiler_candidates([args], context)
 
   for file in current_files
     " Initialize.
