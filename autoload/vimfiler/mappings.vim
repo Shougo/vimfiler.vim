@@ -309,16 +309,12 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
     endif
 
     if count(split(current_dir, '\zs'), '/') <= 1
-      if count(split(current_dir, '\zs'), ':') > 0
-        let dir = substitute(b:vimfiler.current_dir, ':[^:]*$', '', '')
-      else
-        " Ignore.
-        return
-      endif
-    else
-      let dir = fnamemodify(substitute(
-            \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
+      " Ignore.
+      return
     endif
+
+    let dir = fnamemodify(substitute(
+          \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
   elseif dir == '/'
     " Root.
 
