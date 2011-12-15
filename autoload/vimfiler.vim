@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Dec 2011.
+" Last Modified: 15 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -742,7 +742,9 @@ endfunction"}}}
 
 " Complete.
 function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
-  let [source_name, source_arg] = vimfiler#parse_path(a:arglead)
+  let ret = vimfiler#parse_path(path)
+  let source_name = ret[0]
+  let source_args = ret[1:]
 
   let _ = []
 
@@ -751,7 +753,7 @@ function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
         \ 'stridx(v:val, a:arglead) == 0')
 
   " Scheme args completion.
-  let _ += unite#vimfiler_complete([[source_name, source_arg]],
+  let _ += unite#vimfiler_complete([insert(source_name, source_args)],
         \ source_arg, a:cmdline, a:cursorpos)
 
   if a:arglead !~ ':'

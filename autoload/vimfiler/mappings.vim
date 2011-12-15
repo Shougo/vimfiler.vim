@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Dec 2011.
+" Last Modified: 15 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -290,7 +290,9 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
 
   if dir =~ ':'
     " Parse path.
-    let [b:vimfiler.source, dir] = vimfiler#parse_path(dir)
+    let ret = vimfiler#parse_path(dir)
+    let b:vimfiler.source = ret[0]
+    let dir = join(ret[1:], ':')
   endif
 
   let previous_current_dir = b:vimfiler.current_dir
@@ -1030,7 +1032,8 @@ function! s:change_directory_file()"{{{
 
     let filename = cursor_line . cursor_next
   else
-    let filename = vimfiler#resolve(filename)
+    let filename = vimfiler#resolve(
+          \ vimfiler#get_file(line('.')).action__path)
   endif
 
   " Change directory.
