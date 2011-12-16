@@ -123,21 +123,25 @@ COMMANDS 					*vimfiler-commands*
 		Equivalent to |:Unite| except that it creates a new vimfiler
 		buffer.
 
-:VimFilerSimple	[{options}...] [{path}]		*:VimFilerSimple*
+:VimFilerSimple [{options}...] [{path}]		*:VimFilerSimple*
 		Equivalent to |:Unite| except that it creates a simple vimfiler
 		buffer.
 
-:VimFilerSplit	[{options}...] [{path}]		*:VimFilerSplit*
+:VimFilerSplit [{options}...] [{path}]		*:VimFilerSplit*
 		Equivalent to |:Unite| except that it creates a vimfiler buffer
 		and split the window.
 
-:VimFilerTab	[{options}...] [{path}]		*:VimFilerTab*
+:VimFilerTab [{options}...] [{path}]		*:VimFilerTab*
 		Equivalent to |:Unite| except that it creates a vimfiler buffer
 		and create a tab.
 
-:VimFilerDouble	[{options}...] [{path}]		*:VimFilerDouble*
+:VimFilerDouble [{options}...] [{path}]		*:VimFilerDouble*
 		Equivalent to |:Unite| except that it creates double vimfiler
 		buffers.
+
+:VimFilerCurrentDir [{options}...] [{path}]	*:VimFilerCurrentDir*
+		Equivalent to |:Unite| except that it starts with current
+		directory.
 
 :VimFilerClose {buffer-name}			*:VimFilerClose*
 		Close vimfiler buffer named {buffer-name}.
@@ -659,6 +663,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-12-16
+- Added VimFilerCurrentDir command.
 
 2011-12-15
 - Fixed cd error.

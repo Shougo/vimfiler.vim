@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Dec 2011.
+" Last Modified: 16 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -104,6 +104,8 @@ command! -nargs=? -complete=customlist,vimfiler#complete VimFiler
       \ call s:call_vimfiler({}, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerDouble
       \ call s:call_vimfiler({ 'double' : 1, 'create' : 1 }, <q-args>)
+command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCurrentDir
+      \ call s:call_vimfiler({}, <q-args> . ' ' . getcwd())
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCreate
       \ call s:call_vimfiler({ 'create' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSimple

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Dec 2011.
+" Last Modified: 16 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -806,12 +806,13 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
     if b:vimfiler.current_dir !~ '/$'
       let b:vimfiler.current_dir .= '/'
     endif
+    call vimfiler#force_redraw_screen()
+  else
+    call vimfiler#redraw_screen()
   endif
 
   let b:vimfiler.context = extend(b:vimfiler.context, context)
   call vimfiler#set_current_vimfiler(b:vimfiler)
-
-  call vimfiler#redraw_screen()
 endfunction"}}}
 
 " Global options definition."{{{
