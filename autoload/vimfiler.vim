@@ -211,11 +211,14 @@ function! vimfiler#switch_filer(path, ...)"{{{
   " Create window.
   call vimfiler#create_filer(a:path, context)
 endfunction"}}}
-function! vimfiler#get_directory_files(directory)"{{{
+function! vimfiler#get_directory_files(directory, ...)"{{{
   " Save current files.
+
+  let is_manualed = get(a:000, 0, 0)
 
   let context = {
         \ 'vimfiler__is_dummy' : 0,
+        \ 'is_redraw' : is_manualed,
         \ }
   let args = vimfiler#parse_path(b:vimfiler.source . ':' . a:directory)
   let current_files = unite#get_vimfiler_candidates([args], context)
@@ -238,10 +241,11 @@ function! vimfiler#get_directory_files(directory)"{{{
 
   return current_files
 endfunction"}}}
-function! vimfiler#force_redraw_screen()"{{{
+function! vimfiler#force_redraw_screen(...)"{{{
+  let is_manualed = get(a:000, 0, 0)
   " Use matcher_glob.
   let b:vimfiler.original_files =
-        \ vimfiler#get_directory_files(b:vimfiler.current_dir)
+        \ vimfiler#get_directory_files(b:vimfiler.current_dir, is_manualed)
 
   call vimfiler#redraw_screen()
 endfunction"}}}

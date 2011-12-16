@@ -668,6 +668,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added VimFilerCurrentDir command.
 - Fixed completion error.
 - Improved display.
+- Fixed cd behavior.
 
 2011-12-15
 - Fixed cd error.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Dec 2011.
+" Last Modified: 16 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -308,13 +308,18 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
             \ '^//[^/]*/[^/]*', '', '')
     endif
 
-    if count(split(current_dir, '\zs'), '/') <= 1
-      " Ignore.
-      return
+    let chars = split(current_dir, '\zs')
+    if count(chars, '/') <= 1
+      if count(chars, ':') < 1
+        " Ignore.
+        return
+      endif
+      let dir = substitute(
+            \ b:vimfiler.current_dir, ':[^:]*$', '', '')
+    else
+      let dir = fnamemodify(substitute(
+            \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
     endif
-
-    let dir = fnamemodify(substitute(
-          \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
   elseif dir == '/'
     " Root.
 
@@ -390,8 +395,10 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)
     let num = 1
     let max = len(b:vimfiler.current_files)
     while num < max
-      if b:vimfiler.current_files[num].action__path
-            \ ==# a:previous_current_dir
+      let path = b:vimfiler.current_files[num].action__path
+      if path ==#
+            \ b:vimfiler.source.':'.a:previous_current_dir
+            \ || path ==# a:previous_current_dir
         call cursor(vimfiler#get_line_number(num), 1)
         break
       endif
