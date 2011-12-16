@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Dec 2011.
+" Last Modified: 17 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -311,6 +311,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
     let chars = split(current_dir, '\zs')
     if count(chars, '/') <= 1
       if count(chars, ':') < 1
+            \ || b:vimfiler.source ==# 'file'
         " Ignore.
         return
       endif
