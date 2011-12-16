@@ -742,7 +742,7 @@ endfunction"}}}
 
 " Complete.
 function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
-  let ret = vimfiler#parse_path(path)
+  let ret = vimfiler#parse_path(join(split(a:cmdline)[1:]))
   let source_name = ret[0]
   let source_args = ret[1:]
 
@@ -753,8 +753,9 @@ function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
         \ 'stridx(v:val, a:arglead) == 0')
 
   " Scheme args completion.
-  let _ += unite#vimfiler_complete([insert(source_name, source_args)],
-        \ source_arg, a:cmdline, a:cursorpos)
+  let _ += unite#vimfiler_complete(
+        \ [insert(copy(source_args), source_name)],
+        \ join(source_args, ':'), a:cmdline, a:cursorpos)
 
   if a:arglead !~ ':'
     " Scheme name completion.
