@@ -33,7 +33,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_up)
         \ (line('.') == 1)? 'G' : 'k'
   nnoremap <buffer><silent> <Plug>(vimfiler_redraw_screen)
-        \ :<C-u>call vimfiler#force_redraw_screen()<CR>
+        \ :<C-u>call vimfiler#force_redraw_screen(1)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_current_line)
         \ :<C-u>call <SID>toggle_mark_current_line()<CR>j
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_current_line_up)
