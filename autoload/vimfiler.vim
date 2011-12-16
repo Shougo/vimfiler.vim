@@ -470,6 +470,7 @@ function! vimfiler#get_filetype(file)"{{{
 endfunction"}}}
 function! vimfiler#get_filesize(file)"{{{
   if a:file.vimfiler__is_directory
+        \ || a:file.vimfiler__filesize == -1
     return '       '
   endif
 
@@ -507,11 +508,11 @@ function! vimfiler#get_filesize(file)"{{{
   return printf('%s%s%s', pattern[:5], repeat(' ', 6-len(pattern)), suffix)
 endfunction"}}}
 function! vimfiler#get_filetime(file)"{{{
-  return a:file.vimfiler__datemark .
-        \ (a:file.vimfiler__filetime =~ '^\d\+$' ?
+  return (a:file.vimfiler__filetime =~ '^\d\+$' ?
         \  (a:file.vimfiler__filetime <= 0 ? '' :
-        \  strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
-        \ : a:file.vimfiler__filetime)
+        \    a:file.vimfiler__datemark .
+        \    strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
+        \ : a:file.vimfiler__datemark . a:file.vimfiler__filetime)
 endfunction"}}}
 function! vimfiler#get_datemark(file)"{{{
   if a:file.vimfiler__filetime !~ '^\d\+$'
