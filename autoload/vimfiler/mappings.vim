@@ -803,6 +803,7 @@ function! s:create_another_vimfiler()"{{{
   let context.split = 1
   let context.double = 0
   let context.create = 1
+  let context.toggle = 0
   call vimfiler#switch_filer(b:vimfiler.current_dir, context)
 
   let b:vimfiler.another_vimfiler_bufnr = current_bufnr
@@ -811,14 +812,8 @@ function! s:create_another_vimfiler()"{{{
 endfunction"}}}
 function! s:sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
-  let current_bufnr = bufnr('%')
   if !vimfiler#exists_another_vimfiler()
-    let context = deepcopy(b:vimfiler.context)
-    let context.split = 1
-    let context.double = 0
-    let context.create = 1
-    call vimfiler#switch_filer(b:vimfiler.current_dir, context)
-    let b:vimfiler.another_vimfiler_bufnr = current_bufnr
+    call s:create_another_vimfiler()
   else
     " Change another vimfiler directory.
     let current_dir = b:vimfiler.current_dir
@@ -827,7 +822,6 @@ function! s:sync_with_current_vimfiler()"{{{
   endif
 
   wincmd p
-  call vimfiler#set_current_vimfiler(b:vimfiler)
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:sync_with_another_vimfiler()"{{{

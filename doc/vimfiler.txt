@@ -666,6 +666,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-12-17
 - Fixed cd bug in Windows.
+- Fixed toggle vimfiler bug.
 
 2011-12-16
 - Added VimFilerCurrentDir command.
