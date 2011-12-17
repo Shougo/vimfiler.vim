@@ -794,6 +794,11 @@ function! s:event_bufwin_enter()"{{{
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
   let s:last_vimfiler_bufnr = bufnr('%')
+
+  let winwidth = (winwidth(0)+1)/2*2
+  if b:vimfiler.winwidth != winwidth
+    call vimfiler#redraw_screen()
+  endif
 endfunction"}}}
 
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
