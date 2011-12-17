@@ -803,7 +803,6 @@ function! s:create_another_vimfiler()"{{{
   let context.split = 1
   let context.double = 0
   let context.create = 1
-  let context.toggle = 0
   call vimfiler#switch_filer(b:vimfiler.current_dir, context)
 
   let b:vimfiler.another_vimfiler_bufnr = current_bufnr

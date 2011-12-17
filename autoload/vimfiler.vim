@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Dec 2011.
+" Last Modified: 17 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -185,11 +185,11 @@ function! vimfiler#switch_filer(path, ...)"{{{
 
   let context = vimfiler#init_context(get(a:000, 0, {}))
 
-  if context.toggle"{{{
+  if context.toggle && !context.create
     if vimfiler#close(context.buffer_name)
       return
     endif
-  endif"}}}
+  endif
 
   if !context.create
     " Search vimfiler buffer.
