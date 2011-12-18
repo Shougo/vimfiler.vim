@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Dec 2011.
+" Last Modified: 18 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -783,6 +783,11 @@ function! s:event_bufwin_enter()"{{{
   if bufwinnr(s:last_vimfiler_bufnr) > 0
         \ && s:last_vimfiler_bufnr != bufnr('%')
     let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
+  endif
+
+  if has('conceal')
+    setlocal conceallevel=3
+    setlocal concealcursor=n
   endif
 
   call vimfiler#set_current_vimfiler(b:vimfiler)

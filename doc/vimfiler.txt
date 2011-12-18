@@ -664,6 +664,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-12-18
+- Improved for conceal.
+
 2011-12-17
 - Fixed cd bug in Windows.
 - Fixed toggle vimfiler bug.
