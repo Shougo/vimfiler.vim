@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Nov 2011.
+" Last Modified: 19 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -103,7 +103,7 @@ function! vimfiler#util#alternate_buffer()"{{{
   endif
 
   let listed_buffer = filter(range(1, bufnr('$')),
-        \ 'buflisted(v:val) &&
+        \ 's:buflisted(v:val) &&
         \  (v:val == bufnr("%") || getbufvar(v:val, "&filetype") !=# "vimfiler")')
   let current = index(listed_buffer, bufnr('%'))
   if current < 0 || len(listed_buffer) < 3
@@ -120,6 +120,10 @@ function! vimfiler#util#delete_buffer(...)"{{{
   let bufnr = get(a:000, 0, bufnr('%'))
   call vimfiler#util#alternate_buffer()
   execute 'bdelete!' bufnr
+endfunction"}}}
+function! s:buflisted(bufnr)"{{{
+  return !exists('t:unite_buffer_dictionary') ?
+        \ has_key(t:unite_buffer_dictionary, a:bufnr) : buflisted(a:bufnr)
 endfunction"}}}
 
 let &cpo = s:save_cpo
