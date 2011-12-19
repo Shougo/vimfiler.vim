@@ -631,7 +631,7 @@ function! vimfiler#set_histories(histories)"{{{
 endfunction"}}}
 function! vimfiler#get_print_lines(files)"{{{
   let is_simple = b:vimfiler.context.simple
-  if s:max_padding_width + g:vimfiler_min_filename_width
+  if s:max_padding_width + g:vimfiler_min_filename_width > winwidth(0)
     " Force simple.
     let is_simple = 1
   endif
