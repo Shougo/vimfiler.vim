@@ -787,6 +787,11 @@ function! s:event_bufwin_enter()"{{{
     let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
   endif
 
+  if has('conceal')
+    setlocal conceallevel=3
+    setlocal concealcursor=n
+  endif
+
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
   let context = vimfiler#get_context()
