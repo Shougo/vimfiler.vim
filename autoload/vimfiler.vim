@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Dec 2011.
+" Last Modified: 19 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ let s:vimfiler_current_histories = []
 let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-toggle', '-create',
       \ '-simple', '-double', '-split', '-direction=',
-      \ '-winwidth=',
+      \ '-winwidth=', '-winminwidth=',
       \]
 
 augroup vimfiler"{{{
@@ -268,11 +268,6 @@ function! vimfiler#redraw_screen()"{{{
         \ { 'input' : b:vimfiler.current_mask })
   if !b:vimfiler.is_visible_dot_files
     call filter(b:vimfiler.current_files, 'v:val.vimfiler__filename !~ "^\\."')
-  endif
-
-  let winwidth = b:vimfiler.context.winwidth
-  if winwidth != 0
-    execute 'vertical resize' winwidth
   endif
 
   let b:vimfiler.winwidth = (winwidth(0)+1)/2*2
@@ -619,6 +614,9 @@ function! vimfiler#init_context(context)"{{{
   if !has_key(a:context, 'winwidth')
     let a:context.winwidth = 0
   endif
+  if !has_key(a:context, 'winminwidth')
+    let a:context.winminwidth = 0
+  endif
   if !has_key(a:context, 'direction')
     let a:context.direction = g:vimfiler_split_rule
   endif
@@ -633,6 +631,10 @@ function! vimfiler#set_histories(histories)"{{{
 endfunction"}}}
 function! vimfiler#get_print_lines(files)"{{{
   let is_simple = b:vimfiler.context.simple
+  if s:max_padding_width + g:vimfiler_min_filename_width
+    " Force simple.
+    let is_simple = 1
+  endif
   let max_len = winwidth(0) -
         \ (is_simple ? s:min_padding_width : s:max_padding_width)
   if max_len > g:vimfiler_max_filename_width
@@ -787,6 +789,11 @@ function! s:event_bufwin_enter()"{{{
 
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
+  let context = vimfiler#get_context()
+  if context.winwidth != 0
+    execute 'vertical resize' context.winwidth
+  endif
+
   let winwidth = (winwidth(0)+1)/2*2
   if b:vimfiler.winwidth != winwidth
     call vimfiler#redraw_screen()
@@ -794,6 +801,12 @@ function! s:event_bufwin_enter()"{{{
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
   let s:last_vimfiler_bufnr = bufnr('%')
+
+  let context = vimfiler#get_context()
+  if context.winminwidth != 0
+    execute 'vertical resize' context.winminwidth
+    echomsg winwidth(0)
+  endif
 
   let winwidth = (winwidth(0)+1)/2*2
   if b:vimfiler.winwidth != winwidth

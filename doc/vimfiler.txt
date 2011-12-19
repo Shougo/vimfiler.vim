@@ -97,6 +97,10 @@ COMMANDS 					*vimfiler-commands*
 		-winwidth={window-width}
 		Specifies the width of a vimfiler buffer.
 
+						*vimfiler-options-winminwidth*
+		-winminwidth={window-width}
+		Specifies the minimum width of a vimfiler buffer.
+
 						*vimfiler-options-direction*
 		-direction={direction}
 		Defines split position rule. The default value is same to
@@ -663,6 +667,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-12-19
+- Added -winminwidth option.
 
 2011-12-17
 - Fixed cd bug in Windows.

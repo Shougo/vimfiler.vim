@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Dec 2011.
+" Last Modified: 19 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -147,6 +147,10 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
     let s:last_vimfiler_bufnr = bufnr('%')
     let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
     wincmd w
+  endif
+
+  if a:context.winwidth != 0
+    execute 'vertical resize' a:context.winwidth
   endif
 
   call vimfiler#force_redraw_screen()
