@@ -808,7 +808,6 @@ function! s:event_bufwin_leave()"{{{
   let context = vimfiler#get_context()
   if context.winminwidth != 0
     execute 'vertical resize' context.winminwidth
-    echomsg winwidth(0)
   endif
 
   let winwidth = (winwidth(0)+1)/2*2
