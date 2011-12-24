@@ -672,6 +672,7 @@ CHANGELOG					*vimfiler-changelog*
 - Split automatically.
 - Improved <Plug>(vimfiler_split_edit_file) behavior.
 - Fixed winwidth problem.
+- Improved redraw.
 
 2011-12-19
 - Added -winminwidth option.
