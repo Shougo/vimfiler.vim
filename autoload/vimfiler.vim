@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Dec 2011.
+" Last Modified: 24 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -139,12 +139,11 @@ function! vimfiler#get_options()"{{{
   return copy(s:vimfiler_options)
 endfunction"}}}
 function! vimfiler#create_filer(path, ...)"{{{
-  if &l:modified && !&l:hidden
-    echoerr 'Your buffer is modified! Can''t switch vimfiler.'
-    return
-  endif
-
   let context = vimfiler#init_context(get(a:000, 0, {}))
+  if &l:modified && !&l:hidden
+    " Split automatically.
+    let context.is_switch = 1
+  endif
 
   " Create new buffer name.
   let prefix = vimfiler#util#is_win() ? '[vimfiler] - ' : '*vimfiler* - '
@@ -178,12 +177,11 @@ function! vimfiler#create_filer(path, ...)"{{{
   call vimfiler#handler#_event_handler('BufReadCmd', context)
 endfunction"}}}
 function! vimfiler#switch_filer(path, ...)"{{{
-  if &l:modified && !&l:hidden
-    echoerr 'Your buffer is modified! Can''t switch vimfiler.'
-    return
-  endif
-
   let context = vimfiler#init_context(get(a:000, 0, {}))
+  if &l:modified && !&l:hidden
+    " Split automatically.
+    let context.is_switch = 1
+  endif
 
   if context.toggle && !context.create
     if vimfiler#close(context.buffer_name)

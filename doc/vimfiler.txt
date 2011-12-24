@@ -668,6 +668,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-12-24
+- Split automatically.
+
 2011-12-19
 - Added -winminwidth option.
 
