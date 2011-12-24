@@ -74,7 +74,6 @@ function! vimfiler#default_settings()"{{{
   if has('netbeans_intg') || has('sun_workshop')
     setlocal noautochdir
   endif
-  let &l:winwidth = g:vimfiler_min_filename_width + s:min_padding_width
   if has('conceal')
     setlocal conceallevel=3
     setlocal concealcursor=n
@@ -803,6 +802,10 @@ function! s:event_bufwin_enter()"{{{
   endif
 endfunction"}}}
 function! s:event_bufwin_leave()"{{{
+  if !exists('b:vimfiler')
+    return
+  endif
+
   let s:last_vimfiler_bufnr = bufnr('%')
 
   let context = vimfiler#get_context()

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Dec 2011.
+" Last Modified: 24 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -71,7 +71,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)
         \ :<C-u>call <SID>edit()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)
-        \ :<C-u>call vimfiler#mappings#do_action(g:vimfiler_split_action)<CR>
+        \ :<C-u>call <SID>split_edit_file()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)
         \ :<C-u>call <SID>edit_binary_file()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_external_filer)
@@ -844,6 +844,13 @@ function! s:choose_action()"{{{
   endif
 
   call unite#mappings#_choose_action(marked_files)
+endfunction"}}}
+function! s:split_edit_file()"{{{
+  let winwidth = &columns - (winwidth(0)+1)/2*2
+  call vimfiler#mappings#do_action(g:vimfiler_split_action)
+
+  " Resize.
+  execute 'vertical resize' (winwidth / (winnr('$') - 1))
 endfunction"}}}
 
 " File operations.
