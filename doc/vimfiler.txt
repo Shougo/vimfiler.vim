@@ -668,6 +668,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2011-12-25
+- Improved <Plug>(vimfiler_split_edit_file) behavior.
+
 2011-12-24
 - Split automatically.
 - Improved <Plug>(vimfiler_split_edit_file) behavior.

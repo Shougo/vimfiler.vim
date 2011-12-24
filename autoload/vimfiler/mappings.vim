@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Dec 2011.
+" Last Modified: 25 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -846,11 +846,17 @@ function! s:choose_action()"{{{
   call unite#mappings#_choose_action(marked_files)
 endfunction"}}}
 function! s:split_edit_file()"{{{
-  let winwidth = &columns - (winwidth(0)+1)/2*2
+  let context = vimfiler#get_context()
+  let winwidth = (winnr('$') != 1) ?
+        \ &columns - (winwidth(0)+1)/2*2 :
+        \ (context.winwidth == 0) ?
+        \ &columns / 2 :
+        \ &columns - context.winwidth
   call vimfiler#mappings#do_action(g:vimfiler_split_action)
 
   " Resize.
-  execute 'vertical resize' (winwidth / (winnr('$') - 1))
+  execute 'vertical resize'
+        \ (winnr('$') == 1 ? winwidth : winwidth/(winnr('$') - 1))
 endfunction"}}}
 
 " File operations.
