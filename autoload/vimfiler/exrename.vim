@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 26 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -48,9 +48,9 @@ function! vimfiler#exrename#create_buffer(files)"{{{
 
   setfiletype exrename
 
-  syn match ExrenameModified '^.*$'
-  hi def link ExrenameModified Todo
-  hi def link ExrenameOriginal Normal
+  syntax match ExrenameModified '^.*$'
+  highlight def link ExrenameModified Todo
+  highlight def link ExrenameOriginal Normal
 
   " Clean up the screen.
   % delete _
@@ -64,8 +64,8 @@ function! vimfiler#exrename#create_buffer(files)"{{{
       let filename .= '/'
     endif
 
-    execute 'syn match ExrenameOriginal'
-          \ string(printf('^\%%%dl%s$', line('$'), filename))
+    execute 'syntax match ExrenameOriginal'
+          \ '/'.printf('^\%%%dl%s$', line('$'), escape(filename, '/')).'/'
     call append('$', filename)
     call add(b:exrename.current_files, file)
     call add(b:exrename.current_filenames, filename)
