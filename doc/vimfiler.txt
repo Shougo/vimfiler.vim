@@ -213,7 +213,7 @@ g:vimfiler_extensions				*g:vimfiler_extensions*
 g:vimfiler_split_action				*g:vimfiler_split_action*
 		This variable controls vimfiler split action in |unite|.
 		
-		Default value is "vsplit".
+		Default value is "right".
 
 g:vimfiler_edit_action				*g:vimfiler_edit_action*
 		This variable controls vimfiler edit action in |unite|.
@@ -671,6 +671,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-12-27
+- Changed g:vimfiler_split_action default value.
 
 2011-12-26
 - Fixed exrename syntax error.

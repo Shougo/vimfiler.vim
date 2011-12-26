@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Dec 2011.
+" Last Modified: 27 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,7 +44,7 @@ let g:vimfiler_as_default_explorer =
 let g:vimfiler_execute_file_list =
       \ get(g:, 'vimfiler_execute_file_list', {})
 let g:vimfiler_split_action =
-      \ get(g:, 'vimfiler_split_action', 'vsplit')
+      \ get(g:, 'vimfiler_split_action', 'right')
 let g:vimfiler_edit_action =
       \ get(g:, 'vimfiler_edit_action', 'open')
 let g:vimfiler_preview_action =
