@@ -147,6 +147,10 @@ COMMANDS 					*vimfiler-commands*
 		Equivalent to |:Unite| except that it starts with current
 		directory.
 
+:VimFilerBufferDir [{options}...] [{path}]	*:VimFilerBufferDir*
+		Equivalent to |:Unite| except that it starts with current
+		buffer directory.
+
 :VimFilerClose {buffer-name}			*:VimFilerClose*
 		Close vimfiler buffer named {buffer-name}.
 
@@ -671,6 +675,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-12-26
 - Fixed exrename syntax error.
 - Improved hide behavior.
+- Added VimFilerBufferDir command.
 
 2011-12-25
 - Improved <Plug>(vimfiler_split_edit_file) behavior.
