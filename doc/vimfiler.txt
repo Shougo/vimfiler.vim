@@ -670,6 +670,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-12-26
 - Fixed exrename syntax error.
+- Improved hide behavior.
 
 2011-12-25
 - Improved <Plug>(vimfiler_split_edit_file) behavior.
