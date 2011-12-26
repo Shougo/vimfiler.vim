@@ -676,6 +676,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed exrename syntax error.
 - Improved hide behavior.
 - Added VimFilerBufferDir command.
+- Fixed for :VimFilerDouble error.
 
 2011-12-25
 - Improved <Plug>(vimfiler_split_edit_file) behavior.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Dec 2011.
+" Last Modified: 26 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -791,6 +791,11 @@ function! s:event_bufwin_enter()"{{{
 
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
+  let vimfiler = vimfiler#get_current_vimfiler()
+  if !has_key(vimfiler, 'context')
+    return
+  endif
+
   let context = vimfiler#get_context()
   if context.winwidth != 0
     execute 'vertical resize' context.winwidth
@@ -807,6 +812,11 @@ function! s:event_bufwin_leave()"{{{
   endif
 
   let s:last_vimfiler_bufnr = bufnr('%')
+
+  let vimfiler = vimfiler#get_current_vimfiler()
+  if !has_key(vimfiler, 'context')
+    return
+  endif
 
   let context = vimfiler#get_context()
   if context.winminwidth != 0
