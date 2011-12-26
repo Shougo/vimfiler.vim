@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Dec 2011.
+" Last Modified: 27 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -784,8 +784,10 @@ endfunction"}}}
 function! s:hide()"{{{
   let bufnr = bufnr('%')
 
+  let context = vimfiler#get_context()
+
   " Switch buffer.
-  if vimfiler#exists_another_vimfiler()
+  if context.split || context.toggle || vimfiler#exists_another_vimfiler()
     close
   else
     call vimfiler#util#alternate_buffer()

@@ -674,6 +674,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-12-27
 - Changed g:vimfiler_split_action default value.
+- Improved hide behavior.
 
 2011-12-26
 - Fixed exrename syntax error.
