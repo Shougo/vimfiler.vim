@@ -709,6 +709,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved hide behavior.
 - Improved redraw behavior.
 - Added icon options.
+- set winfixwidth.
 
 2011-12-26
 - Fixed exrename syntax error.
