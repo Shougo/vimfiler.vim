@@ -238,9 +238,10 @@ function! vimfiler#mappings#define_default_mappings()"{{{
 endfunction"}}}
 
 function! vimfiler#mappings#smart_cursor_map(directory_map, file_map)"{{{
-  let filename = vimfiler#get_filename(line('.'))
-  return  filename == '..' || !vimfiler#check_filename_line()
-        \ || vimfiler#get_file(line('.')).vimfiler__is_directory ?
+  let filename = vimfiler#get_filename()
+  let file = vimfiler#get_file()
+  return  filename == '..' || empty(file)
+        \ || file.vimfiler__is_directory ?
         \ a:directory_map : a:file_map
 endfunction"}}}
 
@@ -450,7 +451,7 @@ function! s:switch_no_quit()"{{{
   endif
 endfunction"}}}
 function! s:toggle_mark_current_line()"{{{
-  let file = vimfiler#get_file(line('.'))
+  let file = vimfiler#get_file()
   if empty(file)
     " Don't toggle.
     return
@@ -491,9 +492,10 @@ function! s:clear_mark_all_lines()"{{{
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:execute()"{{{
-  let filename = vimfiler#get_filename(line('.'))
-  return  filename == '..' || !vimfiler#check_filename_line()
-        \ || vimfiler#get_file(line('.')).vimfiler__is_directory ?
+  let filename = vimfiler#get_filename()
+  let file = vimfiler#get_file()
+  return  filename == '..' || empty(file)
+        \ || file.vimfiler__is_directory ?
         \ s:change_directory_file() :
         \ unite#start([['vimfiler/execute']], {'immediately' : 1})
 endfunction"}}}
@@ -501,7 +503,7 @@ function! s:execute_vimfiler_associated()"{{{
   call unite#start([['vimfiler/execute']], {'immediately' : 1})
 endfunction"}}}
 function! s:execute_system_associated()"{{{
-  let file = vimfiler#get_file(line('.'))
+  let file = vimfiler#get_file()
   if empty(file)
     call s:execute_external_filer()
     return
@@ -540,8 +542,8 @@ function! s:switch_to_other_window()"{{{
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:print_filename()"{{{
-  let filename = vimfiler#get_filename(line('.'))
-  if filename != '..' && !vimfiler#check_filename_line()
+  let filename = vimfiler#get_filename()
+  if filename != '..' && empty(vimfiler#get_file())
     let filename = matchstr(getline('.'),
           \ ' Current directory: \zs.*\ze[/\\]')
   endif
@@ -549,7 +551,7 @@ function! s:print_filename()"{{{
   echo filename
 endfunction"}}}
 function! s:expand_tree()"{{{
-  let file = vimfiler#get_file(line('.'))
+  let file = vimfiler#get_file()
   if empty(file) || !file.vimfiler__is_directory
     return
   endif
@@ -595,7 +597,7 @@ function! s:expand_tree()"{{{
   setlocal nomodifiable
 endfunction"}}}
 function! s:expand_tree_recursive()"{{{
-  let file = vimfiler#get_file(line('.'))
+  let file = vimfiler#get_file()
   if empty(file) || !file.vimfiler__is_directory
     return
   endif
@@ -657,7 +659,7 @@ function! s:expand_tree_rec(file)"{{{
   return _
 endfunction"}}}
 function! s:unexpand_tree()"{{{
-  let file = vimfiler#get_file(line('.'))
+  let file = vimfiler#get_file()
   let index = vimfiler#get_file_index(line('.'))
   let index_orig = vimfiler#get_original_file_index(line('.'))
 
@@ -729,7 +731,8 @@ function! s:edit()"{{{
   call vimfiler#mappings#do_action(g:vimfiler_edit_action, current_linenr)
 endfunction"}}}
 function! s:edit_binary_file()"{{{
-  if !vimfiler#check_filename_line()
+  let file = vimfiler#get_file()
+  if empty(file)
     return
   endif
 
@@ -740,7 +743,7 @@ function! s:edit_binary_file()"{{{
 
   call s:switch_no_quit()
 
-  Vinarise `=vimfiler#get_filename(line('.'))`
+  Vinarise `=vimfiler#get_filename()`
 endfunction"}}}
 function! s:execute_shell_command()"{{{
   echo 'Marked files:'
@@ -845,7 +848,7 @@ endfunction"}}}
 function! s:choose_action()"{{{
   let marked_files = vimfiler#get_marked_files()
   if empty(marked_files)
-    let marked_files = [ vimfiler#get_file(line('.')) ]
+    let marked_files = [ vimfiler#get_file() ]
   endif
 
   call unite#mappings#_choose_action(marked_files)
@@ -946,7 +949,7 @@ function! s:rename()"{{{
     return
   endif
 
-  let file = vimfiler#get_file(line('.'))
+  let file = vimfiler#get_file()
   if empty(file)
     return
   endif
@@ -1037,10 +1040,10 @@ function! s:find()"{{{
   call vimfiler#mappings#do_current_dir_action('find')
 endfunction"}}}
 function! s:change_directory_file()"{{{
-  let filename = vimfiler#get_filename(line('.'))
+  let filename = vimfiler#get_filename()
 
   if filename == '..'
-  elseif !vimfiler#check_filename_line()
+  elseif empty(vimfiler#get_file())
     let line = getline('.')
     let cursor_line = matchstr(line[: col('.') - 1],
           \ ' Current directory: \zs.*')
@@ -1054,7 +1057,7 @@ function! s:change_directory_file()"{{{
     let filename = cursor_line . cursor_next
   else
     let filename = vimfiler#resolve(
-          \ vimfiler#get_file(line('.')).action__path)
+          \ vimfiler#get_file().action__path)
   endif
 
   " Change directory.

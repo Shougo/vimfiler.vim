@@ -273,6 +273,31 @@ g:vimfiler_max_directories_history		*g:vimfiler_max_directories_history*
 		
 		Default value is 50.
 
+g:vimfiler_tree_leaf_icon			*g:vimfiler_tree_leaf_icon*
+		This variable controls vimfiler tree leaf icon.
+		
+		Default value is "|"
+
+g:vimfiler_tree_opened_icon			*g:vimfiler_tree_opened_icon*
+		This variable controls vimfiler opened directory tree icon.
+		
+		Default value is "-"
+
+g:vimfiler_tree_closed_icon			*g:vimfiler_tree_closed_icon*
+		This variable controls vimfiler closed directory tree icon.
+		
+		Default value is "+"
+
+g:vimfiler_file_icon			*g:vimfiler_file_icon*
+		This variable controls vimfiler file icon.
+		
+		Default value is "-"
+
+g:vimfiler_marked_file_icon		*g:vimfiler_marked_file_icon*
+		This variable controls vimfiler marked file icon.
+		
+		Default value is "*"
+
 g:vimfiler_data_directory			*g:vimfiler_data_directory*
 		Specifies directories for configurations internally used in
 		vimfiler itself or its sources.  If the directory doesn't exist
@@ -621,6 +646,13 @@ EXAMPLES					*vimfiler-examples*
 	
 	" Enable file operation commands.
 	"let g:vimfiler_safe_mode_by_default = 0
+	
+	" Like Textmate icons.
+	let g:vimfiler_tree_leaf_icon = ' '
+	let g:vimfiler_tree_opened_icon = '▾'
+	let g:vimfiler_tree_closed_icon = '▸'
+	let g:vimfiler_file_icon = '-'
+	let g:vimfiler_marked_file_icon = '*'
 <
 ==============================================================================
 UNITE SOURCES						*vimfiler-unite-sources*
@@ -676,6 +708,7 @@ CHANGELOG					*vimfiler-changelog*
 - Changed g:vimfiler_split_action default value.
 - Improved hide behavior.
 - Improved redraw behavior.
+- Added icon options.
 
 2011-12-26
 - Fixed exrename syntax error.

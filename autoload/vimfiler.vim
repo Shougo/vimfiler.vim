@@ -341,18 +341,16 @@ function! vimfiler#get_escaped_marked_files()"{{{
   return map(vimfiler#get_marked_filenames(),
         \ '"\"" . v:val . "\""')
 endfunction"}}}
-function! vimfiler#check_filename_line(...)"{{{
-  let line = (a:0 == 0)? getline('.') : a:1
-  return line =~ '^[*+-]\s\+'
+function! vimfiler#get_filename(...)"{{{
+  let line_num = get(a:000, 0, line('.'))
+  return line_num == 1 ? '' :
+   \ getline(line_num) == '..' ? '..' :
+   \ b:vimfiler.current_files[vimfiler#get_file_index(line_num)].action__path
 endfunction"}}}
-function! vimfiler#get_filename(line_num)"{{{
-  return a:line_num == 1 ? '' :
-   \ getline(a:line_num) == '..' ? '..' :
-   \ b:vimfiler.current_files[vimfiler#get_file_index(a:line_num)].action__path
-endfunction"}}}
-function! vimfiler#get_file(line_num)"{{{
+function! vimfiler#get_file(...)"{{{
+  let line_num = get(a:000, 0, line('.'))
   let vimfiler = vimfiler#get_current_vimfiler()
-  let index = vimfiler#get_file_index(a:line_num)
+  let index = vimfiler#get_file_index(line_num)
   return index < 0 ?
         \ {} : vimfiler.current_files[index]
 endfunction"}}}
@@ -654,11 +652,13 @@ function! vimfiler#get_print_lines(files)"{{{
 
     let mark = ''
     if file.vimfiler__nest_level > 0
-      let mark .= repeat(' ', file.vimfiler__nest_level - 1) . '|'
+      let mark .= repeat(' ', file.vimfiler__nest_level - 1)
+            \ . g:vimfiler_tree_leaf_icon
     endif
-    let mark .= file.vimfiler__is_marked ? '*' :
-          \ (file.vimfiler__is_directory && !file.vimfiler__is_opened) ?
-          \   '+' : '-'
+    let mark .= file.vimfiler__is_marked ? g:vimfiler_marked_file_icon :
+          \ !file.vimfiler__is_directory ? g:vimfiler_file_icon :
+          \ file.vimfiler__is_opened ? g:vimfiler_tree_opened_icon :
+          \                            g:vimfiler_tree_closed_icon
     let mark .= ' '
     let filename = vimfiler#util#truncate_smart(
           \ mark . filename, max_len, max_len/3, '..')

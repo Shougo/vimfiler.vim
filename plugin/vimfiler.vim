@@ -75,6 +75,16 @@ let g:vimfiler_safe_mode_by_default =
       \ get(g:, 'vimfiler_safe_mode_by_default', 1)
 let g:vimfiler_time_format =
       \ get(g:, 'vimfiler_time_format', '%y/%m/%d %H:%M')
+let g:vimfiler_tree_leaf_icon =
+      \ get(g:, 'vimfiler_tree_leaf_icon', '|')
+let g:vimfiler_tree_opened_icon =
+      \ get(g:, 'vimfiler_tree_opened_icon', '-')
+let g:vimfiler_tree_closed_icon =
+      \ get(g:, 'vimfiler_tree_closed_icon', '+')
+let g:vimfiler_file_icon =
+      \ get(g:, 'vimfiler_file_icon', '-')
+let g:vimfiler_marked_file_icon =
+      \ get(g:, 'vimfiler_marked_file_icon', '*')
 let g:vimfiler_data_directory =
       \ get(g:, 'vimfiler_data_directory', expand('~/.vimfiler'))
 if !isdirectory(fnamemodify(g:vimfiler_data_directory, ':p'))
