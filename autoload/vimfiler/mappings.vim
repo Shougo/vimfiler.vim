@@ -787,7 +787,8 @@ function! s:hide()"{{{
   let context = vimfiler#get_context()
 
   " Switch buffer.
-  if context.split || context.toggle || vimfiler#exists_another_vimfiler()
+  if winnr('$') != 1 &&
+        \ (context.split || context.toggle || vimfiler#exists_another_vimfiler())
     close
   else
     call vimfiler#util#alternate_buffer()
@@ -799,6 +800,7 @@ endfunction"}}}
 function! s:create_another_vimfiler()"{{{
   let current_vimfiler = b:vimfiler
   let current_bufnr = bufnr('%')
+  let line = line('.')
 
   " Create another vimfiler.
   let context = deepcopy(b:vimfiler.context)
@@ -806,6 +808,7 @@ function! s:create_another_vimfiler()"{{{
   let context.double = 0
   let context.create = 1
   call vimfiler#switch_filer(b:vimfiler.current_dir, context)
+  call cursor(line, 0)
 
   let b:vimfiler.another_vimfiler_bufnr = current_bufnr
   call vimfiler#set_current_vimfiler(b:vimfiler)

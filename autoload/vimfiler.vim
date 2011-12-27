@@ -58,6 +58,7 @@ let s:vimfiler_options = [
 
 augroup vimfiler"{{{
   autocmd!
+  autocmd WinLeave,BufWinLeave * call s:check_vimfiler_window_size()
 augroup end"}}}
 
 " User utility functions."{{{
@@ -812,20 +813,29 @@ function! s:event_bufwin_leave()"{{{
   endif
 
   let s:last_vimfiler_bufnr = bufnr('%')
+endfunction"}}}
+function! s:check_vimfiler_window_size()"{{{
+  let current = winnr()
+  for winnr in range(1, winnr('$'))
+    if getwinvar(winnr, '&filetype') ==# 'vimfiler'
+      let vimfiler = getbufvar(winbufnr(winnr), 'vimfiler')
 
-  let vimfiler = vimfiler#get_current_vimfiler()
-  if !has_key(vimfiler, 'context')
-    return
-  endif
+      if has_key(vimfiler, 'context')
+        execute winnr 'wincmd w'
+        let context = vimfiler.context
 
-  let context = vimfiler#get_context()
-  if context.winminwidth != 0
-    execute 'vertical resize' context.winminwidth
-    call vimfiler#redraw_screen()
-  elseif context.winwidth != 0
-    execute 'vertical resize' context.winwidth
-    call vimfiler#redraw_screen()
-  endif
+        if context.winminwidth != 0
+          execute 'vertical resize' context.winminwidth
+          call vimfiler#redraw_screen()
+        elseif context.winwidth != 0
+          execute 'vertical resize' context.winwidth
+          call vimfiler#redraw_screen()
+        endif
+      endif
+    endif
+  endfor
+
+  execute current 'wincmd w'
 endfunction"}}}
 
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
