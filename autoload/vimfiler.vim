@@ -329,12 +329,11 @@ function! vimfiler#get_system_error()"{{{
   endif
 endfunction"}}}
 function! vimfiler#get_marked_files()"{{{
-  return filter(copy(vimfiler#get_current_vimfiler().current_files),
-        \ 'v:val.vimfiler__is_marked')
+  return vimfiler#util#sort_by(filter(copy(vimfiler#get_current_vimfiler().current_files),
+        \ 'v:val.vimfiler__is_marked'), 'v:val.vimfiler__marked_time')
 endfunction"}}}
 function! vimfiler#get_marked_filenames()"{{{
-  return map(filter(copy(vimfiler#get_current_vimfiler().current_files),
-        \ 'v:val.vimfiler__is_marked'), 'v:val.action__path')
+  return map(vimfiler#get_marked_files(), 'v:val.action__path')
 endfunction"}}}
 function! vimfiler#get_escaped_marked_files()"{{{
   return map(vimfiler#get_marked_filenames(),

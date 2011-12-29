@@ -465,6 +465,7 @@ function! s:toggle_mark_current_line()"{{{
   endif
 
   let file.vimfiler__is_marked = !file.vimfiler__is_marked
+  let file.vimfiler__marked_time = localtime()
 
   setlocal modifiable
   call setline('.', vimfiler#get_print_lines([file]))
@@ -473,6 +474,7 @@ endfunction"}}}
 function! s:toggle_mark_all_lines()"{{{
   for file in vimfiler#get_current_vimfiler().current_files
     let file.vimfiler__is_marked = !file.vimfiler__is_marked
+    let file.vimfiler__marked_time = localtime()
   endfor
 
   call vimfiler#redraw_screen()
@@ -484,6 +486,7 @@ function! s:toggle_mark_lines(start, end)"{{{
     if !empty(file)
       " Toggle mark.
       let file.vimfiler__is_marked = !file.vimfiler__is_marked
+      let file.vimfiler__marked_time = localtime()
     endif
 
     let cnt += 1

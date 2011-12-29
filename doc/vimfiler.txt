@@ -709,6 +709,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-12-29
 - Improved make directory and new file actions.
 - Fixed buflisted problem.
+- Improved vimfiler#get_marked_files() behavior.
 
 2011-12-27
 - Changed g:vimfiler_split_action default value.
