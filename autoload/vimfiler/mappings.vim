@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Dec 2011.
+" Last Modified: 29 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -266,10 +266,17 @@ function! vimfiler#mappings#do_current_dir_action(action, ...)"{{{
   let context = get(a:000, 0, {})
   let vimfiler = vimfiler#get_current_vimfiler()
 
+  return vimfiler#mappings#do_dir_action(a:action, vimfiler.current_dir, context)
+endfunction"}}}
+
+function! vimfiler#mappings#do_dir_action(action, directory, ...)"{{{
+  let context = get(a:000, 0, {})
+  let vimfiler = vimfiler#get_current_vimfiler()
+
   let dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', vimfiler.current_dir]], extend(context, {
+        \ [['file', a:directory]], extend(context, {
         \ 'vimfiler__is_dummy' : 1,
-        \ 'vimfiler__current_directory' : vimfiler.current_dir,
+        \ 'vimfiler__current_directory' : a:directory,
         \ }))
   if empty(dummy_files)
     return
@@ -277,7 +284,7 @@ function! vimfiler#mappings#do_current_dir_action(action, ...)"{{{
 
   " Execute action.
   call unite#mappings#do_action(a:action, dummy_files, {
-        \ 'vimfiler__current_directory' : vimfiler.current_dir,
+        \ 'vimfiler__current_directory' : a:directory,
         \ })
 endfunction"}}}
 
@@ -960,13 +967,17 @@ function! s:rename()"{{{
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:make_directory()"{{{
-  call vimfiler#mappings#do_current_dir_action('vimfiler__mkdir')
+  let directory = vimfiler#get_file_directory()
+
+  call vimfiler#mappings#do_dir_action('vimfiler__mkdir', directory)
   silent call vimfiler#force_redraw_all_vimfiler()
   redraw
   echo ''
 endfunction"}}}
 function! s:new_file()"{{{
-  call vimfiler#mappings#do_current_dir_action('vimfiler__newfile')
+  let directory = vimfiler#get_file_directory()
+
+  call vimfiler#mappings#do_dir_action('vimfiler__newfile', directory)
   silent call vimfiler#force_redraw_all_vimfiler()
   redraw
   echo ''

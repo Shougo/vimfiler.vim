@@ -401,11 +401,13 @@ Normal mode key mappings.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_make_directory)			*<Plug>(vimfiler_make_directory)*
-		Create new directory.
+		Create new directory. If directory tree is opened, create new
+		directory in directory tree.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_new_file)			*<Plug>(vimfiler_new_file)*
-		Create new files.
+		Create new files. If directory tree is opened, create new
+		files in directory tree.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_rename_file)			*<Plug>(vimfiler_rename_file)*
@@ -703,6 +705,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2011-12-29
+- Improved make directory and new file actions.
 
 2011-12-27
 - Changed g:vimfiler_split_action default value.
