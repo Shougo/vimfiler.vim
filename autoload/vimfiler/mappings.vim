@@ -417,7 +417,8 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)
   " Restore cursor pos.
   if a:dir ==# '..'
     " Search previous current directory.
-    let num = 1
+
+    let num = 0
     let max = len(b:vimfiler.current_files)
     while num < max
       let path = b:vimfiler.current_files[num].action__path
@@ -430,10 +431,10 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)
 
       let num += 1
     endwhile
+  elseif has_key(b:vimfiler.directory_cursor_pos, a:fullpath)
+    call setpos('.', b:vimfiler.directory_cursor_pos[a:fullpath])
   else
-    let a:save_pos[1] = 3
-    call setpos('.', (has_key(b:vimfiler.directory_cursor_pos, a:fullpath) ?
-          \ b:vimfiler.directory_cursor_pos[a:fullpath] : a:save_pos))
+    call cursor(3, 0)
   endif
 
   normal! zb

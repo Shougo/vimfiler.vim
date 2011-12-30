@@ -719,6 +719,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added <Plug>(vimfiler_yank_full_path) mapping.
 - Added <Plug>(vimfiler_open_file_in_another_vimfiler) mapping.
 - Improved redraw tree.
+- Fixed restore cursor bug.
 
 2011-12-29
 - Improved make directory and new file actions.
