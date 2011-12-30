@@ -900,6 +900,8 @@ function! s:open_file_in_another_vimfiler()"{{{
     let files = [vimfiler#get_file()]
   endif
 
+  call s:clear_mark_all_lines()
+
   call s:switch_to_other_window()
 
   if len(files) > 1 || !files[0].vimfiler__is_directory

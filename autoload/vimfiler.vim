@@ -290,7 +290,7 @@ function! vimfiler#redraw_screen()"{{{
   let b:vimfiler.winwidth = (winwidth(0)+1)/2*2
 
   setlocal modifiable
-  let current_line = getline('.')
+  let current_file = vimfiler#get_file()
 
   " Clean up the screen.
   % delete _
@@ -304,9 +304,12 @@ function! vimfiler#redraw_screen()"{{{
   call append('$',
         \ vimfiler#get_print_lines(b:vimfiler.current_files))
 
-  call cursor(3, 0)
-
-  call search(vimfiler#util#escape_pattern(current_line), 'cw')
+  let index = index(b:vimfiler.current_files, current_file)
+  if index > 0
+    call cursor(vimfiler#get_line_number(index), 0)
+  else
+    call cursor(3, 0)
+  endif
 
   setlocal nomodifiable
 
@@ -372,8 +375,8 @@ function! vimfiler#get_file(...)"{{{
   let line_num = get(a:000, 0, line('.'))
   let vimfiler = vimfiler#get_current_vimfiler()
   let index = vimfiler#get_file_index(line_num)
-  return index < 0 ?
-        \ {} : vimfiler.current_files[index]
+  return index < 0 ? {} :
+        \ get(vimfiler.current_files, index, {})
 endfunction"}}}
 function! vimfiler#get_file_directory(...)"{{{
   let line_num = get(a:000, 0, line('.'))
