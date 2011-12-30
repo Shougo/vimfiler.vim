@@ -504,6 +504,10 @@ Normal mode key mappings.
 <Plug>(vimfiler_sync_with_another_vimfiler)	*<Plug>(vimfiler_sync_with_another_vimfiler)*
 		Synchronize current directory with another vimfiler.
 
+<Plug>(vimfiler_open_file_in_another_vimfiler)	*<Plug>(vimfiler_open_file_in_another_vimfiler)*
+		Open cursor file or marked files in another vimfile. If the
+		file is directory, change directory in another vimfiler.
+
 <Plug>(vimfiler_print_filename)			*<Plug>(vimfiler_print_filename)*
 		Print whole filename in echo area.
 
@@ -617,7 +621,7 @@ Q			<Plug>(vimfiler_exit)
 ?			<Plug>(vimfiler_help)
 v			<Plug>(vimfiler_preview_file)
 o			<Plug>(vimfiler_sync_with_current_vimfiler)
-O			<Plug>(vimfiler_sync_with_another_vimfiler)
+O			<Plug>(vimfiler_open_file_in_another_vimfiler)
 <C-g>			<Plug>(vimfiler_print_filename)
 yy			<Plug>(vimfiler_yank_full_path)
 M			<Plug>(vimfiler_set_current_mask)
@@ -713,6 +717,7 @@ CHANGELOG					*vimfiler-changelog*
 2011-12-30
 - Fixed documentation.
 - Added <Plug>(vimfiler_yank_full_path) mapping.
+- Added <Plug>(vimfiler_open_file_in_another_vimfiler) mapping.
 
 2011-12-29
 - Improved make directory and new file actions.

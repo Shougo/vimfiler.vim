@@ -90,6 +90,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>sync_with_current_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_another_vimfiler)
         \ :<C-u>call <SID>sync_with_another_vimfiler()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_open_file_in_another_vimfiler)
+        \ :<C-u>call <SID>open_file_in_another_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_print_filename)
         \ :<C-u>call <SID>print_filename()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_yank_full_path)
@@ -220,7 +222,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> ? <Plug>(vimfiler_help)
   nmap <buffer> v <Plug>(vimfiler_preview_file)
   nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
-  nmap <buffer> O <Plug>(vimfiler_sync_with_another_vimfiler)
+  nmap <buffer> O <Plug>(vimfiler_open_file_in_another_vimfiler)
   nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
   nmap <buffer> yy <Plug>(vimfiler_yank_full_path)
   nmap <buffer> M <Plug>(vimfiler_set_current_mask)
@@ -258,9 +260,17 @@ function! vimfiler#mappings#do_action(action, ...)"{{{
 
   call s:clear_mark_all_lines()
 
+  return vimfiler#mappings#do_files_action(
+        \ a:action, marked_files, cursor_linenr)
+endfunction"}}}
+
+function! vimfiler#mappings#do_files_action(action, files, ...)"{{{
+  let cursor_linenr = get(a:000, 0, line('.'))
+  let vimfiler = vimfiler#get_current_vimfiler()
+
   " Execute action.
   let current_dir = vimfiler.current_dir
-  call unite#mappings#do_action(a:action, marked_files, {
+  call unite#mappings#do_action(a:action, a:files, {
         \ 'vimfiler__current_directory' : current_dir,
         \ })
 endfunction"}}}
@@ -877,6 +887,23 @@ function! s:sync_with_another_vimfiler()"{{{
   endif
 
   call vimfiler#set_current_vimfiler(b:vimfiler)
+endfunction"}}}
+function! s:open_file_in_another_vimfiler()"{{{
+  " Search vimfiler window.
+  let files = vimfiler#get_marked_files()
+  if empty(files)
+    let files = [vimfiler#get_file()]
+  endif
+
+  call s:switch_to_other_window()
+
+  if len(files) > 1 || !files[0].vimfiler__is_directory
+    call vimfiler#mappings#do_files_action(g:vimfiler_edit_action, files)
+  else
+    call vimfiler#mappings#cd(files[0].action__path)
+  endif
+
+  call s:switch_to_other_window()
 endfunction"}}}
 function! s:choose_action()"{{{
   let marked_files = vimfiler#get_marked_files()
