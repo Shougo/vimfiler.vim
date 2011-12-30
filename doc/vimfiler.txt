@@ -507,6 +507,9 @@ Normal mode key mappings.
 <Plug>(vimfiler_print_filename)			*<Plug>(vimfiler_print_filename)*
 		Print whole filename in echo area.
 
+<Plug>(vimfiler_yank_full_path)			*<Plug>(vimfiler_yank_full_path)*
+		Yank full path to clipboard register and unnamed register.
+
 <Plug>(vimfiler_set_current_mask)		*<Plug>(vimfiler_set_current_mask)*
 		Set current file mask by |unite| interface.
 
@@ -616,6 +619,7 @@ v			<Plug>(vimfiler_preview_file)
 o			<Plug>(vimfiler_sync_with_current_vimfiler)
 O			<Plug>(vimfiler_sync_with_another_vimfiler)
 <C-g>			<Plug>(vimfiler_print_filename)
+yy			<Plug>(vimfiler_yank_full_path)
 M			<Plug>(vimfiler_set_current_mask)
 gr			<Plug>(vimfiler_grep)
 gf			<Plug>(vimfiler_find)
@@ -708,6 +712,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2011-12-30
 - Fixed documentation.
+- Added <Plug>(vimfiler_yank_full_path) mapping.
 
 2011-12-29
 - Improved make directory and new file actions.

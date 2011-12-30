@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Dec 2011.
+" Last Modified: 30 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,6 +92,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>sync_with_another_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_print_filename)
         \ :<C-u>call <SID>print_filename()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_yank_full_path)
+        \ :<C-u>call <SID>yank_full_path()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_set_current_mask)
         \ :<C-u>call <SID>set_current_mask()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_grep)
@@ -220,6 +222,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
   nmap <buffer> O <Plug>(vimfiler_sync_with_another_vimfiler)
   nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
+  nmap <buffer> yy <Plug>(vimfiler_yank_full_path)
   nmap <buffer> M <Plug>(vimfiler_set_current_mask)
   nmap <buffer> gr <Plug>(vimfiler_grep)
   nmap <buffer> gf <Plug>(vimfiler_find)
@@ -559,6 +562,26 @@ function! s:print_filename()"{{{
   endif
 
   echo filename
+endfunction"}}}
+function! s:yank_full_path()"{{{
+  let filename = join(vimfiler#get_marked_filenames(), "\n")
+
+  if filename == ''
+    " Use cursor filename.
+    let filename = vimfiler#get_filename()
+    if filename == '..' || empty(vimfiler#get_file())
+      let filename = vimfiler#get_current_vimfiler().current_dir
+    else
+      let filename = vimfiler#get_file().action__path
+    endif
+  endif
+
+  let @" = filename
+  if has('clipboard') || has('xterm_clipboard')
+    let @+ = filename
+  endif
+
+  echo 'Yanked: '.filename
 endfunction"}}}
 function! s:expand_tree()"{{{
   let file = vimfiler#get_file()
