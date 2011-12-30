@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Dec 2011.
+" Last Modified: 30 Dec 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -240,9 +240,29 @@ function! vimfiler#get_directory_files(directory, ...)"{{{
 endfunction"}}}
 function! vimfiler#force_redraw_screen(...)"{{{
   let is_manualed = get(a:000, 0, 0)
+
+  let old_original_files = {}
+  for file in filter(copy(b:vimfiler.original_files),
+        \ 'v:val.vimfiler__is_directory && v:val.vimfiler__is_opened')
+    let old_original_files[file.action__path] = 1
+  endfor
+
   " Use matcher_glob.
   let b:vimfiler.original_files =
         \ vimfiler#get_directory_files(b:vimfiler.current_dir, is_manualed)
+  let index = 0
+  for file in copy(b:vimfiler.original_files)
+    if file.vimfiler__is_directory
+          \ && has_key(old_original_files, file.action__path)
+      let children = vimfiler#mappings#expand_tree_rec(file, old_original_files)
+
+      let b:vimfiler.original_files = b:vimfiler.original_files[: index]
+            \ + children + b:vimfiler.original_files[index+1 :]
+      let index += len(children)
+    endif
+
+    let index += 1
+  endfor
 
   call vimfiler#redraw_screen()
 endfunction"}}}
@@ -270,7 +290,7 @@ function! vimfiler#redraw_screen()"{{{
   let b:vimfiler.winwidth = (winwidth(0)+1)/2*2
 
   setlocal modifiable
-  let pos = getpos('.')
+  let current_line = getline('.')
 
   " Clean up the screen.
   % delete _
@@ -284,7 +304,8 @@ function! vimfiler#redraw_screen()"{{{
   call append('$',
         \ vimfiler#get_print_lines(b:vimfiler.current_files))
 
-  call setpos('.', pos)
+  call search(vimfiler#util#escape_pattern(current_line))
+
   setlocal nomodifiable
 
   if is_switch

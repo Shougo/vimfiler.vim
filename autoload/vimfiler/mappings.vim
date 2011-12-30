@@ -405,6 +405,9 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
     let b:vimfiler.local_sort_type = b:vimfiler.global_sort_type
   endif
 
+  let b:vimfiler.original_files = []
+  let b:vimfiler.current_files = []
+
   " Redraw.
   call vimfiler#force_redraw_screen()
 
@@ -657,7 +660,7 @@ function! s:expand_tree_recursive()"{{{
   " Expand tree.
   let nestlevel = file.vimfiler__nest_level + 1
 
-  let original_files = s:expand_tree_rec(file)
+  let original_files = vimfiler#mappings#expand_tree_rec(file)
 
   let files =
         \ unite#filters#matcher_vimfiler_mask#define().filter(
@@ -676,7 +679,8 @@ function! s:expand_tree_recursive()"{{{
 
   setlocal nomodifiable
 endfunction"}}}
-function! s:expand_tree_rec(file)"{{{
+function! vimfiler#mappings#expand_tree_rec(file, ...)"{{{
+  let old_original_files = get(a:000, 0, {})
   let a:file.vimfiler__is_opened = 1
 
   " Expand tree.
@@ -695,7 +699,9 @@ function! s:expand_tree_rec(file)"{{{
     call add(_, file)
 
     if file.vimfiler__is_directory
-      let _ += s:expand_tree_rec(file)
+          \ && (empty(old_original_files) ||
+          \ has_key(old_original_files, file.action__path))
+      let _ += vimfiler#mappings#expand_tree_rec(file)
     endif
   endfor
 
@@ -755,9 +761,7 @@ endfunction"}}}
 
 function! s:toggle_visible_dot_files()"{{{
   let b:vimfiler.is_visible_dot_files = !b:vimfiler.is_visible_dot_files
-  let current_line = getline('.')
   call vimfiler#redraw_screen()
-  call search(vimfiler#util#escape_pattern(current_line))
 endfunction"}}}
 function! s:popup_shell()"{{{
   let files = vimfiler#get_escaped_marked_files()
