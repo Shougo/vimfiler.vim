@@ -304,7 +304,9 @@ function! vimfiler#redraw_screen()"{{{
   call append('$',
         \ vimfiler#get_print_lines(b:vimfiler.current_files))
 
-  call search(vimfiler#util#escape_pattern(current_line))
+  call cursor(3, 0)
+
+  call search(vimfiler#util#escape_pattern(current_line), 'cw')
 
   setlocal nomodifiable
 
