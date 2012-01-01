@@ -350,6 +350,11 @@ g:unite_kind_file_switch_command			*g:unite_kind_file_switch_command*
 		
 		Default value is refer to autoload/unite/kinds/file.vim.
 
+g:unite_kind_file_use_trashbox			*g:unite_kind_file_use_trashbox*
+		This variable controls vimfiler (and kind file) use trashbox
+		when delete files.
+		Note: This option is works newest vimproc and in Windows only.
+
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
 
@@ -663,6 +668,10 @@ EXAMPLES					*vimfiler-examples*
 	let g:vimfiler_tree_closed_icon = '▸'
 	let g:vimfiler_file_icon = '-'
 	let g:vimfiler_marked_file_icon = '*'
+
+	" Use trashbox.
+	" Windows only and require latest vimproc.
+	"let g:unite_kind_file_use_trashbox = 1
 <
 ==============================================================================
 UNITE SOURCES						*vimfiler-unite-sources*
@@ -713,6 +722,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-01-01
+- Added g:unite_kind_file_use_trashbox option.
 
 2011-12-30
 - Fixed documentation.
