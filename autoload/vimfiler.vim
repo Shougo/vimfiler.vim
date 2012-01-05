@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Dec 2011.
+" Last Modified: 05 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -148,19 +148,13 @@ function! vimfiler#create_filer(path, ...)"{{{
   let prefix = vimfiler#util#is_win() ? '[vimfiler] - ' : '*vimfiler* - '
   let prefix .= context.buffer_name
 
-  let postfix = '@1'
-  let cnt = 1
-  let tabnr = 1
-  while tabnr <= tabpagenr('$')
-    let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
-    if index(buflist, prefix.postfix) >= 0
-      let cnt += 1
-      let postfix = '@' . cnt
-    endif
+  let postfix = s:get_postfix(prefix, 1)
 
-    let tabnr += 1
-  endwhile
   let bufname = prefix . postfix
+
+  " Set buffer_name.
+  let context.profile_name = context.buffer_name
+  let context.buffer_name = bufname
 
   if context.split
     execute context.direction 'vnew'
@@ -194,7 +188,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
           \ s:last_vimfiler_bufnr), 'buflisted(v:val)')
       let vimfiler = getbufvar(bufnr, 'vimfiler')
       if type(vimfiler) == type({})
-            \ && vimfiler.context.buffer_name ==# context.buffer_name
+            \ && vimfiler.context.profile_name ==# context.profile_name
             \ && (!exists('t:unite_buffer_dictionary')
             \      || has_key(t:unite_buffer_dictionary, bufnr))
         call vimfiler#_switch_vimfiler(bufnr, context, a:path)
@@ -631,6 +625,9 @@ function! vimfiler#init_context(context)"{{{
   if !has_key(a:context, 'buffer_name')
     let a:context.buffer_name = 'default'
   endif
+  if !has_key(a:context, 'profile_name')
+    let a:context.profile_name = a:context.buffer_name
+  endif
   if !has_key(a:context, 'no_quit')
     let a:context.no_quit = 0
   endif
@@ -724,7 +721,9 @@ function! vimfiler#close(buffer_name)"{{{
   let buffer_name = a:buffer_name
   if buffer_name !~ '@\d\+$'
     " Add postfix.
-    let buffer_name .= '@1'
+    let prefix = vimfiler#util#is_win() ? '[vimfiler] - ' : '*vimfiler* - '
+    let prefix .= buffer_name
+    let buffer_name .= s:get_postfix(prefix, 0)
   endif
 
   " Note: must escape file-pattern.
@@ -882,6 +881,33 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   let b:vimfiler.context = extend(b:vimfiler.context, context)
   call vimfiler#set_current_vimfiler(b:vimfiler)
 endfunction"}}}
+
+function! s:get_postfix(prefix, is_create)
+  let postfix = '@1'
+  let cnt = 1
+
+  if a:is_create
+    let tabnr = 1
+    while tabnr <= tabpagenr('$')
+      let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
+      if index(buflist, a:prefix.postfix) >= 0
+        let cnt += 1
+        let postfix = '@' . cnt
+      endif
+
+      let tabnr += 1
+    endwhile
+  else
+    let buflist = map(tabpagebuflist(tabpagenr()), 'bufname(v:val)')
+    for bufname in buflist
+      if stridx(bufname, a:prefix) >= 0
+        return matchstr(bufname, '@\d\+$')
+      endif
+    endfor
+  endif
+
+  return postfix
+endfunction
 
 " Global options definition."{{{
 let g:vimfiler_execute_file_list =
