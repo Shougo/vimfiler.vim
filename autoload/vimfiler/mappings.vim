@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Dec 2011.
+" Last Modified: 06 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -342,6 +342,11 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
       let dir = fnamemodify(substitute(
             \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
     endif
+
+    if dir =~ '//$'
+      return
+    endif
+
   elseif dir == '/'
     " Root.
 

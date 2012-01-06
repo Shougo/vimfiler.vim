@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jan 2012.
+" Last Modified: 06 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -868,8 +868,15 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
 
   " Set current directory.
   if a:directory != ''
-    let b:vimfiler.current_dir =
-          \ vimfiler#util#substitute_path_separator(a:directory)
+    let directory = vimfiler#util#substitute_path_separator(a:directory)
+    if directory =~ ':'
+      " Parse path.
+      let ret = vimfiler#parse_path(directory)
+      let b:vimfiler.source = ret[0]
+      let directory = join(ret[1:], ':')
+    endif
+
+    let b:vimfiler.current_dir = directory
     if b:vimfiler.current_dir !~ '/$'
       let b:vimfiler.current_dir .= '/'
     endif
