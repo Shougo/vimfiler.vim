@@ -101,16 +101,17 @@ function! s:write(source_name, source_args, line1, line2, event_name)  "{{{1
   endif
 
   try
+    if a:event_name ==# 'BufWriteCmd'
+          \ && join(a:source_args, ':') ==# bufname('%')
+      " Reset modified flag.
+      setlocal modified
+    endif
+
     call unite#mappings#do_action('vimfiler__write', [dict], {
           \ 'vimfiler__line1' : a:line1,
           \ 'vimfiler__line2' : a:line2,
           \ 'vimfiler__eventname' : a:event_name,
           \ })
-    if a:event_name ==# 'BufWriteCmd'
-          \ && (a:source_name.':'.join(a:source_args, ':')) ==# bufname('%')
-      " Reset modified flag.
-      setlocal nomodified
-    endif
   catch
     call vimfiler#print_error(v:exception . ' ' . v:throwpoint)
   endtry
