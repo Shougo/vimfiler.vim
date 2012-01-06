@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jan 2012.
+" Last Modified: 06 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -89,7 +89,9 @@ function! s:write(source_name, source_args, line1, line2, event_name)  "{{{1
     " File not found.
     return
   endif
-  let [type, lines, dict] = ret
+
+  let [type, info] = ret
+  let [lines, dict] = info
 
   if type !=# 'file'
     " Invalid filetype.
