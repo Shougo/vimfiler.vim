@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jan 2012.
+" Last Modified: 12 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -418,7 +418,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
 
   call s:restore_cursor(a:dir, fullpath, save_pos, previous_current_dir)
 endfunction"}}}
-function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)
+function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)"{{{
   " Restore cursor pos.
   if a:dir ==# '..'
     " Search previous current directory.
@@ -443,7 +443,7 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)
   endif
 
   normal! zb
-endfunction
+endfunction"}}}
 
 function! vimfiler#mappings#search_cursor(path)"{{{
   let max = line('$')
