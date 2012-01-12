@@ -848,8 +848,6 @@ function! s:execute_shell_command()"{{{
   call s:clear_mark_all_lines()
 
   silent call vimfiler#force_redraw_screen()
-  redraw
-  echo ''
 endfunction"}}}
 function! s:hide()"{{{
   let bufnr = bufnr('%')
@@ -1047,12 +1045,10 @@ function! s:rename()"{{{
 endfunction"}}}
 function! s:make_directory()"{{{
   let directory = vimfiler#get_file_directory()
-  let old_files = vimfiler#get_current_vimfiler().current_files
+  let old_files = copy(vimfiler#get_current_vimfiler().current_files)
 
   call vimfiler#mappings#do_dir_action('vimfiler__mkdir', directory)
   silent call vimfiler#force_redraw_all_vimfiler()
-  redraw
-  echo ''
 
   call s:search_new_file(old_files)
 endfunction"}}}
@@ -1061,8 +1057,6 @@ function! s:new_file()"{{{
 
   call vimfiler#mappings#do_dir_action('vimfiler__newfile', directory)
   silent call vimfiler#force_redraw_all_vimfiler()
-  redraw
-  echo ''
 endfunction"}}}
 
 function! s:set_current_mask()"{{{
