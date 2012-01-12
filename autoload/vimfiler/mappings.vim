@@ -459,6 +459,20 @@ function! vimfiler#mappings#search_cursor(path)"{{{
   endwhile
 endfunction"}}}
 
+function! s:search_new_file(old_files)"{{{
+  let files = vimfiler#get_current_vimfiler().current_files
+  let cnt = 0
+  for file in vimfiler#get_current_vimfiler().current_files
+    if file !=# get(a:old_files, cnt, {})
+      " Move cursor.
+      call cursor(vimfiler#get_line_number(cnt), 0)
+      break
+    endif
+
+    let cnt += 1
+  endfor
+endfunction"}}}
+
 function! s:SID_PREFIX()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
@@ -1033,11 +1047,14 @@ function! s:rename()"{{{
 endfunction"}}}
 function! s:make_directory()"{{{
   let directory = vimfiler#get_file_directory()
+  let old_files = vimfiler#get_current_vimfiler().current_files
 
   call vimfiler#mappings#do_dir_action('vimfiler__mkdir', directory)
   silent call vimfiler#force_redraw_all_vimfiler()
   redraw
   echo ''
+
+  call s:search_new_file(old_files)
 endfunction"}}}
 function! s:new_file()"{{{
   let directory = vimfiler#get_file_directory()
