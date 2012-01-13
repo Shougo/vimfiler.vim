@@ -726,6 +726,7 @@ CHANGELOG					*vimfiler-changelog*
 2012-01-14
 - Setlocal wrap(experimental).
 - Improved prompt.
+- Fixed buffer_name bug.
 
 2012-01-12
 - Improved make_directory action.

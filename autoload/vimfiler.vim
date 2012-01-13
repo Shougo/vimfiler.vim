@@ -146,7 +146,7 @@ function! vimfiler#create_filer(path, ...)"{{{
 
   " Create new buffer name.
   let prefix = vimfiler#util#is_win() ? '[vimfiler] - ' : '*vimfiler* - '
-  let prefix .= context.buffer_name
+  let prefix .= context.profile_name
 
   let postfix = s:get_postfix(prefix, 1)
 
