@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jan 2012.
+" Last Modified: 12 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -418,7 +418,7 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
 
   call s:restore_cursor(a:dir, fullpath, save_pos, previous_current_dir)
 endfunction"}}}
-function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)
+function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)"{{{
   " Restore cursor pos.
   if a:dir ==# '..'
     " Search previous current directory.
@@ -443,7 +443,7 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)
   endif
 
   normal! zb
-endfunction
+endfunction"}}}
 
 function! vimfiler#mappings#search_cursor(path)"{{{
   let max = line('$')
@@ -457,6 +457,20 @@ function! vimfiler#mappings#search_cursor(path)"{{{
 
     let cnt += 1
   endwhile
+endfunction"}}}
+
+function! s:search_new_file(old_files)"{{{
+  let files = vimfiler#get_current_vimfiler().current_files
+  let cnt = 0
+  for file in vimfiler#get_current_vimfiler().current_files
+    if file !=# get(a:old_files, cnt, {})
+      " Move cursor.
+      call cursor(vimfiler#get_line_number(cnt), 0)
+      break
+    endif
+
+    let cnt += 1
+  endfor
 endfunction"}}}
 
 function! s:SID_PREFIX()
@@ -707,7 +721,7 @@ function! vimfiler#mappings#expand_tree_rec(file, ...)"{{{
     if file.vimfiler__is_directory
           \ && (empty(old_original_files) ||
           \ has_key(old_original_files, file.action__path))
-      let _ += vimfiler#mappings#expand_tree_rec(file)
+      let _ += vimfiler#mappings#expand_tree_rec(file, old_original_files)
     endif
   endfor
 
@@ -834,8 +848,6 @@ function! s:execute_shell_command()"{{{
   call s:clear_mark_all_lines()
 
   silent call vimfiler#force_redraw_screen()
-  redraw
-  echo ''
 endfunction"}}}
 function! s:hide()"{{{
   let bufnr = bufnr('%')
@@ -1033,19 +1045,18 @@ function! s:rename()"{{{
 endfunction"}}}
 function! s:make_directory()"{{{
   let directory = vimfiler#get_file_directory()
+  let old_files = copy(vimfiler#get_current_vimfiler().current_files)
 
   call vimfiler#mappings#do_dir_action('vimfiler__mkdir', directory)
   silent call vimfiler#force_redraw_all_vimfiler()
-  redraw
-  echo ''
+
+  call s:search_new_file(old_files)
 endfunction"}}}
 function! s:new_file()"{{{
   let directory = vimfiler#get_file_directory()
 
   call vimfiler#mappings#do_dir_action('vimfiler__newfile', directory)
   silent call vimfiler#force_redraw_all_vimfiler()
-  redraw
-  echo ''
 endfunction"}}}
 
 function! s:set_current_mask()"{{{
