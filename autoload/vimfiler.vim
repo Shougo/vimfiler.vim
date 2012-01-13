@@ -317,13 +317,12 @@ endfunction"}}}
 function! vimfiler#redraw_prompt()"{{{
   let modifiable_save = &l:modifiable
   setlocal modifiable
-  call setline(1, printf('%s%s%s:%s[%s%s]',
-        \ (b:vimfiler.is_safe_mode ? '' :
-        \   b:vimfiler.context.simple ? '*u* ' : '*unsafe* '),
-        \ (b:vimfiler.context.simple ? 'CD: ' : 'Current directory: '),
-        \ b:vimfiler.source, b:vimfiler.current_dir,
-        \ (b:vimfiler.is_visible_dot_files ? '.:' : ''),
-        \ b:vimfiler.current_mask))
+  let mask = !b:vimfiler.is_visible_dot_files && b:vimfiler.current_mask == '' ?
+        \ '' : '[' . (b:vimfiler.is_visible_dot_files ? '.:' : '')
+        \       . b:vimfiler.current_mask . ']'
+  call setline(1, printf('%s[Current]: %s:%s%s',
+        \ (b:vimfiler.is_safe_mode ? '' : '! '),
+        \ b:vimfiler.source, b:vimfiler.current_dir, mask))
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! vimfiler#system(...)"{{{

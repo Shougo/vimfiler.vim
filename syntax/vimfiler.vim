@@ -45,12 +45,12 @@ execute 'syn match   vimfilerMarkedFile'        '''^\s*\%('  . leaf_icon .'\)\?'
       \ 'contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek'
 syn match   vimfilerDirectory         '^..$'
 
-syn match   vimfilerPrompt            '^\%(Current directory\|CD\): .*$'
+syn match   vimfilerPrompt            '^\[Current\]: .*$'
       \ contains=vimfilerSpecial,vimfilerCurrentDirectory
-syn match   vimfilerPromptSafe        '^\*u\%[nsafe]\* \%(Current directory\|CD\): .*$'
+syn match   vimfilerPromptSafe        '^! \[Current\]: .*$'
       \ contains=vimfilerSpecial,vimfilerSpecialSafe,vimfilerCurrentDirectory
-syn match   vimfilerSpecialSafe       '^\*u\%[nsafe]\* ' contained
-syn match   vimfilerSpecial           '\%(Current directory\|CD\):' contained
+syn match   vimfilerSpecialSafe       '^! ' contained
+syn match   vimfilerSpecial           '\[Current\]:' contained
 syn match   vimfilerCurrentDirectory  '\s\zs.*$' contained contains=vimfilerMask
 syn match   vimfilerMask  '\[.*\]$' contained
 syn match   vimfilerFileLine          '\[.*\]$' contained
