@@ -42,7 +42,6 @@ if s:exists_unite_version < 300
 endif"}}}
 
 let s:current_vimfiler = {}
-let s:use_current_vimfiler = 1
 let s:last_vimfiler_bufnr = -1
 let s:last_system_is_vimproc = -1
 
@@ -92,8 +91,6 @@ function! vimfiler#default_settings()"{{{
   augroup end"}}}
 
   call vimfiler#mappings#define_default_mappings()
-
-  let s:use_current_vimfiler = 0
 endfunction"}}}
 function! vimfiler#set_execute_file(exts, command)"{{{
   for ext in split(a:exts, ',')
@@ -118,8 +115,7 @@ endfunction"}}}
 
 " vimfiler plugin utility functions."{{{
 function! vimfiler#get_current_vimfiler()"{{{
-  return exists('b:vimfiler') && !s:use_current_vimfiler ?
-        \ b:vimfiler : s:current_vimfiler
+  return exists('b:vimfiler') ? b:vimfiler : s:current_vimfiler
 endfunction"}}}
 function! vimfiler#set_current_vimfiler(vimfiler)"{{{
   let s:current_vimfiler = a:vimfiler
@@ -130,7 +126,7 @@ endfunction"}}}
 function! vimfiler#set_context(context)"{{{
   let old_context = vimfiler#get_context()
 
-  if exists('b:vimfiler') && !s:use_current_vimfiler
+  if exists('b:vimfiler')
     let b:vimfiler.context = a:context
   else
     let s:current_vimfiler.context = a:context

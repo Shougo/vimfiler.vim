@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jan 2012.
+" Last Modified: 14 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -138,6 +138,7 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
   let b:vimfiler.another_vimfiler_bufnr = -1
   let b:vimfiler.winwidth = winwidth(0)
+  call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#default_settings()
   set filetype=vimfiler
