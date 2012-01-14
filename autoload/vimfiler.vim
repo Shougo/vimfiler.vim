@@ -92,6 +92,8 @@ function! vimfiler#default_settings()"{{{
   augroup end"}}}
 
   call vimfiler#mappings#define_default_mappings()
+
+  let s:use_current_vimfiler = 0
 endfunction"}}}
 function! vimfiler#set_execute_file(exts, command)"{{{
   for ext in split(a:exts, ',')
