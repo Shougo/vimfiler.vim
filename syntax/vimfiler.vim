@@ -82,14 +82,15 @@ else
 endif
 
 if has('gui_running')
-    hi vimfilerCurrentDirectory  gui=UNDERLINE guifg=#80ffff guibg=NONE
+    hi vimfilerCurrentDirectory  guifg=#80ffff guibg=NONE
 else
     hi def link vimfilerCurrentDirectory Identifier
 endif
 hi def link vimfilerMask Statement
 
 hi def link vimfilerSpecial Special
-hi def link vimfilerSpecialSafe Statement
+hi vimfilerSpecialSafe guifg=red ctermfg=red
+
 hi def link vimfilerNonMark Special
 "hi vimfilerMarkedFile  gui=REVERSE term=REVERSE
 hi def link vimfilerMarkedFile Type
