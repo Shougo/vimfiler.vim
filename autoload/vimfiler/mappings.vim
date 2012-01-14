@@ -1134,8 +1134,7 @@ function! s:change_directory_file()"{{{
   if filename == '..'
   elseif empty(vimfiler#get_file())
     let line = getline('.')
-    let cursor_line = matchstr(line[: col('.') - 1],
-          \ ' Current directory: \zs.*')
+    let cursor_line = matchstr(line[: col('.') - 1], '\[in\]: \zs.*')
     if cursor_line == ''
       return
     endif

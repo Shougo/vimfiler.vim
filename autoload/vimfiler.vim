@@ -322,9 +322,19 @@ function! vimfiler#redraw_prompt()"{{{
   let mask = !b:vimfiler.is_visible_dot_files && b:vimfiler.current_mask == '' ?
         \ '' : '[' . (b:vimfiler.is_visible_dot_files ? '.:' : '')
         \       . b:vimfiler.current_mask . ']'
-  call setline(1, printf('%s[in]: %s:%s%s',
+
+  let dir = b:vimfiler.current_dir
+  if b:vimfiler.source ==# 'file'
+    let home = neocomplcache#util#substitute_path_separator(expand('~')).'/'
+    if stridx(dir, home) >= 0
+      let dir = '~/' . dir[len(home):]
+    endif
+  endif
+
+  call setline(1, printf('%s[in]: %s%s%s',
         \ (b:vimfiler.is_safe_mode ? '' : '! '),
-        \ b:vimfiler.source, b:vimfiler.current_dir, mask))
+        \ (b:vimfiler.source ==# 'file' ? '' : b:vimfiler.source.':'),
+        \ dir, mask))
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! vimfiler#system(...)"{{{
