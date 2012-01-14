@@ -831,9 +831,9 @@ function! s:event_bufwin_enter(bufnr)"{{{
     let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
   endif
 
-  if winnr(a:bufnr) != winnr()
+  if bufwinnr(a:bufnr) != winnr()
     let winnr = winnr()
-    execute winnr(a:bufnr) 'wincmd w'
+    execute bufwinnr(a:bufnr) 'wincmd w'
   endif
 
   if has('conceal')
@@ -860,7 +860,7 @@ function! s:event_bufwin_enter(bufnr)"{{{
   endif
 
   if exists('winnr')
-    execute winnr 'wincmd w'
+    execute winnr.'wincmd w'
   endif
 endfunction"}}}
 function! s:event_bufwin_leave(bufnr)"{{{
