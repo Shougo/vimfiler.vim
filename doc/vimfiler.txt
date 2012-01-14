@@ -235,7 +235,7 @@ g:vimfiler_min_filename_width			*g:vimfiler_min_filename_width*
 g:vimfiler_max_filename_width			*g:vimfiler_max_filename_width*
 		This variable controls vimfiler displays max filename width.
 		
-		Default value is 80.
+		Default value is 120.
 
 g:vimfiler_sort_type				*g:vimfiler_sort_type*
 		This variable controls default vimfiler sort type.
@@ -518,6 +518,9 @@ Normal mode key mappings.
 <Plug>(vimfiler_print_filename)			*<Plug>(vimfiler_print_filename)*
 		Print whole filename in echo area.
 
+<Plug>(vimfiler_toggle_maximize_window)		*<Plug>(vimfiler_toggle_maximize_window)*
+		Toggle maximize window in current vimfiler.
+
 <Plug>(vimfiler_yank_full_path)			*<Plug>(vimfiler_yank_full_path)*
 		Yank full path to clipboard register and unnamed register.
 
@@ -630,6 +633,7 @@ v			<Plug>(vimfiler_preview_file)
 o			<Plug>(vimfiler_sync_with_current_vimfiler)
 O			<Plug>(vimfiler_open_file_in_another_vimfiler)
 <C-g>			<Plug>(vimfiler_print_filename)
+g<C-g>			<Plug>(vimfiler_toggle_maximize_window)
 yy			<Plug>(vimfiler_yank_full_path)
 M			<Plug>(vimfiler_set_current_mask)
 gr			<Plug>(vimfiler_grep)
@@ -733,6 +737,8 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed vimfiler resize problem.
 - Fixed switch vimfiler.
 - Changed g:vimfiler_min_filename_width behavior.
+- Added <Plug>(vimfiler_toggle_maximize_window) mapping.
+- Changed g:vimfiler_max_filename_width default value.
 
 2012-01-12
 - Improved make_directory action.

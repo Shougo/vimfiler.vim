@@ -94,6 +94,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>open_file_in_another_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_print_filename)
         \ :<C-u>call <SID>print_filename()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_maximize_window)
+        \ :<C-u>call <SID>toggle_maximize_window()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_yank_full_path)
         \ :<C-u>call <SID>yank_full_path()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_set_current_mask)
@@ -224,6 +226,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
   nmap <buffer> O <Plug>(vimfiler_open_file_in_another_vimfiler)
   nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
+  nmap <buffer> g<C-g> <Plug>(vimfiler_toggle_maximize_window)
   nmap <buffer> yy <Plug>(vimfiler_yank_full_path)
   nmap <buffer> M <Plug>(vimfiler_set_current_mask)
   nmap <buffer> gr <Plug>(vimfiler_grep)
@@ -1189,6 +1192,19 @@ function! s:toggle_simple_mode()"{{{
   call vimfiler#redraw_screen()
   echo 'Simple mode is ' .
         \ (b:vimfiler.context.simple ? 'enabled' : 'disabled')
+endfunction"}}}
+function! s:toggle_maximize_window()"{{{
+  let std_width = vimfiler#get_context().winwidth
+  let winwidth = (winwidth(0)+1)/2*2
+  if winwidth == std_width
+    execute 'vertical resize' &columns
+  else
+    execute 'vertical resize' std_width
+  endif
+
+  call vimfiler#redraw_screen()
+
+  setlocal winfixwidth
 endfunction"}}}
 
 " vim: foldmethod=marker
