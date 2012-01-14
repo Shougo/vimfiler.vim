@@ -84,8 +84,10 @@ function! vimfiler#default_settings()"{{{
 
   " Set autocommands.
   augroup vimfiler"{{{
-    autocmd WinEnter,BufWinEnter <buffer> call s:event_bufwin_enter()
-    autocmd WinLeave,BufWinLeave <buffer> call s:event_bufwin_leave()
+    autocmd WinEnter,BufWinEnter <buffer>
+          \ call s:event_bufwin_enter(bufnr(expand('<abuf>')))
+    autocmd WinLeave,BufWinLeave <buffer>
+          \ call s:event_bufwin_leave(bufnr(expand('<abuf>')))
     autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
 
@@ -818,14 +820,20 @@ function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
 endfunction"}}}
 
 " Event functions.
-function! s:event_bufwin_enter()"{{{
-  if !exists('b:vimfiler')
+function! s:event_bufwin_enter(bufnr)"{{{
+  let vimfiler = getbufvar(a:bufnr, 'vimfiler')
+  if type(vimfiler) != type({})
     return
   endif
 
   if bufwinnr(s:last_vimfiler_bufnr) > 0
-        \ && s:last_vimfiler_bufnr != bufnr('%')
+        \ && s:last_vimfiler_bufnr != a:bufnr
     let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
+  endif
+
+  if winnr(a:bufnr) != winnr()
+    let winnr = winnr()
+    execute winnr(a:bufnr) 'wincmd w'
   endif
 
   if has('conceal')
@@ -850,13 +858,17 @@ function! s:event_bufwin_enter()"{{{
   if b:vimfiler.winwidth != winwidth
     call vimfiler#redraw_screen()
   endif
+
+  if exists('winnr')
+    execute winnr 'wincmd w'
+  endif
 endfunction"}}}
-function! s:event_bufwin_leave()"{{{
+function! s:event_bufwin_leave(bufnr)"{{{
   if !exists('b:vimfiler')
     return
   endif
 
-  let s:last_vimfiler_bufnr = bufnr('%')
+  let s:last_vimfiler_bufnr = a:bufnr
 endfunction"}}}
 
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
