@@ -331,7 +331,7 @@ function! vimfiler#redraw_prompt()"{{{
     endif
   endif
 
-  if len(dir) > winwidth(0)
+  if vimfiler#util#strchars(dir) > winwidth(0)
     let dir = fnamemodify(dir, ':t')
   endif
 
