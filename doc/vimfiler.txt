@@ -728,6 +728,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved prompt.
 - Fixed buffer_name bug.
 - Improved switch to other window behavior.
+- Improved vimfiler syntax.
 
 2012-01-12
 - Improved make_directory action.

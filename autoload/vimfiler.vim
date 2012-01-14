@@ -320,7 +320,7 @@ function! vimfiler#redraw_prompt()"{{{
   let mask = !b:vimfiler.is_visible_dot_files && b:vimfiler.current_mask == '' ?
         \ '' : '[' . (b:vimfiler.is_visible_dot_files ? '.:' : '')
         \       . b:vimfiler.current_mask . ']'
-  call setline(1, printf('%s[Current]: %s:%s%s',
+  call setline(1, printf('%s[in]: %s:%s%s',
         \ (b:vimfiler.is_safe_mode ? '' : '! '),
         \ b:vimfiler.source, b:vimfiler.current_dir, mask))
   let &l:modifiable = modifiable_save

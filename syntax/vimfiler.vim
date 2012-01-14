@@ -45,12 +45,12 @@ execute 'syn match   vimfilerMarkedFile'        '''^\s*\%('  . leaf_icon .'\)\?'
       \ 'contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek'
 syn match   vimfilerDirectory         '^..$'
 
-syn match   vimfilerPrompt            '^\[Current\]: .*$'
+syn match   vimfilerPrompt            '^\[in\]: .*$'
       \ contains=vimfilerSpecial,vimfilerCurrentDirectory
-syn match   vimfilerPromptSafe        '^! \[Current\]: .*$'
-      \ contains=vimfilerSpecial,vimfilerSpecialSafe,vimfilerCurrentDirectory
-syn match   vimfilerSpecialSafe       '^! ' contained
-syn match   vimfilerSpecial           '\[Current\]:' contained
+syn match   vimfilerPromptUnSafe        '^! \[in\]: .*$'
+      \ contains=vimfilerSpecial,vimfilerSpecialUnSafe,vimfilerCurrentDirectory
+syn match   vimfilerSpecialUnSafe       '^! ' contained
+syn match   vimfilerSpecial           '\[in\]:' contained
 syn match   vimfilerCurrentDirectory  '\s\zs.*$' contained contains=vimfilerMask
 syn match   vimfilerMask  '\[.*\]$' contained
 syn match   vimfilerFileLine          '\[.*\]$' contained
@@ -89,7 +89,7 @@ endif
 hi def link vimfilerMask Statement
 
 hi def link vimfilerSpecial Special
-hi vimfilerSpecialSafe guifg=red ctermfg=red
+hi def link vimfilerSpecialUnSafe Statement
 
 hi def link vimfilerNonMark Special
 "hi vimfilerMarkedFile  gui=REVERSE term=REVERSE
