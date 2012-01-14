@@ -66,7 +66,7 @@ function! vimfiler#default_settings()"{{{
   setlocal noswapfile
   setlocal noreadonly
   setlocal nomodifiable
-  setlocal wrap
+  setlocal nowrap
   setlocal nofoldenable
   setlocal foldcolumn=0
   setlocal nolist
