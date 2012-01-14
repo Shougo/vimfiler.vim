@@ -889,6 +889,7 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   endif
 
   execute 'buffer' . a:bufnr
+  call s:event_bufwin_enter(a:bufnr)
 
   " Set current directory.
   if a:directory != ''

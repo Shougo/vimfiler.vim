@@ -730,6 +730,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved switch to other window behavior.
 - Improved vimfiler syntax.
 - Fixed vimfiler resize problem.
+- Fixed switch vimfiler.
 
 2012-01-12
 - Improved make_directory action.
