@@ -227,6 +227,8 @@ g:vimfiler_preview_action			*g:vimfiler_preview_action*
 
 g:vimfiler_min_filename_width			*g:vimfiler_min_filename_width*
 		This variable controls vimfiler displays min filename width.
+		If filename range is shorter than it, vimfiler force use simple
+		interface.
 		
 		Default value is 30.
 
@@ -730,6 +732,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved vimfiler syntax.
 - Fixed vimfiler resize problem.
 - Fixed switch vimfiler.
+- Changed g:vimfiler_min_filename_width behavior.
 
 2012-01-12
 - Improved make_directory action.

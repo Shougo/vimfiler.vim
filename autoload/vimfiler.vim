@@ -692,9 +692,6 @@ function! vimfiler#get_print_lines(files)"{{{
         \ (is_simple ? s:min_padding_width : s:max_padding_width)
   if max_len > g:vimfiler_max_filename_width
     let max_len = g:vimfiler_max_filename_width
-  elseif !is_simple &&
-        \ max_len < g:vimfiler_min_filename_width
-    let max_len = g:vimfiler_min_filename_width
   endif
 
   " Print files.
