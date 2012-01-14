@@ -739,6 +739,7 @@ CHANGELOG					*vimfiler-changelog*
 - Changed g:vimfiler_min_filename_width behavior.
 - Added <Plug>(vimfiler_toggle_maximize_window) mapping.
 - Changed g:vimfiler_max_filename_width default value.
+- Fixed set_current_vimfiler_bug.
 
 2012-01-12
 - Improved make_directory action.

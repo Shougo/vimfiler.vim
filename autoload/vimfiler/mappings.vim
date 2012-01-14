@@ -587,7 +587,6 @@ function! s:switch_to_other_window()"{{{
 
   call setpos('.', pos)
 
-  call vimfiler#set_current_vimfiler(b:vimfiler)
   call vimfiler#redraw_screen()
 
   wincmd p
