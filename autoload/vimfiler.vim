@@ -331,6 +331,10 @@ function! vimfiler#redraw_prompt()"{{{
     endif
   endif
 
+  if len(dir) > winwidth(0)
+    let dir = fnamemodify(dir, ':t')
+  endif
+
   call setline(1, printf('%s[in]: %s%s%s',
         \ (b:vimfiler.is_safe_mode ? '' : '! '),
         \ (b:vimfiler.source ==# 'file' ? '' : b:vimfiler.source.':'),
