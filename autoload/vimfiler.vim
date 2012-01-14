@@ -696,7 +696,6 @@ function! vimfiler#get_print_lines(files)"{{{
         \ max_len < g:vimfiler_min_filename_width
     let max_len = g:vimfiler_min_filename_width
   endif
-  let max_len += 1
 
   " Print files.
   let lines = []
