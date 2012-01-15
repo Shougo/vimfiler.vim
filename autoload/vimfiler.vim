@@ -138,6 +138,14 @@ function! vimfiler#get_options()"{{{
   return copy(s:vimfiler_options)
 endfunction"}}}
 function! vimfiler#create_filer(path, ...)"{{{
+  let path = a:path
+  if path == ''
+    let path = vimfiler#util#substitute_path_separator(getcwd())
+  elseif path =~ '^[^a]*:'
+    let path = vimfiler#util#substitute_path_separator(
+          \ fnamemodify(expand(path), ':p'))
+  endif
+
   let context = vimfiler#init_context(get(a:000, 0, {}))
   if &l:modified && !&l:hidden
     " Split automatically.
@@ -162,14 +170,18 @@ function! vimfiler#create_filer(path, ...)"{{{
 
   silent edit `=bufname`
 
-  let path = (a:path == '') ?
-        \ vimfiler#util#substitute_path_separator(getcwd()) : a:path
   let context.path = path
   " echomsg path
 
   call vimfiler#handler#_event_handler('BufReadCmd', context)
 endfunction"}}}
 function! vimfiler#switch_filer(path, ...)"{{{
+  let path = a:path
+  if path =~ '^[^a]*:'
+    let path = vimfiler#util#substitute_path_separator(
+          \ fnamemodify(expand(path), ':p'))
+  endif
+
   let context = vimfiler#init_context(get(a:000, 0, {}))
   if &l:modified && !&l:hidden
     " Split automatically.
@@ -191,7 +203,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
             \ && vimfiler.context.profile_name ==# context.profile_name
             \ && (!exists('t:unite_buffer_dictionary')
             \      || has_key(t:unite_buffer_dictionary, bufnr))
-        call vimfiler#_switch_vimfiler(bufnr, context, a:path)
+        call vimfiler#_switch_vimfiler(bufnr, context, path)
         return
       endif
 
@@ -200,7 +212,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
   endif
 
   " Create window.
-  call vimfiler#create_filer(a:path, context)
+  call vimfiler#create_filer(path, context)
 endfunction"}}}
 function! vimfiler#get_directory_files(directory, ...)"{{{
   " Save current files.
@@ -621,12 +633,16 @@ function! vimfiler#restore_variables(variables_save)"{{{
   endfor
 endfunction"}}}
 function! vimfiler#parse_path(path)"{{{
-  let source_name = matchstr(a:path, '^[^:]*\ze:')
+  let source_name = matchstr(a:path, '^\h[^:]*\ze:')
   if (vimfiler#util#is_win() && len(source_name) == 1)
         \ || source_name == ''
     " Default source.
     let source_name = 'file'
     let source_arg = a:path
+    if source_arg =~ '^[^a]*:'
+      let source_arg = vimfiler#util#substitute_path_separator(
+            \ fnamemodify(expand(source_arg), ':p'))
+    endif
   else
     let source_arg = a:path[len(source_name)+1 :]
   endif
