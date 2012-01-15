@@ -63,17 +63,20 @@ INTERFACE					*vimfiler-interface*
 ------------------------------------------------------------------------------
 COMMANDS 					*vimfiler-commands*
 
-:VimFiler [{options}...] [{path}]		*:VimFiler*
+:VimFiler [{options}...] [[{source-name}:]{path}]
+						*:VimFiler*
 		Run vimfiler. This command reuses a buffer if a vimfiler
 		buffer already exists. If you ommit {path}, vimfiler opens current
-		directory. {path} is same as |:Unite|. But you ommit source
-		name, "file" source will be used.
+		directory. [[{source-name}:]{path}] arg is same as |:Unite|.
+		But you ommit source name, "file" source will be used.
+		If {path} is directory, browse in {path} directory files.
+		If {path} is file, edit {path} file.
 
 		Examples:
 		"foo": the parameters of source file are
 		                ["foo"].
-		"file_rec:foo": the parameters of source file are
-		                ["foo"].
+		"ssh:bar:baz": the parameters of source ssh are
+		                ["bar", "baz"].
 >
 		" File explorer like behavior.
 		:VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle
@@ -114,6 +117,10 @@ COMMANDS 					*vimfiler-commands*
 						*unite-options-simple*
 		-simple
 		Enable vimfiler simple mode.
+
+						*unite-options-split*
+		-split
+		Split vimfiler buffer.
 
 						*unite-options-double*
 		-double
@@ -728,6 +735,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-01-15
+- Fixed documentation.
 
 2012-01-14
 - Improved prompt.
