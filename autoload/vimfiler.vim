@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jan 2012.
+" Last Modified: 15 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -690,6 +690,8 @@ function! vimfiler#get_print_lines(files)"{{{
         \ (is_simple ? s:min_padding_width : s:max_padding_width)
   if max_len > g:vimfiler_max_filename_width
     let max_len = g:vimfiler_max_filename_width
+  elseif max_len < s:min_padding_width
+    let max_len = s:min_padding_width
   endif
 
   " Print files.

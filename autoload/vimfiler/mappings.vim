@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jan 2012.
+" Last Modified: 15 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1194,6 +1194,10 @@ function! s:toggle_simple_mode()"{{{
 endfunction"}}}
 function! s:toggle_maximize_window()"{{{
   let std_width = vimfiler#get_context().winwidth
+  if std_width == 0
+    let std_width = (&columns+1)/2
+  endif
+
   let winwidth = (winwidth(0)+1)/2*2
   if winwidth == std_width
     execute 'vertical resize' &columns

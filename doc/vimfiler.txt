@@ -738,6 +738,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-01-15
 - Fixed documentation.
+- Fixed redraw.
 
 2012-01-14
 - Improved prompt.
