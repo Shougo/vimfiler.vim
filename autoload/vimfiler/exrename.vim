@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Dec 2011.
+" Last Modified: 15 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,10 +28,11 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   let vimfiler_save = deepcopy(b:vimfiler)
   let bufnr = bufnr('%')
 
-  vsplit
-  edit exrename
-  highlight clear
-  syntax clear
+  vsplit exrename
+
+  silent! highlight clear ExrenameModified
+  silent! syntax clear ExrenameModified
+  silent! syntax clear ExrenameOriginal
 
   setlocal buftype=acwrite
   let b:exrename = vimfiler_save
@@ -111,6 +112,10 @@ function! s:do_rename()"{{{
 endfunction"}}}
 
 function! s:check_lines()"{{{
+  if !exists('b:exrename')
+    return
+  endif
+
   if line('$') != len(b:exrename.current_filenames)
     echohl Error | echo 'Invalid rename buffer!' | echohl None
     return

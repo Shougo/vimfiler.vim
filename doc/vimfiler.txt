@@ -740,6 +740,8 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed documentation.
 - Fixed redraw.
 - Fixed parse path.
+- Fixed alternate buffer.
+- Improved exrename highlight.
 
 2012-01-14
 - Improved prompt.
