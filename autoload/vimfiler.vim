@@ -335,7 +335,7 @@ function! vimfiler#redraw_prompt()"{{{
 
   let dir = b:vimfiler.current_dir
   if b:vimfiler.source ==# 'file'
-    let home = neocomplcache#util#substitute_path_separator(expand('~')).'/'
+    let home = unite#util#substitute_path_separator(expand('~')).'/'
     if stridx(dir, home) >= 0
       let dir = '~/' . dir[len(home):]
     endif

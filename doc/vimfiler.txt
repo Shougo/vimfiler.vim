@@ -738,6 +738,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-01-16
 - Fixed vimfiler event error.
+- Fixed neocomplcache depends.
 
 2012-01-15
 - Fixed documentation.
