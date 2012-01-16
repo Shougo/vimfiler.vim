@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jan 2012.
+" Last Modified: 16 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -849,12 +849,13 @@ endfunction"}}}
 function! s:event_bufwin_enter(bufnr)"{{{
   let vimfiler = getbufvar(a:bufnr, 'vimfiler')
   if type(vimfiler) != type({})
+        \ || bufwinnr(a:bufnr) < 1
     return
   endif
 
   if bufwinnr(s:last_vimfiler_bufnr) > 0
         \ && s:last_vimfiler_bufnr != a:bufnr
-    let b:vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
+    let vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
   endif
 
   if bufwinnr(a:bufnr) != winnr()
@@ -862,12 +863,16 @@ function! s:event_bufwin_enter(bufnr)"{{{
     execute bufwinnr(a:bufnr) 'wincmd w'
   endif
 
+  if !exists('b:vimfiler')
+    return
+  endif
+
   if has('conceal')
     setlocal conceallevel=3
     setlocal concealcursor=n
   endif
 
-  call vimfiler#set_current_vimfiler(b:vimfiler)
+  call vimfiler#set_current_vimfiler(vimfiler)
 
   let vimfiler = vimfiler#get_current_vimfiler()
   if !has_key(vimfiler, 'context')
@@ -881,7 +886,7 @@ function! s:event_bufwin_enter(bufnr)"{{{
   endif
 
   let winwidth = (winwidth(0)+1)/2*2
-  if b:vimfiler.winwidth != winwidth
+  if vimfiler.winwidth != winwidth
     call vimfiler#redraw_screen()
   endif
 

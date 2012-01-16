@@ -736,6 +736,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-01-16
+- Fixed vimfiler event error.
+
 2012-01-15
 - Fixed documentation.
 - Fixed redraw.
