@@ -81,12 +81,6 @@ COMMANDS 					*vimfiler-commands*
 		" File explorer like behavior.
 		:VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle
 <
-		Note: To use UNC path in Windows, you must separate path by
-		"/"(not "\").
->
-		" Open UNC path for "\\server\share".
-		:VimFiler //server/share/
-<
 						*vimfiler-options*
 		{options} are options for a vimfiler buffer.  You may give the
 		following parameters for a option; you must escape with \ when
