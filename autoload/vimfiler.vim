@@ -141,7 +141,7 @@ function! vimfiler#create_filer(path, ...)"{{{
   let path = a:path
   if path == ''
     let path = vimfiler#util#substitute_path_separator(getcwd())
-  elseif path =~ '^\A*:'
+  elseif vimfiler#util#is_win_path(path)
     let path = vimfiler#util#substitute_path_separator(
           \ fnamemodify(expand(path), ':p'))
   endif
@@ -177,7 +177,7 @@ function! vimfiler#create_filer(path, ...)"{{{
 endfunction"}}}
 function! vimfiler#switch_filer(path, ...)"{{{
   let path = a:path
-  if path =~ '^\A*:'
+  if vimfiler#util#is_win_path(path)
     let path = vimfiler#util#substitute_path_separator(
           \ fnamemodify(expand(path), ':p'))
   endif
@@ -639,7 +639,7 @@ function! vimfiler#parse_path(path)"{{{
     " Default source.
     let source_name = 'file'
     let source_arg = a:path
-    if source_arg =~ '^\A*:'
+    if vimfiler#util#is_win_path(source_arg)
       let source_arg = vimfiler#util#substitute_path_separator(
             \ fnamemodify(expand(source_arg), ':p'))
     endif
