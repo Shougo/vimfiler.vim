@@ -53,6 +53,9 @@ endfunction
 function! vimfiler#util#is_win(...)
   return call(s:V.is_windows, a:000)
 endfunction
+function! vimfiler#util#is_win_path(path)
+  return a:path =~ '^\A*:' || a:path =~ '^\\\\[^\\]\+\\'
+endfunction
 function! vimfiler#util#print_error(...)
   return call(s:V.print_error, a:000)
 endfunction
