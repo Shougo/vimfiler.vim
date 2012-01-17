@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jan 2012.
+" Last Modified: 17 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -633,18 +633,20 @@ function! vimfiler#restore_variables(variables_save)"{{{
   endfor
 endfunction"}}}
 function! vimfiler#parse_path(path)"{{{
-  let source_name = matchstr(a:path, '^\h[^:]*\ze:')
+  let path = a:path
+
+  let source_name = matchstr(path, '^\h[^:]*\ze:')
   if (vimfiler#util#is_win() && len(source_name) == 1)
         \ || source_name == ''
     " Default source.
     let source_name = 'file'
-    let source_arg = a:path
+    let source_arg = path
     if source_arg =~ '^\A*:'
       let source_arg = vimfiler#util#substitute_path_separator(
             \ fnamemodify(expand(source_arg), ':p'))
     endif
   else
-    let source_arg = a:path[len(source_name)+1 :]
+    let source_arg = path[len(source_name)+1 :]
   endif
 
   let source_args = source_arg  == '' ? [] :
