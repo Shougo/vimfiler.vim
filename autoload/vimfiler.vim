@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jan 2012.
+" Last Modified: 18 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -852,6 +852,7 @@ function! s:event_bufwin_enter(bufnr)"{{{
   let vimfiler = getbufvar(a:bufnr, 'vimfiler')
   if type(vimfiler) != type({})
         \ || bufwinnr(a:bufnr) < 1
+        \ || count(map(range(1, winnr('$')), 'winbufnr(v:val)'), a:bufnr) > 1
     return
   endif
 
