@@ -852,6 +852,7 @@ function! s:event_bufwin_enter(bufnr)"{{{
   let vimfiler = getbufvar(a:bufnr, 'vimfiler')
   if type(vimfiler) != type({})
         \ || bufwinnr(a:bufnr) < 1
+        \ || count(map(range(1, winnr('$')), 'winbufnr(v:val)'), a:bufnr) > 1
     return
   endif
 
