@@ -39,6 +39,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   silent! syntax clear ExrenameOriginal
 
   setlocal buftype=acwrite
+  setlocal noswapfile
   let b:exrename = vimfiler_save
   let b:exrename.bufnr = bufnr
 
@@ -64,7 +65,11 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   let b:exrename.current_files = []
   let b:exrename.current_filenames = []
   for file in a:files
-    let filename = file.vimfiler__filename
+    let filename = file.action__path
+    if stridx(filename, b:exrename.current_dir) == 0
+      let filename = filename[len(b:exrename.current_dir) :]
+    endif
+
     if file.vimfiler__is_directory
       let filename .= '/'
     endif
@@ -90,6 +95,8 @@ function! s:exit()"{{{
     call s:custom_alternate_buffer()
   endif
   execute 'bdelete!' exrename_buf
+
+  call vimfiler#redraw_all_vimfiler()
 endfunction"}}}
 function! s:do_rename()"{{{
   if line('$') != len(b:exrename.current_filenames)
@@ -103,8 +110,10 @@ function! s:do_rename()"{{{
     let filename = b:exrename.current_filenames[linenr - 1]
     if filename !=# getline(linenr)
       let file = b:exrename.current_files[linenr - 1]
-      call unite#mappings#do_action('vimfiler__rename', [file],
-            \ {'action__filename' : vimfiler#util#expand(getline(linenr))})
+      call unite#mappings#do_action('vimfiler__rename', [file], {
+            \ 'vimfiler__current_directory' : b:exrename.current_dir,
+            \ 'action__filename' : vimfiler#util#expand(getline(linenr)),
+            \ })
     endif
 
     let linenr += 1
