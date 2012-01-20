@@ -28,7 +28,11 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   let vimfiler_save = deepcopy(b:vimfiler)
   let bufnr = bufnr('%')
 
-  vsplit exrename
+  vsplit
+  call vimfiler#redraw_screen()
+  let prefix = vimfiler#util#is_win() ? '[exrename] - ' : '*exrename* - '
+  let prefix .= b:vimfiler.context.buffer_name
+  execute 'edit' prefix
 
   silent! highlight clear ExrenameModified
   silent! syntax clear ExrenameModified

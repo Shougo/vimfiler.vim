@@ -736,13 +736,12 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
-<<<<<<< HEAD
 2012-01-20
 - Fixed exrename problem.
-=======
+- Improved exrename behavior.
+
 2012-01-18
 - Fixed winwidth problem.
->>>>>>> 344226fb82e3b8d15a1c16beddc4f8892e2d486d
 
 2012-01-17
 - Improved documentation.

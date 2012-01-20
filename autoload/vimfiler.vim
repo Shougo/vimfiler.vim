@@ -624,7 +624,7 @@ function! vimfiler#set_variables(variables)"{{{
     let variables_save[key] = save_value
     execute 'let' key '= value'
   endfor
-  
+
   return variables_save
 endfunction"}}}
 function! vimfiler#restore_variables(variables_save)"{{{
