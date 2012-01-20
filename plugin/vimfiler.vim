@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimshell.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jan 2012.
+" Last Modified: 20 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -166,8 +166,7 @@ function! s:browse_check(path)"{{{
   if fnamemodify(path, ':t') ==# '~'
     let path = '~'
   endif
-  if isdirectory(expand(
-        \ vimfiler#util#escape_file_searching(path)))
+  if isdirectory(vimfiler#util#expand(path))
         \ && &filetype != 'vimfiler'
     call vimfiler#handler#_event_handler('BufReadCmd')
   endif

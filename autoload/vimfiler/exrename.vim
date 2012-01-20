@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jan 2012.
+" Last Modified: 20 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -66,7 +66,8 @@ function! vimfiler#exrename#create_buffer(files)"{{{
     endif
 
     execute 'syntax match ExrenameOriginal'
-          \ '/'.printf('^\%%%dl%s$', line('$'), escape(filename, '/')).'/'
+          \ '/'.printf('^\%%%dl%s$', line('$'),
+          \ escape(vimfiler#util#escape_pattern(filename), '/')).'/'
     call append('$', filename)
     call add(b:exrename.current_files, file)
     call add(b:exrename.current_filenames, filename)
@@ -99,7 +100,7 @@ function! s:do_rename()"{{{
     if filename !=# getline(linenr)
       let file = b:exrename.current_files[linenr - 1]
       call unite#mappings#do_action('vimfiler__rename', [file],
-            \ {'action__filename' : getline(linenr)})
+            \ {'action__filename' : vimfiler#util#expand(getline(linenr))})
     endif
 
     let linenr += 1

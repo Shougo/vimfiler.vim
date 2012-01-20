@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 Jan 2012.
+" Last Modified: 20 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -143,7 +143,7 @@ function! vimfiler#create_filer(path, ...)"{{{
     let path = vimfiler#util#substitute_path_separator(getcwd())
   elseif vimfiler#util#is_win_path(path)
     let path = vimfiler#util#substitute_path_separator(
-          \ fnamemodify(expand(path), ':p'))
+          \ fnamemodify(vimfiler#util#expand(path), ':p'))
   endif
 
   let context = vimfiler#init_context(get(a:000, 0, {}))
@@ -179,7 +179,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
   let path = a:path
   if vimfiler#util#is_win_path(path)
     let path = vimfiler#util#substitute_path_separator(
-          \ fnamemodify(expand(path), ':p'))
+          \ fnamemodify(vimfiler#util#expand(path), ':p'))
   endif
 
   let context = vimfiler#init_context(get(a:000, 0, {}))
