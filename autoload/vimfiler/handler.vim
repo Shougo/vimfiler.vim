@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jan 2012.
+" Last Modified: 22 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -180,6 +180,8 @@ function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
   filetype detect
   setlocal buftype=acwrite
   setlocal noswapfile
+
+  let &fileencoding = get(a:dict, 'vimfiler__encoding', '')
 endfunction"}}}
 
 " vim: foldmethod=marker
