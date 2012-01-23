@@ -736,6 +736,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-01-23
+- Fixed switch_to_other_window error.
+
 2012-01-22
 - set fileencoding.
 
