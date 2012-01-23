@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jan 2012.
+" Last Modified: 23 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -83,37 +83,22 @@ function! s:on_FileWriteCmd(source_name, source_args, context)  "{{{1
 endfunction
 
 function! s:write(source_name, source_args, line1, line2, event_name)  "{{{1
-  let ret = unite#vimfiler_check_filetype(
-        \ [insert(a:source_args, a:source_name)])
-  if empty(ret)
-    " File not found.
-    return
-  endif
-
-  let [type, info] = ret
-  let [lines, dict] = info
-
-  if type !=# 'file'
-    " Invalid filetype.
-    call vimfiler#print_error('Invalid filetype: '
-          \ . source . join(source_args, ':'))
+  if !exists('b:vimfiler') || !has_key(b:vimfiler, 'current_file')
     return
   endif
 
   try
-    if a:event_name ==# 'BufWriteCmd'
-          \ && join(a:source_args, ':') ==# bufname('%')
-      " Reset modified flag.
-      setlocal nomodified
-    endif
+    setlocal nomodified
 
-    call unite#mappings#do_action('vimfiler__write', [dict], {
+    call unite#mappings#do_action('vimfiler__write',
+          \ [b:vimfiler.current_file], {
           \ 'vimfiler__line1' : a:line1,
           \ 'vimfiler__line2' : a:line2,
           \ 'vimfiler__eventname' : a:event_name,
           \ })
   catch
     call vimfiler#print_error(v:exception . ' ' . v:throwpoint)
+    setlocal modified
   endtry
 endfunction
 
