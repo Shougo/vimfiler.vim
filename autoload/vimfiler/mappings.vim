@@ -953,6 +953,7 @@ function! s:split_edit_file()"{{{
   " Resize.
   execute 'vertical resize'
         \ (winnr('$') == 1 ? winwidth : winwidth/(winnr('$') - 1))
+  call vimfiler#redraw_all_vimfiler()
 endfunction"}}}
 
 " File operations.
