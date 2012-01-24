@@ -738,6 +738,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-01-24
 - Improved vimfiler check.
+- Fixed split automatically.
 
 2012-01-23
 - Fixed switch_to_other_window error.
