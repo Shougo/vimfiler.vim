@@ -29,13 +29,13 @@
 try
   let s:exists_unite_version = unite#version()
 catch
-  echoerr 'Error occured while loading unite.vim.'
-  echoerr 'Please install unite.vim Ver.3.0 or above.'
+  echomsg 'Error occured while loading unite.vim.'
+  echomsg 'Please install unite.vim Ver.3.0 or above.'
   finish
 endtry
 if s:exists_unite_version < 300
-  echoerr 'Your unite.vim is too old.'
-  echoerr 'Please install unite.vim Ver.3.0 or above.'
+  echomsg 'Your unite.vim is too old.'
+  echomsg 'Please install unite.vim Ver.3.0 or above.'
   finish
 endif"}}}
 
