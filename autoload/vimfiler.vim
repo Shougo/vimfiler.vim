@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jan 2012.
+" Last Modified: 24 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,8 +29,6 @@
 try
   let s:exists_unite_version = unite#version()
 catch
-  echoerr v:errmsg
-  echoerr v:exception
   echoerr 'Error occured while loading unite.vim.'
   echoerr 'Please install unite.vim Ver.3.0 or above.'
   finish

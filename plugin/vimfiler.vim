@@ -39,8 +39,6 @@ endif
 try
   let s:exists_unite_version = unite#version()
 catch
-  echoerr v:errmsg
-  echoerr v:exception
   echoerr 'Error occured while loading unite.vim.'
   echoerr 'Please install unite.vim Ver.3.0 or above.'
   finish
