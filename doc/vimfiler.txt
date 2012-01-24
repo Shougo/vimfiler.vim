@@ -736,6 +736,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-01-24
+- Improved vimfiler check.
+
 2012-01-23
 - Fixed switch_to_other_window error.
 - Improved split edit file.
