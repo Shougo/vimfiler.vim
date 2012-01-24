@@ -183,7 +183,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
   let context = vimfiler#init_context(get(a:000, 0, {}))
   if &l:modified && !&l:hidden
     " Split automatically.
-    let context.is_switch = 1
+    let context.split = 1
   endif
 
   if context.toggle && !context.create
