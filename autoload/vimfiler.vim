@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jan 2012.
+" Last Modified: 26 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -883,7 +883,10 @@ function! s:event_bufwin_enter(bufnr)"{{{
   let context = vimfiler#get_context()
   if context.winwidth != 0
     execute 'vertical resize' context.winwidth
-    setlocal winfixwidth
+
+    if context.split
+      setlocal winfixwidth
+    endif
   endif
 
   let winwidth = (winwidth(0)+1)/2*2

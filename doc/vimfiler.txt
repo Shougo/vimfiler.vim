@@ -736,6 +736,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-01-26
+- Fixed winfixwidth problem.
+
 2012-01-24
 - Improved vimfiler check.
 - Fixed split automatically.
