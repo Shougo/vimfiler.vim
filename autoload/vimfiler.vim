@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jan 2012.
+" Last Modified: 31 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -753,7 +753,7 @@ function! vimfiler#close(buffer_name)"{{{
     " Add postfix.
     let prefix = vimfiler#util#is_win() ? '[vimfiler] - ' : '*vimfiler* - '
     let prefix .= buffer_name
-    let buffer_name .= s:get_postfix(prefix, 0)
+    let buffer_name = prefix . s:get_postfix(prefix, 0)
   endif
 
   " Note: must escape file-pattern.

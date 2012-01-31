@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Jan 2012.
+" Last Modified: 31 Jan 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -112,7 +112,7 @@ let g:vimfiler_extensions =
 
 " Plugin keymappings"{{{
 nnoremap <silent> <Plug>(vimfiler_split_switch)
-      \ :<C-u>s:call_vimfiler({ 'split' : 1 }, '')<CR>
+      \ :<C-u><SID>call_vimfiler({ 'split' : 1 }, '')<CR>
 nnoremap <silent> <Plug>(vimfiler_split_create)
       \ :<C-u>VimFilerSplit<CR>
 nnoremap <silent> <Plug>(vimfiler_switch)
