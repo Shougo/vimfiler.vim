@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/drive.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Nov 2011.
+" Last Modified: 01 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,6 +26,16 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+let g:vimfiler_detect_drives =
+      \ get(g:, 'vimfiler_detect_drives', (has('win32') || has('win64')) ? [
+      \     'A:/', 'B:/', 'C:/', 'D:/', 'E:/', 'F:/', 'G:/',
+      \     'H:/', 'I:/', 'J:/', 'K:/', 'L:/', 'M:/', 'N:/',
+      \     'O:/', 'P:/', 'Q:/', 'R:/', 'S:/', 'T:/', 'U:/',
+      \     'V:/', 'W:/', 'X:/', 'Y:/', 'Z:/'
+      \ ] : (has('macunix') || system('uname') =~? '^darwin') ?
+      \ split(glob('/Volumes/*'), '\n') :
+      \ split(glob('/mnt/*'), '\n') + split(glob('/media/*'), '\n'))
 
 function! unite#sources#vimfiler_drive#define()"{{{
   return s:source
