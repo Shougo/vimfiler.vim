@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jan 2012.
+" Last Modified: 10 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -233,7 +233,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> gf <Plug>(vimfiler_find)
   nmap <buffer> S <Plug>(vimfiler_select_sort_type)
   nmap <buffer> <C-v> <Plug>(vimfiler_switch_vim_buffer_mode)
-  nmap <buffer> gc <Plug>(vimfiler_cd)
+  nmap <buffer> gc <Plug>(vimfiler_cd_vim_current_dir)
   nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
   nmap <buffer> gS <Plug>(vimfiler_toggle_simple_mode)
   nmap <buffer> gg <Plug>(vimfiler_cursor_top)
@@ -1103,19 +1103,12 @@ function! s:execute_external_filer()"{{{
   call vimfiler#mappings#do_current_dir_action('vimfiler__execute')
 endfunction"}}}
 function! s:change_vim_current_dir(directory)"{{{
-  let dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', a:directory]], {
-        \ 'vimfiler__is_dummy' : 1,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-  if empty(dummy_files)
+  if b:vimfiler.source !=# 'file'
+    call vimfiler#print_error('Invalid operation in not file source.')
     return
   endif
 
-  " Execute cd.
-  call unite#mappings#do_action('cd', dummy_files, {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
+  execute g:unite_kind_openable_lcd_command '`=b:vimfiler.current_dir`'
 endfunction"}}}
 function! s:grep()"{{{
   call s:switch_no_quit()
