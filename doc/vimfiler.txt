@@ -744,6 +744,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed <Plug>(vimfiler_cd_vim_current_dir).
 - Added -horizontal option.
 - Fixed default explorer problem.
+- Fixed handler.
 
 2012-02-01
 - Improved g:vimfiler_detect_drives initialize timing.

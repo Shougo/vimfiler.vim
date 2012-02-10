@@ -27,7 +27,8 @@
 
 function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
   let context = vimfiler#init_context(get(a:000, 0, {}))
-  let path = get(context, 'path', expand('<afile>'))
+  let path = get(context, 'path',
+        \ vimfiler#util#substitute_path_separator(vimfiler#util#expand('<afile>')))
 
   let ret = vimfiler#parse_path(path)
   let source_name = ret[0]
