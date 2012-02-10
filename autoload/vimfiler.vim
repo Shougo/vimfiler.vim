@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2012.
+" Last Modified: 10 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,7 +49,7 @@ let s:vimfiler_current_histories = []
 
 let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-toggle', '-create',
-      \ '-simple', '-double', '-split', '-direction=',
+      \ '-simple', '-double', '-split', '-horizontal', '-direction=',
       \ '-winwidth=', '-winminwidth=',
       \]
 
@@ -162,7 +162,9 @@ function! vimfiler#create_filer(path, ...)"{{{
   let context.profile_name = context.buffer_name
   let context.buffer_name = bufname
 
-  if context.split
+  if context.horizontal && context.split
+    execute context.direction 'new'
+  elseif context.split
     execute context.direction 'vnew'
   endif
 
@@ -678,6 +680,9 @@ function! vimfiler#init_context(context)"{{{
   if !has_key(a:context, 'split')
     let a:context.split = 0
   endif
+  if !has_key(a:context, 'horizontal')
+    let a:context.horizontal = 0
+  endif
   if !has_key(a:context, 'winwidth')
     let a:context.winwidth = 0
   endif
@@ -909,7 +914,9 @@ endfunction"}}}
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   let context = vimfiler#init_context(a:context)
 
-  if context.split
+  if context.horizontal && context.split
+    execute context.direction 'new'
+  elseif context.split
     execute context.direction 'vnew'
   endif
 

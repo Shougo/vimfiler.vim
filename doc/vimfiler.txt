@@ -122,6 +122,10 @@ COMMANDS 					*vimfiler-commands*
 		-split
 		Split vimfiler buffer.
 
+						*unite-options-horizontal*
+		-horizontal
+		Split horizontally.
+
 						*unite-options-double*
 		-double
 		Open vimfiler buffers in double mode.
@@ -738,6 +742,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-02-10
 - Fixed <Plug>(vimfiler_cd_vim_current_dir).
+- Added -horizontal option.
 
 2012-02-01
 - Improved g:vimfiler_detect_drives initialize timing.
