@@ -134,6 +134,12 @@ COMMANDS 					*vimfiler-commands*
 		-create
 		Create new vimfiler buffer.
 
+						*unite-options-auto-cd*
+		-auto-cd
+		Enable auto cd behavior.
+		If omit it, use |g:vimfiler_enable_auto_cd|.
+		Note: This option works in file source.
+
 :VimFilerCreate [{options}...] [{path}]		*:VimFilerCreate*
 		Equivalent to |:VimFiler| except that it creates a new vimfiler
 		buffer.
@@ -317,6 +323,13 @@ g:vimfiler_data_directory			*g:vimfiler_data_directory*
 		the directory will be automatically generated.
 		
 		Default value is expand('~/.vimfiler'); the absolute path of it.
+
+g:vimfiler_enable_auto_cd			*g:vimfiler_enable_auto_cd*
+		This variable controls whether vimfiler change Vim current
+		directory automatically.
+		Note: This variable works in file source.
+		
+		Default value is 0
 
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
@@ -745,6 +758,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added -horizontal option.
 - Fixed default explorer problem.
 - Fixed handler.
+- Added g:vimfiler_enable_auto_cd option.
 
 2012-02-01
 - Improved g:vimfiler_detect_drives initialize timing.

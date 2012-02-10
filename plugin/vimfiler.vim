@@ -89,6 +89,8 @@ let g:vimfiler_file_icon =
       \ get(g:, 'vimfiler_file_icon', '-')
 let g:vimfiler_marked_file_icon =
       \ get(g:, 'vimfiler_marked_file_icon', '*')
+let g:vimfiler_enable_auto_cd =
+      \ get(g:, 'vimfiler_enable_auto_cd', 0)
 let g:vimfiler_data_directory =
       \ get(g:, 'vimfiler_data_directory', expand('~/.vimfiler'))
 if !isdirectory(fnamemodify(g:vimfiler_data_directory, ':p'))

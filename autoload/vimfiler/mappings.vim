@@ -115,7 +115,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> <Plug>(vimfiler_cd)
         \ <Plug>(vimfiler_cd_vim_current_dir)
   nnoremap <buffer><silent> <Plug>(vimfiler_cd_vim_current_dir)
-        \ :<C-u>call <SID>change_vim_current_dir(b:vimfiler.current_dir)<CR>
+        \ :<C-u>call <SID>change_vim_current_dir()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd_file)
         \ :<C-u>call <SID>change_directory_file()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_choose_action)
@@ -388,6 +388,10 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
         \ deepcopy(save_pos)
   let prev_dir = b:vimfiler.current_dir
   let b:vimfiler.current_dir = fullpath
+
+  if vimfiler#get_context().auto_cd
+    call s:change_vim_current_dir()
+  endif
 
   " Save changed directories.
   if save_history
@@ -1102,7 +1106,7 @@ endfunction"}}}
 function! s:execute_external_filer()"{{{
   call vimfiler#mappings#do_current_dir_action('vimfiler__execute')
 endfunction"}}}
-function! s:change_vim_current_dir(directory)"{{{
+function! s:change_vim_current_dir()"{{{
   if b:vimfiler.source !=# 'file'
     call vimfiler#print_error('Invalid operation in not file source.')
     return

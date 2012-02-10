@@ -50,7 +50,7 @@ let s:vimfiler_current_histories = []
 let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-toggle', '-create',
       \ '-simple', '-double', '-split', '-horizontal', '-direction=',
-      \ '-winwidth=', '-winminwidth=',
+      \ '-winwidth=', '-winminwidth=', '-auto-cd',
       \]
 
 augroup vimfiler"{{{
@@ -691,6 +691,9 @@ function! vimfiler#init_context(context)"{{{
   endif
   if !has_key(a:context, 'direction')
     let a:context.direction = g:vimfiler_split_rule
+  endif
+  if !has_key(a:context, 'auto_cd')
+    let a:context.auto_cd = g:vimfiler_enable_auto_cd
   endif
 
   return a:context
