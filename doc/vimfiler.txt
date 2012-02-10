@@ -326,7 +326,8 @@ g:vimfiler_data_directory			*g:vimfiler_data_directory*
 
 g:vimfiler_enable_auto_cd			*g:vimfiler_enable_auto_cd*
 		This variable controls whether vimfiler change Vim current
-		directory automatically.
+		directory using |g:unite_kind_openable_lcd_command|
+		automatically.
 		Note: This variable works in file source.
 		
 		Default value is 0
@@ -572,7 +573,8 @@ Normal mode key mappings.
 
 <Plug>(vimfiler_cd_vim_current_dir)		*<Plug>(vimfiler_cd_vim_current_dir)*
 <Plug>(vimfiler_cd)				*<Plug>(vimfiler_cd)*
-		Change system current directory to vimfiler current directory.
+		Change system current directory to vimfiler current directory
+		using |g:unite_kind_openable_lcd_command|.
 		Note: |<Plug>(vimfiler_cd)| is obsolute name.
 
 <Plug>(vimfiler_cd_file)			*<Plug>(vimfiler_cd_file)*
