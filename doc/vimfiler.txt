@@ -755,6 +755,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-02-11
+- Fixed check buflisted.
+
 2012-02-10
 - Fixed <Plug>(vimfiler_cd_vim_current_dir).
 - Added -horizontal option.
