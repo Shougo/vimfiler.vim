@@ -151,7 +151,7 @@ function! vimfiler#create_filer(path, ...)"{{{
   endif
 
   " Create new buffer name.
-  let prefix = vimfiler#util#is_win() ? '[vimfiler] - ' : '*vimfiler* - '
+  let prefix = vimfiler#util#is_windows() ? '[vimfiler] - ' : '*vimfiler* - '
   let prefix .= context.profile_name
 
   let postfix = s:get_postfix(prefix, 1)
@@ -335,7 +335,7 @@ function! vimfiler#redraw_prompt()"{{{
 
   let dir = b:vimfiler.current_dir
   if b:vimfiler.source ==# 'file'
-    let home = unite#util#substitute_path_separator(expand('~')).'/'
+    let home = vimfiler#util#substitute_path_separator(expand('~')).'/'
     if stridx(dir, home) >= 0
       let dir = '~/' . dir[len(home):]
     endif
@@ -496,7 +496,7 @@ endfunction"}}}
 function! vimfiler#get_filetype(file)"{{{
   let ext = tolower(a:file.vimfiler__extension)
 
-  if (vimfiler#util#is_win() && ext ==? 'LNK')
+  if (vimfiler#util#is_windows() && ext ==? 'LNK')
         \ || get(a:file, 'vimfiler__ftype', '') ==# 'link'
     " Symbolic link.
     return '[LNK]'
@@ -610,7 +610,7 @@ function! vimfiler#get_another_vimfiler()"{{{
         \ getbufvar(b:vimfiler.another_vimfiler_bufnr, 'vimfiler') : ''
 endfunction"}}}
 function! vimfiler#resolve(filename)"{{{
-  return ((vimfiler#util#is_win() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
+  return ((vimfiler#util#is_windows() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
         \ vimfiler#util#substitute_path_separator(resolve(a:filename)) : a:filename
 endfunction"}}}
 function! vimfiler#print_error(message)"{{{
@@ -636,7 +636,7 @@ function! vimfiler#parse_path(path)"{{{
   let path = a:path
 
   let source_name = matchstr(path, '^\h[^:]*\ze:')
-  if (vimfiler#util#is_win() && len(source_name) == 1)
+  if (vimfiler#util#is_windows() && len(source_name) == 1)
         \ || source_name == ''
     " Default source.
     let source_name = 'file'
@@ -759,7 +759,7 @@ function! vimfiler#close(buffer_name)"{{{
   let buffer_name = a:buffer_name
   if buffer_name !~ '@\d\+$'
     " Add postfix.
-    let prefix = vimfiler#util#is_win() ? '[vimfiler] - ' : '*vimfiler* - '
+    let prefix = vimfiler#util#is_windows() ? '[vimfiler] - ' : '*vimfiler* - '
     let prefix .= buffer_name
     let buffer_name = prefix . s:get_postfix(prefix, 0)
   endif

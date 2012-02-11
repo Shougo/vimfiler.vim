@@ -50,7 +50,7 @@ endfunction
 function! vimfiler#util#wcswidth(...)
   return call(s:V.wcswidth, a:000)
 endfunction
-function! vimfiler#util#is_win(...)
+function! vimfiler#util#is_windows(...)
   return call(s:V.is_windows, a:000)
 endfunction
 function! vimfiler#util#is_win_path(path)
@@ -100,7 +100,7 @@ function! vimfiler#util#escape_file_searching(...)
 endfunction
 
 function! vimfiler#util#expand(path)"{{{
-  return expand(escape(a:path, unite#util#is_win() ?
+  return expand(escape(a:path, vimfiler#util#is_windows() ?
         \ '*?"={}' : '*?"={}[]'))
 endfunction"}}}
 
