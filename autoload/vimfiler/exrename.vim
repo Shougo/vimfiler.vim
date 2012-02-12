@@ -32,8 +32,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   call vimfiler#redraw_screen()
   let prefix = vimfiler#util#is_windows() ?
         \ '[exrename] - ' : '*exrename* - '
-  let prefix .= b:vimfiler.context.buffer_name
-  execute 'edit' prefix
+  edit `=prefix . b:vimfiler.context.buffer_name`
 
   setlocal buftype=acwrite
   setlocal noswapfile
@@ -56,7 +55,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   " Clean up the screen.
   % delete _
 
-  silent! syntax clear ExrenameOriginal
+  silent! syntax clear exrenameOriginal
 
   " Print files.
   let b:exrename.current_files = []
@@ -72,7 +71,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
       let filename .= '/'
     endif
 
-    execute 'syntax match ExrenameOriginal'
+    execute 'syntax match exrenameOriginal'
           \ '/'.printf('^\%%%dl%s$', cnt,
           \ escape(vimfiler#util#escape_pattern(filename), '/')).'/'
     call add(b:exrename.current_files, file)
