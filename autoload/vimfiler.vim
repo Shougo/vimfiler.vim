@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2012.
+" Last Modified: 12 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -144,7 +144,7 @@ function! vimfiler#create_filer(path, ...)"{{{
           \ fnamemodify(vimfiler#util#expand(path), ':p'))
   endif
 
-  let context = vimfiler#init_context(get(a:000, 0, {}))
+  let context = vimfiler#initialize_context(get(a:000, 0, {}))
   if &l:modified && !&l:hidden
     " Split automatically.
     let context.split = 1
@@ -182,7 +182,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
           \ fnamemodify(vimfiler#util#expand(path), ':p'))
   endif
 
-  let context = vimfiler#init_context(get(a:000, 0, {}))
+  let context = vimfiler#initialize_context(get(a:000, 0, {}))
   if &l:modified && !&l:hidden
     " Split automatically.
     let context.split = 1
@@ -655,48 +655,28 @@ function! vimfiler#parse_path(path)"{{{
 
   return insert(source_args, source_name)
 endfunction"}}}
-function! vimfiler#init_context(context)"{{{
-  if !has_key(a:context, 'buffer_name')
-    let a:context.buffer_name = 'default'
-  endif
-  if !has_key(a:context, 'profile_name')
-    let a:context.profile_name = a:context.buffer_name
-  endif
-  if !has_key(a:context, 'no_quit')
-    let a:context.no_quit = 0
-  endif
-  if !has_key(a:context, 'toggle')
-    let a:context.toggle = 0
-  endif
-  if !has_key(a:context, 'create')
-    let a:context.create = 0
-  endif
-  if !has_key(a:context, 'simple')
-    let a:context.simple = 0
-  endif
-  if !has_key(a:context, 'double')
-    let a:context.double = 0
-  endif
-  if !has_key(a:context, 'split')
-    let a:context.split = 0
-  endif
-  if !has_key(a:context, 'horizontal')
-    let a:context.horizontal = 0
-  endif
-  if !has_key(a:context, 'winwidth')
-    let a:context.winwidth = 0
-  endif
-  if !has_key(a:context, 'winminwidth')
-    let a:context.winminwidth = 0
-  endif
-  if !has_key(a:context, 'direction')
-    let a:context.direction = g:vimfiler_split_rule
-  endif
-  if !has_key(a:context, 'auto_cd')
-    let a:context.auto_cd = g:vimfiler_enable_auto_cd
+function! vimfiler#initialize_context(context)"{{{
+  let default_context = {
+    \ 'buffer_name' : 'default',
+    \ 'no_quit' : 0,
+    \ 'toggle' : 0,
+    \ 'create' : 0,
+    \ 'simple' : 0,
+    \ 'double' : 0,
+    \ 'split' : 0,
+    \ 'horizontal' : 0,
+    \ 'winwidth' : 0,
+    \ 'winminwidth' : 0,
+    \ 'direction' : g:vimfiler_split_rule,
+    \ 'auto_cd' : g:vimfiler_enable_auto_cd,
+    \ }
+  let context = extend(default_context, a:context)
+
+  if !has_key(context, 'profile_name')
+    let context.profile_name = context.buffer_name
   endif
 
-  return a:context
+  return context
 endfunction"}}}
 function! vimfiler#get_histories()"{{{
   return copy(s:vimfiler_current_histories)
@@ -915,7 +895,7 @@ function! s:event_bufwin_leave(bufnr)"{{{
 endfunction"}}}
 
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
-  let context = vimfiler#init_context(a:context)
+  let context = vimfiler#initialize_context(a:context)
 
   if context.horizontal && context.split
     execute context.direction 'new'
