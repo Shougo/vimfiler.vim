@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2012.
+" Last Modified: 13 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,20 +30,19 @@ function! vimfiler#exrename#create_buffer(files)"{{{
 
   vsplit
   call vimfiler#redraw_screen()
-  let prefix = vimfiler#util#is_windows() ? '[exrename] - ' : '*exrename* - '
+  let prefix = vimfiler#util#is_windows() ?
+        \ '[exrename] - ' : '*exrename* - '
   let prefix .= b:vimfiler.context.buffer_name
   execute 'edit' prefix
-
-  silent! highlight clear ExrenameModified
-  silent! syntax clear ExrenameModified
-  silent! syntax clear ExrenameOriginal
 
   setlocal buftype=acwrite
   setlocal noswapfile
   let b:exrename = vimfiler_save
   let b:exrename.bufnr = bufnr
 
-  lcd `=b:exrename.current_dir`
+  if b:exrename.source ==# 'file'
+    execute g:unite_kind_openable_lcd_command '`=b:exrename.current_dir`'
+  endif
 
   nnoremap <buffer><silent> q    :<C-u>call <SID>exit()<CR>
   augroup exrename
@@ -54,16 +53,15 @@ function! vimfiler#exrename#create_buffer(files)"{{{
 
   setfiletype exrename
 
-  syntax match ExrenameModified '^.*$'
-  highlight def link ExrenameModified Todo
-  highlight def link ExrenameOriginal Normal
-
   " Clean up the screen.
   % delete _
+
+  silent! syntax clear ExrenameOriginal
 
   " Print files.
   let b:exrename.current_files = []
   let b:exrename.current_filenames = []
+  let cnt = 1
   for file in a:files
     let filename = file.action__path
     if stridx(filename, b:exrename.current_dir) == 0
@@ -75,14 +73,15 @@ function! vimfiler#exrename#create_buffer(files)"{{{
     endif
 
     execute 'syntax match ExrenameOriginal'
-          \ '/'.printf('^\%%%dl%s$', line('$'),
+          \ '/'.printf('^\%%%dl%s$', cnt,
           \ escape(vimfiler#util#escape_pattern(filename), '/')).'/'
-    call append('$', filename)
     call add(b:exrename.current_files, file)
     call add(b:exrename.current_filenames, filename)
+
+    let cnt += 1
   endfor
 
-  1delete
+  call setline(1, b:exrename.current_filenames)
 
   setlocal nomodified
 endfunction"}}}
@@ -139,27 +138,27 @@ endfunction"}}}
 function! s:custom_alternate_buffer()"{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
     buffer #
-  else
-    let cnt = 0
-    let pos = 1
-    let current = 0
-    while pos <= bufnr('$')
-      if buflisted(pos)
-        if pos == bufnr('%')
-          let current = cnt
-        endif
+  endif
 
-        let cnt += 1
+  let cnt = 0
+  let pos = 1
+  let current = 0
+  while pos <= bufnr('$')
+    if buflisted(pos)
+      if pos == bufnr('%')
+        let current = cnt
       endif
 
-      let pos += 1
-    endwhile
-
-    if current > cnt / 2
-      bprevious
-    else
-      bnext
+      let cnt += 1
     endif
+
+    let pos += 1
+  endwhile
+
+  if current > cnt / 2
+    bprevious
+  else
+    bnext
   endif
 endfunction"}}}
 

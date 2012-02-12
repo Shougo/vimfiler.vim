@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Oct 2010
+" Last Modified: 13 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,7 +26,7 @@
 
 if version < 700
   syntax clear
-elseif exists("b:current_syntax")
+elseif exists('b:current_syntax')
   finish
 endif
 
@@ -111,4 +111,6 @@ hi def link vimfilerTypeDirectory Preproc
 hi def link vimfilerTypeSystem Comment
 hi def link vimfilerTypeLink Comment
 
-let b:current_syntax = "vimfiler"
+let b:current_syntax = 'vimfiler'
+
+" vim: foldmethod=marker
