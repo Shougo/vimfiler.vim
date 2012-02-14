@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Feb 2012.
+" Last Modified: 14 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -91,13 +91,12 @@ function! vimfiler#default_settings()"{{{
   call vimfiler#mappings#define_default_mappings()
 endfunction"}}}
 function! vimfiler#set_execute_file(exts, command)"{{{
-  for ext in split(a:exts, ',')
-    let g:vimfiler_execute_file_list[ext] = a:command
-  endfor
+  return vimfiler#util#set_dictionary_helper(g:vimfiler_execute_file_list,
+        \ a:exts, a:command)
 endfunction"}}}
 function! vimfiler#set_extensions(kind, exts)"{{{
   let g:vimfiler_extensions[a:kind] = {}
-  for ext in split(a:exts, ',')
+  for ext in split(a:exts, '\s*,\s*')
     let g:vimfiler_extensions[a:kind][ext] = 1
   endfor
 endfunction"}}}
