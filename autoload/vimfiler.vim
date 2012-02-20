@@ -174,6 +174,12 @@ function! vimfiler#switch_filer(path, ...)"{{{
   call s:create_filer(path, context)
 endfunction"}}}
 function! s:create_filer(path, context)"{{{
+  let path = a:path
+  if path == ''
+    " Use current directory.
+    let path = vimfiler#util#substitute_path_separator(getcwd())
+  endif
+
   if &l:modified && !&l:hidden
     " Split automatically.
     let a:context.split = 1
@@ -200,7 +206,7 @@ function! s:create_filer(path, context)"{{{
 
   silent edit `=bufname`
 
-  let a:context.path = a:path
+  let a:context.path = path
   " echomsg path
 
   call vimfiler#handler#_event_handler('BufReadCmd', a:context)
