@@ -204,6 +204,8 @@ vimfiler#smart_cursor_map({directory-map}, {file-map})
 				\  "\<Plug>(vimfiler_cd_file)",
 				\  "\<Plug>(vimfiler_edit_file)")
 
+vimfiler#set_execute_file({exts}, {command})	*vimfiler#set_execute_file()*
+
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
 
@@ -685,6 +687,7 @@ EXAMPLES					*vimfiler-examples*
 >
 	call vimfiler#set_execute_file('vim', 'vim')
 	call vimfiler#set_execute_file('txt', 'notepad')
+	call vimfiler#set_execute_file('c', ['vim', 'notepad'])
 	
 	" Edit file by tabedit.
 	"let g:vimfiler_edit_action = 'tabopen'
@@ -754,6 +757,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-02-20
+- Fixed vimfiler create buffer.
 
 2012-02-14
 - Improved helper functions.

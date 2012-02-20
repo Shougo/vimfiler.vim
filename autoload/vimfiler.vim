@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Feb 2012.
+" Last Modified: 20 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -134,46 +134,6 @@ endfunction"}}}
 function! vimfiler#get_options()"{{{
   return copy(s:vimfiler_options)
 endfunction"}}}
-function! vimfiler#create_filer(path, ...)"{{{
-  let path = a:path
-  if path == ''
-    let path = vimfiler#util#substitute_path_separator(getcwd())
-  elseif vimfiler#util#is_win_path(path)
-    let path = vimfiler#util#substitute_path_separator(
-          \ fnamemodify(vimfiler#util#expand(path), ':p'))
-  endif
-
-  let context = vimfiler#initialize_context(get(a:000, 0, {}))
-  if &l:modified && !&l:hidden
-    " Split automatically.
-    let context.split = 1
-  endif
-
-  " Create new buffer name.
-  let prefix = vimfiler#util#is_windows() ? '[vimfiler] - ' : '*vimfiler* - '
-  let prefix .= context.profile_name
-
-  let postfix = s:get_postfix(prefix, 1)
-
-  let bufname = prefix . postfix
-
-  " Set buffer_name.
-  let context.profile_name = context.buffer_name
-  let context.buffer_name = bufname
-
-  if context.horizontal && context.split
-    execute context.direction 'new'
-  elseif context.split
-    execute context.direction 'vnew'
-  endif
-
-  silent edit `=bufname`
-
-  let context.path = path
-  " echomsg path
-
-  call vimfiler#handler#_event_handler('BufReadCmd', context)
-endfunction"}}}
 function! vimfiler#switch_filer(path, ...)"{{{
   let path = a:path
   if vimfiler#util#is_win_path(path)
@@ -211,7 +171,39 @@ function! vimfiler#switch_filer(path, ...)"{{{
   endif
 
   " Create window.
-  call vimfiler#create_filer(path, context)
+  call s:create_filer(path, context)
+endfunction"}}}
+function! s:create_filer(path, context)"{{{
+  if &l:modified && !&l:hidden
+    " Split automatically.
+    let a:context.split = 1
+  endif
+
+  " Create new buffer name.
+  let prefix = vimfiler#util#is_windows() ?
+        \ '[vimfiler] - ' : '*vimfiler* - '
+  let prefix .= a:context.profile_name
+
+  let postfix = s:get_postfix(prefix, 1)
+
+  let bufname = prefix . postfix
+
+  " Set buffer_name.
+  let a:context.profile_name = a:context.buffer_name
+  let a:context.buffer_name = bufname
+
+  if a:context.horizontal && a:context.split
+    execute a:context.direction 'new'
+  elseif a:context.split
+    execute a:context.direction 'vnew'
+  endif
+
+  silent edit `=bufname`
+
+  let a:context.path = a:path
+  " echomsg path
+
+  call vimfiler#handler#_event_handler('BufReadCmd', a:context)
 endfunction"}}}
 function! vimfiler#get_directory_files(directory, ...)"{{{
   " Save current files.
