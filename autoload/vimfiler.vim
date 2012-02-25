@@ -278,12 +278,14 @@ function! vimfiler#redraw_screen()"{{{
     " Switch vimfiler.
     let vimfiler = vimfiler#get_current_vimfiler()
 
-    if getbufvar(winbufnr(vimfiler.winnr), '&filetype') !=# 'vimfiler'
+    let save_winnr = winnr()
+    let winnr = bufwinnr(vimfiler.bufnr)
+    if winnr < 0
       " Not vimfiler window.
       return
     endif
 
-    execute vimfiler.winnr . 'wincmd w'
+    execute winnr . 'wincmd w'
   endif
 
   if !has_key(b:vimfiler, 'original_files')
@@ -325,7 +327,7 @@ function! vimfiler#redraw_screen()"{{{
   setlocal nomodifiable
 
   if is_switch
-    wincmd p
+    execute save_winnr . 'wincmd w'
   endif
 endfunction"}}}
 function! vimfiler#redraw_prompt()"{{{
