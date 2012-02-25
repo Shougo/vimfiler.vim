@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Feb 2012.
+" Last Modified: 25 Feb 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -278,6 +278,11 @@ function! vimfiler#redraw_screen()"{{{
     " Switch vimfiler.
     let vimfiler = vimfiler#get_current_vimfiler()
 
+    if getbufvar(winbufnr(vimfiler.winnr), '&filetype') !=# 'vimfiler'
+      " Not vimfiler window.
+      return
+    endif
+
     execute vimfiler.winnr . 'wincmd w'
   endif
 
@@ -324,6 +329,10 @@ function! vimfiler#redraw_screen()"{{{
   endif
 endfunction"}}}
 function! vimfiler#redraw_prompt()"{{{
+  if &filetype !=# 'vimfiler'
+    return
+  endif
+
   let modifiable_save = &l:modifiable
   setlocal modifiable
   let mask = !b:vimfiler.is_visible_dot_files && b:vimfiler.current_mask == '' ?
