@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Feb 2012.
+" Last Modified: 03 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -127,7 +127,7 @@ function! vimfiler#util#alternate_buffer()"{{{
         \ "s:buflisted(v:val) &&
         \  (v:val == bufnr('%') || getbufvar(v:val, '&filetype') !=# 'vimfiler')")
   let current = index(listed_buffer, bufnr('%'))
-  if current < 0 || len(listed_buffer) < 3
+  if current < 0 || len(listed_buffer) < 2
     enew
     return
   endif
