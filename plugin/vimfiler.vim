@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Feb 2012.
+" Last Modified: 05 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,10 +24,10 @@
 " }}}
 "=============================================================================
 
-if v:version < 702
-  echomsg 'vimfiler does not work this version of Vim "' . v:version . '".'
+if exists('g:loaded_vimfiler')
   finish
-elseif exists('g:loaded_vimfiler')
+elseif v:version < 702
+  echomsg 'vimfiler does not work this version of Vim "' . v:version . '".'
   finish
 elseif $SUDO_USER != ''
   echomsg '"sudo vim" is detected. Please use sudo.vim or other plugins instead.'
