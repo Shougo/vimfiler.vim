@@ -758,6 +758,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-03-06
+- Fixed create vimfiler buffer behavior.
+
 2012-03-03
 - Improved new file behavior.
 - Improved alternate buffer.

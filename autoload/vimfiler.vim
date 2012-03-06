@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Feb 2012.
+" Last Modified: 06 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -945,10 +945,10 @@ function! s:get_postfix(prefix, is_create)
     let tabnr = 1
     while tabnr <= tabpagenr('$')
       let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
-      if index(buflist, a:prefix.postfix) >= 0
+      while index(buflist, a:prefix.postfix) >= 0
         let cnt += 1
         let postfix = '@' . cnt
-      endif
+      endwhile
 
       let tabnr += 1
     endwhile
