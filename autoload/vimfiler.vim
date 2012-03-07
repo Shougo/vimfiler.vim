@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Mar 2012.
+" Last Modified: 07 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -367,14 +367,10 @@ function! vimfiler#force_system(str, ...)"{{{
 
   let command = a:str
   let input = join(a:000)
-  if &termencoding != '' && &termencoding != &encoding
-    let command = iconv(command, &encoding, &termencoding)
-    let input = iconv(input, &encoding, &termencoding)
-  endif
+  let command = iconv(command, &encoding, 'char')
+  let input = iconv(input, &encoding, 'char')
   let output = (a:0 == 0)? system(command) : system(command, input)
-  if &termencoding != '' && &termencoding != &encoding
-    let output = iconv(output, &termencoding, &encoding)
-  endif
+  let output = iconv(output, 'char', &encoding)
   return output
 endfunction"}}}
 function! vimfiler#get_system_error()"{{{
