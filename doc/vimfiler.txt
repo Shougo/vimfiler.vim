@@ -758,6 +758,9 @@ vimfiler/popd						*vimfiler-unite-action-vimfiler-popd*
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-03-26
+- Fixed edit binary file.
+
 2012-03-20
 - Fixed expand().
 
