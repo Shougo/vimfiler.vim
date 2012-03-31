@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Mar 2012.
+" Last Modified: 31 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,7 +92,7 @@ let g:vimfiler_marked_file_icon =
 let g:vimfiler_enable_auto_cd =
       \ get(g:, 'vimfiler_enable_auto_cd', 0)
 let g:vimfiler_data_directory =
-      \ get(g:, 'vimfiler_data_directory', expand('~/.vimfiler'))
+      \ expand(get(g:, 'vimfiler_data_directory', '~/.vimfiler'))
 if !isdirectory(fnamemodify(g:vimfiler_data_directory, ':p'))
   call mkdir(fnamemodify(g:vimfiler_data_directory, ':p'))
 endif

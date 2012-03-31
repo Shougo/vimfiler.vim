@@ -760,6 +760,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-03-31
 - Fixed for cmdwin.
+- Fixed variables initialization.
 
 2012-03-26
 - Fixed edit binary file.
