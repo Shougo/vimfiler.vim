@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Mar 2012.
+" Last Modified: 31 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -135,6 +135,14 @@ function! vimfiler#get_options()"{{{
   return copy(s:vimfiler_options)
 endfunction"}}}
 function! vimfiler#switch_filer(path, ...)"{{{
+  if vimfiler#util#is_cmdwin()
+    call vimfiler#print_error(
+          \ '[vimfiler] Command line buffer is detected!')
+    call vimfiler#print_error(
+          \ '[vimfiler] Please close command line buffer.')
+    return
+  endif
+
   let path = a:path
   if vimfiler#util#is_win_path(path)
     let path = vimfiler#util#substitute_path_separator(

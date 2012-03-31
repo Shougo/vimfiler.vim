@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Mar 2012.
+" Last Modified: 31 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -98,6 +98,17 @@ endfunction
 function! vimfiler#util#escape_file_searching(...)
   return call(s:V.escape_file_searching, a:000)
 endfunction
+
+function! vimfiler#util#is_cmdwin()"{{{
+  try
+    noautocmd wincmd p
+  catch /^Vim\%((\a\+)\)\=:E11:/
+    return 1
+  endtry
+
+  silent! noautocmd wincmd p
+  return 0
+endfunction"}}}
 
 function! vimfiler#util#expand(path)"{{{
   return s:V.substitute_path_separator(
