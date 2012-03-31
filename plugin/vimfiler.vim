@@ -92,9 +92,11 @@ let g:vimfiler_marked_file_icon =
 let g:vimfiler_enable_auto_cd =
       \ get(g:, 'vimfiler_enable_auto_cd', 0)
 let g:vimfiler_data_directory =
-      \ expand(get(g:, 'vimfiler_data_directory', '~/.vimfiler'))
-if !isdirectory(fnamemodify(g:vimfiler_data_directory, ':p'))
-  call mkdir(fnamemodify(g:vimfiler_data_directory, ':p'))
+      \ substitute(fnamemodify(get(
+      \   g:, 'vimfiler_data_directory', '~/.vimfiler'),
+      \  ':p'), '\\', '/', 'g')
+if !isdirectory(g:vimfiler_data_directory)
+  call mkdir(g:vimfiler_data_directory)
 endif
 
 " Set extensions.
