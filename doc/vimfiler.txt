@@ -761,6 +761,7 @@ CHANGELOG					*vimfiler-changelog*
 2012-04-10
 - Fixed browse check.
 - Improved sudo check.
+- Fixed choose action error.
 
 2012-03-31
 - Fixed for cmdwin.
