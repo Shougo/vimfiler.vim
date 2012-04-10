@@ -33,6 +33,7 @@ elseif $SUDO_USER != '' && $USER !=# $SUDO_USER
       \ && $HOME !=# expand('~'.$SUDO_USER)
   echoerr '"sudo vim" and $HOME is not same to /root are detected.'
         \.'Please use sudo.vim plugin instead of sudo command or set always_set_home in sudoers.'
+  finish
 endif
 
 " Check unite.vim."{{{
