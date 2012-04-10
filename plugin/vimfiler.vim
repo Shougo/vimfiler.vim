@@ -29,10 +29,10 @@ if exists('g:loaded_vimfiler')
 elseif v:version < 702
   echomsg 'vimfiler does not work this version of Vim "' . v:version . '".'
   finish
-elseif $SUDO_USER != ''
-  echomsg '"sudo vim" is detected. Please use sudo.vim or other plugins instead.'
-  echomsg 'vimfiler is disabled.'
-  finish
+elseif $SUDO_USER != '' && $USER !=# $SUDO_USER
+      \ && $HOME !=# expand('~'.$SUDO_USER)
+  echoerr '"sudo vim" and $HOME is not same to /root are detected.'
+        \.'Please use sudo.vim plugin instead of sudo command or set always_set_home in sudoers.'
 endif
 
 " Check unite.vim."{{{
