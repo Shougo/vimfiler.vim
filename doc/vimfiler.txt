@@ -33,7 +33,7 @@ Interface		|vimfiler-interface|
   Key mappings		  |vimfiler-key-mappings|
 Examples		|vimfiler-examples|
 Unite sources		|vimfiler-unite-sources|
-FAQ			*vimfiler-faq*
+FAQ			|vimfiler-faq|
 Changelog		|vimfiler-changelog|
 
 ==============================================================================
@@ -778,6 +778,9 @@ recommend):
 <
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-04-19
+- Fixed tag error.
 
 2012-04-16
 - Added FAQ section.
