@@ -779,6 +779,9 @@ recommend):
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-04-28
+- Updated vital.
+
 2012-04-19
 - Fixed tag error.
 
