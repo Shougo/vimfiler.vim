@@ -97,6 +97,10 @@ COMMANDS 					*vimfiler-commands*
 		-no-quit
 		Doesn't close the vimfiler buffer after firing an action.
 
+						*vimfiler-options-quit*
+		-quit
+		Close the vimfiler buffer after firing an action.
+
 						*vimfiler-options-winwidth*
 		-winwidth={window-width}
 		Specifies the width of a vimfiler buffer.
@@ -778,6 +782,9 @@ recommend):
 <
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-05-02
+- Added -quit option.
 
 2012-04-28
 - Updated vital.

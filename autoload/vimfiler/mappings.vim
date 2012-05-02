@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Apr 2012.
+" Last Modified: 02 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -467,9 +467,11 @@ function! vimfiler#mappings#search_cursor(path)"{{{
 endfunction"}}}
 
 function! s:search_new_file(old_files)"{{{
-  let files = vimfiler#get_current_vimfiler().current_files
+  let files =
+        \ vimfiler#get_current_vimfiler().current_files
   let cnt = 0
-  for file in vimfiler#get_current_vimfiler().current_files
+  for file in
+        \ vimfiler#get_current_vimfiler().current_files
     if file !=# get(a:old_files, cnt, {})
       " Move cursor.
       call cursor(vimfiler#get_line_number(cnt), 0)
@@ -484,7 +486,7 @@ function! s:SID_PREFIX()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
 endfunction
 
-function! s:switch_no_quit()"{{{
+function! s:switch()"{{{
   let context = vimfiler#get_context()
   if context.no_quit
     let vimfiler = vimfiler#get_current_vimfiler()
@@ -497,6 +499,8 @@ function! s:switch_no_quit()"{{{
     endif
 
     wincmd w
+  elseif context.quit
+    call s:exit()
   endif
 endfunction"}}}
 function! s:toggle_mark_current_line()"{{{
@@ -800,7 +804,7 @@ function! s:popup_shell()"{{{
 endfunction"}}}
 function! s:edit()"{{{
   let current_linenr = line('.')
-  call s:switch_no_quit()
+  call s:switch()
 
   call vimfiler#mappings#do_action(g:vimfiler_edit_action, current_linenr)
 endfunction"}}}
@@ -815,7 +819,7 @@ function! s:edit_binary_file()"{{{
     return
   endif
 
-  call s:switch_no_quit()
+  call s:switch()
 
   execute 'Vinarise' escape(vimfiler#get_filename(), ' ')
 endfunction"}}}
@@ -1067,7 +1071,7 @@ endfunction"}}}
 function! s:new_file()"{{{
   let directory = vimfiler#get_file_directory()
 
-  call s:switch_no_quit()
+  call s:switch()
 
   call vimfiler#mappings#do_dir_action('vimfiler__newfile', directory)
   silent call vimfiler#force_redraw_all_vimfiler()
@@ -1120,7 +1124,7 @@ function! s:change_vim_current_dir()"{{{
   execute g:unite_kind_openable_lcd_command '`=b:vimfiler.current_dir`'
 endfunction"}}}
 function! s:grep()"{{{
-  call s:switch_no_quit()
+  call s:switch()
 
   if empty(vimfiler#get_marked_files())
     call vimfiler#mappings#do_current_dir_action('grep')
@@ -1129,7 +1133,7 @@ function! s:grep()"{{{
   endif
 endfunction"}}}
 function! s:find()"{{{
-  call s:switch_no_quit()
+  call s:switch()
 
   call vimfiler#mappings#do_current_dir_action('find')
 endfunction"}}}
