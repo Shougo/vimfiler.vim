@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 May 2012.
+" Last Modified: 12 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -166,7 +166,8 @@ function! vimfiler#switch_filer(path, ...)"{{{
     for bufnr in filter(insert(range(1, bufnr('$')),
           \ s:last_vimfiler_bufnr), 'buflisted(v:val)')
       let vimfiler = getbufvar(bufnr, 'vimfiler')
-      if type(vimfiler) == type({})
+      if getbufvar(bufnr, '&filetype') ==# 'vimfiler'
+            \ && type(vimfiler) == type({})
             \ && vimfiler.context.profile_name ==# context.profile_name
             \ && (!exists('t:unite_buffer_dictionary')
             \      || has_key(t:unite_buffer_dictionary, bufnr))
