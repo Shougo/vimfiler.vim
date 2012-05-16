@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 May 2012.
+" Last Modified: 16 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1120,6 +1120,9 @@ function! s:change_vim_current_dir()"{{{
     call vimfiler#print_error('Invalid operation in not file source.')
     return
   endif
+
+  " Initialize load.
+  call unite#kinds#file#define()
 
   execute g:unite_kind_openable_lcd_command '`=b:vimfiler.current_dir`'
 endfunction"}}}

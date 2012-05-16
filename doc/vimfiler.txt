@@ -783,6 +783,9 @@ recommend):
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-05-16
+- Fixed g:unite_kind_openable_lcd_command error.
+
 2012-05-12
 - Fixed search vimfiler error.
 
