@@ -1127,6 +1127,8 @@ function! s:change_vim_current_dir()"{{{
   execute g:unite_kind_openable_lcd_command '`=b:vimfiler.current_dir`'
 endfunction"}}}
 function! s:grep()"{{{
+  call unite#sources#grep#define()
+
   call s:switch()
 
   if empty(vimfiler#get_marked_files())
