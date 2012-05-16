@@ -1122,7 +1122,7 @@ function! s:change_vim_current_dir()"{{{
   endif
 
   " Initialize load.
-  call unite#kinds#file#define()
+  call unite#kinds#openable#define()
 
   execute g:unite_kind_openable_lcd_command '`=b:vimfiler.current_dir`'
 endfunction"}}}
