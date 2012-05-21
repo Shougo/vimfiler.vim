@@ -783,6 +783,9 @@ recommend):
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-05-22
+- Fixed debug message.
+
 2012-05-17
 - Fixed auto detection error.
 
