@@ -141,8 +141,12 @@ command! -nargs=1 VimFilerClose call vimfiler#close(<q-args>)
 if g:vimfiler_as_default_explorer"{{{
   augroup vimfiler-FileExplorer
     autocmd!
+<<<<<<< HEAD
     autocmd BufNew,BufEnter,BufWinEnter
           \ * call s:browse_check(expand('<amatch>'))
+=======
+    autocmd BufNew,BufEnter,BufWinEnter * call s:browse_check(expand('<amatch>'))
+>>>>>>> 5e1c7c31f44c7b9f371f1c09e7aa387292191ae6
     autocmd BufReadCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('BufReadCmd')
     autocmd BufWriteCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('BufWriteCmd')
     autocmd FileAppendCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('FileAppendCmd')
