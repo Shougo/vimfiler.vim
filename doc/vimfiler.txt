@@ -785,6 +785,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-05-22
 - Fixed debug message.
+- Fixed for visualbell.
 
 2012-05-17
 - Fixed auto detection error.

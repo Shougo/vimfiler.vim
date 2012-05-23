@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 May 2012.
+" Last Modified: 23 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -346,7 +346,8 @@ function! vimfiler#redraw_prompt()"{{{
 
   let modifiable_save = &l:modifiable
   setlocal modifiable
-  let mask = !b:vimfiler.is_visible_dot_files && b:vimfiler.current_mask == '' ?
+  let mask = !b:vimfiler.is_visible_dot_files
+        \ && b:vimfiler.current_mask == '' ?
         \ '' : '[' . (b:vimfiler.is_visible_dot_files ? '.:' : '')
         \       . b:vimfiler.current_mask . ']'
 
@@ -364,7 +365,8 @@ function! vimfiler#redraw_prompt()"{{{
 
   call setline(1, printf('%s[in]: %s%s%s',
         \ (b:vimfiler.is_safe_mode ? '' : '! '),
-        \ (b:vimfiler.source ==# 'file' ? '' : b:vimfiler.source.':'),
+        \ (b:vimfiler.source ==# 'file' ? '' :
+        \                 b:vimfiler.source.':'),
         \ dir, mask))
   let &l:modifiable = modifiable_save
 endfunction"}}}

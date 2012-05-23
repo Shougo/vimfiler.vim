@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 May 2012.
+" Last Modified: 23 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,9 +35,9 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_redraw_screen)
         \ :<C-u>call vimfiler#force_redraw_screen(1)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_current_line)
-        \ :<C-u>call <SID>toggle_mark_current_line()<CR>j
+        \ :<C-u>call <SID>toggle_mark_current_line('j')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_current_line_up)
-        \ :<C-u>call <SID>toggle_mark_current_line()<CR>k
+        \ :<C-u>call <SID>toggle_mark_current_line('k')<CR>
   vnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_selected_lines)
         \ :<C-u>call <SID>toggle_mark_lines(getpos("'<")[1], getpos("'>")[1])<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_all_lines)
@@ -503,7 +503,7 @@ function! s:switch()"{{{
     call s:exit()
   endif
 endfunction"}}}
-function! s:toggle_mark_current_line()"{{{
+function! s:toggle_mark_current_line(...)"{{{
   let file = vimfiler#get_file()
   if empty(file)
     " Don't toggle.
@@ -516,6 +516,23 @@ function! s:toggle_mark_current_line()"{{{
   setlocal modifiable
   call setline('.', vimfiler#get_print_lines([file]))
   setlocal nomodifiable
+
+  let map = get(a:000, 0, '')
+  if map == ''
+    return
+  endif
+
+  if map ==# 'j'
+    if line('.') != line('$')
+      normal! j
+    endif
+  elseif map ==# 'k'
+    if line('.') > 2
+      normal! k
+    endif
+  else
+    execute 'normal!' map
+  endif
 endfunction"}}}
 function! s:toggle_mark_all_lines()"{{{
   for file in vimfiler#get_current_vimfiler().current_files
