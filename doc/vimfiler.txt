@@ -783,6 +783,9 @@ recommend):
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-05-24
+- Fixed autocmd bug in g:vimfiler_as_default_explorer.
+
 2012-05-22
 - Fixed debug message.
 - Fixed for visualbell.
