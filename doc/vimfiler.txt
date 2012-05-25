@@ -783,6 +783,9 @@ recommend):
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-05-25
+- Fixed vimfiler mapping.
+
 2012-05-24
 - Fixed autocmd bug in g:vimfiler_as_default_explorer.
 
