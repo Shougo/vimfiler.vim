@@ -290,7 +290,7 @@ function! vimfiler#mappings#do_dir_action(action, directory, ...)"{{{
   let vimfiler = vimfiler#get_current_vimfiler()
 
   let dummy_files = unite#get_vimfiler_candidates(
-        \ [['file', a:directory]], extend(context, {
+        \ [[vimfiler.source, a:directory]], extend(context, {
         \ 'vimfiler__is_dummy' : 1,
         \ 'vimfiler__current_directory' : a:directory,
         \ }))

@@ -780,11 +780,27 @@ recommend):
 >
 	autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
 <
+You must use // path to open UNC path in Windows:
+Note: "\\" path is not supported.
+>
+	VimFiler //{path}/
+	VimFiler //foo/bar/
+	VimFiler //hoge/piyo/hogera.txt
+
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
 2012-05-29
 - Fixed find action error.
+
+2012-05-28
+- Improved documentation.
+
+2012-05-25
+- Fixed vimfiler mapping.
+
+2012-05-24
+- Fixed autocmd bug in g:vimfiler_as_default_explorer.
 
 2012-05-22
 - Fixed debug message.
