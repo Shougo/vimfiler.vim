@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 May 2012.
+" Last Modified: 01 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -832,13 +832,31 @@ function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
   let _ +=  filter(vimfiler#get_options(),
         \ 'stridx(v:val, a:arglead) == 0')
 
-  " Scheme args completion.
+  " Source path completion.
+  let _ += vimfiler#complete_path(a:arglead,
+        \ join(split(a:cmdline)[1:]), a:cursorpos)
+
+  let args = split(join(split(a:cmdline)[1:]), '\\\@<!\s\+')
+  if !empty(args) && args[-1] !=# a:arglead
+    call map(_, "v:val[len(args[-1])-len(a:arglead) :]")
+  endif
+
+  return sort(_)
+endfunction"}}}
+function! vimfiler#complete_path(arglead, cmdline, cursorpos)"{{{
+  let ret = vimfiler#parse_path(a:cmdline)
+  let source_name = ret[0]
+  let source_args = ret[1:]
+
+  let _ = []
+
+  " Source args completion.
   let _ += unite#vimfiler_complete(
         \ [insert(copy(source_args), source_name)],
         \ join(source_args, ':'), a:cmdline, a:cursorpos)
 
   if a:arglead !~ ':'
-    " Scheme name completion.
+    " Source name completion.
     let _ += map(filter(unite#get_vimfiler_source_names(),
           \ 'stridx(v:val, a:arglead) == 0'), 'v:val.":"')
   else

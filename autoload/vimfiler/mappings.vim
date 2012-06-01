@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 May 2012.
+" Last Modified: 01 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -138,6 +138,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>expand_tree()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree_recursive)
         \ :<C-u>call <SID>expand_tree_recursive()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_cd_input_directory)
+        \ :<C-u>call <SID>cd_input_directory()<CR>
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()
@@ -239,6 +241,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nmap <buffer> gg <Plug>(vimfiler_cursor_top)
   nmap <buffer> t <Plug>(vimfiler_expand_tree)
   nmap <buffer> T <Plug>(vimfiler_expand_tree_recursive)
+  nmap <buffer> I <Plug>(vimfiler_cd_input_directory)
 
   " pushd/popd
   nmap <buffer> Y <Plug>(vimfiler_pushd)
@@ -569,7 +572,7 @@ function! s:execute()"{{{
   let file = vimfiler#get_file()
   return  filename == '..' || empty(file)
         \ || file.vimfiler__is_directory ?
-        \ s:change_directory_file() :
+        \ s:cd_file_directory() :
         \ unite#start([['vimfiler/execute']], {'immediately' : 1})
 endfunction"}}}
 function! s:execute_vimfiler_associated()"{{{
@@ -1161,7 +1164,7 @@ function! s:find()"{{{
 
   call vimfiler#mappings#do_current_dir_action('find')
 endfunction"}}}
-function! s:change_directory_file()"{{{
+function! s:cd_file_directory()"{{{
   let filename = vimfiler#get_filename()
 
   if filename == '..'
@@ -1183,6 +1186,21 @@ function! s:change_directory_file()"{{{
 
   " Change directory.
   call vimfiler#mappings#cd(filename)
+endfunction"}}}
+function! s:cd_input_directory()"{{{
+  let vimfiler = vimfiler#get_current_vimfiler()
+  let current_dir = vimfiler.current_dir
+  let dir = input('[in]: ',
+        \ vimfiler.source . ':'. current_dir,
+        \ 'customlist,vimfiler#complete_path')
+
+  if dir == ''
+    echo 'Canceled.'
+    return
+  endif
+
+  " Change directory.
+  call vimfiler#mappings#cd(dir)
 endfunction"}}}
 
 " For safe mode.

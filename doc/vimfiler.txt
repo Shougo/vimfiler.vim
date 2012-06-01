@@ -616,6 +616,9 @@ Normal mode key mappings.
 <Plug>(vimfiler_expand_tree_recursive)		*<Plug>(vimfiler_expand_tree_recursive)*
 		Expand/Close directory tree.
 
+<Plug>(vimfiler_cd_input_directory)		*<Plug>(vimfiler_cd_input_directory)*
+		Change directory to input directory.
+
 Visual mode key mappings.
 
 <Plug>(vimfiler_toggle_mark_selected_lines)	*<Plug>(vimfiler_toggle_selected_lines)*
@@ -681,6 +684,7 @@ Y			<Plug>(vimfiler_pushd)
 P			<Plug>(vimfiler_popd)
 t			<Plug>(vimfiler_expand_tree)
 T			<Plug>(vimfiler_expand_tree_recursive)
+I			<Plug>(vimfiler_cd_input_directory)
 
 Visual mode mappings.
 {lhs}			{rhs}
@@ -789,6 +793,9 @@ Note: "\\" path is not supported.
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-06-01
+- Added <Plug>(vimfiler_cd_input_directory) mapping.
 
 2012-05-31
 - Fixed completion.
