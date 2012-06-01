@@ -117,7 +117,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_cd_vim_current_dir)
         \ :<C-u>call <SID>change_vim_current_dir()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd_file)
-        \ :<C-u>call <SID>change_directory_file()<CR>
+        \ :<C-u>call <SID>cd_file_directory()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_choose_action)
         \ :<C-u>call <SID>choose_action()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_safe_mode)
