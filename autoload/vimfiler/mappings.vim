@@ -972,7 +972,10 @@ function! s:choose_action()"{{{
     let marked_files = [ vimfiler#get_file() ]
   endif
 
-  call unite#mappings#_choose_action(marked_files)
+  call unite#mappings#_choose_action(marked_files, {
+        \ 'vimfiler__current_directory' :
+        \   vimfiler#get_current_vimfiler().current_dir,
+        \ })
 endfunction"}}}
 function! s:split_edit_file()"{{{
   let context = vimfiler#get_context()

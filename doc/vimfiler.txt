@@ -798,6 +798,7 @@ CHANGELOG					*vimfiler-changelog*
 - Added <Plug>(vimfiler_cd_input_directory) mapping.
 - Fixed s:create_another_vimfiler() error.
 - Fixed cd mapping error.
+- Fixed choose action.
 
 2012-05-31
 - Fixed completion.
