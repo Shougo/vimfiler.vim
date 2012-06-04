@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jun 2012.
+" Last Modified: 04 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -667,7 +667,8 @@ function! s:expand_tree()"{{{
   " Expand tree.
   let nestlevel = file.vimfiler__nest_level + 1
 
-  let original_files = vimfiler#get_directory_files(file.action__path)
+  let original_files =
+        \ vimfiler#get_directory_files(file.action__path)
   for file in original_files
     " Initialize.
     let file.vimfiler__nest_level = nestlevel
@@ -682,12 +683,16 @@ function! s:expand_tree()"{{{
   endif
 
   let index = vimfiler#get_file_index(line('.'))
-  let index_orig = vimfiler#get_original_file_index(line('.'))
+  let index_orig =
+        \ vimfiler#get_original_file_index(line('.'))
 
-  let b:vimfiler.current_files = b:vimfiler.current_files[: index]
-        \ + files + b:vimfiler.current_files[index+1 :]
-  let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
-        \ + original_files + b:vimfiler.original_files[index_orig+1 :]
+  let b:vimfiler.current_files =
+        \ b:vimfiler.current_files[: index]
+        \  + files + b:vimfiler.current_files[index+1 :]
+  let b:vimfiler.original_files =
+        \ b:vimfiler.original_files[: index_orig]
+        \  + original_files
+        \  + b:vimfiler.original_files[index_orig+1 :]
 
   call append('.', vimfiler#get_print_lines(files))
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Jun 2012.
+" Last Modified: 04 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -229,7 +229,11 @@ function! vimfiler#get_directory_files(directory, ...)"{{{
         \ 'vimfiler__is_dummy' : 0,
         \ 'is_redraw' : is_manualed,
         \ }
-  let args = vimfiler#parse_path(b:vimfiler.source . ':' . a:directory)
+  let path = a:directory
+  if path !~ '^\a\w*:'
+    let path = b:vimfiler.source . ':' . path
+  endif
+  let args = vimfiler#parse_path(path)
   let current_files = unite#get_vimfiler_candidates([args], context)
 
   for file in current_files
