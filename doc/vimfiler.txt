@@ -794,6 +794,9 @@ Note: "\\" path is not supported.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-06-05
+- Fixed find error.
+
 2012-06-04
 - Fixed expand tree behavior in ssh source.
 
