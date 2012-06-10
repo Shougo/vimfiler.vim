@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jun 2012.
+" Last Modified: 10 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -163,6 +163,11 @@ function! vimfiler#switch_filer(path, ...)"{{{
 
   if !context.create
     " Search vimfiler buffer.
+    if getbufvar(bufnr('%'), '&filetype') ==# 'vimfiler'
+      call vimfiler#_switch_vimfiler(bufnr('%'), context, path)
+      return
+    endif
+
     for bufnr in filter(insert(range(1, bufnr('$')),
           \ s:last_vimfiler_bufnr), 'buflisted(v:val)')
       let vimfiler = getbufvar(bufnr, 'vimfiler')
