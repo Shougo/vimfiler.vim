@@ -794,6 +794,9 @@ Note: "\\" path is not supported.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-06-20
+- Fixed copy and move implementation.
+
 2012-06-10
 - Improved searching vimfiler behavior.
 

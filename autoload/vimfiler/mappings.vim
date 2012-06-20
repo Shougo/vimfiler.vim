@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jun 2012.
+" Last Modified: 20 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -415,7 +415,8 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   let cache_dir = g:vimfiler_data_directory . '/' . 'sort'
   let path = b:vimfiler.source.'/'.b:vimfiler.current_dir
   if s:Cache.filereadable(cache_dir, path)
-    let b:vimfiler.local_sort_type = s:Cache.readfile(cache_dir, path)[0]
+    let b:vimfiler.local_sort_type =
+          \ s:Cache.readfile(cache_dir, path)[0]
   else
     let b:vimfiler.local_sort_type = b:vimfiler.global_sort_type
   endif
@@ -426,7 +427,8 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   " Redraw.
   call vimfiler#force_redraw_screen()
 
-  call s:restore_cursor(a:dir, fullpath, save_pos, previous_current_dir)
+  call s:restore_cursor(a:dir, fullpath, save_pos,
+        \ previous_current_dir)
 endfunction"}}}
 function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)"{{{
   " Restore cursor pos.
@@ -1013,13 +1015,13 @@ function! s:move()"{{{
   endif
 
   " Get destination directory.
-  let dest_dir = vimfiler#exists_another_vimfiler() ?
-        \ vimfiler#get_another_vimfiler().current_dir : ''
+  if vimfiler#exists_another_vimfiler()
+    if vimfiler#get_another_vimfiler().source !=# 'file'
+      let dest_dir = vimfiler#get_another_vimfiler().source
+            \  . ':'
+    endif
 
-  if dest_dir ==# b:vimfiler.current_dir
-    " Rename.
-    call s:rename()
-    return
+    let dest_dir .= vimfiler#get_another_vimfiler().current_dir
   endif
 
   " Execute move.
@@ -1028,7 +1030,7 @@ function! s:move()"{{{
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
   call s:clear_mark_all_lines()
-  silent call vimfiler#force_redraw_all_vimfiler()
+  silent call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:copy()"{{{
   let marked_files = vimfiler#get_marked_files()
@@ -1039,8 +1041,15 @@ function! s:copy()"{{{
   endif
 
   " Get destination directory.
-  let dest_dir = vimfiler#exists_another_vimfiler() ?
-        \ vimfiler#get_another_vimfiler().current_dir : ''
+  let dest_dir = ''
+  if vimfiler#exists_another_vimfiler()
+    if vimfiler#get_another_vimfiler().source !=# 'file'
+      let dest_dir = vimfiler#get_another_vimfiler().source
+            \  . ':'
+    endif
+
+    let dest_dir .= vimfiler#get_another_vimfiler().current_dir
+  endif
 
   " Execute copy.
   call unite#mappings#do_action('vimfiler__copy', marked_files, {
@@ -1048,7 +1057,7 @@ function! s:copy()"{{{
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
   call s:clear_mark_all_lines()
-  silent call vimfiler#force_redraw_all_vimfiler()
+  silent call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:delete()"{{{
   let marked_files = vimfiler#get_marked_files()

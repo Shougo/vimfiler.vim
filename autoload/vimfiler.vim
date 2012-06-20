@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Jun 2012.
+" Last Modified: 20 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -485,7 +485,9 @@ function! vimfiler#input_yesno(message)"{{{
 
   return yesno =~? 'y\%[es]'
 endfunction"}}}
-function! vimfiler#force_redraw_all_vimfiler()"{{{
+function! vimfiler#force_redraw_all_vimfiler(...)"{{{
+  let is_manualed = get(a:000, 0, 0)
+
   let current_nr = winnr()
   let bufnr = 1
   while bufnr <= winnr('$')
@@ -493,7 +495,7 @@ function! vimfiler#force_redraw_all_vimfiler()"{{{
     if getwinvar(bufnr, '&filetype') ==# 'vimfiler'
 
       execute bufnr . 'wincmd w'
-      call vimfiler#force_redraw_screen()
+      call vimfiler#force_redraw_screen(is_manualed)
     endif
 
     let bufnr += 1
