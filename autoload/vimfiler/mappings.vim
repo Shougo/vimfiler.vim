@@ -1078,7 +1078,7 @@ function! s:delete()"{{{
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
   call s:clear_mark_all_lines()
-  silent call vimfiler#force_redraw_all_vimfiler()
+  silent call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:rename()"{{{
   let marked_files = vimfiler#get_marked_filenames()
@@ -1096,7 +1096,7 @@ function! s:rename()"{{{
   call unite#mappings#do_action('vimfiler__rename', [file], {
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
-  silent call vimfiler#force_redraw_all_vimfiler()
+  silent call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:make_directory()"{{{
   let directory = vimfiler#get_file_directory()

@@ -796,6 +796,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-06-20
 - Fixed copy and move implementation.
+- Fixed delete implementation.
 
 2012-06-10
 - Improved searching vimfiler behavior.
