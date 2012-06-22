@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jun 2012.
+" Last Modified: 23 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1015,13 +1015,14 @@ function! s:move()"{{{
   endif
 
   " Get destination directory.
+  let dest_dir = ''
   if vimfiler#exists_another_vimfiler()
-    if vimfiler#get_another_vimfiler().source !=# 'file'
-      let dest_dir = vimfiler#get_another_vimfiler().source
-            \  . ':'
+    let another = vimfiler#get_another_vimfiler()
+    if another.source !=# 'file'
+      let dest_dir = another.source . ':'
     endif
 
-    let dest_dir .= vimfiler#get_another_vimfiler().current_dir
+    let dest_dir .= another.current_dir
   endif
 
   " Execute move.
@@ -1043,12 +1044,12 @@ function! s:copy()"{{{
   " Get destination directory.
   let dest_dir = ''
   if vimfiler#exists_another_vimfiler()
-    if vimfiler#get_another_vimfiler().source !=# 'file'
-      let dest_dir = vimfiler#get_another_vimfiler().source
-            \  . ':'
+    let another = vimfiler#get_another_vimfiler()
+    if another.source !=# 'file'
+      let dest_dir = another.source . ':'
     endif
 
-    let dest_dir .= vimfiler#get_another_vimfiler().current_dir
+    let dest_dir .= another.current_dir
   endif
 
   " Execute copy.
