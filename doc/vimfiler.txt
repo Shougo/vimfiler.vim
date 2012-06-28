@@ -794,6 +794,9 @@ Note: "\\" path is not supported.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-06-28
+- Fixed autocmd.
+
 2012-06-23
 - Fixed file move error.
 
