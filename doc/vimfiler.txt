@@ -797,6 +797,9 @@ CHANGELOG					*vimfiler-changelog*
 2012-06-30
 - Deleted tail spaces.
 
+2012-06-28
+- Fixed autocmd.
+
 2012-06-23
 - Fixed file move error.
 
