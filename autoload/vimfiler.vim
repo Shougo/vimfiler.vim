@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jun 2012.
+" Last Modified: 30 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -754,7 +754,9 @@ function! vimfiler#get_print_lines(files)"{{{
             \ vimfiler#get_filetime(file),
             \)
     else
-      let line = printf('%s %s', filename, file.vimfiler__filetype)
+      let line = substitute(
+            \ printf('%s %s', filename,
+            \       file.vimfiler__filetype), '\s\+$', '', '')
     endif
 
     call add(lines, line)
