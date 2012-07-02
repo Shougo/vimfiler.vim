@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jun 2012.
+" Last Modified: 02 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -148,7 +148,6 @@ augroup END
 
 if g:vimfiler_as_default_explorer"{{{
   augroup vimfiler-FileExplorer
-    autocmd!
     autocmd BufEnter,BufWinEnter
           \ * call s:browse_check(expand('<amatch>'))
   augroup END
