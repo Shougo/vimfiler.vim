@@ -1,15 +1,13 @@
-" vim:set et ts=2 sts=2 sw=2 tw=0:
-
 
 " glob() wrapper which returns List.
 function! s:glob(...)
-  let R = call('glob', a:000)
-  return split(R, '\n')
+    let R = call('glob', a:000)
+    return split(R, '\n')
 endfunction
 " globpath() wrapper which returns List.
 function! s:globpath(...)
-  let R = call('globpath', a:000)
-  return split(R, '\n')
+    let R = call('globpath', a:000)
+    return split(R, '\n')
 endfunction
 
 " Wrapper functions for type().
@@ -33,36 +31,36 @@ let [
 
 " Number or Float
 function! s:is_numeric(Value)
-  let _ = type(a:Value)
-  return _ ==# s:__TYPE_NUMBER
-  \   || _ ==# s:__TYPE_FLOAT
+    let _ = type(a:Value)
+    return _ ==# s:__TYPE_NUMBER
+    \   || _ ==# s:__TYPE_FLOAT
 endfunction
 " Number
 function! s:is_integer(Value)
-  return type(a:Value) ==# s:__TYPE_NUMBER
+    return type(a:Value) ==# s:__TYPE_NUMBER
 endfunction
 function! s:is_number(Value)
-  return type(a:Value) ==# s:__TYPE_NUMBER
+    return type(a:Value) ==# s:__TYPE_NUMBER
 endfunction
 " Float
 function! s:is_float(Value)
-  return type(a:Value) ==# s:__TYPE_FLOAT
+    return type(a:Value) ==# s:__TYPE_FLOAT
 endfunction
 " String
 function! s:is_string(Value)
-  return type(a:Value) ==# s:__TYPE_STRING
+    return type(a:Value) ==# s:__TYPE_STRING
 endfunction
 " Funcref
 function! s:is_funcref(Value)
-  return type(a:Value) ==# s:__TYPE_FUNCREF
+    return type(a:Value) ==# s:__TYPE_FUNCREF
 endfunction
 " List
 function! s:is_list(Value)
-  return type(a:Value) ==# s:__TYPE_LIST
+    return type(a:Value) ==# s:__TYPE_LIST
 endfunction
 " Dictionary
 function! s:is_dict(Value)
-  return type(a:Value) ==# s:__TYPE_DICT
+    return type(a:Value) ==# s:__TYPE_DICT
 endfunction
 
 function! s:truncate_smart(str, max, footer_width, separator)"{{{
@@ -184,7 +182,7 @@ endif
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
-let s:is_mac = !s:is_windows && !s:is_cygwin
+let s:is_mac = !s:is_windows
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!executable('xdg-open') && system('uname') =~? '^darwin'))
 function! s:is_windows()"{{{
@@ -314,18 +312,11 @@ function! s:path2project_directory(path, ...)"{{{
   return s:substitute_path_separator(directory)
 endfunction"}}}
 " Check vimproc."{{{
+let s:exists_vimproc = globpath(&rtp, 'autoload/vimproc.vim') != ''
+"}}}
 function! s:has_vimproc()"{{{
-  if !exists('s:exists_vimproc')
-    try
-      call vimproc#version()
-      let s:exists_vimproc = 1
-    catch
-      let s:exists_vimproc = 0
-    endtry
-  endif
   return s:exists_vimproc
 endfunction"}}}
-"}}}
 function! s:system(str, ...)"{{{
   let command = a:str
   let input = a:0 >= 1 ? a:1 : ''
@@ -352,5 +343,4 @@ function! s:get_last_status()"{{{
   return s:has_vimproc() ?
         \ vimproc#get_last_status() : v:shell_error
 endfunction"}}}
-
-" vim:set et ts=2 sts=2 sw=2 tw=0:
+" vim: foldmethod=marker

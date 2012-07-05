@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jul 2012.
+" Last Modified: 31 Mar 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -100,12 +100,11 @@ function! vimfiler#util#escape_file_searching(...)
 endfunction
 
 function! vimfiler#util#is_cmdwin()"{{{
-  let errmsg_save = v:errmsg
-  silent! verbose noautocmd wincmd p
-  if errmsg_save !=# v:errmsg
-        \ && v:errmsg =~ '^E11:'
+  try
+    noautocmd wincmd p
+  catch /^Vim\%((\a\+)\)\=:E11:/
     return 1
-  endif
+  endtry
 
   silent! noautocmd wincmd p
   return 0
