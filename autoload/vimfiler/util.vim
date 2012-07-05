@@ -28,7 +28,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:V = vital#of('vimfiler')
-call s:V.load('Data.List')
+let s:List = vital#of('vimfiler').import('Data.List')
+
 function! vimfiler#util#truncate_smart(...)
   return call(s:V.truncate_smart, a:000)
 endfunction
@@ -93,7 +94,7 @@ function! vimfiler#util#get_last_status(...)
   return call(s:V.get_last_status, a:000)
 endfunction
 function! vimfiler#util#sort_by(...)
-  return call(s:V.Data.List.sort_by, a:000)
+  return call(s:List.sort_by, a:000)
 endfunction
 function! vimfiler#util#escape_file_searching(...)
   return call(s:V.escape_file_searching, a:000)
