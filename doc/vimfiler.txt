@@ -796,6 +796,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-07-02
 - Fixed vimfiler autocmd.
+- Fixed exrename error.
 
 2012-06-30
 - Deleted tail spaces.

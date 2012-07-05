@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Feb 2012.
+" Last Modified: 02 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,6 +40,9 @@ function! vimfiler#exrename#create_buffer(files)"{{{
   let b:exrename.bufnr = bufnr
 
   if b:exrename.source ==# 'file'
+    " Initialize load.
+    call unite#kinds#openable#define()
+
     execute g:unite_kind_openable_lcd_command '`=b:exrename.current_dir`'
   endif
 
