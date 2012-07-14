@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Jun 2012.
+" Last Modified: 15 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -821,16 +821,18 @@ function! vimfiler#sort(files, type)"{{{
   return files
 endfunction"}}}
 function! s:compare_size(i1, i2)"{{{
-  return a:i1.vimfiler__filesize > a:i2.vimfiler__filesize ? 1 : a:i1.vimfiler__filesize == a:i2.vimfiler__filesize ? 0 : -1
+  return a:i1.vimfiler__filesize - a:i2.vimfiler__filesize
 endfunction"}}}
 function! s:compare_extension(i1, i2)"{{{
-  return a:i1.vimfiler__extension > a:i2.vimfiler__extension ? 1 : a:i1.vimfiler__extension == a:i2.vimfiler__extension ? 0 : -1
+  return a:i1.vimfiler__extension > a:i2.vimfiler__extension ?
+        \ 1 : a:i1.vimfiler__extension == a:i2.vimfiler__extension ? 0 : -1
 endfunction"}}}
 function! s:compare_name(i1, i2)"{{{
-  return a:i1.vimfiler__filename > a:i2.vimfiler__filename ? 1 : a:i1.vimfiler__filename == a:i2.vimfiler__filename ? 0 : -1
+  return a:i1.vimfiler__filename ># a:i2.vimfiler__filename ?
+        \ 1 : a:i1.vimfiler__filename == a:i2.vimfiler__filename ? 0 : -1
 endfunction"}}}
 function! s:compare_time(i1, i2)"{{{
-  return a:i1.vimfiler__filetime > a:i2.vimfiler__filetime ? 1 : a:i1.vimfiler__filetime == a:i2.vimfiler__filetime ? 0 : -1
+  return a:i1.vimfiler__filetime - a:i2.vimfiler__filetime
 endfunction"}}}
 
 " Complete.
