@@ -796,6 +796,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-07-22
 - Supported above 4.0 GB.
+- Improved APIs.
 
 2012-07-15
 - Improved filename sort behavior.

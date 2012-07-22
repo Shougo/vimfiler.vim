@@ -553,7 +553,7 @@ function! vimfiler#get_filetype(file)"{{{
     return '     '
   endif
 endfunction"}}}
-function! vimfiler#get_filesize(file)"{{{
+function! s:get_filesize(file)"{{{
   if a:file.vimfiler__is_directory
         \ || a:file.vimfiler__filesize == -1
     return '       '
@@ -596,7 +596,7 @@ function! vimfiler#get_filesize(file)"{{{
 
   return printf('%s%s%s', pattern[:5], repeat(' ', 6-len(pattern)), suffix)
 endfunction"}}}
-function! vimfiler#get_filetime(file)"{{{
+function! s:get_filetime(file)"{{{
   return (a:file.vimfiler__filetime =~ '^\d\+$' ?
         \  (a:file.vimfiler__filetime <= 0 ? '' :
         \    a:file.vimfiler__datemark .
@@ -754,8 +754,8 @@ function! vimfiler#get_print_lines(files)"{{{
       let line = printf('%s %s %s %s',
             \ filename,
             \ file.vimfiler__filetype,
-            \ vimfiler#get_filesize(file),
-            \ vimfiler#get_filetime(file),
+            \ s:get_filesize(file),
+            \ s:get_filetime(file),
             \)
     else
       let line = substitute(
