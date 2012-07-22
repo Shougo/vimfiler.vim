@@ -553,7 +553,7 @@ function! vimfiler#get_filetype(file)"{{{
     return '     '
   endif
 endfunction"}}}
-function! s:get_filesize(file)"{{{
+function! s:get_filesize(file, path)"{{{
   if a:file.vimfiler__is_directory
         \ || a:file.vimfiler__filesize == -1
     return '       '
@@ -754,7 +754,7 @@ function! vimfiler#get_print_lines(files)"{{{
       let line = printf('%s %s %s %s',
             \ filename,
             \ file.vimfiler__filetype,
-            \ s:get_filesize(file),
+            \ s:get_filesize(file, file.action__path),
             \ s:get_filetime(file),
             \)
     else
