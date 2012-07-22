@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jul 2012.
+" Last Modified: 22 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -560,7 +560,11 @@ function! vimfiler#get_filesize(file)"{{{
   endif
 
   " Get human file size.
-  if a:file.vimfiler__filesize < 0
+  if a:file.vimfiler__filesize == -2
+    " Above 4GB.
+    let suffix = 'G'
+    let pattern = '>4.0'
+  elseif a:file.vimfiler__filesize < 0
     " Above 2GB.
     let suffix = 'G'
     let mega = (a:file.vimfiler__filesize+1073741824+1073741824) / 1024 / 1024
