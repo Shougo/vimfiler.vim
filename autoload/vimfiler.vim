@@ -553,56 +553,6 @@ function! vimfiler#get_filetype(file)"{{{
     return '     '
   endif
 endfunction"}}}
-function! s:get_filesize(file, path)"{{{
-  if a:file.vimfiler__is_directory
-        \ || a:file.vimfiler__filesize == -1
-    return '       '
-  endif
-
-  " Get human file size.
-  if a:file.vimfiler__filesize == -2
-    " Above 4GB.
-    let suffix = 'G'
-    let pattern = '>4.0'
-  elseif a:file.vimfiler__filesize < 0
-    " Above 2GB.
-    let suffix = 'G'
-    let mega = (a:file.vimfiler__filesize+1073741824+1073741824) / 1024 / 1024
-    let float = (mega%1024)*100/1024
-    let pattern = printf('%d.%d', 2+mega/1024, float)
-  elseif a:file.vimfiler__filesize >= 1073741824
-    " GB.
-    let suffix = 'G'
-    let mega = a:file.vimfiler__filesize / 1024 / 1024
-    let float = (mega%1024)*100/1024
-    let pattern = printf('%d.%d', mega/1024, float)
-  elseif a:file.vimfiler__filesize >= 1048576
-    " MB.
-    let suffix = 'M'
-    let kilo = a:file.vimfiler__filesize / 1024
-    let float = (kilo%1024)*100/1024
-    let pattern = printf('%d.%d', kilo/1024, float)
-  elseif a:file.vimfiler__filesize >= 1024
-    " KB.
-    let suffix = 'K'
-    let float = (a:file.vimfiler__filesize%1024)*100/1024
-    let pattern = printf('%d.%d', a:file.vimfiler__filesize/1024, float)
-  else
-    " B.
-    let suffix = 'B'
-    let float = ''
-    let pattern = printf('%6d', a:file.vimfiler__filesize)
-  endif
-
-  return printf('%s%s%s', pattern[:5], repeat(' ', 6-len(pattern)), suffix)
-endfunction"}}}
-function! s:get_filetime(file)"{{{
-  return (a:file.vimfiler__filetime =~ '^\d\+$' ?
-        \  (a:file.vimfiler__filetime <= 0 ? '' :
-        \    a:file.vimfiler__datemark .
-        \    strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
-        \ : a:file.vimfiler__datemark . a:file.vimfiler__filetime)
-endfunction"}}}
 function! vimfiler#get_datemark(file)"{{{
   if a:file.vimfiler__filetime !~ '^\d\+$'
     return '~'
@@ -754,8 +704,7 @@ function! vimfiler#get_print_lines(files)"{{{
       let line = printf('%s %s %s %s',
             \ filename,
             \ file.vimfiler__filetype,
-            \ s:get_filesize(file, file.action__path),
-            \ s:get_filetime(file),
+            \ s:get_filesize(file), s:get_filetime(file),
             \)
     else
       let line = substitute(
@@ -824,12 +773,22 @@ function! vimfiler#sort(files, type)"{{{
 
   return files
 endfunction"}}}
-function! s:compare_size(i1, i2)"{{{
-  return a:i1.vimfiler__filesize - a:i2.vimfiler__filesize
+function! s:compare_size(a, b)"{{{
+  let not_over_a = a:a.vimfiler__filesize >= 0
+  let not_over_b = a:b.vimfiler__filesize >= 0
+  if not_over_a && not_over_b
+    return (a:a.vimfiler__filesize - a:b.vimfiler__filesize)
+  elseif not_over_a && !not_over_b
+    return -1
+  elseif !not_over_a && not_over_b
+    return 1
+  else
+    return s:compare_filesize_pattern(a:a, a:b)
+  endif
 endfunction"}}}
 function! s:compare_extension(i1, i2)"{{{
   return a:i1.vimfiler__extension > a:i2.vimfiler__extension ?
-        \ 1 : a:i1.vimfiler__extension == a:i2.vimfiler__extension ? 0 : -1
+        \ -1 : a:i1.vimfiler__extension == a:i2.vimfiler__extension ? 0 : 1
 endfunction"}}}
 function! s:compare_name(i1, i2)"{{{
   return a:i1.vimfiler__filename ># a:i2.vimfiler__filename ?
@@ -837,6 +796,12 @@ function! s:compare_name(i1, i2)"{{{
 endfunction"}}}
 function! s:compare_time(i1, i2)"{{{
   return a:i1.vimfiler__filetime - a:i2.vimfiler__filetime
+endfunction"}}}
+function! s:compare_filesize_pattern(a, b)"{{{
+  let pattern_a = s:get_filesize(a:a)
+  let pattern_b = s:get_filesize(a:b)
+  return pattern_a ># pattern_b ?
+        \ 1 : pattern_a == pattern_b ? 0 : -1
 endfunction"}}}
 
 " Complete.
@@ -1012,6 +977,74 @@ function! s:get_postfix(prefix, is_create)"{{{
   endif
 
   return postfix
+endfunction"}}}
+function! s:get_filesize(file)"{{{
+  if a:file.vimfiler__is_directory
+    return '       '
+  endif
+
+  " Get human file size.
+  let filesize = a:file.vimfiler__filesize
+  if filesize < 0
+    if a:file.action__path !~ '^\a\w\+:' && has('python')
+      let pattern = s:get_file_pattern(a:file.action__path)
+    elseif filesize == -2
+      " Above 2GB?
+      let pattern = '>2.0'
+    else
+      let pattern = ''
+    endif
+    let suffix = (pattern != '') ? 'G' : ''
+  elseif filesize >= 1073741824
+    " GB.
+    let suffix = 'G'
+    let mega = filesize / 1024 / 1024
+    let float = (mega%1024)*100/1024
+    let pattern = printf('%d.%d', mega/1024, float)
+  elseif filesize >= 1048576
+    " MB.
+    let suffix = 'M'
+    let kilo = filesize / 1024
+    let float = (kilo%1024)*100/1024
+    let pattern = printf('%d.%d', kilo/1024, float)
+  elseif filesize >= 1024
+    " KB.
+    let suffix = 'K'
+    let float = (filesize%1024)*100/1024
+    let pattern = printf('%d.%d', filesize/1024, float)
+  else
+    " B.
+    let suffix = 'B'
+    let float = ''
+    let pattern = printf('%6d', filesize)
+  endif
+
+  return printf('%s%s%s', pattern[:5], repeat(' ', 6-len(pattern)), suffix)
+endfunction"}}}
+function! s:get_file_pattern(filename)"{{{
+    " Use python.
+python <<END
+import os.path
+import vim
+filesize = os.path.getsize(vim.eval('a:filename'))
+if filesize < 0:
+  pattern = ''
+else:
+  mega = filesize / 1024 / 1024
+  float = int((mega%1024)*100/1024)
+  pattern = '%d.%d' % (mega/1024, float)
+
+vim.command('let pattern = ' + str(pattern))
+END
+
+  return string(pattern)
+endfunction"}}}
+function! s:get_filetime(file)"{{{
+  return (a:file.vimfiler__filetime =~ '^\d\+$' ?
+        \  (a:file.vimfiler__filetime <= 0 ? '' :
+        \    a:file.vimfiler__datemark .
+        \    strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
+        \ : a:file.vimfiler__datemark . a:file.vimfiler__filetime)
 endfunction"}}}
 
 " Global options definition."{{{
