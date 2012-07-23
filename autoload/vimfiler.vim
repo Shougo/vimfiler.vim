@@ -223,9 +223,9 @@ function! s:create_filer(path, context)"{{{
   let a:context.path = path
   " echomsg path
 
-  call s:event_bufwin_enter(bufnr('%'))
-
   call vimfiler#handler#_event_handler('BufReadCmd', a:context)
+
+  call s:event_bufwin_enter(bufnr('%'))
 endfunction"}}}
 function! vimfiler#get_directory_files(directory, ...)"{{{
   " Save current files.
