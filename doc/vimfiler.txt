@@ -796,6 +796,9 @@ Note: "\\" path is not supported.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-07-23
+- Call s:event_bufwin_enter() when create vimfiler.
+
 2012-07-22
 - Supported above 4.0 GB.
 - Improved APIs.
