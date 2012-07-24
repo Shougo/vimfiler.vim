@@ -998,23 +998,23 @@ function! s:get_filesize(file)"{{{
       let pattern = ''
     endif
     let suffix = (pattern != '') ? 'G' : ''
-  elseif filesize >= 1073741824
+  elseif filesize >= 1000000000
     " GB.
     let suffix = 'G'
     let mega = filesize / 1024 / 1024
     let float = (mega%1024)*100/1024
-    let pattern = printf('%d.%d', mega/1024, float)
-  elseif filesize >= 1048576
+    let pattern = printf('%3d.%02d', mega/1024, float)
+  elseif filesize >= 1000000
     " MB.
     let suffix = 'M'
     let kilo = filesize / 1024
     let float = (kilo%1024)*100/1024
-    let pattern = printf('%d.%d', kilo/1024, float)
-  elseif filesize >= 1024
+    let pattern = printf('%3d.%02d', kilo/1024, float)
+  elseif filesize >= 1000
     " KB.
     let suffix = 'K'
     let float = (filesize%1024)*100/1024
-    let pattern = printf('%d.%d', filesize/1024, float)
+    let pattern = printf('%3d.%02d', filesize/1024, float)
   else
     " B.
     let suffix = 'B'
@@ -1022,7 +1022,7 @@ function! s:get_filesize(file)"{{{
     let pattern = printf('%6d', filesize)
   endif
 
-  return printf('%s%s%s', pattern[:5], repeat(' ', 6-len(pattern)), suffix)
+  return printf('%s%s', pattern, suffix)
 endfunction"}}}
 function! s:get_file_pattern(filename)"{{{
     " Use python.
@@ -1035,12 +1035,12 @@ if filesize < 0:
 else:
   mega = filesize / 1024 / 1024
   float = int((mega%1024)*100/1024)
-  pattern = '%d.%d' % (mega/1024, float)
+  pattern = '%3d.%02d' % (mega/1024, float)
 
-vim.command('let pattern = ' + str(pattern))
+vim.command("let pattern = '%s'" % pattern)
 END
 
-  return string(pattern)
+  return pattern
 endfunction"}}}
 function! s:get_filetime(file)"{{{
   return (a:file.vimfiler__filetime =~ '^\d\+$' ?
