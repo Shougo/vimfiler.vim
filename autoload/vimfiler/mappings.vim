@@ -851,8 +851,11 @@ function! s:edit_binary_file()"{{{
   execute 'Vinarise' escape(vimfiler#get_filename(), ' ')
 endfunction"}}}
 function! s:execute_shell_command()"{{{
-  echo 'Marked files:'
-  echohl Type | echo join(vimfiler#get_marked_filenames(), "\n") | echohl NONE
+  let marked_files = vimfiler#get_marked_files()
+  if !empty(marked_files)
+    echo 'Marked files:'
+    echohl Type | echo join(vimfiler#get_marked_filenames(), "\n") | echohl NONE
+  endif
 
   let command = input('Input shell command: ', '', 'shellcmd')
   redraw
@@ -867,7 +870,7 @@ function! s:execute_shell_command()"{{{
     let command = substitute(command,
         \'\s\+\zs[*]\ze\%([;|[:space:]]\|$\)',
         \ join(vimfiler#get_escaped_marked_files()), 'g')
-  else
+  elseif !empty(marked_files)
     let base_command = command
     let command = ''
     for file in vimfiler#get_escaped_marked_files()
