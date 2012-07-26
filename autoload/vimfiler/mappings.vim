@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jul 2012.
+" Last Modified: 26 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1106,7 +1106,7 @@ function! s:make_directory()"{{{
   let old_files = copy(vimfiler#get_current_vimfiler().current_files)
 
   call vimfiler#mappings#do_dir_action('vimfiler__mkdir', directory)
-  silent call vimfiler#force_redraw_all_vimfiler()
+  silent call vimfiler#force_redraw_all_vimfiler(1)
 
   call s:search_new_file(old_files)
 endfunction"}}}
@@ -1116,7 +1116,7 @@ function! s:new_file()"{{{
   call s:switch()
 
   call vimfiler#mappings#do_dir_action('vimfiler__newfile', directory)
-  silent call vimfiler#force_redraw_all_vimfiler()
+  silent call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 
 function! s:set_current_mask()"{{{
