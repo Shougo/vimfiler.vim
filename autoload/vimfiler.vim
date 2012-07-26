@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jul 2012.
+" Last Modified: 26 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -989,7 +989,8 @@ function! s:get_filesize(file)"{{{
   " Get human file size.
   let filesize = a:file.vimfiler__filesize
   if filesize < 0
-    if a:file.action__path !~ '^\a\w\+:' && has('python')
+    if a:file.action__path !~ '^\a\w\+:' &&
+          \ has('python') && getftype(a:file.action__path) !=# 'link'
       let pattern = s:get_file_pattern(a:file.action__path)
     elseif filesize == -2
       " Above 2GB?
@@ -1043,7 +1044,7 @@ END
   return pattern
 endfunction"}}}
 function! s:get_filetime(file)"{{{
-  return (a:file.vimfiler__filetime =~ '^\d\+$' ?
+  return (a:file.vimfiler__filetime =~ '^-\?\d\+$' ?
         \  (a:file.vimfiler__filetime <= 0 ? '' :
         \    a:file.vimfiler__datemark .
         \    strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))

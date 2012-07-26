@@ -799,6 +799,7 @@ CHANGELOG					*vimfiler-changelog*
 2012-07-26
 - Fixed redraw problems.
 - Fixed execute_command.
+- Fixed for symbolic link problem.
 
 2012-07-23
 - Call s:event_bufwin_enter() when create vimfiler.
