@@ -57,7 +57,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_parent_directory)
         \ :<C-u>call vimfiler#mappings#cd('..')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_home_directory)
-        \ :<C-u>call vimfiler#mappings#cd('~')<CR>
+        \ :<C-u>call vimfiler#mappings#cd('file:~')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_root_directory)
         \ :<C-u>call vimfiler#mappings#cd('/')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_drive)

@@ -800,6 +800,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed redraw problems.
 - Fixed execute_command.
 - Fixed for symbolic link problem.
+- Fixed <Plug>(vimfiler_switch_to_home_directory) behavior.
 
 2012-07-23
 - Call s:event_bufwin_enter() when create vimfiler.
