@@ -883,12 +883,12 @@ function! s:execute_shell_command()"{{{
     endfor
   endif
 
-  call vimfiler#mappings#do_current_dir_action('vimfiler__shellcmd', {
-        \ 'vimfiler__command' : command,
-        \})
   call s:clear_mark_all_lines()
 
-  silent call vimfiler#force_redraw_screen()
+  call vimfiler#mappings#do_current_dir_action(
+        \ 'vimfiler__shellcmd', {
+        \ 'vimfiler__command' : command,
+        \})
 endfunction"}}}
 function! s:hide()"{{{
   let bufnr = bufnr('%')
@@ -999,7 +999,7 @@ function! s:split_edit_file()"{{{
   " Resize.
   execute 'vertical resize'
         \ (winnr('$') == 1 ? winwidth : winwidth/(winnr('$') - 1))
-  call vimfiler#redraw_all_vimfiler()
+  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 
 " File operations.
