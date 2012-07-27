@@ -798,6 +798,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-07-27
 - Improved some mappings.
+- Setlocal nolist.
 
 2012-07-26
 - Fixed redraw problems.
