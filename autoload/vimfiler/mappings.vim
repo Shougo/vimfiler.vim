@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jul 2012.
+" Last Modified: 27 Jul 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,7 +59,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_home_directory)
         \ :<C-u>call vimfiler#mappings#cd('file:~')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_root_directory)
-        \ :<C-u>call vimfiler#mappings#cd('/')<CR>
+        \ :<C-u>call vimfiler#mappings#cd('file:/')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_drive)
         \ :<C-u>call <SID>switch_to_drive()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_history_directory)
@@ -931,9 +931,10 @@ function! s:sync_with_current_vimfiler()"{{{
     call s:create_another_vimfiler()
   else
     " Change another vimfiler directory.
-    let current_dir = b:vimfiler.current_dir
+    let vimfiler = b:vimfiler
     execute vimfiler#winnr_another_vimfiler() . 'wincmd w'
-    call vimfiler#mappings#cd(current_dir)
+    call vimfiler#mappings#cd(
+          \ vimfiler.source . ':' . vimfiler.current_dir)
   endif
 
   wincmd p
@@ -948,7 +949,9 @@ function! s:sync_with_another_vimfiler()"{{{
     call vimfiler#redraw_screen()
   else
     " Change current vimfiler directory.
-    call vimfiler#mappings#cd(vimfiler#get_another_vimfiler().current_dir)
+    let another = vimfiler#get_another_vimfiler()
+    call vimfiler#mappings#cd(
+          \ another.source . ':' . another.current_dir)
   endif
 
   call vimfiler#set_current_vimfiler(b:vimfiler)
