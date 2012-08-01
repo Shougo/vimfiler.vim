@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Apr 2012.
+" Last Modified: 01 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -104,7 +104,8 @@ endfunction
 
 function! s:initialize_vimfiler_directory(directory, context) "{{{1
   " Set current directory.
-  let current = vimfiler#util#substitute_path_separator(a:directory)
+  let current = vimfiler#util#substitute_path_separator(
+        \ a:directory)
   let b:vimfiler.current_dir = current
   if b:vimfiler.current_dir !~ '[:/]$'
     let b:vimfiler.current_dir .= '/'
@@ -126,6 +127,8 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#default_settings()
+  call vimfiler#mappings#define_default_mappings()
+
   set filetype=vimfiler
 
   if a:context.double

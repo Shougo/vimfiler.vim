@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jul 2012.
+" Last Modified: 01 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -59,25 +59,7 @@ augroup end"}}}
 
 " User utility functions."{{{
 function! vimfiler#default_settings()"{{{
-  setlocal buftype=nofile
-  setlocal noswapfile
-  setlocal noreadonly
-  setlocal nomodifiable
-  setlocal nowrap
-  setlocal nofoldenable
-  setlocal foldcolumn=0
-  setlocal nolist
-  setlocal bufhidden=hide
-  if has('netbeans_intg') || has('sun_workshop')
-    setlocal noautochdir
-  endif
-  if has('conceal')
-    setlocal conceallevel=3
-    setlocal concealcursor=n
-  endif
-  if exists('&colorcolumn')
-    setlocal colorcolumn=
-  endif
+  call s:buffer_default_settings()
 
   " Set autocommands.
   augroup vimfiler"{{{
@@ -85,10 +67,9 @@ function! vimfiler#default_settings()"{{{
           \ call s:event_bufwin_enter(bufnr(expand('<abuf>')))
     autocmd WinLeave,BufWinLeave <buffer>
           \ call s:event_bufwin_leave(bufnr(expand('<abuf>')))
-    autocmd VimResized <buffer> call vimfiler#redraw_all_vimfiler()
+    autocmd VimResized <buffer>
+          \ call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
-
-  call vimfiler#mappings#define_default_mappings()
 endfunction"}}}
 function! vimfiler#set_execute_file(exts, command)"{{{
   return vimfiler#util#set_dictionary_helper(g:vimfiler_execute_file_list,
@@ -859,7 +840,34 @@ function! vimfiler#complete_path(arglead, cmdline, cursorpos)"{{{
 endfunction"}}}
 
 " Event functions.
+function! s:buffer_default_settings()"{{{
+  setlocal buftype=nofile
+  setlocal noswapfile
+  setlocal noreadonly
+  setlocal nowrap
+  setlocal bufhidden=hide
+  setlocal nolist
+  setlocal foldcolumn=0
+  setlocal nofoldenable
+  setlocal nowrap
+  setlocal nomodifiable
+  if has('netbeans_intg') || has('sun_workshop')
+    setlocal noautochdir
+  endif
+  if exists('&colorcolumn')
+    setlocal colorcolumn=
+  endif
+
+  if has('conceal')
+    setlocal conceallevel=3
+    setlocal concealcursor=n
+  endif
+endfunction"}}}
 function! s:event_bufwin_enter(bufnr)"{{{
+  if &filetype ==# 'vimfiler'
+    call s:buffer_default_settings()
+  endif
+
   let vimfiler = getbufvar(a:bufnr, 'vimfiler')
   if type(vimfiler) != type({})
         \ || bufwinnr(a:bufnr) < 1
@@ -880,13 +888,6 @@ function! s:event_bufwin_enter(bufnr)"{{{
 
   if !exists('b:vimfiler')
     return
-  endif
-
-  setlocal nolist
-
-  if has('conceal')
-    setlocal conceallevel=3
-    setlocal concealcursor=n
   endif
 
   call vimfiler#set_current_vimfiler(vimfiler)

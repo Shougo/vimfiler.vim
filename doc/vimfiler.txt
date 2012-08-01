@@ -796,6 +796,9 @@ Note: "\\" path is not supported.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-08-01
+- Fixed buffer settings.
+
 2012-07-27
 - Improved some mappings.
 - Setlocal nolist.
