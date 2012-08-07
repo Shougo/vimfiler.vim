@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Aug 2012.
+" Last Modified: 07 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,6 +39,7 @@ if s:exists_unite_version < 300
   finish
 endif"}}}
 
+" Variables"{{{
 let s:current_vimfiler = {}
 let s:last_vimfiler_bufnr = -1
 let s:last_system_is_vimproc = -1
@@ -52,6 +53,12 @@ let s:vimfiler_options = [
       \ '-simple', '-double', '-split', '-horizontal', '-direction=',
       \ '-winwidth=', '-winminwidth=', '-auto-cd',
       \]
+
+let s:V = vital#of('vimfiler')
+let s:BM = s:V.import('Vim.Buffer.Manager')
+let s:manager = s:BM.new()  " creates new manager
+call s:manager.config('opener', 'silent edit')
+"}}}
 
 augroup vimfiler"{{{
   autocmd!
