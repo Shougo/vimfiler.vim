@@ -206,7 +206,21 @@ function! s:create_filer(path, context)"{{{
     execute a:context.direction 'vnew'
   endif
 
-  silent edit `=bufname`
+  " Save swapfile option.
+  let swapfile_save = &swapfile
+  set noswapfile
+
+  try
+    let ret = s:manager.open(bufname)
+  finally
+    let &swapfile = swapfile_save
+  endtry
+
+  if !ret.loaded
+    call vimshell#echo_error(
+          \ '[vimfiler] Failed to open Buffer.')
+    return
+  endif
 
   let a:context.path = path
   " echomsg path
