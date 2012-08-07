@@ -799,6 +799,7 @@ CHANGELOG					*vimfiler-changelog*
 2012-08-07
 - Updated vital.
 - Set noswapfile.
+- Don't use vital buffer manager(temporary).
 
 2012-08-01
 - Fixed buffer settings.
