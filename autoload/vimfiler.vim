@@ -58,6 +58,7 @@ let s:V = vital#of('vimfiler')
 let s:BM = s:V.import('Vim.Buffer.Manager')
 let s:manager = s:BM.new()  " creates new manager
 call s:manager.config('opener', 'silent edit')
+call s:manager.config('range', 'current')
 "}}}
 
 augroup vimfiler"{{{
@@ -211,18 +212,18 @@ function! s:create_filer(path, context)"{{{
   set noswapfile
 
   try
-    " let ret = s:manager.open(bufname)
-    silent edit `=bufname`
+    let ret = s:manager.open(bufname)
+    " silent edit `=bufname`
     setlocal noswapfile
   finally
     let &swapfile = swapfile_save
   endtry
 
-  " if !ret.loaded
-  "   call vimshell#echo_error(
-  "         \ '[vimfiler] Failed to open Buffer.')
-  "   return
-  " endif
+  if !ret.loaded
+    call vimshell#echo_error(
+          \ '[vimfiler] Failed to open Buffer.')
+    return
+  endif
 
   let a:context.path = path
   " echomsg path
