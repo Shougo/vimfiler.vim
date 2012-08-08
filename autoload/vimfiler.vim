@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Aug 2012.
+" Last Modified: 08 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -213,6 +213,7 @@ function! s:create_filer(path, context)"{{{
   try
     " let ret = s:manager.open(bufname)
     silent edit `=bufname`
+    setlocal noswapfile
   finally
     let &swapfile = swapfile_save
   endtry

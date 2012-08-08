@@ -796,6 +796,9 @@ Note: "\\" path is not supported.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-08-08
+- Setlocal noswapfile.
+
 2012-08-07
 - Updated vital.
 - Set noswapfile.
