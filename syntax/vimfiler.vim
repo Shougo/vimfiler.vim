@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Feb 2012.
+" Last Modified: 09 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -81,11 +81,7 @@ else
   syn match   vimfilerDateIgnore        '[#~!]' contained
 endif
 
-if has('gui_running')
-    hi vimfilerCurrentDirectory  guifg=#80ffff guibg=NONE
-else
-    hi def link vimfilerCurrentDirectory Identifier
-endif
+hi def link vimfilerCurrentDirectory Identifier
 hi def link vimfilerMask Statement
 
 hi def link vimfilerSpecial Special
