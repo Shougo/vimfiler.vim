@@ -799,6 +799,9 @@ CHANGELOG					*vimfiler-changelog*
 2012-08-10
 - Improved last vimfiler buffer.
 
+2012-08-09
+- Fixed current directory highlight.
+
 2012-08-08
 - Setlocal noswapfile.
 - Fixed for vital buffer manager.
