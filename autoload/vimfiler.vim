@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Aug 2012.
+" Last Modified: 10 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,8 +41,6 @@ endif"}}}
 
 " Variables"{{{
 let s:current_vimfiler = {}
-let s:last_vimfiler_bufnr = -1
-let s:last_system_is_vimproc = -1
 
 let s:min_padding_width = 10
 let s:max_padding_width = 35
@@ -157,8 +155,12 @@ function! vimfiler#switch_filer(path, ...)"{{{
       return
     endif
 
+    if !exists('t:vimfiler')
+      call vimfiler#initialize_tab_variable()
+    endif
     for bufnr in filter(insert(range(1, bufnr('$')),
-          \ s:last_vimfiler_bufnr), 'buflisted(v:val)')
+          \ t:vimfiler.last_vimfiler_bufnr),
+          \ 'buflisted(v:val)')
       let vimfiler = getbufvar(bufnr, 'vimfiler')
       if getbufvar(bufnr, '&filetype') ==# 'vimfiler'
             \ && type(vimfiler) == type({})
@@ -386,27 +388,6 @@ function! vimfiler#redraw_prompt()"{{{
         \ dir, mask))
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! vimfiler#system(...)"{{{
-  return vimfiler#util#system(a:000)
-endfunction"}}}
-function! vimfiler#force_system(str, ...)"{{{
-  let s:last_system_is_vimproc = 0
-
-  let command = a:str
-  let input = join(a:000)
-  let command = iconv(command, &encoding, 'char')
-  let input = iconv(input, &encoding, 'char')
-  let output = (a:0 == 0)? system(command) : system(command, input)
-  let output = iconv(output, 'char', &encoding)
-  return output
-endfunction"}}}
-function! vimfiler#get_system_error()"{{{
-  if s:last_system_is_vimproc
-    return vimproc#get_last_status()
-  else
-    return v:shell_error
-  endif
-endfunction"}}}
 function! vimfiler#get_marked_files()"{{{
   return vimfiler#util#sort_by(filter(copy(vimfiler#get_current_vimfiler().current_files),
         \ 'v:val.vimfiler__is_marked'), 'v:val.vimfiler__marked_time')
@@ -585,8 +566,11 @@ function! vimfiler#exists_another_vimfiler()"{{{
         \ && getwinvar(winnr, '&filetype') ==# 'vimfiler'
 endfunction"}}}
 function! vimfiler#bufnr_another_vimfiler()"{{{
+  if !exists('t:vimfiler')
+    call vimfiler#initialize_tab_variable()
+  endif
   return vimfiler#exists_another_vimfiler() ?
-        \ s:last_vimfiler_bufnr : -1
+        \ t:vimfiler.last_vimfiler_bufnr : -1
 endfunction"}}}
 function! vimfiler#winnr_another_vimfiler()"{{{
   return vimfiler#exists_another_vimfiler() ?
@@ -665,6 +649,11 @@ function! vimfiler#initialize_context(context)"{{{
   endif
 
   return context
+endfunction"}}}
+function! vimfiler#initialize_tab_variable()"{{{
+  let t:vimfiler = {
+        \ 'last_vimfiler_bufnr' : -1,
+        \ }
 endfunction"}}}
 function! vimfiler#get_histories()"{{{
   return copy(s:vimfiler_current_histories)
@@ -900,9 +889,13 @@ function! s:event_bufwin_enter(bufnr)"{{{
     return
   endif
 
-  if bufwinnr(s:last_vimfiler_bufnr) > 0
-        \ && s:last_vimfiler_bufnr != a:bufnr
-    let vimfiler.another_vimfiler_bufnr = s:last_vimfiler_bufnr
+  if !exists('t:vimfiler')
+    call vimfiler#initialize_tab_variable()
+  endif
+  let last_vimfiler_bufnr = t:vimfiler.last_vimfiler_bufnr
+  if bufwinnr(last_vimfiler_bufnr) > 0
+        \ && last_vimfiler_bufnr != a:bufnr
+    let vimfiler.another_vimfiler_bufnr = last_vimfiler_bufnr
   endif
 
   if bufwinnr(a:bufnr) != winnr()
@@ -944,7 +937,11 @@ function! s:event_bufwin_leave(bufnr)"{{{
     return
   endif
 
-  let s:last_vimfiler_bufnr = a:bufnr
+  if !exists('t:vimfiler')
+    call vimfiler#initialize_tab_variable()
+  endif
+
+  let t:vimfiler.last_vimfiler_bufnr = a:bufnr
 endfunction"}}}
 
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
