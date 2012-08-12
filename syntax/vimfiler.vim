@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Aug 2012.
+" Last Modified: 12 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,82 +30,69 @@ elseif exists('b:current_syntax')
   finish
 endif
 
-let leaf_icon = vimfiler#util#escape_pattern(g:vimfiler_tree_leaf_icon)
-let opened_icon = vimfiler#util#escape_pattern(g:vimfiler_tree_opened_icon)
-let closed_icon = vimfiler#util#escape_pattern(g:vimfiler_tree_closed_icon)
-let file_icon = vimfiler#util#escape_pattern(g:vimfiler_file_icon)
-let marked_file_icon = vimfiler#util#escape_pattern(g:vimfiler_marked_file_icon)
-
-syn match   vimfilerNonMarkedFile     '.*'
-      \ contains=vimfilerNonMark,vimfilerTypeText,vimfilerTypeImage,vimfilerTypeArchive,
-      \vimfilerTypeExecute,vimfilerTypeMultimedia,vimfilerTypeDirectory,vimfilerTypeSystem,vimfilerTypeLink,
+syntax match   vimfilerNonMarkedFile     '.*'
+      \ contains=vimfilerNonMark,vimfilerTypeText,vimfilerTypeImage,
+      \vimfilerTypeArchive,vimfilerTypeExecute,vimfilerTypeMultimedia,
+      \vimfilerTypeDirectory,vimfilerTypeSystem,vimfilerTypeLink,
       \vimfilerSize,vimfilerDate,vimfilerDateToday,vimfilerDateWeek
-execute 'syn match   vimfilerMarkedFile'        '''^\s*\%('  . leaf_icon .'\)\?'
-      \ . marked_file_icon . ' .*$'''
-      \ 'contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek'
-syn match   vimfilerDirectory         '^..$'
 
-syn match   vimfilerPrompt            '^\[in\]: .*$'
+syntax match   vimfilerDirectory         '^..$'
+
+syntax match   vimfilerPrompt            '^\[in\]: .*$'
       \ contains=vimfilerSpecial,vimfilerCurrentDirectory
-syn match   vimfilerPromptUnSafe        '^! \[in\]: .*$'
+syntax match   vimfilerPromptUnSafe        '^! \[in\]: .*$'
       \ contains=vimfilerSpecial,vimfilerSpecialUnSafe,vimfilerCurrentDirectory
-syn match   vimfilerSpecialUnSafe       '^! ' contained
-syn match   vimfilerSpecial           '\[in\]:' contained
-syn match   vimfilerCurrentDirectory  '\s\zs.*$' contained contains=vimfilerMask
-syn match   vimfilerMask  '\[.*\]$' contained
-syn match   vimfilerFileLine          '\[.*\]$' contained
+syntax match   vimfilerSpecialUnSafe       '^! ' contained
+syntax match   vimfilerSpecial           '\[in\]:' contained
+syntax match   vimfilerCurrentDirectory  '\s\zs.*$' contained contains=vimfilerMask
+syntax match   vimfilerMask  '\[.*\]$' contained
+syntax match   vimfilerFileLine          '\[.*\]$' contained
 
-syn match   vimfilerTypeText          '.*\[TXT\]' contained
-syn match   vimfilerTypeImage         '.*\[IMG\]' contained
-syn match   vimfilerTypeArchive       '.*\[ARC\]' contained
-syn match   vimfilerTypeExecute       '.*\[EXE\]' contained
-syn match   vimfilerTypeMultimedia    '.*\[MUL\]' contained
-syn match   vimfilerTypeDirectory     '.*\[DIR\]' contained
-syn match   vimfilerTypeSystem        '.*\[SYS\]' contained
-syn match   vimfilerTypeLink          '.*\[LNK\]' contained
+syntax match   vimfilerTypeText          '.*\[TXT\]' contained
+syntax match   vimfilerTypeImage         '.*\[IMG\]' contained
+syntax match   vimfilerTypeArchive       '.*\[ARC\]' contained
+syntax match   vimfilerTypeExecute       '.*\[EXE\]' contained
+syntax match   vimfilerTypeMultimedia    '.*\[MUL\]' contained
+syntax match   vimfilerTypeDirectory     '.*\[DIR\]' contained
+syntax match   vimfilerTypeSystem        '.*\[SYS\]' contained
+syntax match   vimfilerTypeLink          '.*\[LNK\]' contained
 
-syn match   vimfilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]' contained
+syntax match   vimfilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]' contained
 
-" syn match   vimfilerNonMark         '^\s*|\?[+-]' contained
-execute 'syn match   vimfilerNonMark'
-      \ '''^\s*\%('. leaf_icon .'\)\?\%('. opened_icon . '\|'
-      \ . closed_icon . '\|' . file_icon  .'\)'' contained'
-
-syn match   vimfilerDate              '\s\zs#[^#]\+$' contains=vimfilerDateIgnore contained
-syn match   vimfilerDateToday         '\s\zs\~[^~]\+$' contains=vimfilerDateIgnore contained
-syn match   vimfilerDateWeek          '\s\zs![^!]\+$' contains=vimfilerDateIgnore contained
+syntax match   vimfilerDate              '\s\zs#[^#]\+$' contains=vimfilerDateIgnore contained
+syntax match   vimfilerDateToday         '\s\zs\~[^~]\+$' contains=vimfilerDateIgnore contained
+syntax match   vimfilerDateWeek          '\s\zs![^!]\+$' contains=vimfilerDateIgnore contained
 if has('conceal')
   " Supported conceal features.
-  syn match   vimfilerDateIgnore        '[#~!]' contained conceal
+  syntax match   vimfilerDateIgnore        '[#~!]' contained conceal
 else
-  syn match   vimfilerDateIgnore        '[#~!]' contained
+  syntax match   vimfilerDateIgnore        '[#~!]' contained
 endif
 
-hi def link vimfilerCurrentDirectory Identifier
-hi def link vimfilerMask Statement
+highlight def link vimfilerCurrentDirectory Identifier
+highlight def link vimfilerMask Statement
 
-hi def link vimfilerSpecial Special
-hi def link vimfilerSpecialUnSafe Statement
+highlight def link vimfilerSpecial Special
+highlight def link vimfilerSpecialUnSafe Statement
 
-hi def link vimfilerNonMark Special
-"hi vimfilerMarkedFile  gui=REVERSE term=REVERSE
-hi def link vimfilerMarkedFile Type
-hi def link vimfilerDirectory Preproc
-hi def link vimfilerSize Constant
+highlight def link vimfilerNonMark Special
+highlight def link vimfilerMarkedFile Type
+highlight def link vimfilerDirectory Preproc
+highlight def link vimfilerSize Constant
 
-hi def link vimfilerDateToday Statement
-hi def link vimfilerDateWeek Special
-hi def link vimfilerDate Identifier
-hi def link vimfilerDateIgnore Ignore
+highlight def link vimfilerDateToday Statement
+highlight def link vimfilerDateWeek Special
+highlight def link vimfilerDate Identifier
+highlight def link vimfilerDateIgnore Ignore
 
-hi def link vimfilerTypeText Constant
-hi def link vimfilerTypeImage Type
-hi def link vimfilerTypeArchive Special
-hi def link vimfilerTypeExecute Statement
-hi def link vimfilerTypeMultimedia Identifier
-hi def link vimfilerTypeDirectory Preproc
-hi def link vimfilerTypeSystem Comment
-hi def link vimfilerTypeLink Comment
+highlight def link vimfilerTypeText Constant
+highlight def link vimfilerTypeImage Type
+highlight def link vimfilerTypeArchive Special
+highlight def link vimfilerTypeExecute Statement
+highlight def link vimfilerTypeMultimedia Identifier
+highlight def link vimfilerTypeDirectory Preproc
+highlight def link vimfilerTypeSystem Comment
+highlight def link vimfilerTypeLink Comment
 
 let b:current_syntax = 'vimfiler'
 
