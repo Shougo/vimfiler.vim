@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2012.
+" Last Modified: 12 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -70,9 +70,9 @@ function! vimfiler#default_settings()"{{{
   " Set autocommands.
   augroup vimfiler"{{{
     autocmd WinEnter,BufWinEnter <buffer>
-          \ call s:event_bufwin_enter(bufnr(expand('<abuf>')))
+          \ call s:event_bufwin_enter(expand('<abuf>'))
     autocmd WinLeave,BufWinLeave <buffer>
-          \ call s:event_bufwin_leave(bufnr(expand('<abuf>')))
+          \ call s:event_bufwin_leave(expand('<abuf>'))
     autocmd VimResized <buffer>
           \ call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
@@ -160,10 +160,10 @@ function! vimfiler#switch_filer(path, ...)"{{{
     endif
     for bufnr in filter(insert(range(1, bufnr('$')),
           \ t:vimfiler.last_vimfiler_bufnr),
-          \ 'buflisted(v:val)')
+          \ "buflisted(v:val) &&
+          \ getbufvar(v:val, '&filetype') ==# 'vimfiler'")
       let vimfiler = getbufvar(bufnr, 'vimfiler')
-      if getbufvar(bufnr, '&filetype') ==# 'vimfiler'
-            \ && type(vimfiler) == type({})
+      if type(vimfiler) == type({})
             \ && vimfiler.context.profile_name ==# context.profile_name
             \ && (!exists('t:unite_buffer_dictionary')
             \      || has_key(t:unite_buffer_dictionary, bufnr))
@@ -223,7 +223,7 @@ function! s:create_filer(path, context)"{{{
 
   if !ret.loaded
     call vimshell#echo_error(
-          \ '[vimfiler] Failed to open Buffer.')
+          \ '[vimfiler] Failed to open Buffer "'. bufname .'".')
     return
   endif
 
@@ -980,30 +980,14 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
 endfunction"}}}
 
 function! s:get_postfix(prefix, is_create)"{{{
-  let postfix = '@1'
-  let cnt = 1
-
-  if a:is_create
-    let tabnr = 1
-    while tabnr <= tabpagenr('$')
-      let buflist = map(tabpagebuflist(tabnr), 'bufname(v:val)')
-      while index(buflist, a:prefix.postfix) >= 0
-        let cnt += 1
-        let postfix = '@' . cnt
-      endwhile
-
-      let tabnr += 1
-    endwhile
-  else
-    let buflist = map(tabpagebuflist(tabpagenr()), 'bufname(v:val)')
-    for bufname in buflist
-      if stridx(bufname, a:prefix) >= 0
-        return matchstr(bufname, '@\d\+$')
-      endif
-    endfor
+  let buflist = sort(filter(map(range(1, bufnr('$')),
+        \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'))
+  if empty(buflist)
+    return '@1'
   endif
 
-  return postfix
+  return a:is_create ? '@'.(matchstr(buflist[-1], '@\zs\d\+$') + 1)
+        \ : matchstr(buflist[0], '@\d\+$')
 endfunction"}}}
 function! s:get_filesize(file)"{{{
   if a:file.vimfiler__is_directory
