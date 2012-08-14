@@ -1,6 +1,6 @@
 *vimfiler.txt*	Powerful file explorer implemented by Vim script
 
-Version: 3.1
+Version: 3.2
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -801,6 +801,12 @@ Note: "\\" path is not supported.
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-08-14
+- Ver.3.2 development is started.
+
+------------------------------------------------------------------------------
+ChangeLog 3.1
 
 2012-08-14
 - Fixed <Plug>(vimfiler_expand_tree_recursive) behavior.
