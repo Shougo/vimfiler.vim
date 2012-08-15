@@ -802,6 +802,10 @@ Note: "\\" path is not supported.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-08-15
+- Improved postfix.
+- Improved loaded check.
+
 2012-08-14
 - Ver.3.2 development is started.
 
