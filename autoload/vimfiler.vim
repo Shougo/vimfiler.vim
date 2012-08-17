@@ -689,7 +689,8 @@ function! vimfiler#get_print_lines(files)"{{{
             \ . g:vimfiler_tree_leaf_icon
     endif
     let mark .= file.vimfiler__is_marked ? g:vimfiler_marked_file_icon :
-          \ !file.vimfiler__is_directory ? (!file.vimfiler__is_writable ?
+          \ !file.vimfiler__is_directory ?
+          \     (!get(file, 'vimfiler__is_writable', 1) ?
           \      g:vimfiler_readonly_file_icon : g:vimfiler_file_icon) :
           \ file.vimfiler__is_opened ? g:vimfiler_tree_opened_icon :
           \                            g:vimfiler_tree_closed_icon
