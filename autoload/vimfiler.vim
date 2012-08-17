@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Aug 2012.
+" Last Modified: 17 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -864,6 +864,7 @@ function! s:buffer_default_settings()"{{{
   setlocal nofoldenable
   setlocal nowrap
   setlocal nomodifiable
+  setlocal nomodified
   if has('netbeans_intg') || has('sun_workshop')
     setlocal noautochdir
   endif
