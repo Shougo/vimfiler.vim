@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Aug 2012.
+" Last Modified: 22 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -35,6 +35,10 @@ elseif $SUDO_USER != '' && $USER !=# $SUDO_USER
         \.'Please use sudo.vim plugin instead of sudo command or set always_set_home in sudoers.'
   finish
 endif
+
+if exists(':NeoBundleDepends')"{{{
+  NeoBundleDepends 'Shougo/unite.vim.git'
+endif"}}}
 
 " Check unite.vim."{{{
 try
