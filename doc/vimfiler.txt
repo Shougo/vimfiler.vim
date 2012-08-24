@@ -111,6 +111,10 @@ COMMANDS 					*vimfiler-commands*
 		-winminwidth={window-width}
 		Specifies the minimum width of a vimfiler buffer.
 
+						*vimfiler-options-winheight*
+		-winheight={window-height}
+		Specifies the height of a vimfiler buffer.
+
 						*vimfiler-options-direction*
 		-direction={direction}
 		Defines split position rule. The default value is same to
@@ -801,6 +805,9 @@ Note: "\\" path is not supported.
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-08-24
+- Added -winheight option.
 
 2012-08-22
 - Added depends.
