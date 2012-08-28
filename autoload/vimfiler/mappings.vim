@@ -500,10 +500,9 @@ function! s:switch()"{{{
 
     if winnr('$') == 1
       vnew
+    else
       wincmd w
     endif
-
-    wincmd w
   elseif context.quit
     call s:exit()
   endif

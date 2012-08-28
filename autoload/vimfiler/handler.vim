@@ -154,6 +154,7 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   "}}}
 
   if a:context.double
+    let winnr = winnr()
     let bufnr = bufnr('%')
 
     " Create another vimfiler.
@@ -165,7 +166,7 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
 
     let another_vimfiler_bufnr = bufnr('%')
     let b:vimfiler.another_vimfiler_bufnr = bufnr
-    wincmd w
+    execute winnr.'wincmd w'
     let b:vimfiler.another_vimfiler_bufnr = another_vimfiler_bufnr
   else
     let b:vimfiler.another_vimfiler_bufnr = -1
