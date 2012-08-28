@@ -599,11 +599,13 @@ function! s:switch_to_other_window()"{{{
 
   let pos = getpos('.')
 
-  if vimfiler#exists_another_vimfiler()
+  let another_vimfiler_bufnr = b:vimfiler.another_vimfiler_bufnr
+  if bufnr('%') != another_vimfiler_bufnr
+        \ && getbufvar(another_vimfiler_bufnr, '&filetype') ==# 'vimfiler'
+        \ && buflisted(another_vimfiler_bufnr) > 0
     " Restore another vimfiler.
     call vimfiler#_switch_vimfiler(
-          \ b:vimfiler.another_vimfiler_bufnr,
-          \ { 'split' : 1 }, '')
+          \ another_vimfiler_bufnr, { 'split' : 1 }, '')
   else
     " Create another vimfiler.
     call s:create_another_vimfiler()
@@ -898,7 +900,6 @@ function! s:hide()"{{{
   let context = vimfiler#get_context()
 
   if vimfiler#exists_another_vimfiler()
-        \ && vimfiler#winnr_another_vimfiler() > 0
     " Hide another vimfiler.
     let winnr = vimfiler#winnr_another_vimfiler()
     close

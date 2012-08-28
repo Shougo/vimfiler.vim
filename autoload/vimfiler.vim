@@ -574,13 +574,6 @@ function! vimfiler#exists_another_vimfiler()"{{{
         \ && getwinvar(winnr, '&filetype') ==# 'vimfiler'
         \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
 endfunction"}}}
-function! vimfiler#bufnr_another_vimfiler()"{{{
-  if !exists('t:vimfiler')
-    call vimfiler#initialize_tab_variable()
-  endif
-  return vimfiler#exists_another_vimfiler() ?
-        \ t:vimfiler.last_vimfiler_bufnr : -1
-endfunction"}}}
 function! vimfiler#winnr_another_vimfiler()"{{{
   return vimfiler#exists_another_vimfiler() ?
         \ bufwinnr(b:vimfiler.another_vimfiler_bufnr) : -1

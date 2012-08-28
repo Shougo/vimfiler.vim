@@ -166,7 +166,11 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
 
     let another_vimfiler_bufnr = bufnr('%')
     let b:vimfiler.another_vimfiler_bufnr = bufnr
-    execute winnr.'wincmd w'
+    if winnr() == winnr
+      wincmd w
+    else
+      execute winnr.'wincmd w'
+    endif
     let b:vimfiler.another_vimfiler_bufnr = another_vimfiler_bufnr
   else
     let b:vimfiler.another_vimfiler_bufnr = -1

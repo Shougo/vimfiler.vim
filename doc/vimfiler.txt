@@ -811,6 +811,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed vimfiler#redraw_prompt().
 - Improved double vimfiler behavior.
 - Refactored documentation.
+- Fixed another_vimfiler_bufnr.
 
 2012-08-24
 - Added -winheight option.
