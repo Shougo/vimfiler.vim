@@ -608,7 +608,7 @@ function! s:switch_to_other_window()"{{{
           \ another_vimfiler_bufnr, { 'split' : 1 }, '')
   else
     " Create another vimfiler.
-    call s:create_another_vimfiler()
+    call vimfiler#mappings#create_another_vimfiler()
   endif
 
   wincmd p
@@ -924,7 +924,7 @@ function! s:exit()"{{{
     call vimfiler#util#delete_buffer()
   endif
 endfunction"}}}
-function! s:create_another_vimfiler()"{{{
+function! vimfiler#mappings#create_another_vimfiler()"{{{
   let current_vimfiler = vimfiler#get_current_vimfiler()
   let current_bufnr = bufnr('%')
   let line = line('.')
@@ -946,7 +946,7 @@ endfunction"}}}
 function! s:sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
   if !vimfiler#exists_another_vimfiler()
-    call s:create_another_vimfiler()
+    call vimfiler#mappings#create_another_vimfiler()
   else
     " Change another vimfiler directory.
     let vimfiler = b:vimfiler
@@ -961,7 +961,7 @@ endfunction"}}}
 function! s:sync_with_another_vimfiler()"{{{
   " Search vimfiler window.
   if !vimfiler#exists_another_vimfiler()
-    call s:create_another_vimfiler()
+    call vimfiler#mappings#create_another_vimfiler()
 
     wincmd p
     call vimfiler#redraw_screen()

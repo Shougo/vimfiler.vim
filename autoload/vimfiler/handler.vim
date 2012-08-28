@@ -123,6 +123,7 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.local_sort_type = g:vimfiler_sort_type
   let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
   let b:vimfiler.winwidth = winwidth(0)
+  let b:vimfiler.another_vimfiler_bufnr = -1
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#default_settings()
@@ -154,26 +155,8 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   "}}}
 
   if a:context.double
-    let winnr = winnr()
-    let bufnr = bufnr('%')
-
     " Create another vimfiler.
-    let context = deepcopy(b:vimfiler.context)
-    let context.split = 1
-    let context.double = 0
-    let context.create = 1
-    call vimfiler#switch_filer(b:vimfiler.current_dir, context)
-
-    let another_vimfiler_bufnr = bufnr('%')
-    let b:vimfiler.another_vimfiler_bufnr = bufnr
-    if winnr() == winnr
-      wincmd w
-    else
-      execute winnr.'wincmd w'
-    endif
-    let b:vimfiler.another_vimfiler_bufnr = another_vimfiler_bufnr
-  else
-    let b:vimfiler.another_vimfiler_bufnr = -1
+    call vimfiler#mappings#create_another_vimfiler()
   endif
 
   if a:context.winwidth != 0
