@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Aug 2012.
+" Last Modified: 28 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -122,7 +122,6 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.global_sort_type = g:vimfiler_sort_type
   let b:vimfiler.local_sort_type = g:vimfiler_sort_type
   let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
-  let b:vimfiler.another_vimfiler_bufnr = -1
   let b:vimfiler.winwidth = winwidth(0)
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
@@ -155,15 +154,20 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   "}}}
 
   if a:context.double
+    let bufnr = bufnr('%')
+
     " Create another vimfiler.
     let context = deepcopy(b:vimfiler.context)
     let context.split = 1
     let context.double = 0
     let context.create = 1
     call vimfiler#switch_filer(b:vimfiler.current_dir, context)
-    let s:last_vimfiler_bufnr = bufnr('%')
-    let b:vimfiler.another_vimfiler_bufnr = bufnr('%')
+
+    let another_vimfiler_bufnr = bufnr('%')
+    let b:vimfiler.another_vimfiler_bufnr = bufnr
     wincmd w
+  else
+    let b:vimfiler.another_vimfiler_bufnr = -1
   endif
 
   if a:context.winwidth != 0

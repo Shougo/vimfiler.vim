@@ -572,6 +572,7 @@ function! vimfiler#exists_another_vimfiler()"{{{
   let winnr = bufwinnr(b:vimfiler.another_vimfiler_bufnr)
   return winnr > 0 && bufnr('%') != b:vimfiler.another_vimfiler_bufnr
         \ && getwinvar(winnr, '&filetype') ==# 'vimfiler'
+        \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
 endfunction"}}}
 function! vimfiler#bufnr_another_vimfiler()"{{{
   if !exists('t:vimfiler')
@@ -899,15 +900,6 @@ function! s:event_bufwin_enter(bufnr)"{{{
         \ || count(map(range(1, winnr('$')),
         \       'winbufnr(v:val)'), a:bufnr) > 1
     return
-  endif
-
-  if !exists('t:vimfiler')
-    call vimfiler#initialize_tab_variable()
-  endif
-  let last_vimfiler_bufnr = t:vimfiler.last_vimfiler_bufnr
-  if bufwinnr(last_vimfiler_bufnr) > 0
-        \ && last_vimfiler_bufnr != a:bufnr
-    let vimfiler.another_vimfiler_bufnr = last_vimfiler_bufnr
   endif
 
   if bufwinnr(a:bufnr) != winnr()

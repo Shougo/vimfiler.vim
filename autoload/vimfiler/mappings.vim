@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Aug 2012.
+" Last Modified: 28 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -600,9 +600,7 @@ function! s:switch_to_other_window()"{{{
 
   let pos = getpos('.')
 
-  if bufnr('%') != b:vimfiler.another_vimfiler_bufnr
-        \ && bufwinnr(b:vimfiler.another_vimfiler_bufnr) < 0
-        \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
+  if vimfiler#exists_another_vimfiler()
     " Restore another vimfiler.
     call vimfiler#_switch_vimfiler(
           \ b:vimfiler.another_vimfiler_bufnr,
@@ -900,16 +898,31 @@ function! s:hide()"{{{
 
   let context = vimfiler#get_context()
 
-  " Switch buffer.
-  if winnr('$') != 1 &&
-        \ (context.split || context.toggle || vimfiler#exists_another_vimfiler())
+  if vimfiler#exists_another_vimfiler()
+        \ && vimfiler#winnr_another_vimfiler() > 0
+    " Hide another vimfiler.
+    let winnr = vimfiler#winnr_another_vimfiler()
+    close
+    execute winnr.'wincmd w'
+    call s:hide()
+  elseif winnr('$') != 1 && (context.split || context.toggle
+        \ || vimfiler#exists_another_vimfiler())
     close
   else
     call vimfiler#util#alternate_buffer()
   endif
 endfunction"}}}
 function! s:exit()"{{{
-  call vimfiler#util#delete_buffer()
+  if vimfiler#exists_another_vimfiler()
+        \ && vimfiler#winnr_another_vimfiler() > 0
+    let winnr = vimfiler#winnr_another_vimfiler()
+    " Exit another vimfiler.
+    call vimfiler#util#delete_buffer()
+    execute winnr.'wincmd w'
+    call vimfiler#util#delete_buffer()
+  else
+    call vimfiler#util#delete_buffer()
+  endif
 endfunction"}}}
 function! s:create_another_vimfiler()"{{{
   let current_vimfiler = vimfiler#get_current_vimfiler()

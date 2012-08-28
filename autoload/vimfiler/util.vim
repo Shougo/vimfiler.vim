@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Aug 2012.
+" Last Modified: 28 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -154,8 +154,15 @@ function! vimfiler#util#alternate_buffer()"{{{
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! vimfiler#util#delete_buffer(...)"{{{
+  let context = vimfiler#get_context()
   let bufnr = get(a:000, 0, bufnr('%'))
-  call vimfiler#util#alternate_buffer()
+
+  if winnr('$') != 1 && (context.split || context.toggle
+        \ || vimfiler#exists_another_vimfiler())
+    close
+  else
+    call vimfiler#util#alternate_buffer()
+  endif
   execute 'silent bdelete!' bufnr
 endfunction"}}}
 function! s:buflisted(bufnr)"{{{

@@ -484,14 +484,14 @@ Normal mode key mappings.
 <Plug>(vimfiler_switch_to_parent_directory)	*<Plug>(vimfiler_switch_to_parent_directory)*
 		Switch to parent directory.
 
-<Plug>(vimfiler_switch_to_drive)			*<Plug>(vimfiler_switch_to_drive)*
+<Plug>(vimfiler_switch_to_drive)		*<Plug>(vimfiler_switch_to_drive)*
 		Switch to other drive(Windows) or mount point(Mac/Linux) by
 		|unite| interface.
 
-<Plug>(vimfiler_switch_to_home_directory)		*<Plug>(vimfiler_switch_to_home_directory)*
+<Plug>(vimfiler_switch_to_home_directory)	*<Plug>(vimfiler_switch_to_home_directory)*
 		Switch to home directory.
 
-<Plug>(vimfiler_switch_to_root_directory)		*<Plug>(vimfiler_switch_to_root_directory)*
+<Plug>(vimfiler_switch_to_root_directory)	*<Plug>(vimfiler_switch_to_root_directory)*
 		Switch to root directory.
 
 <Plug>(vimfiler_switch_to_history_directory)	*<Plug>(vimfiler_switch_to_history_directory)*
@@ -535,10 +535,10 @@ Normal mode key mappings.
 		(Command) "echo foo bar baz"
 
 <Plug>(vimfiler_hide)				*<Plug>(vimfiler_hide)*
-		Hide current vimfiler.
+		Hide current and another vimfiler.
 
 <Plug>(vimfiler_exit)				*<Plug>(vimfiler_exit)*
-		Exit current vimfiler.
+		Exit current and another vimfiler.
 
 <Plug>(vimfiler_help)				*<Plug>(vimfiler_help)*
 		Mappings help by |unite| interface.
@@ -808,6 +808,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-08-28
 - Fixed vimfiler#redraw_prompt().
+- Improved double vimfiler behavior.
 
 2012-08-24
 - Added -winheight option.
