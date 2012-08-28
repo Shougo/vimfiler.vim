@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Aug 2012.
+" Last Modified: 28 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -372,6 +372,11 @@ function! vimfiler#redraw_prompt()"{{{
         \ '' : '[' . (b:vimfiler.is_visible_dot_files ? '.:' : '')
         \       . b:vimfiler.current_mask . ']'
 
+  let prefix = printf('%s[in]: %s',
+        \ (b:vimfiler.is_safe_mode ? '' : '! '),
+        \ (b:vimfiler.source ==# 'file' ? '' :
+        \                 b:vimfiler.source.':'))
+
   let dir = b:vimfiler.current_dir
   if b:vimfiler.source ==# 'file'
     let home = vimfiler#util#substitute_path_separator(expand('~')).'/'
@@ -380,15 +385,15 @@ function! vimfiler#redraw_prompt()"{{{
     endif
   endif
 
-  if vimfiler#util#strchars(dir) > winwidth(0)
-    let dir = fnamemodify(dir, ':t')
+  if vimfiler#util#strchars(prefix.dir) > winwidth(0)
+    let dir = fnamemodify(substitute(dir, '/$', '', ''), ':t')
   endif
 
-  call setline(1, printf('%s[in]: %s%s%s',
-        \ (b:vimfiler.is_safe_mode ? '' : '! '),
-        \ (b:vimfiler.source ==# 'file' ? '' :
-        \                 b:vimfiler.source.':'),
-        \ dir, mask))
+  if dir !~ '/$'
+    let dir .= '/'
+  endif
+
+  call setline(1, prefix .  dir . mask)
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! vimfiler#get_marked_files()"{{{
