@@ -406,62 +406,63 @@ KEY MAPPINGS 					*vimfiler-key-mappings*
 Normal mode key mappings.
 
 <Plug>(vimfiler_switch_to_other_window)		*<Plug>(vimfiler_switch_to_other_window)*
-		Switch to other vimfiler window.
+		Switches to other vimfiler window or creates other vimfiler
+		window.
 
 <Plug>(vimfiler_loop_cursor_down)		*<Plug>(vimfiler_loop_cursor_down)*
-		Switch to next line with loop.
+		Switches to next line with loop.
 
 <Plug>(vimfiler_loop_cursor_up)			*<Plug>(vimfiler_loop_cursor_up)*
-		Switch to previous line with loop.
+		Switches to previous line with loop.
 
 <Plug>(vimfiler_cursor_top)			*<Plug>(vimfiler_cursor_top)*
 		Moves the cursor to the top of the vimfiler.
 
 <Plug>(vimfiler_redraw_screen)			*<Plug>(vimfiler_redraw_screen)*
-		Redraw vimfiler screen.
+		Redraws vimfiler screen.
 
 <Plug>(vimfiler_toggle_mark_current_line)	*<Plug>(vimfiler_toggle_mark_current_line)*
-		Toggle mark in cursor line and move down.
+		Toggles mark in cursor line and move down.
 
 <Plug>(vimfiler_toggle_mark_current_line_up)	*<Plug>(vimfiler_toggle_mark_current_line_up)*
-		Toggle mark in cursor line and move up.
+		Toggles mark in cursor line and move up.
 
 <Plug>(vimfiler_toggle_mark_all_lines)		*<Plug>(vimfiler_toggle_mark_all_lines)*
-		Toggle marks in all lines.
+		Toggles marks in all lines.
 
 <Plug>(vimfiler_clear_mark_all_lines)		*<Plug>(vimfiler_clear_mark_all_lines)*
-		Clear marks in all lines.
+		Clears marks in all lines.
 
 <Plug>(vimfiler_copy_file)			*<Plug>(vimfiler_copy_file)*
-		Copy marked files to destination directory. If exists another
+		Copies marked files to destination directory. If exists another
 		vimfiler buffer, destination directory is another vimfiler
 		directory.
 		If no marked files, mark current file.
 
 <Plug>(vimfiler_move_file)			*<Plug>(vimfiler_move_file)*
-		Move marked files to destination directory. If exists another
+		Moves marked files to destination directory. If exists another
 		vimfiler buffer, destination directory is another vimfiler
 		directory.
 		If no marked files, mark current file.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_delete_file)			*<Plug>(vimfiler_delete_file)*
-		Delete marked files completely.
+		Deletes marked files completely.
 		If no marked files, mark current file.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_make_directory)			*<Plug>(vimfiler_make_directory)*
-		Create new directory. If directory tree is opened, create new
+		Creates new directory. If directory tree is opened, create new
 		directory in directory tree.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_new_file)			*<Plug>(vimfiler_new_file)*
-		Create new files. If directory tree is opened, create new
+		Creates new files. If directory tree is opened, create new
 		files in directory tree.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_rename_file)			*<Plug>(vimfiler_rename_file)*
-		Rename cursor file or selected files.
+		Renames cursor file or selected files.
 		If selected files, vimfiler will open exrename buffer.
 		In exrename buffer, you can rename with Vim features like
 		|renamer.vim|.
@@ -469,59 +470,59 @@ Normal mode key mappings.
 		This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_execute)			*<Plug>(vimfiler_execute)*
-		Execute cursor file with |g:vimfiler_execute_file_list| command.
+		Executes cursor file with |g:vimfiler_execute_file_list| command.
 		If cursor file is directory, change directory.
 
 <Plug>(vimfiler_execute_system_associated)	*<Plug>(vimfiler_execute_system_associated)*
 <Plug>(vimfiler_execute_file)			*<Plug>(vimfiler_execute_file)*
-		Execute cursor file by system associated command.
+		Executes cursor file by system associated command.
 		Note: <Plug>(vimfiler_execute_file) is obsolute name.
 
 <Plug>(vimfiler_execute_vimfiler_associated)	*<Plug>(vimfiler_execute_vimfiler_associated)*
-		Execute cursor file by vimfiler associated command.
+		Executes cursor file by vimfiler associated command.
 		Refer to |g:vimfiler_execute_file_list|.
 
 <Plug>(vimfiler_switch_to_parent_directory)	*<Plug>(vimfiler_switch_to_parent_directory)*
-		Switch to parent directory.
+		Switches to parent directory.
 
 <Plug>(vimfiler_switch_to_drive)		*<Plug>(vimfiler_switch_to_drive)*
-		Switch to other drive(Windows) or mount point(Mac/Linux) by
+		Switches to other drive(Windows) or mount point(Mac/Linux) by
 		|unite| interface.
 
 <Plug>(vimfiler_switch_to_home_directory)	*<Plug>(vimfiler_switch_to_home_directory)*
-		Switch to home directory.
+		Switches to home directory.
 
 <Plug>(vimfiler_switch_to_root_directory)	*<Plug>(vimfiler_switch_to_root_directory)*
-		Switch to root directory.
+		Switches to root directory.
 
 <Plug>(vimfiler_switch_to_history_directory)	*<Plug>(vimfiler_switch_to_history_directory)*
-		Switch to history directory by |unite| interface.
+		Switches to history directory by |unite| interface.
 
 <Plug>(vimfiler_toggle_visible_dot_files)	*<Plug>(vimfiler_toggle_visible_dot_files)*
-		Toggle visible dot files.
+		Toggles visible dot files.
 
 <Plug>(vimfiler_popup_shell)			*<Plug>(vimfiler_popup_shell)*
-		Execute |:VimShellPop|or |:shell|.
+		Executes |:VimShellPop|or |:shell|.
 
 <Plug>(vimfiler_edit_file)			*<Plug>(vimfiler_edit_file)*
-		Edit cursor file. This mapping use |g:vimfiler_edit_action|.
+		Edits cursor file. This mapping use |g:vimfiler_edit_action|.
 
 <Plug>(vimfiler_split_edit_file)		*<Plug>(vimfiler_split_edit_file)*
-		Split buffer and edit cursor file. This mapping use
+		Splits buffer and edit cursor file. This mapping use
 		|g:vimfiler_edit_action|.
 
 <Plug>(vimfiler_edit_binary_file)		*<Plug>(vimfiler_edit_binary_file)*
-		Edit binary file by |vinarise|.
+		Edits binary file by |vinarise|.
 
 <Plug>(vimfiler_execute_external_filer)		*<Plug>(vimfiler_execute_external_filer)*
-		Open current directory by external filer(Explorer, Nautilus,
+		Opens current directory by external filer(Explorer, Nautilus,
 		...).
 
 <Plug>(vimfiler_execute_shell_command)		*<Plug>(vimfiler_execute_shell_command)*
-		Execute shell command by |vimproc#system()| or |system()|.
-		If the argument is "?", substitute one file.
-		If the argument is "*", substitute the selected files.
-		Otherwise, append one file to the last argument.
+		Executes shell command by |vimproc#system()| or |system()|.
+		If the argument is "?", it substitutes one file.
+		If the argument is "*", it substitutes the selected files.
+		Otherwise, it appends one file to the last argument.
 		
 		Example:
 		You selected files "foo", "bar", "baz".
@@ -535,106 +536,106 @@ Normal mode key mappings.
 		(Command) "echo foo bar baz"
 
 <Plug>(vimfiler_hide)				*<Plug>(vimfiler_hide)*
-		Hide current and another vimfiler.
+		Hides current and another vimfiler.
 
 <Plug>(vimfiler_exit)				*<Plug>(vimfiler_exit)*
-		Exit current and another vimfiler.
+		Exits current and another vimfiler.
 
 <Plug>(vimfiler_help)				*<Plug>(vimfiler_help)*
-		Mappings help by |unite| interface.
+		Starts mappings help by |unite| interface.
 
 <Plug>(vimfiler_preview_file)			*<Plug>(vimfiler_preview_file)*
-		Preview current file. This mapping use
+		Previews current file. This mapping use
 		|g:vimfiler_preview_action|.
 
 <Plug>(vimfiler_sync_with_current_vimfiler)	*<Plug>(vimfiler_sync_with_current_vimfiler)*
-		Synchronize another vimfiler current directory with current
+		Synchronizes another vimfiler current directory with current
 		vimfiler.
 
 <Plug>(vimfiler_sync_with_another_vimfiler)	*<Plug>(vimfiler_sync_with_another_vimfiler)*
-		Synchronize current directory with another vimfiler.
+		Synchronizes current directory with another vimfiler.
 
 <Plug>(vimfiler_open_file_in_another_vimfiler)	*<Plug>(vimfiler_open_file_in_another_vimfiler)*
-		Open cursor file or marked files in another vimfile. If the
-		file is directory, change directory in another vimfiler.
+		Opens cursor file or marked files in another vimfile. If the
+		file is directory, will change directory in another vimfiler.
 
 <Plug>(vimfiler_print_filename)			*<Plug>(vimfiler_print_filename)*
-		Print whole filename in echo area.
+		Prints whole filename in echo area.
 
 <Plug>(vimfiler_toggle_maximize_window)		*<Plug>(vimfiler_toggle_maximize_window)*
-		Toggle maximize window in current vimfiler.
+		Toggles maximize window in current vimfiler.
 
 <Plug>(vimfiler_yank_full_path)			*<Plug>(vimfiler_yank_full_path)*
-		Yank full path to clipboard register and unnamed register.
+		Yanks full path to clipboard register and unnamed register.
 
 <Plug>(vimfiler_set_current_mask)		*<Plug>(vimfiler_set_current_mask)*
 		Set current file mask by |unite| interface.
 
 <Plug>(vimfiler_grep)				*<Plug>(vimfiler_grep)*
-		Grep word in selected files or all current files by |unite|
-		interface.
+		Executes grep word in selected files or all current files by
+		|unite| interface.
 
 <Plug>(vimfiler_find)				*<Plug>(vimfiler_find)*
-		Find from current directory by |unite| interface. Command line
+		Finds from current directory by |unite| interface. Command line
 		format is refer to find command.
 		Note: Windows "find" command is not supported.
 		Please install UNIX Tools find for Windows.
 
 <Plug>(vimfiler_select_sort_type)		*<Plug>(vimfiler_select_sort_type)*
-		Select current vimfiler sort type by |unite| interface.
+		Selects current vimfiler sort type by |unite| interface.
 		If you selected "save", save current sort type.
 		If you selected "nosave", no save current sort type.
 
 <Plug>(vimfiler_switch_vim_buffer_mode)		*<Plug>(vimfiler_switch_vim_buffer_mode)*
-		Switch to vimfiler buffer mode. All vimfiler mappings is
+		Switches to vimfiler buffer mode. All vimfiler mappings is
 		disabled. If press <ESC>, settings will be restored.
 
 <Plug>(vimfiler_cd_vim_current_dir)		*<Plug>(vimfiler_cd_vim_current_dir)*
 <Plug>(vimfiler_cd)				*<Plug>(vimfiler_cd)*
-		Change system current directory to vimfiler current directory
+		Changes system current directory to vimfiler current directory
 		using |g:unite_kind_openable_lcd_command|.
 		Note: |<Plug>(vimfiler_cd)| is obsolute name.
 
 <Plug>(vimfiler_cd_file)			*<Plug>(vimfiler_cd_file)*
-		Change vimfiler current directory.
+		Changes vimfiler current directory.
 
 <Plug>(vimfiler_choose_action)			*<Plug>(vimfiler_choose_action)*
-		Choose |unite| action in selected files.
+		Chooses |unite| action in selected files.
 
 <Plug>(vimfiler_smart_h)			*<Plug>(vimfiler_smart_h)*
-		Switch to parent directory or normal! "h".
+		Switches to parent directory or normal! "h".
 
 <Plug>(vimfiler_smart_l)			*<Plug>(vimfiler_smart_l)*
-		Execute cursor file or normal! "l".
+		Executes cursor file or normal! "l".
 
 <Plug>(vimfiler_toggle_safe_mode)		*<Plug>(vimfiler_toggle_safe_mode)*
-		Toggle safe mode. In safe mode, dangerous command is disabled.
+		Toggles safe mode. In safe mode, dangerous command is disabled.
 
 <Plug>(vimfiler_toggle_simple_mode)		*<Plug>(vimfiler_toggle_simple_mode)*
-		Toggle simple mode. In simple mode, dispayed information is simple.
+		Toggles simple mode. In simple mode, dispayed information is simple.
 
 <Plug>(vimfiler_pushd)				*<Plug>(vimfiler_pushd)*
-		Push current directory(and another vimfiler current directory)
+		Pushes current directory(and another vimfiler current directory)
 		to directory stack.
 
 <Plug>(vimfiler_popd)				*<Plug>(vimfiler_popd)*
-		Pop current directory(and another vimfiler current directory)
+		Pops current directory(and another vimfiler current directory)
 		from directory stack.
 
 <Plug>(vimfiler_expand_tree)			*<Plug>(vimfiler_expand_tree)*
-		Expand/Unexpand directory tree.
+		Expands/Unexpands directory tree.
 
 <Plug>(vimfiler_expand_tree_recursive)		*<Plug>(vimfiler_expand_tree_recursive)*
-		Expand/Close directory tree.
+		Expands/Closes directory tree.
 		Note: This mapping ignores a symbolic link.
 
 <Plug>(vimfiler_cd_input_directory)		*<Plug>(vimfiler_cd_input_directory)*
-		Change directory to input directory.
+		Changes directory to input directory.
 
 Visual mode key mappings.
 
 <Plug>(vimfiler_toggle_mark_selected_lines)	*<Plug>(vimfiler_toggle_selected_lines)*
-		Toggle marks in selected lines.
+		Toggles marks in selected lines.
 
 						*g:vimfiler_default_key_mappings*
 Following keymappings are default keymappings.
@@ -809,6 +810,7 @@ CHANGELOG					*vimfiler-changelog*
 2012-08-28
 - Fixed vimfiler#redraw_prompt().
 - Improved double vimfiler behavior.
+- Refactored documentation.
 
 2012-08-24
 - Added -winheight option.
@@ -1197,572 +1199,6 @@ ChangeLog 3.1
 2011-11-17
 - Ver.3.1 development is started.
 - Improved syntax.
-
-------------------------------------------------------------------------------
-ChangeLog 3.0
-
-2011-11-17
-- Fixed dummy action error.
-
-2011-11-16
-- Fixed documentation.
-- Improved dummy action.
-- Fixed grep behavior.
-- Improved vimfiler history behavior.
-- Added <Plug>(vimfiler_hide) mapping.
-- Changed default mappings.
-- Improved another vimfiler behavior.
-
-2011-11-15
-- Fixed initialization.
-
-2011-11-11
-- Improved syntax highlight.
-- Added <Plug>(vimfiler_find) mapping.
-- Vitalized.
-- Changed sort behavior.
-- Added g:vimfiler_data_directory option.
-- Implemented save sort type.
-
-2011-11-10
-- Fixed :VimFilerDouble error.
-- Fixed vimfiler/drive source.
-- Added <Plug>(vimfiler_cursor_top) mapping.
-- Improved switch to other window.
-
-2011-11-06
-- Fixed mappings name.
-
-2011-11-05
-- Improved restore another vimfiler behavior.
-
-2011-11-02
-- Improved vimfiler/mapping source.
-- Improved redraw behavior.
-- Deleted vimfiler/mapping source.
-- Added <Plug>(vimfiler_toggle_simple_mode) mapping.
-- Fixed change current directory.
-- Improved <Plug>(vimfiler_print_filename) mapping.
-
-2011-10-31
-- Added vimfiler#do_action().
-
-2011-10-25
-- Fixed s:browse_check().
-
-2011-10-23
-- Improved check link.
-- Fixed for ":edit ~".
-
-2011-10-17
-- Improved vimfiler mappings source.
-
-2011-10-13
-- Detect sudo vim.
-
-2011-10-11
-- Fixed for Vim 7.2.
-
-2011-10-10
-- Fixed variables initialize.
-- Delted obsolute options.
-- Improved vimfiler/drive source.
-
-2011-10-05
-- Added vimfiler/popd source.
-- Improved execute file.
-
-2011-09-27
-- Set bufhidden.
-- Improved syntax.
-
-2011-09-24
-- Added README.
-
-2011-09-23
-- Improved documentation.
-- Changed <Plug>(vimfiler_cd) behavior.
-
-2011-09-22
-- Revised documentation.
-- Added vimfiler/drive source.
-
-2011-09-21
-- Added vimfiler#mappings#search_cursor() function.
-- Fixed vimfiler mappings.
-
-2011-09-19
-- Refactored local variable names.
-
-2011-09-17
-- Implemented context.
-
-2011-09-15
-- Fixed for netrw.
-
-2011-09-04
-- Fixed vimfiler create.
-- Improved buffer name.
-
-2011-09-03
-- Improved cd.
-- Improved expand directory.
-
-2011-09-01
-- Improved initialize vimfiler buffer.
-
-2011-08-31
-- Fixed new file action.
-
-2011-08-29
-- Fixed vimfiler buffer search.
-- Fixed preview error.
-- Fixed wrapper commands exists error.
-
-2011-08-26
-- Implemented event handler.
-- Improved redraw screen.
-- Improved event handler.
-- Implemented completion interface.
-- Parse cd path.
-- Fixed grep error.
-
-2011-08-25
-- Improved vimfiler file interface.
-- Fixed browse check.
-- Improved behavior.
-
-2011-08-24
-- Improved vimfiler actions.
-- Deleted g:vimfiler_cd_command option.
-- Deleted mappings_caller().
-- Improved exrename.
-
-2011-08-23
-- Improved switch vimfiler behavior.
-- Fixed browser check.
-- Fixed restore another vimfiler.
-- Improved cd.
-
-2011-08-17
-- Added vimfiler/mask source.
-- Added vimfiler/history source.
-- Added vimfiler/mapping source.
-- Changed g:vimfiler_sort_type default value.
-- Added vimfiler/mask matcher.
-- Added vimfiler/execute source.
-
-2011-08-16
-- Improved actions.
-- Added vimfiler sort source.
-- Deleted vimfiler clipboard.
-- Added is_listed attribute.
-
-2011-08-15
-- Fixed some errors.
-- Improved context.
-
-2011-08-14
-- Use unite.vim Ver.3(experimental).
-- Deleted scheme file.
-- Deleted vimfiler trash box routine.
-- Deleted obsolute mapping.
-- Improved action name.
-
-2011-08-13
-- Ver.3.0 development is started.
-
-------------------------------------------------------------------------------
-ChangeLog 2.0
-
-2011-08-13
-- Improved another vimfiler.
-- Released ver.2.0.
-
-2011-07-07
-- Set no-quit option in unite-grep.
-
-2011-07-01
-- Improved sync vimfiler.
-
-2011-06-26
-- Improved cd internal command.
-- Fixed exrename highlight.
-
-2011-06-15
-- Improved grep action.
-
-2011-06-08
-- Improved substitute path separator.
-
-2011-06-03
-- Improved grep action.
-- Improved default filer behavior.
-
-2011-05-29
-- Use unite-grep in grep command.
-- Fixed grep error.
-- Improved move_to_other_window mapping.
-- Added :VimFilerDouble command.
-
-2011-05-27
-- Fixed vital bug.
-
-2011-05-12
-- Use system_gui().
-
-2011-05-11
-- <Plug>(vimfiler_new_file) keymapping supports create multiple files.
-
-2011-05-10
-- Fixed <Plug>(vimfiler_execute).
-
-2011-05-09
-- Do autocmd BufNewFile.
-
-2011-04-27
-- Improved displays.
-- Vitalized.
-
-2011-01-11
-- Fixed g:vimfiler_as_default_explorer.
-
-2011-01-03
-- Fixed edit file.
-
-2011-01-01
-- Fixed exrename initialize.
-
-2010-12-19
-- Fixed exrename error.
-- Fixed exrename syntax.
-
-2010-12-08
-- Restored cd behavior.
-
-2010-12-05
-- Fixed cd command.
-
-2010-11-30
-- Improved examples.
-
-2010-11-09
-- Fixed g:vimfiler_safe_mode_by_default description.
-
-2010-11-08
-- Fixed exrename bug.
-
-2010-11-07
-- Improved modeline.
-
-2010-11-04
-- Added g:vimfiler_cd_command option.
-
-2010-10-31
-- Improved symbolic link.
-
-2010-10-30
-- When execute <Plug>(vimfiler_split_edit_file), g:vimfiler_edit_command is ignored.
-- Display symbolic link.
-
-2010-10-27
-- Detect cd error.
-- Improved cd.
-- Convert path separator \ to / only for Windows.
-
-2010-10-21
-- Added :VimFilerTab command.
-- Check t:unite_buffer_dictionary.
-
-2010-10-11
-- Improved safe mode view.
-- Improved error detection.
-
-2010-10-10
-- Implemented safe mode.
-- Added <Plug>(vimfiler_toggle_safe_mode) mapping.
-- Added g:vimfiler_safe_mode_by_default option.
-- Improved safe mode prompt.
-- Improved safe mode.
-- Disabled file operation mappings in safe mode.
-- Added g:vimfiler_time_format option.
-- Improved safe mode mappings.
-- Safe mode is default.
-
-2010-10-09
-- Fixed shellslash bug.
-
-2010-10-07
-- Don't resolve link.
-
-2010-10-06
-- Disabled copy in Windows when cp.exe is not found.
-
-2010-10-02
-- Fixed vim buffer mode.
-- Added :VimFilerSplit command.
-- Silent error message.
-- Improved vimfiler switch.
-
-2010-10-01
-- Fixed noshellslash bug.
-
-2010-09-23
-- Fixed grep.
-
-2010-09-18
-- Fixed current directory bug.
-
-2010-09-09
-- Improved h and l keymappings.
-
-2010-08-26
-- Improved grep.
-
-2010-08-25
-- Fixed cd bug.
-- Improved default mappings.
-
-2010-08-22
-- Fixed edit.
-
-2010-08-19
-- Fixed readonly.
-- Added g:vimfiler_wildignore option.
-
-2010-08-13
-- Improved error message.
-- Added <Plug>(vimfiler_edit_binary_file) mapping.
-- Fixed make directory check.
-
-2010-08-12
-- Improved copy option.
-
-2010-08-08
-- Improved default buffer settings.
-- Changed <Plug>(vimfiler_select_sort_type) default mapping.
-
-2010-08-07
-- Implemented <Plug>(vimfiler_split_edit_file).
-- Improved edit.
-
-2010-08-02
-- Don't change current directory.
-- Added <Plug>(vimfiler_cd) mapping.
-- Improved mappings.
-
-2010-08-01
-- Improved rename copy.
-
-2010-07-31
-- Fixed documentation.
-- Improved edit behavior.
-- Implemented rename copy.
-- Detect same directory.
-
-2010-07-29
-- Improved move_to_drive().
-- Improved mask.
-- Fixed visible doted file bug.
-- Implemented <Plug>(vimfiler_jump_to_history_directory).
-- Revised documentation.
-
-2010-07-28
-- Implemented dictionary plugin.
-- Added <Plug>(vimfiler_move_to_history_forward) and <Plug>(vimfiler_move_to_history_back) key-mappings.
-- Added g:vimfiler_enable_clipboard option.
-- Revised documentation.
-- Added mappings manual.
-
-2010-07-26
-- Supported conceal feature.
-
-2010-07-19
-- Deleted cursorline.
-
-2010-07-18
-- Improved omit filename.
-
-2010-07-17
-- Optimized head match.
-
-2010-07-12
-- Started Ver.2.0 development.
-- Improved vimproc check.
-
-------------------------------------------------------------------------------
-ChangeLog 1.50
-2010-06-25
-- Improved mappings.
-
-2010-06-22
-- Use vimproc#system_bg().
-
-2010-06-21
-- Improved marked file syntax.
-- Added <Plug>(vimfiler_move_to_other_window) mapping.
-- Fixed error.
-- Use vimproc#open().
-- Added <Plug>(vimfiler_switch_vim_buffer_mode) and <Plug>(vimfiler_restore_vimfiler_mode) mappings.
-
-2010-06-18
-- Use command.
-
-2010-06-15
-- Improved wincmd.
-
-2010-06-13
-- Optimized redraw.
-- Refactoringed mappings.
-- Implemented <Plug>(vimfiler_toggle_mark_selected_lines) mapping.
-
-2010-06-12
-- Supported symbolic link and Win32 shortcut.
-- Improved filetype detect.
-- Added g:vimfiler_extensions option.
-
-2010-06-11
-- Fixed exrename error.
-
-2010-06-10
-- Fixed vimfiler#get_filename() error.
-
-2010-06-09
-- Optimized <Plug>(vimfiler_loop_cursor_down) and <Plug>(vimfiler_loop_cursor_up).
-
-2010-06-05
-- Improved initialize cursor.
-
-2010-06-01
-- Fixed critical error.
-
-2010-05-24
-- Fixed open bug.
-
-2010-05-23
-- Improved xdg-open.
-- Fixed error.
-- Improved g:vimfiler_as_default_explorer.
-- Implemented extended rename.
-
-2010-05-18
-- Fixed file size calculation.
-- Changed some default mappings.
-- Deleted <Plug>(vimfiler_open_next_file) and <Plug>(vimfiler_open_previous_file) default mappings.
-- Improved sort.
-- Improved another vimfiler detect.
-
-2010-05-16
-- Added g:vimfiler_sort_type and g:vimfiler_directory_display_top options.
-- Implemented sort.
-
-2010-05-15
-- Improved cygwin detect.
-- Added VimFilerDetectDrives command.
-- Added g:vimfiler_detect_drives option.
-- Implemented restore from trashbox.
-- Fixed move bug in Windows.
-- Added <Plug>(vimfiler_grep) mapping.
-- Added <Plug>(vimfiler_open_next_file) and <Plug>(vimfiler_open_previous_file) mappings.
-
-2010-05-13
-* Improved environment detect.
-
-2010-05-09
-* Deleted duplicated mapping.
-* Renamed open another vimfiler mapping.
-* Added <Plug>(vimfiler_sync_with_another_vimfiler) mapping.
-* Improved vimfiler's cursor position.
-* Added <Plug>(vimfiler_jump_to_directory) mapping.
-* Fixed visible dot files bug.
-
-2010-05-07
-* Added g:vimfiler_max_filename_width and g:vimfiler_min_filename_width options.
-* Improved redraw.
-* Improved syntax.
-* Added VimFilerSimple command.
-* Improved execute file.
-* popup shell clears markes.
-* Optimized display.
-* Added <Plug>(vimfiler_print_filename) keymapping.
-* Implemented delete and force delete.
-* Implemented paste.
-* Implemented set mask patterns.
-
-2010-05-06
-* Renamed g:vimfiler_use_default_explorer as g:vimfiler_as_default_explorer.
-* Fixed g:vimfiler_edit_command bug.
-* Fixed compare string.
-* Improved augroup name.
-
-2010-05-05
-* Improved encoding.
-* Added g:vimfiler_use_default_explorer option.
-* Fixed current directory bugs.
-* Improved execute file.
-* Improved syntax highlight.
-* Calculate directory date.
-* Fixed file size view.
-* Detect Mac.
-* Check autochdir.
-
-2010-05-04
-* Improved system().
-* Fixed depulicated tags.
-
-2010-05-03
-* Set noautochdir.
-* Added g:vimfiler_split_command and g:vimfiler_edit_command options.
-* Added g:vimfiler_pedit_command option.
-* Added <Plug>(vimfiler_exit) mapping.
-* Added <Plug>(vimfiler_execute_shell_command) mapping.
-* Improved <Plug>(vimfiler_popup_shell) mapping.
-* Fixed some bugs.
-* Implemented file operations.
-
-2010-03-11
-* Deleted <Plug>(vimfiler_move_to_current_directory) mapping.
-* Added <Plug>(vimfiler_delete) mapping.
-
-2010-03-03
-* Improved restore current directory.
-* Caching current files.
-* Improved marks.
-* Improved cd.
-
-------------------------------------------------------------------------------
-ChangeLog 1.x-1.00
-    1.02 :
-    - Added <Plug>(vimfiler_execute) and <Plug>(vimfiler_move_to_current_directory) mappings.
-    - Save cursor position when redraw and cd.
-    - Analyse "Current directory: " line when <Plug>(vimfiler_execute).
-    - Improved buffer search in <Plug>(vimfiler_split_create).
-    - Improved detect for mac.
-    - Added g:vimfiler_execute_file_list option.
-
-    1.01 :
-    - Optimized speed.
-    - Improved window size.
-    - Fixed restore current directory bug.
-    - Improved display file size.
-    - Changed execute file keymapping.
-    - Added help and preview keymappings.
-    - Added g:vimfiler_no_default_key_mappings variable.
-    
-    1.00 :
-    - Initial version.
-    - Implemented move to other drive.
-    - Implemented filetype colors.
-    - Implemented execute new gvim key-mapping.
-    - Implemented execute external filer key-mapping.
-    - Implemented execute external command key-mapping.
-    - Fixed file execution bug.
-    - Implemented visible dot file.
-    - Added popup shell key-mapping.
-    - Added presentation file.
-    - Improved cd internal command.
-    - Implemented functions like dual screen filer.
-    - Implemented loop cursor.
 
 ==============================================================================
 vim:tw=78:ts=8:ft=help:norl:noet:fen:fdl=0:
