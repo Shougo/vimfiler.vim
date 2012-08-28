@@ -176,7 +176,7 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
     execute 'vertical resize' a:context.winwidth
   endif
 
-  call vimfiler#force_redraw_screen()
+  call vimfiler#force_redraw_all_vimfiler()
   3
 endfunction"}}}
 function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
