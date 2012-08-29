@@ -901,9 +901,9 @@ function! s:hide()"{{{
 
   if vimfiler#exists_another_vimfiler()
     " Hide another vimfiler.
-    let winnr = vimfiler#winnr_another_vimfiler()
+    let bufnr = b:vimfiler.another_vimfiler_bufnr
     close
-    execute winnr.'wincmd w'
+    execute bufwinnr(bufnr).'wincmd w'
     call s:hide()
   elseif winnr('$') != 1 && (context.split || context.toggle
         \ || vimfiler#exists_another_vimfiler())
@@ -914,10 +914,10 @@ function! s:hide()"{{{
 endfunction"}}}
 function! s:exit()"{{{
   if vimfiler#exists_another_vimfiler()
-    let winnr = vimfiler#winnr_another_vimfiler()
+    let bufnr = b:vimfiler.another_vimfiler_bufnr
     " Exit another vimfiler.
     call vimfiler#util#delete_buffer()
-    execute winnr.'wincmd w'
+    execute bufwinnr(bufnr).'wincmd w'
     call vimfiler#util#delete_buffer()
   else
     call vimfiler#util#delete_buffer()
