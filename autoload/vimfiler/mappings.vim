@@ -108,6 +108,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>select_sort_type()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_other_window)
         \ :<C-u>call <SID>switch_to_other_window()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_another_vimfiler)
+        \ :<C-u>call <SID>switch_to_another_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)
         \ :<C-u>call <SID>switch_vim_buffer_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)
@@ -153,7 +155,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
     return
   endif
 
-  nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_other_window)
+  nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_another_vimfiler)
   nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
   nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
 
@@ -597,18 +599,19 @@ function! s:switch_to_other_window()"{{{
     return
   endif
 
-  let pos = getpos('.')
-
   " Create another vimfiler.
   call vimfiler#mappings#create_another_vimfiler()
-
-  wincmd p
-
-  call setpos('.', pos)
-
-  call vimfiler#redraw_screen()
-
-  wincmd p
+  call vimfiler#redraw_all_vimfiler()
+endfunction"}}}
+function! s:switch_to_another_vimfiler()"{{{
+  if vimfiler#winnr_another_vimfiler() > 0
+    " Switch to another vimfiler.
+    execute vimfiler#winnr_another_vimfiler().'wincmd w'
+  else
+    " Create another vimfiler.
+    call vimfiler#mappings#create_another_vimfiler()
+    call vimfiler#redraw_all_vimfiler()
+  endif
 endfunction"}}}
 function! s:print_filename()"{{{
   let filename = vimfiler#get_filename()

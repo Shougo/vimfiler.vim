@@ -406,8 +406,11 @@ KEY MAPPINGS 					*vimfiler-key-mappings*
 Normal mode key mappings.
 
 <Plug>(vimfiler_switch_to_other_window)		*<Plug>(vimfiler_switch_to_other_window)*
-		Switches to other vimfiler window or creates other vimfiler
-		window.
+		Switches to other window or creates another vimfiler window.
+
+<Plug>(vimfiler_switch_to_another_vimfiler)	*<Plug>(vimfiler_switch_to_another_vimfiler)*
+		Switches to another vimfiler window or creates another
+		vimfiler window.
 
 <Plug>(vimfiler_loop_cursor_down)		*<Plug>(vimfiler_loop_cursor_down)*
 		Switches to next line with loop.
@@ -643,7 +646,7 @@ Following keymappings are default keymappings.
 Normal mode default mappings.
 {lhs}			{rhs}
 --------		-----------------------------
-<TAB>			<Plug>(vimfiler_switch_to_other_window)
+<TAB>			<Plug>(vimfiler_switch_to_another_vimfiler)
 j			<Plug>(vimfiler_loop_cursor_down)
 k			<Plug>(vimfiler_loop_cursor_up)
 gg			<Plug>(vimfiler_cursor_top)
@@ -810,6 +813,8 @@ CHANGELOG					*vimfiler-changelog*
 2012-08-29
 - Fixed hide and exit.
 - Improved for :VimFilerDouble.
+- Added <Plug>(vimfiler_switch_to_another_vimfiler) keymapping.
+- Changed <Tab> default keymapping.
 
 2012-08-28
 - Fixed vimfiler#redraw_prompt().
