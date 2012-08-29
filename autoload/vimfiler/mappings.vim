@@ -503,7 +503,7 @@ function! s:switch()"{{{
     if winnr('$') == 1
       vnew
     else
-      wincmd w
+      wincmd p
     endif
   elseif context.quit
     call s:exit()
