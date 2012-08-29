@@ -933,6 +933,7 @@ function! vimfiler#mappings#create_another_vimfiler()"{{{
   let context.split = 1
   let context.double = 0
   let context.create = 1
+  let context.direction = 'belowright'
   call vimfiler#switch_filer(
         \ current_vimfiler.source.':'.
         \ current_vimfiler.current_dir, context)

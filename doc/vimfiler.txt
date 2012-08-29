@@ -809,6 +809,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-08-29
 - Fixed hide and exit.
+- Improved for :VimFilerDouble.
 
 2012-08-28
 - Fixed vimfiler#redraw_prompt().

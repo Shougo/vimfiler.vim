@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Aug 2012.
+" Last Modified: 29 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -206,10 +206,12 @@ function! s:create_filer(path, context)"{{{
   let a:context.profile_name = a:context.buffer_name
   let a:context.buffer_name = bufname
 
-  if a:context.horizontal && a:context.split
-    execute a:context.direction 'new'
-  elseif a:context.split
-    execute a:context.direction 'vnew'
+  if a:context.split
+    if a:context.horizontal || a:context.double
+      execute a:context.direction 'new'
+    else
+      execute a:context.direction 'vnew'
+    endif
   endif
 
   " Save swapfile option.
@@ -951,10 +953,12 @@ endfunction"}}}
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   let context = vimfiler#initialize_context(a:context)
 
-  if context.horizontal && context.split
-    execute context.direction 'new'
-  elseif context.split
-    execute context.direction 'vnew'
+  if context.split
+    if context.horizontal || context.double
+      execute context.direction 'new'
+    else
+      execute context.direction 'vnew'
+    endif
   endif
 
   execute 'buffer' . a:bufnr
@@ -981,6 +985,11 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
 
   let b:vimfiler.context = extend(b:vimfiler.context, context)
   call vimfiler#set_current_vimfiler(b:vimfiler)
+
+  if a:context.double
+    " Create another vimfiler.
+    call vimfiler#mappings#create_another_vimfiler()
+  endif
 endfunction"}}}
 
 function! s:get_postfix(prefix, is_create)"{{{
