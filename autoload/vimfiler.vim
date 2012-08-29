@@ -978,9 +978,6 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
     if b:vimfiler.current_dir !~ '/$'
       let b:vimfiler.current_dir .= '/'
     endif
-    call vimfiler#force_redraw_screen()
-  else
-    call vimfiler#redraw_screen()
   endif
 
   let b:vimfiler.context = extend(b:vimfiler.context, context)
@@ -989,7 +986,10 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   if a:context.double
     " Create another vimfiler.
     call vimfiler#mappings#create_another_vimfiler()
+    wincmd p
   endif
+
+  call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 
 function! s:get_postfix(prefix, is_create)"{{{

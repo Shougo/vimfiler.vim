@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Aug 2012.
+" Last Modified: 29 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -157,6 +157,7 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   if a:context.double
     " Create another vimfiler.
     call vimfiler#mappings#create_another_vimfiler()
+    wincmd p
   endif
 
   if a:context.winwidth != 0
