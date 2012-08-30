@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Aug 2012.
+" Last Modified: 29 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -206,10 +206,12 @@ function! s:create_filer(path, context)"{{{
   let a:context.profile_name = a:context.buffer_name
   let a:context.buffer_name = bufname
 
-  if a:context.horizontal && a:context.split
-    execute a:context.direction 'new'
-  elseif a:context.split
-    execute a:context.direction 'vnew'
+  if a:context.split
+    if a:context.horizontal || a:context.double
+      execute a:context.direction 'new'
+    else
+      execute a:context.direction 'vnew'
+    endif
   endif
 
   " Save swapfile option.
@@ -372,6 +374,11 @@ function! vimfiler#redraw_prompt()"{{{
         \ '' : '[' . (b:vimfiler.is_visible_dot_files ? '.:' : '')
         \       . b:vimfiler.current_mask . ']'
 
+  let prefix = printf('%s[in]: %s',
+        \ (b:vimfiler.is_safe_mode ? '' : '! '),
+        \ (b:vimfiler.source ==# 'file' ? '' :
+        \                 b:vimfiler.source.':'))
+
   let dir = b:vimfiler.current_dir
   if b:vimfiler.source ==# 'file'
     let home = vimfiler#util#substitute_path_separator(expand('~')).'/'
@@ -380,15 +387,15 @@ function! vimfiler#redraw_prompt()"{{{
     endif
   endif
 
-  if vimfiler#util#strchars(dir) > winwidth(0)
-    let dir = fnamemodify(dir, ':t')
+  if vimfiler#util#strchars(prefix.dir) > winwidth(0)
+    let dir = fnamemodify(substitute(dir, '/$', '', ''), ':t')
   endif
 
-  call setline(1, printf('%s[in]: %s%s%s',
-        \ (b:vimfiler.is_safe_mode ? '' : '! '),
-        \ (b:vimfiler.source ==# 'file' ? '' :
-        \                 b:vimfiler.source.':'),
-        \ dir, mask))
+  if dir !~ '/$'
+    let dir .= '/'
+  endif
+
+  call setline(1, prefix .  dir . mask)
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! vimfiler#get_marked_files()"{{{
@@ -567,13 +574,7 @@ function! vimfiler#exists_another_vimfiler()"{{{
   let winnr = bufwinnr(b:vimfiler.another_vimfiler_bufnr)
   return winnr > 0 && bufnr('%') != b:vimfiler.another_vimfiler_bufnr
         \ && getwinvar(winnr, '&filetype') ==# 'vimfiler'
-endfunction"}}}
-function! vimfiler#bufnr_another_vimfiler()"{{{
-  if !exists('t:vimfiler')
-    call vimfiler#initialize_tab_variable()
-  endif
-  return vimfiler#exists_another_vimfiler() ?
-        \ t:vimfiler.last_vimfiler_bufnr : -1
+        \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
 endfunction"}}}
 function! vimfiler#winnr_another_vimfiler()"{{{
   return vimfiler#exists_another_vimfiler() ?
@@ -896,15 +897,6 @@ function! s:event_bufwin_enter(bufnr)"{{{
     return
   endif
 
-  if !exists('t:vimfiler')
-    call vimfiler#initialize_tab_variable()
-  endif
-  let last_vimfiler_bufnr = t:vimfiler.last_vimfiler_bufnr
-  if bufwinnr(last_vimfiler_bufnr) > 0
-        \ && last_vimfiler_bufnr != a:bufnr
-    let vimfiler.another_vimfiler_bufnr = last_vimfiler_bufnr
-  endif
-
   if bufwinnr(a:bufnr) != winnr()
     let winnr = winnr()
     execute bufwinnr(a:bufnr) 'wincmd w'
@@ -961,10 +953,12 @@ endfunction"}}}
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   let context = vimfiler#initialize_context(a:context)
 
-  if context.horizontal && context.split
-    execute context.direction 'new'
-  elseif context.split
-    execute context.direction 'vnew'
+  if context.split
+    if context.horizontal || context.double
+      execute context.direction 'new'
+    else
+      execute context.direction 'vnew'
+    endif
   endif
 
   execute 'buffer' . a:bufnr
@@ -984,13 +978,18 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
     if b:vimfiler.current_dir !~ '/$'
       let b:vimfiler.current_dir .= '/'
     endif
-    call vimfiler#force_redraw_screen()
-  else
-    call vimfiler#redraw_screen()
   endif
 
   let b:vimfiler.context = extend(b:vimfiler.context, context)
   call vimfiler#set_current_vimfiler(b:vimfiler)
+
+  if a:context.double
+    " Create another vimfiler.
+    call vimfiler#mappings#create_another_vimfiler()
+    wincmd p
+  endif
+
+  call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 
 function! s:get_postfix(prefix, is_create)"{{{

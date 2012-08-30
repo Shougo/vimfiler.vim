@@ -108,6 +108,8 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>select_sort_type()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_other_window)
         \ :<C-u>call <SID>switch_to_other_window()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_another_vimfiler)
+        \ :<C-u>call <SID>switch_to_another_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_vim_buffer_mode)
         \ :<C-u>call <SID>switch_vim_buffer_mode()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_restore_vimfiler_mode)
@@ -153,7 +155,7 @@ function! vimfiler#mappings#define_default_mappings()"{{{
     return
   endif
 
-  nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_other_window)
+  nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_another_vimfiler)
   nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
   nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
 
@@ -499,10 +501,9 @@ function! s:switch()"{{{
 
     if winnr('$') == 1
       vnew
-      wincmd w
+    else
+      wincmd p
     endif
-
-    wincmd w
   elseif context.quit
     call s:exit()
   endif
@@ -597,27 +598,19 @@ function! s:switch_to_other_window()"{{{
     return
   endif
 
-  let pos = getpos('.')
-
-  if bufnr('%') != b:vimfiler.another_vimfiler_bufnr
-        \ && bufwinnr(b:vimfiler.another_vimfiler_bufnr) < 0
-        \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
-    " Restore another vimfiler.
-    call vimfiler#_switch_vimfiler(
-          \ b:vimfiler.another_vimfiler_bufnr,
-          \ { 'split' : 1 }, '')
+  " Create another vimfiler.
+  call vimfiler#mappings#create_another_vimfiler()
+  call vimfiler#redraw_all_vimfiler()
+endfunction"}}}
+function! s:switch_to_another_vimfiler()"{{{
+  if vimfiler#winnr_another_vimfiler() > 0
+    " Switch to another vimfiler.
+    execute vimfiler#winnr_another_vimfiler().'wincmd w'
   else
     " Create another vimfiler.
-    call s:create_another_vimfiler()
+    call vimfiler#mappings#create_another_vimfiler()
+    call vimfiler#redraw_all_vimfiler()
   endif
-
-  wincmd p
-
-  call setpos('.', pos)
-
-  call vimfiler#redraw_screen()
-
-  wincmd p
 endfunction"}}}
 function! s:print_filename()"{{{
   let filename = vimfiler#get_filename()
@@ -899,18 +892,31 @@ function! s:hide()"{{{
 
   let context = vimfiler#get_context()
 
-  " Switch buffer.
-  if winnr('$') != 1 &&
-        \ (context.split || context.toggle || vimfiler#exists_another_vimfiler())
+  if vimfiler#exists_another_vimfiler()
+    " Hide another vimfiler.
+    let bufnr = b:vimfiler.another_vimfiler_bufnr
+    close
+    execute bufwinnr(bufnr).'wincmd w'
+    call s:hide()
+  elseif winnr('$') != 1 && (context.split || context.toggle
+        \ || vimfiler#exists_another_vimfiler())
     close
   else
     call vimfiler#util#alternate_buffer()
   endif
 endfunction"}}}
 function! s:exit()"{{{
-  call vimfiler#util#delete_buffer()
+  if vimfiler#exists_another_vimfiler()
+    let bufnr = b:vimfiler.another_vimfiler_bufnr
+    " Exit another vimfiler.
+    call vimfiler#util#delete_buffer()
+    execute bufwinnr(bufnr).'wincmd w'
+    call vimfiler#util#delete_buffer()
+  else
+    call vimfiler#util#delete_buffer()
+  endif
 endfunction"}}}
-function! s:create_another_vimfiler()"{{{
+function! vimfiler#mappings#create_another_vimfiler()"{{{
   let current_vimfiler = vimfiler#get_current_vimfiler()
   let current_bufnr = bufnr('%')
   let line = line('.')
@@ -920,6 +926,7 @@ function! s:create_another_vimfiler()"{{{
   let context.split = 1
   let context.double = 0
   let context.create = 1
+  let context.direction = 'belowright'
   call vimfiler#switch_filer(
         \ current_vimfiler.source.':'.
         \ current_vimfiler.current_dir, context)
@@ -932,7 +939,7 @@ endfunction"}}}
 function! s:sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
   if !vimfiler#exists_another_vimfiler()
-    call s:create_another_vimfiler()
+    call vimfiler#mappings#create_another_vimfiler()
   else
     " Change another vimfiler directory.
     let vimfiler = b:vimfiler
@@ -947,7 +954,7 @@ endfunction"}}}
 function! s:sync_with_another_vimfiler()"{{{
   " Search vimfiler window.
   if !vimfiler#exists_another_vimfiler()
-    call s:create_another_vimfiler()
+    call vimfiler#mappings#create_another_vimfiler()
 
     wincmd p
     call vimfiler#redraw_screen()
@@ -1064,6 +1071,8 @@ function! s:copy()"{{{
     let dest_dir .= another.current_dir
   endif
 
+  let old_files = copy(vimfiler#get_current_vimfiler().current_files)
+
   " Execute copy.
   call unite#mappings#do_action('vimfiler__copy', marked_files, {
         \ 'action__directory' : dest_dir,
@@ -1071,6 +1080,8 @@ function! s:copy()"{{{
         \ })
   call s:clear_mark_all_lines()
   silent call vimfiler#force_redraw_all_vimfiler(1)
+
+  call s:search_new_file(old_files)
 endfunction"}}}
 function! s:delete()"{{{
   let marked_files = vimfiler#get_marked_files()

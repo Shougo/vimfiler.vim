@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Aug 2012.
+" Last Modified: 29 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -127,7 +127,7 @@ nnoremap <silent> <Plug>(vimfiler_simple)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFiler
       \ call s:call_vimfiler({}, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerDouble
-      \ call s:call_vimfiler({ 'double' : 1, 'create' : 1 }, <q-args>)
+      \ call s:call_vimfiler({ 'double' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCurrentDir
       \ call s:call_vimfiler({}, <q-args> . ' ' . getcwd())
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerBufferDir
@@ -138,7 +138,7 @@ command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCreate
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSimple
       \ call s:call_vimfiler({ 'simple' : 1, 'split' : 1, 'create' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSplit
-      \ call s:call_vimfiler({ 'split' : 1, 'create' : 1 }, <q-args>)
+      \ call s:call_vimfiler({ 'split' : 1, }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerTab
       \ tabnew | call s:call_vimfiler({ 'create' : 1 }, <q-args>)
 command! VimFilerDetectDrives call vimfiler#detect_drives()
