@@ -810,6 +810,9 @@ Note: "\\" path is not supported.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-08-30
+- Improved rename copy behavior.
+
 2012-08-29
 - Fixed hide and exit.
 - Improved for :VimFilerDouble.
