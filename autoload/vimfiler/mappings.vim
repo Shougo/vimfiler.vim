@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Aug 2012.
+" Last Modified: 31 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -472,12 +472,11 @@ function! vimfiler#mappings#search_cursor(path)"{{{
 endfunction"}}}
 
 function! s:search_new_file(old_files)"{{{
-  let files =
-        \ vimfiler#get_current_vimfiler().current_files
   let cnt = 0
   for file in
         \ vimfiler#get_current_vimfiler().current_files
-    if file !=# get(a:old_files, cnt, {})
+    if file.action__path !=#
+          \ get(get(a:old_files, cnt, {}), 'action__path', '')
       " Move cursor.
       call cursor(vimfiler#get_line_number(cnt), 0)
       break
