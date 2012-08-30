@@ -936,38 +936,6 @@ function! vimfiler#mappings#create_another_vimfiler()"{{{
   call vimfiler#set_current_vimfiler(b:vimfiler)
   let current_vimfiler.another_vimfiler_bufnr = bufnr('%')
 endfunction"}}}
-function! vimfiler#mappings#create_another_vimfiler()"{{{
-  let another_vimfiler_bufnr = b:vimfiler.another_vimfiler_bufnr
-  if bufnr('%') != another_vimfiler_bufnr
-        \ && getbufvar(another_vimfiler_bufnr,
-        \                  '&filetype') ==# 'vimfiler'
-        \ && buflisted(another_vimfiler_bufnr) > 0
-    " Restore another vimfiler.
-    call vimfiler#_switch_vimfiler(
-          \ another_vimfiler_bufnr, {
-          \ 'split' : 1, 'double' : 0,
-          \ 'direction' : 'belowright' }, '')
-  else
-    let current_vimfiler = vimfiler#get_current_vimfiler()
-    let current_bufnr = bufnr('%')
-    let line = line('.')
-
-    " Create another vimfiler.
-    let context = deepcopy(vimfiler#get_context())
-    let context.split = 1
-    let context.double = 0
-    let context.create = 1
-    let context.direction = 'belowright'
-    call vimfiler#switch_filer(
-          \ current_vimfiler.source.':'.
-          \ current_vimfiler.current_dir, context)
-    call cursor(line, 0)
-
-    let b:vimfiler.another_vimfiler_bufnr = current_bufnr
-    call vimfiler#set_current_vimfiler(b:vimfiler)
-    let current_vimfiler.another_vimfiler_bufnr = bufnr('%')
-  endif
-endfunction"}}}
 function! s:sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
   if !vimfiler#exists_another_vimfiler()
