@@ -456,7 +456,9 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)"{{{
     call cursor(3, 0)
   endif
 
-  normal! zb
+  if line('.') < winheight(0)
+    normal! zb
+  endif
 endfunction"}}}
 
 function! vimfiler#mappings#search_cursor(path)"{{{

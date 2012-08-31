@@ -924,7 +924,9 @@ function! s:event_bufwin_enter(bufnr)"{{{
     endif
   elseif context.winheight != 0
     execute 'resize' context.winheight
-    normal! zb
+    if line('.') < winheight(0)
+      normal! zb
+    endif
 
     if context.split
       setlocal winfixheight
