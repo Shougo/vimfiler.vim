@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2012.
+" Last Modified: 31 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,6 +49,8 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
   endif
   let [type, info] = ret
 
+  let bufnr = bufnr('%')
+
   let b:vimfiler = {}
   let b:vimfiler.source = a:source_name
   let b:vimfiler.context = a:context
@@ -59,6 +61,11 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
     call s:initialize_vimfiler_file(a:source_args, info[0], info[1])
   else
     call vimfiler#print_error('Unknown filetype.')
+  endif
+
+  if bufnr('%') != bufnr
+    " Restore window.
+    execute bufwinnr(bufnr).'wincmd w'
   endif
 
   call vimfiler#set_current_vimfiler(b:vimfiler)
