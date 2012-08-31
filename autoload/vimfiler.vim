@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2012.
+" Last Modified: 31 Aug 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -646,6 +646,8 @@ function! vimfiler#initialize_context(context)"{{{
     \ 'winminwidth' : 0,
     \ 'direction' : g:vimfiler_split_rule,
     \ 'auto_cd' : g:vimfiler_enable_auto_cd,
+    \ 'vimfiler__prev_bufnr' : bufnr('%'),
+    \ 'vimfiler__prev_winnr' : winbufnr('%'),
     \ }
   let context = extend(default_context, a:context)
 

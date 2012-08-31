@@ -812,6 +812,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-08-31
 - Added window restore.
+- Fixed switch problem.
 
 2012-08-30
 - Improved rename copy behavior.

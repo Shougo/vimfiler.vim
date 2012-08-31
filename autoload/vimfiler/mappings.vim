@@ -499,10 +499,14 @@ function! s:switch()"{{{
 
     call vimfiler#set_current_vimfiler(vimfiler)
 
-    if winnr('$') == 1
+    let winnr = bufwinnr(context.vimfiler__prev_bufnr)
+    if winnr < 0
+      let winnr = context.vimfiler__prev_winnr
+    endif
+    if winnr == winnr() || winnr < 0
       vnew
     else
-      wincmd p
+      execute winnr 'wincmd w'
     endif
   elseif context.quit
     call s:exit()
