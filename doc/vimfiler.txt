@@ -813,6 +813,7 @@ CHANGELOG					*vimfiler-changelog*
 2012-09-01
 - Fixed toggle.
 - Improved switch behavior.
+- Improved simple behavior.
 
 2012-08-31
 - Added window restore.

@@ -134,7 +134,7 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#default_settings()
-  call vimfiler#mappings#define_default_mappings()
+  call vimfiler#mappings#define_default_mappings(a:context)
 
   set filetype=vimfiler
 

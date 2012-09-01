@@ -45,14 +45,14 @@ endif"}}}
 " Variables"{{{
 let s:current_vimfiler = {}
 
-let s:min_padding_width = 10
+let s:min_padding_width = 2
 let s:max_padding_width = 35
 let s:vimfiler_current_histories = []
 
 let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-quit', '-toggle', '-create',
       \ '-simple', '-double', '-split', '-horizontal', '-direction=',
-      \ '-winheight=', '-winwidth=', '-winminwidth=', '-auto-cd',
+      \ '-winheight=', '-winwidth=', '-winminwidth=', '-auto-cd', '-explorer'
       \]
 
 let s:V = vital#of('vimfiler')
@@ -329,7 +329,8 @@ function! vimfiler#redraw_screen()"{{{
         \ copy(b:vimfiler.original_files),
         \ { 'input' : b:vimfiler.current_mask })
   if !b:vimfiler.is_visible_dot_files
-    call filter(b:vimfiler.current_files, 'v:val.vimfiler__filename !~ "^\\."')
+    call filter(b:vimfiler.current_files,
+          \  'v:val.vimfiler__filename !~ "^\\."')
   endif
 
   let b:vimfiler.winwidth = (winwidth(0)+1)/2*2
@@ -646,9 +647,18 @@ function! vimfiler#initialize_context(context)"{{{
     \ 'winminwidth' : 0,
     \ 'direction' : g:vimfiler_split_rule,
     \ 'auto_cd' : g:vimfiler_enable_auto_cd,
+    \ 'explorer' : 0,
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
     \ 'vimfiler__prev_winnr' : winbufnr('%'),
     \ }
+  if a:context.explorer
+    " Change default value.
+    let default_context.buffer_name = 'explorer'
+    let default_context.split = 1
+    let default_context.toggle = 1
+    let default_context.no_quit = 1
+    let default_context.winwidth = 35
+  endif
   let context = extend(default_context, a:context)
 
   if !has_key(context, 'profile_name')
@@ -705,16 +715,16 @@ function! vimfiler#get_print_lines(files)"{{{
     let mark .= ' '
     let filename = vimfiler#util#truncate_smart(
           \ mark . filename, max_len, max_len/3, '..')
-    if !is_simple
+    if is_simple
+      let line = substitute(
+            \ filename . s:convert_filetype(file.vimfiler__filetype),
+            \   '\s\+$', '', '')
+    else
       let line = printf('%s %s %s %s',
             \ filename,
             \ file.vimfiler__filetype,
             \ s:get_filesize(file), s:get_filetime(file),
             \)
-    else
-      let line = substitute(
-            \ printf('%s %s', filename,
-            \       file.vimfiler__filetype), '\s\+$', '', '')
     endif
 
     call add(lines, line)
@@ -1076,6 +1086,11 @@ function! s:get_filetime(file)"{{{
         \    a:file.vimfiler__datemark .
         \    strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
         \ : a:file.vimfiler__datemark . a:file.vimfiler__filetime)
+endfunction"}}}
+function! s:convert_filetype(filetype)"{{{
+  return ' ' . get({'[TXT]' : '~', '[IMG]' : '!',
+        \ '[ARC]' : '@', '[EXE]' : '#', '[MUL]' : '$', '[DIR]' : '%',
+        \ '[SYS]' : '^', '[LNK]' : '&',}, a:filetype, '')
 endfunction"}}}
 
 " Global options definition."{{{

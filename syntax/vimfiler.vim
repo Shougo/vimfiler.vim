@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Aug 2012.
+" Last Modified: 01 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -49,13 +49,21 @@ syntax match   vimfilerMask  '\[.*\]$' contained
 syntax match   vimfilerFileLine          '\[.*\]$' contained
 
 syntax match   vimfilerTypeText          '.*\[TXT\]' contained
+syntax match   vimfilerTypeText          '.* \~$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeImage         '.*\[IMG\]' contained
+syntax match   vimfilerTypeImage         '.* !$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeArchive       '.*\[ARC\]' contained
+syntax match   vimfilerTypeArchive       '.* @$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeExecute       '.*\[EXE\]' contained
+syntax match   vimfilerTypeExecute       '.* #$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeMultimedia    '.*\[MUL\]' contained
+syntax match   vimfilerTypeMultimedia    '.* \$$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeDirectory     '.*\[DIR\]' contained
+syntax match   vimfilerTypeDirectory     '.* %$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeSystem        '.*\[SYS\]' contained
+syntax match   vimfilerTypeSystem        '.* \^$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeLink          '.*\[LNK\]' contained
+syntax match   vimfilerTypeLink          '.* &$' contained contains=vimfilerMarker
 
 syntax match   vimfilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]' contained
 
@@ -65,8 +73,9 @@ syntax match   vimfilerDateWeek          '\s\zs![^!]\+$' contains=vimfilerDateIg
 if has('conceal')
   " Supported conceal features.
   syntax match   vimfilerDateIgnore        '[#~!]' contained conceal
+  syntax match   vimfilerMarker        '[~!@#$%^&]$' contained conceal
 else
-  syntax match   vimfilerDateIgnore        '[#~!]' contained
+  syntax match   vimfilerMarker        '[~!@#$%^&]$' contained
 endif
 
 highlight def link vimfilerCurrentDirectory Identifier

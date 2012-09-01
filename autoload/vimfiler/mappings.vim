@@ -26,7 +26,7 @@
 
 let s:Cache = vital#of('vimfiler').import('System.Cache')
 
-function! vimfiler#mappings#define_default_mappings()"{{{
+function! vimfiler#mappings#define_default_mappings(context)"{{{
   " Plugin keymappings"{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)
         \ (line('.') == line('$'))? '3Gzb' : 'j'
@@ -130,10 +130,21 @@ function! vimfiler#mappings#define_default_mappings()"{{{
         \ :<C-u>call <SID>pushd()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_popd)
         \ :<C-u>call <SID>popd()<CR>
-  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
-        \ line('.') == 1 ? 'h' : ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
-  nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
-        \ line('.') == 1 ? 'l' : ":\<C-u>call \<SID>execute()\<CR>"
+  if a:context.explorer
+    nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
+          \ line('.') == 1 ? 'h' :
+          \  ":\<C-u>call \<SID>expand_tree()\<CR>"
+    nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
+          \ line('.') == 1 ? 'l' :
+          \  ":\<C-u>call \<SID>expand_tree()\<CR>"
+  else
+    nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
+          \ line('.') == 1 ? 'h' :
+          \  ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
+    nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
+          \ line('.') == 1 ? 'l' :
+          \  ":\<C-u>call \<SID>execute()\<CR>"
+  endif
   nnoremap <buffer><silent> <Plug>(vimfiler_cursor_top)
         \ 3Gzb
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree)
@@ -155,7 +166,12 @@ function! vimfiler#mappings#define_default_mappings()"{{{
     return
   endif
 
-  nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_another_vimfiler)
+  if a:context.split && a:context.no_quit
+    " Change default mapping.
+    nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_other_window)
+  else
+    nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_another_vimfiler)
+  endif
   nmap <buffer> j <Plug>(vimfiler_loop_cursor_down)
   nmap <buffer> k <Plug>(vimfiler_loop_cursor_up)
 
