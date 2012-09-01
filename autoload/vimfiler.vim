@@ -153,16 +153,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
 
   if !context.create
     " Search vimfiler buffer.
-    if getbufvar(bufnr('%'), '&filetype') ==# 'vimfiler'
-      call vimfiler#_switch_vimfiler(bufnr('%'), context, path)
-      return
-    endif
-
-    if !exists('t:vimfiler')
-      call vimfiler#initialize_tab_variable()
-    endif
-    for bufnr in filter(insert(range(1, bufnr('$')),
-          \ t:vimfiler.last_vimfiler_bufnr),
+    for bufnr in filter(insert(range(1, bufnr('$')), bufnr('%')),
           \ "buflisted(v:val) &&
           \ getbufvar(v:val, '&filetype') ==# 'vimfiler'")
       let vimfiler = getbufvar(bufnr, 'vimfiler')
@@ -667,11 +658,6 @@ function! vimfiler#initialize_context(context)"{{{
 
   return context
 endfunction"}}}
-function! vimfiler#initialize_tab_variable()"{{{
-  let t:vimfiler = {
-        \ 'last_vimfiler_bufnr' : -1,
-        \ }
-endfunction"}}}
 function! vimfiler#get_histories()"{{{
   return copy(s:vimfiler_current_histories)
 endfunction"}}}
@@ -957,12 +943,6 @@ function! s:event_bufwin_leave(bufnr)"{{{
   if !exists('b:vimfiler')
     return
   endif
-
-  if !exists('t:vimfiler')
-    call vimfiler#initialize_tab_variable()
-  endif
-
-  let t:vimfiler.last_vimfiler_bufnr = a:bufnr
 endfunction"}}}
 
 function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{

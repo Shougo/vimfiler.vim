@@ -834,6 +834,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved simple behavior.
 - Added :VimFilerExplorer command.
 - Improved expand/unexpand tree mappings.
+- Improved to search vimfiler buffer.
 
 2012-08-31
 - Added window restore.
