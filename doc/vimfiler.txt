@@ -617,9 +617,13 @@ Normal mode key mappings.
 
 <Plug>(vimfiler_smart_h)			*<Plug>(vimfiler_smart_h)*
 		Switches to parent directory or normal! "h".
+		If enabled "explorer" option, it expand directory tree or
+		normal! "h".
 
 <Plug>(vimfiler_smart_l)			*<Plug>(vimfiler_smart_l)*
 		Executes cursor file or normal! "l".
+		If enabled "explorer" option, it expand directory tree or
+		normal! "l".
 
 <Plug>(vimfiler_toggle_safe_mode)		*<Plug>(vimfiler_toggle_safe_mode)*
 		Toggles safe mode. In safe mode, dangerous command is disabled.
