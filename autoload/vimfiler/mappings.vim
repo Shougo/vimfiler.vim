@@ -133,7 +133,7 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
   if a:context.explorer
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
           \ line('.') == 1 ? 'h' :
-          \  ":\<C-u>call \<SID>expand_tree()\<CR>"
+          \  ":\<C-u>call \<SID>unexpand_tree()\<CR>"
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
           \ line('.') == 1 ? 'l' :
           \  ":\<C-u>call \<SID>expand_tree()\<CR>"
@@ -148,9 +148,9 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_cursor_top)
         \ 3Gzb
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree)
-        \ :<C-u>call <SID>expand_tree()<CR>
+        \ :<C-u>call <SID>toggle_tree()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree_recursive)
-        \ :<C-u>call <SID>expand_tree_recursive()<CR>
+        \ :<C-u>call <SID>toggle_tree_recursive()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd_input_directory)
         \ :<C-u>call <SID>cd_input_directory()<CR>
 
@@ -665,6 +665,32 @@ function! s:yank_full_path()"{{{
 
   echo 'Yanked: '.filename
 endfunction"}}}
+function! s:toggle_tree()"{{{
+  let file = vimfiler#get_file()
+  if empty(file)
+    return
+  endif
+
+  if !file.vimfiler__is_directory
+    " Search parent directory.
+    for cnt in reverse(range(1, line('.')-1))
+      let nest_level = get(vimfiler#get_file(cnt),
+            \ 'vimfiler__nest_level', -1)
+      if nest_level >= 0 && nest_level < file.vimfiler__nest_level
+        call cursor(cnt, 0)
+        call s:toggle_tree()
+        break
+      endif
+    endfor
+    return
+  endif
+
+  if file.vimfiler__is_opened
+    call s:unexpand_tree()
+  else
+    call s:expand_tree()
+  endif
+endfunction"}}}
 function! s:expand_tree()"{{{
   let file = vimfiler#get_file()
   if empty(file)
@@ -685,16 +711,14 @@ function! s:expand_tree()"{{{
     return
   endif
 
-  setlocal modifiable
-
-  let file.vimfiler__is_opened = !file.vimfiler__is_opened
-  call setline('.', vimfiler#get_print_lines([file]))
-
-  if !file.vimfiler__is_opened
-    call s:unexpand_tree()
-    setlocal nomodifiable
+  if file.vimfiler__is_opened
     return
   endif
+
+  setlocal modifiable
+
+  let file.vimfiler__is_opened = 1
+  call setline('.', vimfiler#get_print_lines([file]))
 
   " Expand tree.
   let nestlevel = file.vimfiler__nest_level + 1
@@ -730,7 +754,7 @@ function! s:expand_tree()"{{{
 
   setlocal nomodifiable
 endfunction"}}}
-function! s:expand_tree_recursive()"{{{
+function! s:toggle_tree_recursive()"{{{
   let file = vimfiler#get_file()
   if empty(file)
     return
@@ -743,23 +767,22 @@ function! s:expand_tree_recursive()"{{{
             \ 'vimfiler__nest_level', -1)
       if nest_level == 0
         call cursor(cnt, 0)
-        call s:expand_tree_recursive()
+        call s:toggle_tree_recursive()
         break
       endif
     endfor
     return
   endif
 
-  setlocal modifiable
-
-  let file.vimfiler__is_opened = !file.vimfiler__is_opened
-  call setline('.', vimfiler#get_print_lines([file]))
-
-  if !file.vimfiler__is_opened
+  if file.vimfiler__is_opened
     call s:unexpand_tree()
-    setlocal nomodifiable
     return
   endif
+
+  setlocal modifiable
+
+  let file.vimfiler__is_opened = 1
+  call setline('.', vimfiler#get_print_lines([file]))
 
   " Expand tree.
   let nestlevel = file.vimfiler__nest_level + 1
@@ -818,6 +841,29 @@ function! vimfiler#mappings#expand_tree_rec(file, ...)"{{{
 endfunction"}}}
 function! s:unexpand_tree()"{{{
   let file = vimfiler#get_file()
+  if !file.vimfiler__is_directory
+    " Search parent directory.
+    for cnt in reverse(range(1, line('.')-1))
+      let nest_level = get(vimfiler#get_file(cnt),
+            \ 'vimfiler__nest_level', -1)
+      if nest_level >= 0 && nest_level < file.vimfiler__nest_level
+        call cursor(cnt, 0)
+        call s:unexpand_tree()
+        break
+      endif
+    endfor
+    return
+  endif
+
+  if !file.vimfiler__is_opened
+    return
+  endif
+
+  setlocal modifiable
+
+  let file.vimfiler__is_opened = 0
+  call setline('.', vimfiler#get_print_lines([file]))
+
   let index = vimfiler#get_file_index(line('.'))
   let index_orig = vimfiler#get_original_file_index(line('.'))
 
@@ -853,6 +899,8 @@ function! s:unexpand_tree()"{{{
     silent execute (line('.')+1).','.(vimfiler#get_line_number(end)).'delete _'
     call setpos('.', pos)
   endif
+
+  setlocal nomodifiable
 endfunction"}}}
 
 function! s:switch_to_drive()"{{{
