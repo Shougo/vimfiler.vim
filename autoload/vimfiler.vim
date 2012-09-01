@@ -651,7 +651,7 @@ function! vimfiler#initialize_context(context)"{{{
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
     \ 'vimfiler__prev_winnr' : winbufnr('%'),
     \ }
-  if a:context.explorer
+  if get(a:context, 'explorer', 0)
     " Change default value.
     let default_context.buffer_name = 'explorer'
     let default_context.split = 1
