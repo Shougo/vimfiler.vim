@@ -83,6 +83,7 @@ COMMANDS 					*vimfiler-commands*
 >
 		" File explorer like behavior.
 		:VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit
+		:VimFilerExplorer
 <
 						*vimfiler-options*
 		{options} are options for a vimfiler buffer.  You may give the
@@ -800,7 +801,7 @@ Like NERDTree FAQ(https://github.com/scrooloose/nerdtree).
 To open a vimfiler tree automatically when Vim starts up(VimEnter autocmd
 event):
 >
-	autocmd VimEnter * VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit
+	autocmd VimEnter * VimFilerExplorer
 <
 To open a vimfiler buffer automatically when Vim starts up if no
 files(arguments) were specified:
