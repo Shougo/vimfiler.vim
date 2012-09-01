@@ -640,7 +640,8 @@ Normal mode key mappings.
 		from directory stack.
 
 <Plug>(vimfiler_expand_tree)			*<Plug>(vimfiler_expand_tree)*
-		Expands/Unexpands directory tree.
+		Expands/Unexpands directory tree. If it is used on file, it
+		will expand/unexpand parent directory tree.
 
 <Plug>(vimfiler_expand_tree_recursive)		*<Plug>(vimfiler_expand_tree_recursive)*
 		Expands/Closes directory tree.
@@ -832,6 +833,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved switch behavior.
 - Improved simple behavior.
 - Added :VimFilerExplorer command.
+- Improved expand/unexpand tree mappings.
 
 2012-08-31
 - Added window restore.

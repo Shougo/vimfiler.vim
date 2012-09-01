@@ -667,7 +667,21 @@ function! s:yank_full_path()"{{{
 endfunction"}}}
 function! s:expand_tree()"{{{
   let file = vimfiler#get_file()
-  if empty(file) || !file.vimfiler__is_directory
+  if empty(file)
+    return
+  endif
+
+  if !file.vimfiler__is_directory
+    " Search parent directory.
+    for cnt in reverse(range(1, line('.')-1))
+      let nest_level = get(vimfiler#get_file(cnt),
+            \ 'vimfiler__nest_level', -1)
+      if nest_level >= 0 && nest_level < file.vimfiler__nest_level
+        call cursor(cnt, 0)
+        call s:expand_tree()
+        break
+      endif
+    endfor
     return
   endif
 
@@ -718,18 +732,34 @@ function! s:expand_tree()"{{{
 endfunction"}}}
 function! s:expand_tree_recursive()"{{{
   let file = vimfiler#get_file()
-  if empty(file) || !file.vimfiler__is_directory
+  if empty(file)
+    return
+  endif
+
+  if !file.vimfiler__is_directory || file.vimfiler__nest_level > 0
+    " Search parent directory.
+    for cnt in reverse(range(1, line('.')-1))
+      let nest_level = get(vimfiler#get_file(cnt),
+            \ 'vimfiler__nest_level', -1)
+      if nest_level == 0
+        call cursor(cnt, 0)
+        call s:expand_tree_recursive()
+        break
+      endif
+    endfor
     return
   endif
 
   setlocal modifiable
 
-  if file.vimfiler__is_opened
-    call s:unexpand_tree()
-  endif
-
-  let file.vimfiler__is_opened = 1
+  let file.vimfiler__is_opened = !file.vimfiler__is_opened
   call setline('.', vimfiler#get_print_lines([file]))
+
+  if !file.vimfiler__is_opened
+    call s:unexpand_tree()
+    setlocal nomodifiable
+    return
+  endif
 
   " Expand tree.
   let nestlevel = file.vimfiler__nest_level + 1
