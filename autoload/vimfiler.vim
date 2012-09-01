@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2012.
+" Last Modified: 01 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -726,7 +726,8 @@ function! vimfiler#close(buffer_name)"{{{
   let buffer_name = a:buffer_name
   if buffer_name !~ '@\d\+$'
     " Add postfix.
-    let prefix = vimfiler#util#is_windows() ? '[vimfiler] - ' : '*vimfiler* - '
+    let prefix = vimfiler#util#is_windows() ?
+          \ '[vimfiler] - ' : '*vimfiler* - '
     let prefix .= buffer_name
     let buffer_name = prefix . s:get_postfix(prefix, 0)
   endif
@@ -1005,7 +1006,7 @@ function! s:get_postfix(prefix, is_create)"{{{
   endif
 
   return a:is_create ? '@'.(matchstr(buflist[-1], '@\zs\d\+$') + 1)
-        \ : matchstr(buflist[0], '@\d\+$')
+        \ : matchstr(buflist[-1], '@\d\+$')
 endfunction"}}}
 function! s:get_filesize(file)"{{{
   if a:file.vimfiler__is_directory
