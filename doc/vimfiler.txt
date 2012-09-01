@@ -151,6 +151,11 @@ COMMANDS 					*vimfiler-commands*
 		If omit it, use |g:vimfiler_enable_auto_cd|.
 		Note: This option works in file source.
 
+						*unite-options-explorer*
+		-explorer
+		Enable the behavior like explorer.
+		Note: This option changes some default options.
+
 :VimFilerCreate [{options}...] [{path}]		*:VimFilerCreate*
 		Equivalent to |:VimFiler| except that it creates a new vimfiler
 		buffer.
@@ -178,6 +183,10 @@ COMMANDS 					*vimfiler-commands*
 :VimFilerBufferDir [{options}...] [{path}]	*:VimFilerBufferDir*
 		Equivalent to |:VimFiler| except that it starts with current
 		buffer directory.
+
+:VimFilerExplorer [{options}...] [{path}]	*:VimFilerExplorer*
+		Equivalent to |:VimFiler| except that it creates explorer
+		vimfiler buffers.
 
 :VimFilerClose {buffer-name}			*:VimFilerClose*
 		Close vimfiler buffer named {buffer-name}.
@@ -646,7 +655,10 @@ Following keymappings are default keymappings.
 Normal mode default mappings.
 {lhs}			{rhs}
 --------		-----------------------------
-<TAB>			<Plug>(vimfiler_switch_to_another_vimfiler)
+<Tab> (default)
+			<Plug>(vimfiler_switch_to_another_vimfiler)
+<Tab> (enabled "no-quit" and "split" options)
+			<Plug>(vimfiler_switch_to_other_window)
 j			<Plug>(vimfiler_loop_cursor_down)
 k			<Plug>(vimfiler_loop_cursor_up)
 gg			<Plug>(vimfiler_cursor_top)
@@ -814,6 +826,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed toggle.
 - Improved switch behavior.
 - Improved simple behavior.
+- Added :VimFilerExplorer command.
 
 2012-08-31
 - Added window restore.
