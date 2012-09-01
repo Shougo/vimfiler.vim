@@ -841,7 +841,7 @@ function! vimfiler#mappings#expand_tree_rec(file, ...)"{{{
 endfunction"}}}
 function! s:unexpand_tree()"{{{
   let file = vimfiler#get_file()
-  if !file.vimfiler__is_directory
+  if !file.vimfiler__is_directory || !file.vimfiler__is_opened
     " Search parent directory.
     for cnt in reverse(range(1, line('.')-1))
       let nest_level = get(vimfiler#get_file(cnt),
