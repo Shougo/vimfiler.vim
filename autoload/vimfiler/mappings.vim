@@ -1043,7 +1043,7 @@ function! vimfiler#mappings#switch_another_vimfiler(...)"{{{
     execute vimfiler#winnr_another_vimfiler().'wincmd w'
     if directory != ''
       " Change current directory.
-      call vimfiler#mappings#cd(dir, directory)
+      call vimfiler#mappings#cd(directory)
     endif
   else
     " Create another vimfiler.
@@ -1065,7 +1065,7 @@ function! s:sync_with_current_vimfiler()"{{{
   if vimfiler#exists_another_vimfiler()
     " Change another vimfiler directory.
     call vimfiler#mappings#switch_another_vimfiler(
-          \ vimfiler.source . ':' . vimfiler.current_dir)
+          \ b:vimfiler.source . ':' . b:vimfiler.current_dir)
   else
     call vimfiler#mappings#create_another_vimfiler()
   endif
