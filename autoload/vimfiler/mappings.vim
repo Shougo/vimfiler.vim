@@ -625,7 +625,6 @@ function! s:switch_to_other_window()"{{{
   call s:switch_to_another_vimfiler()
 endfunction"}}}
 function! s:switch_to_another_vimfiler()"{{{
-  echomsg vimfiler#exists_another_vimfiler()
   if vimfiler#exists_another_vimfiler()
     call vimfiler#mappings#switch_another_vimfiler()
   else
