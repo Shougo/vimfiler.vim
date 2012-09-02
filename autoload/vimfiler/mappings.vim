@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2012.
+" Last Modified: 02 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -622,14 +622,12 @@ function! s:switch_to_other_window()"{{{
     return
   endif
 
-  " Create another vimfiler.
-  call vimfiler#mappings#create_another_vimfiler()
-  call vimfiler#redraw_all_vimfiler()
+  call s:switch_to_another_vimfiler()
 endfunction"}}}
 function! s:switch_to_another_vimfiler()"{{{
-  if vimfiler#winnr_another_vimfiler() > 0
-    " Switch to another vimfiler.
-    execute vimfiler#winnr_another_vimfiler().'wincmd w'
+  echomsg vimfiler#exists_another_vimfiler()
+  if vimfiler#exists_another_vimfiler()
+    call vimfiler#mappings#switch_another_vimfiler()
   else
     " Create another vimfiler.
     call vimfiler#mappings#create_another_vimfiler()
@@ -994,21 +992,20 @@ function! s:hide()"{{{
 
   let context = vimfiler#get_context()
 
-  if vimfiler#exists_another_vimfiler()
+  if vimfiler#winnr_another_vimfiler() > 0
     " Hide another vimfiler.
     let bufnr = b:vimfiler.another_vimfiler_bufnr
     close
     execute bufwinnr(bufnr).'wincmd w'
     call s:hide()
-  elseif winnr('$') != 1 && (context.split || context.toggle
-        \ || vimfiler#exists_another_vimfiler())
+  elseif winnr('$') != 1 && (context.split || context.toggle)
     close
   else
     call vimfiler#util#alternate_buffer()
   endif
 endfunction"}}}
 function! s:exit()"{{{
-  if vimfiler#exists_another_vimfiler()
+  if vimfiler#winnr_another_vimfiler() > 0
     let bufnr = b:vimfiler.another_vimfiler_bufnr
     " Exit another vimfiler.
     call vimfiler#util#delete_buffer()
@@ -1029,7 +1026,7 @@ function! vimfiler#mappings#create_another_vimfiler()"{{{
   let context.double = 0
   let context.create = 1
   let context.direction = 'belowright'
-  call vimfiler#switch_filer(
+  call vimfiler#start(
         \ current_vimfiler.source.':'.
         \ current_vimfiler.current_dir, context)
   call cursor(line, 0)
@@ -1038,16 +1035,40 @@ function! vimfiler#mappings#create_another_vimfiler()"{{{
   call vimfiler#set_current_vimfiler(b:vimfiler)
   let current_vimfiler.another_vimfiler_bufnr = bufnr('%')
 endfunction"}}}
+function! vimfiler#mappings#switch_another_vimfiler(...)"{{{
+  let directory = get(a:000, 0, '')
+  let line = line('.')
+
+  if vimfiler#winnr_another_vimfiler() > 0
+    " Switch to another vimfiler.
+    execute vimfiler#winnr_another_vimfiler().'wincmd w'
+    if directory != ''
+      " Change current directory.
+      call vimfiler#mappings#cd(dir, directory)
+    endif
+  else
+    " Create another vimfiler.
+    let current_vimfiler = vimfiler#get_current_vimfiler()
+
+    let context = deepcopy(vimfiler#get_context())
+    let context.split = 1
+    let context.double = 0
+    let context.direction = 'belowright'
+    call vimfiler#_switch_vimfiler(
+          \ current_vimfiler.another_vimfiler_bufnr,
+          \ context, directory)
+  endif
+
+  call cursor(line, 0)
+endfunction"}}}
 function! s:sync_with_current_vimfiler()"{{{
   " Search vimfiler window.
-  if !vimfiler#exists_another_vimfiler()
-    call vimfiler#mappings#create_another_vimfiler()
-  else
+  if vimfiler#exists_another_vimfiler()
     " Change another vimfiler directory.
-    let vimfiler = b:vimfiler
-    execute vimfiler#winnr_another_vimfiler() . 'wincmd w'
-    call vimfiler#mappings#cd(
+    call vimfiler#mappings#switch_another_vimfiler(
           \ vimfiler.source . ':' . vimfiler.current_dir)
+  else
+    call vimfiler#mappings#create_another_vimfiler()
   endif
 
   wincmd p
@@ -1137,7 +1158,7 @@ function! s:move()"{{{
 
   " Get destination directory.
   let dest_dir = ''
-  if vimfiler#exists_another_vimfiler()
+  if vimfiler#winnr_another_vimfiler() > 0
     let another = vimfiler#get_another_vimfiler()
     if another.source !=# 'file'
       let dest_dir = another.source . ':'
@@ -1164,7 +1185,7 @@ function! s:copy()"{{{
 
   " Get destination directory.
   let dest_dir = ''
-  if vimfiler#exists_another_vimfiler()
+  if vimfiler#winnr_another_vimfiler() > 0
     let another = vimfiler#get_another_vimfiler()
     if another.source !=# 'file'
       let dest_dir = another.source . ':'

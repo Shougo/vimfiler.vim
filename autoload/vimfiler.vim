@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2012.
+" Last Modified: 02 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -124,7 +124,7 @@ endfunction"}}}
 function! vimfiler#get_options()"{{{
   return copy(s:vimfiler_options)
 endfunction"}}}
-function! vimfiler#switch_filer(path, ...)"{{{
+function! vimfiler#start(path, ...)"{{{
   if vimfiler#util#is_cmdwin()
     call vimfiler#print_error(
           \ '[vimfiler] Command line buffer is detected!')
@@ -154,7 +154,7 @@ function! vimfiler#switch_filer(path, ...)"{{{
   if !context.create
     " Search vimfiler buffer.
     for bufnr in filter(insert(range(1, bufnr('$')), bufnr('%')),
-          \ "buflisted(v:val) &&
+          \ "bufloaded(v:val) &&
           \ getbufvar(v:val, '&filetype') ==# 'vimfiler'")
       let vimfiler = getbufvar(bufnr, 'vimfiler')
       if type(vimfiler) == type({})
@@ -563,14 +563,14 @@ function! vimfiler#head_match(checkstr, headstr)"{{{
   return stridx(a:checkstr, a:headstr) == 0
 endfunction"}}}
 function! vimfiler#exists_another_vimfiler()"{{{
-  let winnr = bufwinnr(b:vimfiler.another_vimfiler_bufnr)
-  return winnr > 0 && bufnr('%') != b:vimfiler.another_vimfiler_bufnr
-        \ && getwinvar(winnr, '&filetype') ==# 'vimfiler'
-        \ && buflisted(b:vimfiler.another_vimfiler_bufnr) > 0
+  return bufnr('%') != b:vimfiler.another_vimfiler_bufnr
+        \ && getbufvar(b:vimfiler.another_vimfiler_bufnr,
+        \         '&filetype') ==# 'vimfiler'
+        \ && bufloaded(b:vimfiler.another_vimfiler_bufnr) > 0
 endfunction"}}}
 function! vimfiler#winnr_another_vimfiler()"{{{
-  return vimfiler#exists_another_vimfiler() ?
-        \ bufwinnr(b:vimfiler.another_vimfiler_bufnr) : -1
+  return winnr() == bufwinnr(b:vimfiler.another_vimfiler_bufnr) ?
+        \ -1 : bufwinnr(b:vimfiler.another_vimfiler_bufnr)
 endfunction"}}}
 function! vimfiler#get_another_vimfiler()"{{{
   return vimfiler#exists_another_vimfiler() ?
@@ -961,7 +961,8 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
 
   " Set current directory.
   if a:directory != ''
-    let directory = vimfiler#util#substitute_path_separator(a:directory)
+    let directory = vimfiler#util#substitute_path_separator(
+          \ a:directory)
     if directory =~ ':'
       " Parse path.
       let ret = vimfiler#parse_path(directory)
@@ -989,14 +990,16 @@ endfunction"}}}
 
 function! s:get_postfix(prefix, is_create)"{{{
   let buffers = get(a:000, 0, range(1, bufnr('$')))
-  let buflist = sort(filter(map(buffers,
-        \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'))
+  let buflist = vimfiler#util#sort_by(filter(map(buffers,
+        \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'),
+        \ "str2nr(matchstr(v:val, '\\d\\+$'))")
   if empty(buflist)
     return ''
   endif
 
-  return a:is_create ? '@'.(matchstr(buflist[-1], '@\zs\d\+$') + 1)
-        \ : matchstr(buflist[-1], '@\d\+$')
+  let num = matchstr(buflist[-1], '@\zs\d\+$')
+  return num == '' && !a:is_create ? '' :
+        \ '@' . (a:is_create ? (num + 1) : num)
 endfunction"}}}
 function! s:get_filesize(file)"{{{
   if a:file.vimfiler__is_directory
