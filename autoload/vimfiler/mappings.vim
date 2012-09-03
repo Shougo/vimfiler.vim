@@ -1318,7 +1318,7 @@ endfunction"}}}
 function! s:grep()"{{{
   if !vimfiler#util#has_vimproc()
     call vimfiler#print_error('Sorry, vimproc is not installed. '
-          \ 'This mapping must use vimproc.')
+          \ 'This mapping use vimproc.')
     return
   endif
 
@@ -1335,7 +1335,7 @@ endfunction"}}}
 function! s:find()"{{{
   if !vimfiler#util#has_vimproc()
     call vimfiler#print_error('Sorry, vimproc is not installed. '
-          \ 'This mapping must use vimproc.')
+          \ 'This mapping use vimproc.')
     return
   endif
 

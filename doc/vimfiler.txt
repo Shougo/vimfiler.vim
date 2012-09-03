@@ -587,12 +587,14 @@ Normal mode key mappings.
 <Plug>(vimfiler_grep)				*<Plug>(vimfiler_grep)*
 		Executes grep word in selected files or all current files by
 		|unite| interface.
+		Note: This mapping use |vimproc|.
 
 <Plug>(vimfiler_find)				*<Plug>(vimfiler_find)*
 		Finds from current directory by |unite| interface. Command line
 		format is refer to find command.
 		Note: Windows "find" command is not supported.
 		Please install UNIX Tools find for Windows.
+		Note: This mapping use |vimproc|.
 
 <Plug>(vimfiler_select_sort_type)		*<Plug>(vimfiler_select_sort_type)*
 		Selects current vimfiler sort type by |unite| interface.
