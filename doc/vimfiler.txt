@@ -831,6 +831,7 @@ CHANGELOG					*vimfiler-changelog*
 2012-09-03
 - Fixed marks.
 - Check in expand/unexpand tree.
+- Added vimproc check.
 
 2012-09-02
 - Fixed open vimfiler buffers.

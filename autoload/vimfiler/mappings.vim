@@ -1316,6 +1316,12 @@ function! s:change_vim_current_dir()"{{{
   execute g:unite_kind_openable_lcd_command '`=b:vimfiler.current_dir`'
 endfunction"}}}
 function! s:grep()"{{{
+  if !vimfiler#util#has_vimproc()
+    call vimfiler#print_error('Sorry, vimproc is not installed. '
+          \ 'This mapping must use vimproc.')
+    return
+  endif
+
   call unite#sources#grep#define()
 
   call s:switch()
@@ -1327,6 +1333,12 @@ function! s:grep()"{{{
   endif
 endfunction"}}}
 function! s:find()"{{{
+  if !vimfiler#util#has_vimproc()
+    call vimfiler#print_error('Sorry, vimproc is not installed. '
+          \ 'This mapping must use vimproc.')
+    return
+  endif
+
   call unite#sources#find#define()
 
   call s:switch()
