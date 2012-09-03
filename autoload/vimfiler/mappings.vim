@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2012.
+" Last Modified: 03 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -664,7 +664,7 @@ function! s:yank_full_path()"{{{
 endfunction"}}}
 function! s:toggle_tree()"{{{
   let file = vimfiler#get_file()
-  if empty(file)
+  if empty(file) || vimfiler#get_filename() == '..'
     return
   endif
 
@@ -690,7 +690,7 @@ function! s:toggle_tree()"{{{
 endfunction"}}}
 function! s:expand_tree()"{{{
   let file = vimfiler#get_file()
-  if empty(file)
+  if empty(file) || vimfiler#get_filename() == '..'
     return
   endif
 
@@ -753,7 +753,7 @@ function! s:expand_tree()"{{{
 endfunction"}}}
 function! s:toggle_tree_recursive()"{{{
   let file = vimfiler#get_file()
-  if empty(file)
+  if empty(file) || vimfiler#get_filename() == '..'
     return
   endif
 
@@ -838,6 +838,10 @@ function! vimfiler#mappings#expand_tree_rec(file, ...)"{{{
 endfunction"}}}
 function! s:unexpand_tree()"{{{
   let file = vimfiler#get_file()
+  if empty(file) || vimfiler#get_filename() == '..'
+    return
+  endif
+
   if !file.vimfiler__is_directory || !file.vimfiler__is_opened
     " Search parent directory.
     for cnt in reverse(range(1, line('.')-1))
