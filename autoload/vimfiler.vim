@@ -24,8 +24,8 @@
 " }}}
 "=============================================================================
 
-if !exists('g:loaded_vimfiler') && exists(':NeoBundleDepends')
-  NeoBundleDepends 'Shougo/unite.vim.git'
+if !exists('g:loaded_vimfiler')
+  runtime! plugin/vimfiler.vim
 endif
 
 " Check unite.vim."{{{

@@ -156,31 +156,25 @@ augroup vimfiler-FileExplorer
         \ call vimfiler#handler#_event_handler('FileAppendCmd')
   autocmd FileReadCmd ??*:{*,*/*}
         \ call vimfiler#handler#_event_handler('FileReadCmd')
+  autocmd BufEnter,BufWinEnter
+        \ * call s:browse_check(expand('<amatch>'))
 augroup END
 
-if g:vimfiler_as_default_explorer"{{{
-  augroup vimfiler-FileExplorer
-    autocmd BufEnter,BufWinEnter
-          \ * call s:browse_check(expand('<amatch>'))
-  augroup END
-
-  " Define wrapper commands.
-  command! -bang -bar -complete=customlist,vimfiler#complete -nargs=*
-        \ Edit  edit<bang> <args>
-  command! -bang -bar -complete=customlist,vimfiler#complete -nargs=*
-        \ Read  read<bang> <args>
-  command! -bang -bar -complete=customlist,vimfiler#complete -nargs=1
-        \ Source  source<bang> <args>
-  command! -bang -bar -complete=customlist,vimfiler#complete -nargs=* -range=%
-        \ Write  <line1>,<line2>write<bang> <args>
-
-  " Disable netrw.
-  augroup FileExplorer
-    autocmd!
-  augroup END
-endif"}}}
+" Define wrapper commands.
+command! -bang -bar -complete=customlist,vimfiler#complete -nargs=*
+      \ Edit  edit<bang> <args>
+command! -bang -bar -complete=customlist,vimfiler#complete -nargs=*
+      \ Read  read<bang> <args>
+command! -bang -bar -complete=customlist,vimfiler#complete -nargs=1
+      \ Source  source<bang> <args>
+command! -bang -bar -complete=customlist,vimfiler#complete -nargs=* -range=%
+      \ Write  <line1>,<line2>write<bang> <args>
 
 function! s:browse_check(path)"{{{
+  if !g:vimfiler_as_default_explorer
+    return
+  endif
+
   " Disable netrw.
   augroup FileExplorer
     autocmd!
