@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Sep 2012.
+" Last Modified: 04 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -148,10 +148,14 @@ command! -nargs=1 VimFilerClose call vimfiler#close(<q-args>)
 
 augroup vimfiler-FileExplorer
   autocmd!
-  autocmd BufReadCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('BufReadCmd')
-  autocmd BufWriteCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('BufWriteCmd')
-  autocmd FileAppendCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('FileAppendCmd')
-  autocmd FileReadCmd ??*:{*,*/*}  call vimfiler#handler#_event_handler('FileReadCmd')
+  autocmd BufReadCmd ??*:{*,*/*}
+        \ call vimfiler#handler#_event_handler('BufReadCmd')
+  autocmd BufWriteCmd ??*:{*,*/*}
+        \ call vimfiler#handler#_event_handler('BufWriteCmd')
+  autocmd FileAppendCmd ??*:{*,*/*}
+        \ call vimfiler#handler#_event_handler('FileAppendCmd')
+  autocmd FileReadCmd ??*:{*,*/*}
+        \ call vimfiler#handler#_event_handler('FileReadCmd')
 augroup END
 
 if g:vimfiler_as_default_explorer"{{{

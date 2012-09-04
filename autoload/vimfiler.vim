@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2012.
+" Last Modified: 04 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,8 +24,8 @@
 " }}}
 "=============================================================================
 
-if !exists('g:loaded_vimfiler')
-  runtime! plugin/vimfiler.vim
+if !exists('g:loaded_vimfiler') && exists(':NeoBundleDepends')
+  NeoBundleDepends 'Shougo/unite.vim.git'
 endif
 
 " Check unite.vim."{{{
