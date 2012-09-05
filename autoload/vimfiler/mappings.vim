@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Sep 2012.
+" Last Modified: 05 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1041,14 +1041,14 @@ function! vimfiler#mappings#switch_another_vimfiler(...)"{{{
   let line = line('.')
 
   if vimfiler#winnr_another_vimfiler() > 0
-    " Switch to another vimfiler.
+    " Switch to another vimfiler window.
     execute vimfiler#winnr_another_vimfiler().'wincmd w'
     if directory != ''
       " Change current directory.
       call vimfiler#mappings#cd(directory)
     endif
   else
-    " Create another vimfiler.
+    " Open another vimfiler buffer.
     let current_vimfiler = vimfiler#get_current_vimfiler()
 
     let context = deepcopy(vimfiler#get_context())
@@ -1077,19 +1077,18 @@ function! s:sync_with_current_vimfiler()"{{{
 endfunction"}}}
 function! s:sync_with_another_vimfiler()"{{{
   " Search vimfiler window.
-  if !vimfiler#exists_another_vimfiler()
-    call vimfiler#mappings#create_another_vimfiler()
-
-    wincmd p
-    call vimfiler#redraw_screen()
-  else
+  if vimfiler#exists_another_vimfiler()
     " Change current vimfiler directory.
     let another = vimfiler#get_another_vimfiler()
+    call vimfiler#mappings#switch_another_vimfiler()
+    wincmd p
     call vimfiler#mappings#cd(
           \ another.source . ':' . another.current_dir)
+  else
+    call vimfiler#mappings#create_another_vimfiler()
+    wincmd p
+    call vimfiler#redraw_screen()
   endif
-
-  call vimfiler#set_current_vimfiler(b:vimfiler)
 endfunction"}}}
 function! s:open_file_in_another_vimfiler()"{{{
   " Search vimfiler window.
