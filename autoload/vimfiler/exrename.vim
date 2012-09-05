@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: exrename.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jul 2012.
+" Last Modified: 06 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -111,9 +111,14 @@ function! s:do_rename()"{{{
     let filename = b:exrename.current_filenames[linenr - 1]
     if filename !=# getline(linenr)
       let file = b:exrename.current_files[linenr - 1]
+      let new_file = vimfiler#util#expand(getline(linenr))
+      if new_file !~ '^\%(\a\a\+:\)\|^\%(\a:\|/\)'
+        " Add current_dir.
+        let new_file = b:exrename.current_dir . new_file
+      endif
       call unite#mappings#do_action('vimfiler__rename', [file], {
             \ 'vimfiler__current_directory' : b:exrename.current_dir,
-            \ 'action__filename' : vimfiler#util#expand(getline(linenr)),
+            \ 'action__filename' : new_file,
             \ })
     endif
 

@@ -841,6 +841,9 @@ A: <Plug>(vimfiler_hide) closes both vimfiler windows. You can use
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-09-06
+- Fixed exrename relative path.
+
 2012-09-05
 - Fixed sync_with_another_vimfiler.
 - Added <Plug>(vimfiler_close) mapping.
