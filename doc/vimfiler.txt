@@ -549,10 +549,13 @@ Normal mode key mappings.
 		(Command) "echo foo bar baz"
 
 <Plug>(vimfiler_hide)				*<Plug>(vimfiler_hide)*
-		Hides current and another vimfiler.
+		Hides current and another vimfiler windows.
 
 <Plug>(vimfiler_exit)				*<Plug>(vimfiler_exit)*
-		Exits current and another vimfiler.
+		Exits current and another vimfiler buffers.
+
+<Plug>(vimfiler_close)				*<Plug>(vimfiler_close)*
+		Closes current vimfiler window.
 
 <Plug>(vimfiler_help)				*<Plug>(vimfiler_help)*
 		Starts mappings help by |unite| interface.
@@ -700,6 +703,7 @@ ge			<Plug>(vimfiler_execute_external_filer)
 !			<Plug>(vimfiler_execute_shell_command)
 q			<Plug>(vimfiler_hide)
 Q			<Plug>(vimfiler_exit)
+-			<Plug>(vimfiler_close)
 ?			<Plug>(vimfiler_help)
 v			<Plug>(vimfiler_preview_file)
 o			<Plug>(vimfiler_sync_with_current_vimfiler)
@@ -829,16 +833,17 @@ Note: "\\" path is not supported.
 	VimFiler //hoge/piyo/hogera.txt
 
 Q: I want to close one vimfile window in double mode.
-A: <Plug>(vimfiler_hide) closes both vimfiler windows. To close one vimfiler
-window:
+A: <Plug>(vimfiler_hide) closes both vimfiler windows. You can use
+<Plug>(vimfiler_close) instead of it:
 >
-	autocmd FileType vimfiler nnoremap q <buffer> :close<CR>
+	autocmd FileType vimfiler nnoremap q <buffer> <Plug>(vimfiler_close)
 <
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
 2012-09-05
 - Fixed sync_with_another_vimfiler.
+- Added <Plug>(vimfiler_close) mapping.
 
 2012-09-04
 - Fixed initialization.

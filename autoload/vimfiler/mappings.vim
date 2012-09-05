@@ -82,6 +82,8 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
         \ :<C-u>call <SID>hide()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_exit)
         \ :<C-u>call <SID>exit()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_close)
+        \ :<C-u>call <SID>close()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_help)
         \ :<C-u>call <SID>help()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_preview_file)
@@ -236,6 +238,8 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
   nmap <buffer> q <Plug>(vimfiler_hide)
   " Exit vimfiler.
   nmap <buffer> Q <Plug>(vimfiler_exit)
+  " Close vimfiler.
+  nmap <buffer> - <Plug>(vimfiler_close)
 
   nmap <buffer> ge <Plug>(vimfiler_execute_external_filer)
   nmap <buffer> <RightMouse> <Plug>(vimfiler_execute_external_filer)
@@ -1014,6 +1018,23 @@ function! s:exit()"{{{
     call vimfiler#util#delete_buffer()
   else
     call vimfiler#util#delete_buffer()
+  endif
+endfunction"}}}
+function! s:close()"{{{
+  let bufnr = bufnr('%')
+
+  let context = vimfiler#get_context()
+
+  if vimfiler#winnr_another_vimfiler() > 0
+    " Close current vimfiler.
+    let bufnr = b:vimfiler.another_vimfiler_bufnr
+    close
+    execute bufwinnr(bufnr).'wincmd w'
+    call vimfiler#redraw_screen()
+  elseif winnr('$') != 1 && (context.split || context.toggle)
+    close
+  else
+    call vimfiler#util#alternate_buffer()
   endif
 endfunction"}}}
 function! vimfiler#mappings#create_another_vimfiler()"{{{
