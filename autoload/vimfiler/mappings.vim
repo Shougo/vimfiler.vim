@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Sep 2012.
+" Last Modified: 08 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1335,7 +1335,7 @@ function! s:change_vim_current_dir()"{{{
 endfunction"}}}
 function! s:grep()"{{{
   if !vimfiler#util#has_vimproc()
-    call vimfiler#print_error('Sorry, vimproc is not installed. '
+    call vimfiler#print_error('Sorry, vimproc is not installed. '.
           \ 'This mapping use vimproc.')
     return
   endif
@@ -1352,7 +1352,7 @@ function! s:grep()"{{{
 endfunction"}}}
 function! s:find()"{{{
   if !vimfiler#util#has_vimproc()
-    call vimfiler#print_error('Sorry, vimproc is not installed. '
+    call vimfiler#print_error('Sorry, vimproc is not installed. '.
           \ 'This mapping use vimproc.')
     return
   endif
