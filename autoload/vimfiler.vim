@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Sep 2012.
+" Last Modified: 09 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -52,7 +52,8 @@ let s:vimfiler_current_histories = []
 let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-quit', '-toggle', '-create',
       \ '-simple', '-double', '-split', '-horizontal', '-direction=',
-      \ '-winheight=', '-winwidth=', '-winminwidth=', '-auto-cd', '-explorer'
+      \ '-winheight=', '-winwidth=', '-winminwidth=', '-auto-cd', '-explorer',
+      \ '-reverse',
       \]
 
 let s:V = vital#of('vimfiler')
@@ -639,6 +640,7 @@ function! vimfiler#initialize_context(context)"{{{
     \ 'direction' : g:vimfiler_split_rule,
     \ 'auto_cd' : g:vimfiler_enable_auto_cd,
     \ 'explorer' : 0,
+    \ 'reverse' : 0,
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
     \ 'vimfiler__prev_winnr' : winbufnr('%'),
     \ }

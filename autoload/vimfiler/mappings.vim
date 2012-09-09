@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Sep 2012.
+" Last Modified: 09 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1048,6 +1048,11 @@ function! vimfiler#mappings#create_another_vimfiler()"{{{
   let context.double = 0
   let context.create = 1
   let context.direction = 'belowright'
+  if context.reverse
+    " Reverse split direction.
+    let context.horizontal = !context.horizontal
+  endif
+
   call vimfiler#start(
         \ current_vimfiler.source.':'.
         \ current_vimfiler.current_dir, context)
@@ -1076,6 +1081,11 @@ function! vimfiler#mappings#switch_another_vimfiler(...)"{{{
     let context.split = 1
     let context.double = 0
     let context.direction = 'belowright'
+    if context.reverse
+      " Reverse split direction.
+      let context.horizontal = !context.horizontal
+    endif
+
     call vimfiler#_switch_vimfiler(
           \ current_vimfiler.another_vimfiler_bufnr,
           \ context, directory)
