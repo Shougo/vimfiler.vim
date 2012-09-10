@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Sep 2012.
+" Last Modified: 10 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -297,7 +297,7 @@ function! vimfiler#force_redraw_screen(...)"{{{
   echo ''
 endfunction"}}}
 function! vimfiler#redraw_screen()"{{{
-  let is_switch = &filetype != 'vimfiler'
+  let is_switch = &filetype !=# 'vimfiler'
   if is_switch
     " Switch vimfiler.
     let vimfiler = vimfiler#get_current_vimfiler()
@@ -335,8 +335,10 @@ function! vimfiler#redraw_screen()"{{{
 
   call vimfiler#redraw_prompt()
 
-  " Append up directory.
-  call append('$', '..')
+  if !vimfiler#get_context().explorer
+    " Append up directory.
+    call append('$', '..')
+  endif
 
   " Print files.
   call append('$',
@@ -346,7 +348,7 @@ function! vimfiler#redraw_screen()"{{{
   if index > 0
     call cursor(vimfiler#get_line_number(index), 0)
   else
-    call cursor(3, 0)
+    call cursor(vimfiler#get_file_offset(), 0)
   endif
 
   setlocal nomodifiable
@@ -434,13 +436,16 @@ function! vimfiler#get_file_directory(...)"{{{
   return directory
 endfunction"}}}
 function! vimfiler#get_file_index(line_num)"{{{
-  return a:line_num - 3
+  return a:line_num - vimfiler#get_file_offset()
 endfunction"}}}
 function! vimfiler#get_original_file_index(line_num)"{{{
   return index(b:vimfiler.original_files, vimfiler#get_file(a:line_num))
 endfunction"}}}
 function! vimfiler#get_line_number(index)"{{{
-  return a:index + 3
+  return a:index + vimfiler#get_file_offset()
+endfunction"}}}
+function! vimfiler#get_file_offset()"{{{
+  return vimfiler#get_context().explorer ?  2 : 3
 endfunction"}}}
 function! vimfiler#input_directory(message)"{{{
   echo a:message

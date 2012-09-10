@@ -156,6 +156,8 @@ COMMANDS 					*vimfiler-commands*
 		-explorer
 		Enable the behavior like explorer.
 		Note: This option changes some default options.
+		For Example, hide parent directory, change some default
+		mappings ...
 
 						*vimfiler-options-reverse*
 		-reverse
@@ -847,6 +849,9 @@ A: <Plug>(vimfiler_hide) closes both vimfiler windows. You can use
 <
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-09-10
+- Hide parent directory in explorer mode.
 
 2012-09-09
 - Added -reverse option.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Sep 2012.
+" Last Modified: 10 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,7 +29,8 @@ let s:Cache = vital#of('vimfiler').import('System.Cache')
 function! vimfiler#mappings#define_default_mappings(context)"{{{
   " Plugin keymappings"{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)
-        \ (line('.') == line('$'))? '3Gzb' : 'j'
+        \ (line('.') == line('$'))?
+        \  vimfiler#get_file_offset().'Gzb' : 'j'
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_up)
         \ (line('.') == 1)? 'G' : 'k'
   nnoremap <buffer><silent> <Plug>(vimfiler_redraw_screen)
@@ -147,8 +148,8 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
           \ line('.') == 1 ? 'l' :
           \  ":\<C-u>call \<SID>execute()\<CR>"
   endif
-  nnoremap <buffer><silent> <Plug>(vimfiler_cursor_top)
-        \ 3Gzb
+  nnoremap <buffer><silent><expr> <Plug>(vimfiler_cursor_top)
+        \ vimfiler#get_file_offset().'Gzb'
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree)
         \ :<C-u>call <SID>toggle_tree()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree_recursive)
@@ -471,7 +472,7 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir)"{{{
   elseif has_key(b:vimfiler.directory_cursor_pos, a:fullpath)
     call setpos('.', b:vimfiler.directory_cursor_pos[a:fullpath])
   else
-    call cursor(3, 0)
+    call cursor(vimfiler#get_file_offset(), 0)
   endif
 
   if line('.') < winheight(0)

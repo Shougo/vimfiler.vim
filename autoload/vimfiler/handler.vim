@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2012.
+" Last Modified: 10 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -172,7 +172,6 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   endif
 
   call vimfiler#force_redraw_all_vimfiler()
-  3
 endfunction"}}}
 function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
   " Set current directory.
