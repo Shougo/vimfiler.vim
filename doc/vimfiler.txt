@@ -686,7 +686,7 @@ Normal mode key mappings.
 					*<Plug>(vimfiler_cd_input_directory)*
 		Changes directory to input directory.
 
-<Plug>(vimfiler_double_click)		*<Plug>(vimfiler_cd_input_directory)*
+<Plug>(vimfiler_double_click)		*<Plug>(vimfiler_double_click)*
 		If cursor is on the directory, execute
 		|<Plug>(vimfiler_expand_tree)| mapping.
 		If cursor is on the file, execute
