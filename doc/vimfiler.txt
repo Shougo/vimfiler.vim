@@ -657,19 +657,28 @@ Normal mode key mappings.
 		Expands/Unexpands directory tree. If it is used on file, it
 		will expand/unexpand parent directory tree.
 
-<Plug>(vimfiler_expand_tree_recursive)		*<Plug>(vimfiler_expand_tree_recursive)*
+<Plug>(vimfiler_expand_tree_recursive)
+					*<Plug>(vimfiler_expand_tree_recursive)*
 		Expands/Closes directory tree.
 		Note: This mapping ignores a symbolic link.
 
-<Plug>(vimfiler_cd_input_directory)		*<Plug>(vimfiler_cd_input_directory)*
+<Plug>(vimfiler_cd_input_directory)
+					*<Plug>(vimfiler_cd_input_directory)*
 		Changes directory to input directory.
+
+<Plug>(vimfiler_double_click)		*<Plug>(vimfiler_cd_input_directory)*
+		If cursor is on the directory, execute
+		|<Plug>(vimfiler_expand_tree)| mapping.
+		If cursor is on the file, execute
+		|<Plug>(vimfiler_execute_system_associated)| mapping.
 
 Visual mode key mappings.
 
-<Plug>(vimfiler_toggle_mark_selected_lines)	*<Plug>(vimfiler_toggle_selected_lines)*
+<Plug>(vimfiler_toggle_mark_selected_lines)
+				*<Plug>(vimfiler_toggle_selected_lines)*
 		Toggles marks in selected lines.
 
-						*g:vimfiler_default_key_mappings*
+					*g:vimfiler_default_key_mappings*
 Following keymappings are default keymappings.
 
 Normal mode default mappings.
@@ -696,7 +705,6 @@ N			<Plug>(vimfiler_new_file)
 <Enter>			<Plug>(vimfiler_execute)
 l			<Plug>(vimfiler_smart_l)
 x			<Plug>(vimfiler_execute_system_associated)
-<2-LeftMouse>		<Plug>(vimfiler_execute_system_associated)
 h			<Plug>(vimfiler_smart_h)
 L			<Plug>(vimfiler_switch_to_drive)
 ~			<Plug>(vimfiler_switch_to_home_directory)
@@ -734,6 +742,7 @@ P			<Plug>(vimfiler_popd)
 t			<Plug>(vimfiler_expand_tree)
 T			<Plug>(vimfiler_expand_tree_recursive)
 I			<Plug>(vimfiler_cd_input_directory)
+<2-LeftMouse>		<Plug>(vimfiler_double_click)
 
 Visual mode mappings.
 {lhs}			{rhs}
@@ -849,6 +858,9 @@ A: <Plug>(vimfiler_hide) closes both vimfiler windows. You can use
 <
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-09-11
+- Added <Plug>(vimfiler_double_click) mapping.
 
 2012-09-10
 - Hide parent directory in explorer mode.

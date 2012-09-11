@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Sep 2012.
+" Last Modified: 11 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -156,6 +156,8 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
         \ :<C-u>call <SID>toggle_tree_recursive()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd_input_directory)
         \ :<C-u>call <SID>cd_input_directory()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_double_click)
+        \ :<C-u>call <SID>on_double_click()<CR>
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()
@@ -213,8 +215,6 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
 
   nmap <buffer> x
         \ <Plug>(vimfiler_execute_system_associated)
-  nmap <buffer> <2-LeftMouse>
-        \ <Plug>(vimfiler_execute_system_associated)
 
   " Move to directory.
   nmap <buffer> h <Plug>(vimfiler_smart_h)
@@ -265,6 +265,8 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
   nmap <buffer> t <Plug>(vimfiler_expand_tree)
   nmap <buffer> T <Plug>(vimfiler_expand_tree_recursive)
   nmap <buffer> I <Plug>(vimfiler_cd_input_directory)
+  nmap <buffer> <2-LeftMouse>
+        \ <Plug>(vimfiler_double_click)
 
   " pushd/popd
   nmap <buffer> Y <Plug>(vimfiler_pushd)
@@ -1411,6 +1413,15 @@ function! s:cd_input_directory()"{{{
 
   " Change directory.
   call vimfiler#mappings#cd(dir)
+endfunction"}}}
+function! s:on_double_click()"{{{
+  let file = vimfiler#get_file()
+  if empty(file) || vimfiler#get_filename() == '..'
+        \ || !file.vimfiler__is_directory
+    call s:execute_system_associated()
+  else
+    call s:toggle_tree()
+  endif
 endfunction"}}}
 
 " For safe mode.
