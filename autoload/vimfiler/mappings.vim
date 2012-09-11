@@ -193,9 +193,11 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
 
   " Copy files.
   nmap <buffer> c <Plug>(vimfiler_copy_file)
+  nmap <buffer> Cc <Plug>(vimfiler_clipboard_copy_file)
 
   " Move files.
   nmap <buffer> m <Plug>(vimfiler_move_file)
+  nmap <buffer> Cm <Plug>(vimfiler_clipboard_move_file)
 
   " Delete files.
   nmap <buffer> d <Plug>(vimfiler_delete_file)
@@ -208,6 +210,9 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
 
   " New file.
   nmap <buffer> N <Plug>(vimfiler_new_file)
+
+  " Paste.
+  nmap <buffer> Cp <Plug>(vimfiler_clipboard_paste)
 
   " Execute or change directory.
   nmap <buffer> <Enter> <Plug>(vimfiler_execute)
@@ -1174,6 +1179,37 @@ function! s:split_edit_file()"{{{
 endfunction"}}}
 
 " File operations.
+function! s:copy()"{{{
+  let marked_files = vimfiler#get_marked_files()
+  if empty(marked_files)
+    " Mark current line.
+    call s:toggle_mark_current_line()
+    return
+  endif
+
+  " Get destination directory.
+  let dest_dir = ''
+  if vimfiler#winnr_another_vimfiler() > 0
+    let another = vimfiler#get_another_vimfiler()
+    if another.source !=# 'file'
+      let dest_dir = another.source . ':'
+    endif
+
+    let dest_dir .= another.current_dir
+  endif
+
+  let old_files = copy(vimfiler#get_current_vimfiler().current_files)
+
+  " Execute copy.
+  call unite#mappings#do_action('vimfiler__copy', marked_files, {
+        \ 'action__directory' : dest_dir,
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
+  call s:clear_mark_all_lines()
+  silent call vimfiler#force_redraw_all_vimfiler(1)
+
+  call s:search_new_file(old_files)
+endfunction"}}}
 function! s:move()"{{{
   let marked_files = vimfiler#get_marked_files()
   if empty(marked_files)
@@ -1208,37 +1244,6 @@ function! s:move()"{{{
         \ })
   call s:clear_mark_all_lines()
   silent call vimfiler#force_redraw_all_vimfiler(1)
-endfunction"}}}
-function! s:copy()"{{{
-  let marked_files = vimfiler#get_marked_files()
-  if empty(marked_files)
-    " Mark current line.
-    call s:toggle_mark_current_line()
-    return
-  endif
-
-  " Get destination directory.
-  let dest_dir = ''
-  if vimfiler#winnr_another_vimfiler() > 0
-    let another = vimfiler#get_another_vimfiler()
-    if another.source !=# 'file'
-      let dest_dir = another.source . ':'
-    endif
-
-    let dest_dir .= another.current_dir
-  endif
-
-  let old_files = copy(vimfiler#get_current_vimfiler().current_files)
-
-  " Execute copy.
-  call unite#mappings#do_action('vimfiler__copy', marked_files, {
-        \ 'action__directory' : dest_dir,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
-        \ })
-  call s:clear_mark_all_lines()
-  silent call vimfiler#force_redraw_all_vimfiler(1)
-
-  call s:search_new_file(old_files)
 endfunction"}}}
 function! s:delete()"{{{
   let marked_files = vimfiler#get_marked_files()
@@ -1295,6 +1300,58 @@ function! s:new_file()"{{{
 
   call vimfiler#mappings#do_dir_action('vimfiler__newfile', directory)
   silent call vimfiler#force_redraw_all_vimfiler(1)
+endfunction"}}}
+function! s:clipboard_copy()"{{{
+  let marked_files = vimfiler#get_marked_files()
+  if empty(marked_files)
+    " Mark current line.
+    call s:toggle_mark_current_line()
+    return
+  endif
+
+  let b:vimfiler.clipboard = {
+        \ 'operation' : 'copy',
+        \ 'files' : marked_files,
+        \ }
+  call s:clear_mark_all_lines()
+
+  echo 'Copied files to vimfiler clipboard.'
+endfunction"}}}
+function! s:clipboard_move()"{{{
+  let marked_files = vimfiler#get_marked_files()
+  if empty(marked_files)
+    " Mark current line.
+    call s:toggle_mark_current_line()
+    return
+  endif
+
+  let b:vimfiler.clipboard = {
+        \ 'operation' : 'move',
+        \ 'files' : marked_files,
+        \ }
+  call s:clear_mark_all_lines()
+
+  echo 'Moved files to vimfiler clipboard.'
+endfunction"}}}
+function! s:clipboard_paste()"{{{
+  if empty(b:vimfiler.clipboard)
+    call vimfiler#print_error('Clipboard is empty.')
+    return
+  endif
+
+  " Get destination directory.
+  let dest_dir = vimfiler#get_file_directory()
+
+  " Execute file operation.
+  call unite#mappings#do_action(
+        \ 'vimfiler__' . b:vimfiler.clipboard.operation,
+        \ b:vimfiler.clipboard.files, {
+        \ 'action__directory' : dest_dir,
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ })
+  silent call vimfiler#force_redraw_all_vimfiler(1)
+
+  let b:vimfiler.clipboard = {}
 endfunction"}}}
 
 function! s:set_current_mask()"{{{
@@ -1437,20 +1494,44 @@ function! s:toggle_safe_mode()"{{{
   endif
 endfunction"}}}
 function! s:mapping_file_operations()"{{{
-  nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)  :<C-u>call <SID>copy()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_file)  :<C-u>call <SID>move()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_delete_file)  :<C-u>call <SID>delete()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_rename_file)  :<C-u>call <SID>rename()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_make_directory)  :<C-u>call <SID>make_directory()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_new_file)  :<C-u>call <SID>new_file()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)
+        \ :<C-u>call <SID>copy()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_file)
+        \ :<C-u>call <SID>move()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_delete_file)
+        \ :<C-u>call <SID>delete()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_rename_file)
+        \ :<C-u>call <SID>rename()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_make_directory)
+        \ :<C-u>call <SID>make_directory()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_new_file)
+        \ :<C-u>call <SID>new_file()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_clipboard_copy_file)
+        \ :<C-u>call <SID>clipboard_copy()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_clipboard_move_file)
+        \ :<C-u>call <SID>clipboard_move()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_clipboard_paste)
+        \ :<C-u>call <SID>clipboard_paste()<CR>
 endfunction"}}}
 function! s:unmapping_file_operations()"{{{
-  nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)  :<C-u>call <SID>disable_operation()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_move_file)  :<C-u>call <SID>disable_operation()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_delete_file)  :<C-u>call <SID>disable_operation()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_rename_file)  :<C-u>call <SID>disable_operation()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_make_directory)  :<C-u>call <SID>disable_operation()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_new_file)  :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_copy_file)
+        \ :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_move_file)
+        \ :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_delete_file)
+        \ :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_rename_file)
+        \ :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_make_directory)
+        \ :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_new_file)
+        \ :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_clipboard_copy_file)
+        \ :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_clipboard_move_file)
+        \ :<C-u>call <SID>disable_operation()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_clipboard_paste)
+        \ :<C-u>call <SID>disable_operation()<CR>
 endfunction"}}}
 function! s:disable_operation()"{{{
   call vimfiler#print_error('In safe mode, this operation is disabled.')

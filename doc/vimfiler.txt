@@ -460,28 +460,48 @@ Normal mode key mappings.
 		vimfiler buffer, destination directory is another vimfiler
 		directory.
 		If no marked files, mark current file.
+		Note: This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_move_file)			*<Plug>(vimfiler_move_file)*
 		Moves marked files to destination directory. If exists another
 		vimfiler buffer, destination directory is another vimfiler
 		directory.
 		If no marked files, mark current file.
-		This mappings is disabled in vimfiler safe mode.
+		Note: This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_delete_file)			*<Plug>(vimfiler_delete_file)*
 		Deletes marked files completely.
 		If no marked files, mark current file.
-		This mappings is disabled in vimfiler safe mode.
+		Note: This mappings is disabled in vimfiler safe mode.
+
+<Plug>(vimfiler_clipboard_copy_file)
+					*<Plug>(vimfiler_clipboard_copy_file)*
+		Copies marked files to vimfiler clipboard.
+		If no marked files, mark current file.
+		Note: This mappings is disabled in vimfiler safe mode.
+
+<Plug>(vimfiler_clipboard_move_file)
+					*<Plug>(vimfiler_clipboard_move_file)*
+		Moves marked files to vimfiler clipboard.
+		If no marked files, mark current file.
+		Note: This mappings is disabled in vimfiler safe mode.
+
+<Plug>(vimfiler_clipboard_paste)
+					*<Plug>(vimfiler_clipboard_paste)*
+		Execute move or copy operation from vimfiler clipboard to
+		cursor directory. If directory tree is opened, will execute
+		the operation in directory tree.
+		Note: This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_make_directory)			*<Plug>(vimfiler_make_directory)*
-		Creates new directory. If directory tree is opened, create new
-		directory in directory tree.
-		This mappings is disabled in vimfiler safe mode.
+		Creates new directory. If directory tree is opened, will
+		create new directory in directory tree.
+		Note: This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_new_file)			*<Plug>(vimfiler_new_file)*
 		Creates new files. If directory tree is opened, create new
 		files in directory tree.
-		This mappings is disabled in vimfiler safe mode.
+		Note: This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_rename_file)			*<Plug>(vimfiler_rename_file)*
 		Renames cursor file or selected files.
@@ -489,7 +509,7 @@ Normal mode key mappings.
 		In exrename buffer, you can rename with Vim features like
 		|renamer.vim|.
 		http://www.vim.org/scripts/script.php?script_id=1721
-		This mappings is disabled in vimfiler safe mode.
+		Note: This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_execute)			*<Plug>(vimfiler_execute)*
 		Executes cursor file with |g:vimfiler_execute_file_list| command.
@@ -699,6 +719,9 @@ U			<Plug>(vimfiler_clear_mark_all_lines)
 c			<Plug>(vimfiler_copy_file)
 m			<Plug>(vimfiler_move_file)
 d			<Plug>(vimfiler_delete_file)
+Cc			<Plug>(vimfiler_clipboard_copy_file)
+Cm			<Plug>(vimfiler_clipboard_move_file)
+Cp			<Plug>(vimfiler_clipboard_paste)
 r			<Plug>(vimfiler_rename_file)
 K			<Plug>(vimfiler_make_directory)
 N			<Plug>(vimfiler_new_file)
@@ -861,6 +884,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-09-11
 - Added <Plug>(vimfiler_double_click) mapping.
+- Added clipboard operations.
 
 2012-09-10
 - Hide parent directory in explorer mode.
