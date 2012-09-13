@@ -416,8 +416,10 @@ g:unite_kind_file_switch_command			*g:unite_kind_file_switch_command*
 
 g:unite_kind_file_use_trashbox			*g:unite_kind_file_use_trashbox*
 		This variable controls vimfiler (and kind file) use trashbox
-		when delete files.
-		Note: This option is works newest vimproc and in Windows only.
+		when delete files. It is automatically set if you installed
+		|vimproc|.
+		Note: This option is works newest |vimproc| and in Windows
+		only.
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*vimfiler-key-mappings*
@@ -879,8 +881,34 @@ A: <Plug>(vimfiler_hide) closes both vimfiler windows. You can use
 >
 	autocmd FileType vimfiler nnoremap q <buffer> <Plug>(vimfiler_close)
 <
+
+Q: I want to put trashbox instead of "rm" command.
+A: Yes, you can. Newest unite.vim and vimfiler are detect trashbox commands
+automatically.
+
+In windows: Please install vimproc.
+http://github.com/Shougo/vimproc
+
+In Mac: Please install "rmtrash" command.
+>
+	$ brew install rmtrash
+<
+Or
+>
+	$ sudo port install rmtrash
+<
+In Linux: Please install "trashcli" commands.
+https://github.com/andreafrancia/trash-cli
+>
+	$ sudo apt-get install trash-cli
+<
+
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-09-13
+- Added FAQ section.
+- Improved vimfiler/drive source.
 
 2012-09-11
 - Added <Plug>(vimfiler_double_click) mapping.

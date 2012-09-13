@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/drive.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Feb 2012.
+" Last Modified: 13 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,14 +28,12 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let g:vimfiler_detect_drives =
-      \ get(g:, 'vimfiler_detect_drives', (has('win32') || has('win64')) ? [
+      \ get(g:, 'vimfiler_detect_drives', unite#util#is_windows() ? [
       \     'A:/', 'B:/', 'C:/', 'D:/', 'E:/', 'F:/', 'G:/',
       \     'H:/', 'I:/', 'J:/', 'K:/', 'L:/', 'M:/', 'N:/',
       \     'O:/', 'P:/', 'Q:/', 'R:/', 'S:/', 'T:/', 'U:/',
       \     'V:/', 'W:/', 'X:/', 'Y:/', 'Z:/'
-      \ ] : (has('macunix') || system('uname') =~? '^darwin') ?
-      \ split(glob('/Volumes/*'), '\n') :
-      \ split(glob('/mnt/*'), '\n') + split(glob('/media/*'), '\n'))
+      \ ] : [])
 
 function! unite#sources#vimfiler_drive#define()"{{{
   return s:source
@@ -51,16 +49,31 @@ let s:source = {
 function! s:source.gather_candidates(args, context)"{{{
   if !exists('s:drives') || a:context.is_redraw
     " Detect mounted drive.
-    let s:drives = filter(copy(g:vimfiler_detect_drives),
-          \ 'isdirectory(v:val)')
+    let s:drives = copy(g:vimfiler_detect_drives)
+    if unite#util#is_mac()
+      let s:drives += split(glob('/Volumes/*'), '\n')
+    elseif !unite#util#is_windows()
+      let s:drives += split(glob('/mnt/*'), '\n')
+            \ + split(glob('/media/*'), '\n')
+    endif
+    call filter(s:drives, 'isdirectory(v:val)')
+
+    if !empty(unite#get_sources('ssh'))
+      " Add network drive.
+      let s:drives += map(unite#sources#ssh#command_complete_host('', '', 0),
+            \ "'ssh://'.v:val.'/'")
+    endif
+
+    let s:drives = unite#util#uniq(s:drives)
   endif
 
-  return map(copy(s:drives), '{
-        \ "word" : v:val,
-        \ "action__path" : v:val,
-        \ "action__directory" : v:val,
-        \ "kind" : "directory",
-        \ }')
+  return map(copy(s:drives), "{
+        \ 'word' : v:val,
+        \ 'action__path' : v:val,
+        \ 'action__directory' : v:val,
+        \ 'kind' : ((v:val =~ '^ssh://') ?
+        \     'directory/ssh' : 'directory'),
+        \ }")
 endfunction"}}}
 
 let &cpo = s:save_cpo
