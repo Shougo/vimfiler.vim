@@ -909,6 +909,7 @@ CHANGELOG					*vimfiler-changelog*
 2012-09-13
 - Added FAQ section.
 - Improved vimfiler/drive source.
+- Improved cd behavior.
 
 2012-09-11
 - Added <Plug>(vimfiler_double_click) mapping.

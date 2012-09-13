@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Sep 2012.
+" Last Modified: 13 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -342,6 +342,11 @@ function! vimfiler#mappings#cd(dir, ...)"{{{
   let save_history = get(a:000, 0, 1)
 
   let dir = vimfiler#util#substitute_path_separator(a:dir)
+  if b:vimfiler.source !=# 'file' &&
+        \ dir !~ ':' && dir =~ '^/\|^\a:'
+    " Use file source.
+    let dir = 'file:' . dir
+  endif
 
   if dir =~ ':'
     " Parse path.

@@ -71,7 +71,7 @@ function! s:source.gather_candidates(args, context)"{{{
         \ 'word' : v:val,
         \ 'action__path' : v:val,
         \ 'action__directory' : v:val,
-        \ 'kind' : ((v:val =~ '^ssh://') ?
+        \ 'kind' : (v:val =~ '^ssh://' ?
         \     'directory/ssh' : 'directory'),
         \ }")
 endfunction"}}}
