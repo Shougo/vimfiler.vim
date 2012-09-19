@@ -909,6 +909,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-09-19
 - Improved g:vimfiler_execute_file_list behavior.
+- Improved check network drives.
 
 2012-09-13
 - Added FAQ section.

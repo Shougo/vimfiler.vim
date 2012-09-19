@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/drive.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Sep 2012.
+" Last Modified: 19 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,7 +58,7 @@ function! s:source.gather_candidates(args, context)"{{{
     endif
     call filter(s:drives, 'isdirectory(v:val)')
 
-    if !empty(unite#get_sources('ssh'))
+    if !empty(unite#get_all_sources('ssh'))
       " Add network drive.
       let s:drives += map(unite#sources#ssh#command_complete_host('', '', 0),
             \ "'ssh://'.v:val.'/'")
