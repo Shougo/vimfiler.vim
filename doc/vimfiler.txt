@@ -912,6 +912,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved g:vimfiler_execute_file_list behavior.
 - Improved check network drives.
 - Added <BS> default mapping.
+- Added s:on_FileReadCmd().
 
 2012-09-13
 - Added FAQ section.

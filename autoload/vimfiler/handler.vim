@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Sep 2012.
+" Last Modified: 19 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -80,6 +80,28 @@ endfunction
 function! s:on_FileAppendCmd(source_name, source_args, context)  "{{{1
   " FileAppendCmd is published by :write or other commands with >>.
   return s:write(a:source_name, a:source_args, line("'["), line("']"), 'FileAppendCmd')
+endfunction
+
+
+function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
+  " Check path.
+  let ret = unite#vimfiler_check_filetype(
+        \ [insert(a:source_args, a:source_name)])
+  if empty(ret)
+    " File not found.
+    call vimfiler#print_error(
+          \ printf('Can''t open "%s".', join(a:source_args, ':')))
+    return
+  endif
+  let [type, info] = ret
+
+  if type !=# 'file'
+    call vimfiler#print_error(
+          \ printf('"%s" is not a file.', join(a:source_args, ':')))
+    return
+  endif
+
+  call append(line('.'), info[0])
 endfunction
 
 
