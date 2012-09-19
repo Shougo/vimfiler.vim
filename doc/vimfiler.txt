@@ -913,6 +913,7 @@ CHANGELOG					*vimfiler-changelog*
 - Improved check network drives.
 - Added <BS> default mapping.
 - Added s:on_FileReadCmd().
+- Improved BufWriteCmd.
 
 2012-09-13
 - Added FAQ section.

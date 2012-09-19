@@ -205,6 +205,8 @@ function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
 
   augroup vimfiler
     autocmd! * <buffer>
+    autocmd BufWriteCmd <buffer>
+          \ call vimfiler#handler#_event_handler('BufWriteCmd')
   augroup end
 
   call setline(1, a:lines)
