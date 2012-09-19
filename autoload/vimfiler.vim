@@ -944,8 +944,10 @@ function! s:event_bufwin_enter(bufnr)"{{{
   endif
 
   let winwidth = (winwidth(0)+1)/2*2
-  if vimfiler.winwidth != winwidth
-    call vimfiler#redraw_screen()
+  if exists('vimfiler.winwidth')
+      if vimfiler.winwidth != winwidth
+        call vimfiler#redraw_screen()
+      endif
   endif
 
   if exists('winnr')
