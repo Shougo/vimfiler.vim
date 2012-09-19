@@ -250,6 +250,7 @@ g:vimfiler_execute_file_list			*g:vimfiler_execute_file_list*
 		This variable controls vimfiler execute.
 		The key is extension. The value is command name or
 		command name list. If value is "vim", edit file.
+		If the key is "_", it will be default command name.
 
 g:vimfiler_extensions				*g:vimfiler_extensions*
 		This variable controls vimfiler color syntax.
@@ -905,6 +906,9 @@ https://github.com/andreafrancia/trash-cli
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-09-19
+- Improved g:vimfiler_execute_file_list behavior.
 
 2012-09-13
 - Added FAQ section.

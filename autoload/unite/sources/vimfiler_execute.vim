@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/execute.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Dec 2011.
+" Last Modified: 19 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,14 +53,10 @@ function! s:source.gather_candidates(args, context)"{{{
 
   " Search user execute file.
   let ext = a:context.source__file.vimfiler__extension
-  if !has_key(g:vimfiler_execute_file_list, ext)
-    call unite#print_error(
-          \ '[vimfiler/execute] Associated programs are not found.')
-    return []
-  endif
 
   let candidates = []
-  let commands = g:vimfiler_execute_file_list[ext]
+  let commands = get(g:vimfiler_execute_file_list, ext,
+        \ get(g:vimfiler_execute_file_list, '_', []))
   for command in type(commands) == type([]) ?
         \ commands : [commands]
     let dict = { 'word' : command }
