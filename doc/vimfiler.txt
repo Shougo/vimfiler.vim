@@ -736,6 +736,7 @@ L			<Plug>(vimfiler_switch_to_drive)
 ~			<Plug>(vimfiler_switch_to_home_directory)
 \			<Plug>(vimfiler_switch_to_root_directory)
 <C-j>			<Plug>(vimfiler_switch_to_history_directory)
+<BS>			<Plug>(vimfiler_switch_to_parent_directory)
 .			<Plug>(vimfiler_toggle_visible_dot_files)
 H			<Plug>(vimfiler_popup_shell)
 e			<Plug>(vimfiler_edit_file)
@@ -910,6 +911,7 @@ CHANGELOG					*vimfiler-changelog*
 2012-09-19
 - Improved g:vimfiler_execute_file_list behavior.
 - Improved check network drives.
+- Added <BS> default mapping.
 
 2012-09-13
 - Added FAQ section.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Sep 2012.
+" Last Modified: 19 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -227,6 +227,7 @@ function! vimfiler#mappings#define_default_mappings(context)"{{{
   nmap <buffer> ~ <Plug>(vimfiler_switch_to_home_directory)
   nmap <buffer> \ <Plug>(vimfiler_switch_to_root_directory)
   nmap <buffer> <C-j> <Plug>(vimfiler_switch_to_history_directory)
+  nmap <buffer> <BS> <Plug>(vimfiler_switch_to_parent_directory)
 
   nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
   nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
