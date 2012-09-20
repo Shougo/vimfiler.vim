@@ -205,16 +205,21 @@ function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
 
   augroup vimfiler
     autocmd! * <buffer>
+    autocmd BufWriteCmd <buffer>
+          \ call vimfiler#handler#_event_handler('BufWriteCmd')
   augroup END
 
   call setline(1, a:lines)
-  setlocal nomodified
 
   setlocal buftype=acwrite
   setlocal noswapfile
+
+  " For filetype detect.
   execute 'doautocmd BufRead' a:path[1]
 
   let &fileencoding = get(a:dict, 'vimfiler__encoding', '')
+
+  setlocal nomodified
 endfunction"}}}
 
 " vim: foldmethod=marker

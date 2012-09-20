@@ -910,6 +910,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-09-20
 - Fixed autocmd behavior.
+- Fixed acwrite error.
 
 2012-09-19
 - Improved g:vimfiler_execute_file_list behavior.
