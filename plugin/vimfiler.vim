@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Sep 2012.
+" Last Modified: 20 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -146,8 +146,7 @@ command! -nargs=? -complete=customlist,vimfiler#complete VimFilerExplorer
 command! VimFilerDetectDrives call vimfiler#detect_drives()
 command! -nargs=1 VimFilerClose call vimfiler#close(<q-args>)
 
-augroup vimfiler-FileExplorer
-  autocmd!
+augroup vimfiler
   autocmd BufReadCmd ??*:{*,*/*}
         \ call vimfiler#handler#_event_handler('BufReadCmd')
   autocmd BufWriteCmd ??*:{*,*/*}
