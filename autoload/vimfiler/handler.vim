@@ -215,7 +215,7 @@ function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
   setlocal noswapfile
 
   " For filetype detect.
-  execute 'doautocmd BufRead' a:path[1]
+  execute 'doautocmd BufRead' fnamemodify(a:path[-1], ':t')
 
   let &fileencoding = get(a:dict, 'vimfiler__encoding', '')
 
