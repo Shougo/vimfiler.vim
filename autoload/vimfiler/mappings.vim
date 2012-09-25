@@ -621,15 +621,18 @@ function! s:execute_vimfiler_associated()"{{{
   call unite#start([['vimfiler/execute']], {'immediately' : 1})
 endfunction"}}}
 function! s:execute_system_associated()"{{{
-  let marked_files = vimfiler#get_marked_filenames()
-  if !empty(marked_files)
+  let marked_files = vimfiler#get_marked_files()
+  if empty(marked_files)
     let file = vimfiler#get_file()
     if empty(file)
       call s:execute_external_filer()
       return
     endif
+
     let marked_files = [file]
   endif
+
+  call s:clear_mark_all_lines()
 
   " Execute marked files.
   call unite#mappings#do_action('vimfiler__execute', marked_files, {
