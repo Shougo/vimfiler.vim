@@ -520,7 +520,8 @@ Normal mode key mappings.
 
 <Plug>(vimfiler_execute_system_associated)	*<Plug>(vimfiler_execute_system_associated)*
 <Plug>(vimfiler_execute_file)			*<Plug>(vimfiler_execute_file)*
-		Executes cursor file by system associated command.
+		Executes marked files or cursor file by system associated
+		command.
 		Note: <Plug>(vimfiler_execute_file) is obsolute name.
 
 <Plug>(vimfiler_execute_vimfiler_associated)	*<Plug>(vimfiler_execute_vimfiler_associated)*
@@ -907,6 +908,9 @@ https://github.com/andreafrancia/trash-cli
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2012-09-25
+- Improved <Plug>(vimfiler_execute_system_associated) behavior.
 
 2012-09-20
 - Fixed autocmd behavior.

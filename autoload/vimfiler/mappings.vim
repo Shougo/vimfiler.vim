@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2012.
+" Last Modified: 25 Sep 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -621,14 +621,18 @@ function! s:execute_vimfiler_associated()"{{{
   call unite#start([['vimfiler/execute']], {'immediately' : 1})
 endfunction"}}}
 function! s:execute_system_associated()"{{{
-  let file = vimfiler#get_file()
-  if empty(file)
-    call s:execute_external_filer()
-    return
+  let marked_files = vimfiler#get_marked_filenames()
+  if !empty(marked_files)
+    let file = vimfiler#get_file()
+    if empty(file)
+      call s:execute_external_filer()
+      return
+    endif
+    let marked_files = [file]
   endif
 
-  " Execute cursor file.
-  call unite#mappings#do_action('vimfiler__execute', [file], {
+  " Execute marked files.
+  call unite#mappings#do_action('vimfiler__execute', marked_files, {
         \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
 endfunction"}}}
