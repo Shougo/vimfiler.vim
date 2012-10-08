@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Sep 2012.
+" Last Modified: 08 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1061,7 +1061,8 @@ function! s:get_file_pattern(filename)"{{{
 python <<END
 import os.path
 import vim
-filesize = os.path.getsize(vim.eval('a:filename'))
+filesize = os.path.getsize(vim.eval(\
+    'unite#util#iconv(a:filename, &encoding, "char")'))
 if filesize < 0:
   pattern = ''
 else:
