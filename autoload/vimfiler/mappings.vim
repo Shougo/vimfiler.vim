@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Sep 2012.
+" Last Modified: 19 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -615,10 +615,11 @@ function! s:execute()"{{{
   return  filename == '..' || empty(file)
         \ || file.vimfiler__is_directory ?
         \ s:cd_file_directory() :
-        \ unite#start([['vimfiler/execute']], {'immediately' : 1})
+        \ s:execute_vimfiler_associated()
 endfunction"}}}
 function! s:execute_vimfiler_associated()"{{{
-  call unite#start([['vimfiler/execute']], {'immediately' : 1})
+  call unite#start(['vimfiler/execute'],
+        \ { 'immediately' : 1, 'buffer_name' : 'vimfiler/execute', 'script' : 1 })
 endfunction"}}}
 function! s:execute_system_associated()"{{{
   let marked_files = vimfiler#get_marked_files()
@@ -928,16 +929,19 @@ function! s:unexpand_tree()"{{{
 endfunction"}}}
 
 function! s:switch_to_drive()"{{{
-  call unite#start([['vimfiler/drive']])
+  call unite#start(['vimfiler/drive'],
+        \ { 'buffer_name' : 'vimfiler/drive', 'script' : 1 })
 endfunction"}}}
 function! s:switch_to_history_directory()"{{{
-  call unite#start([['vimfiler/history']])
+  call unite#start(['vimfiler/history'],
+        \ { 'buffer_name' : 'vimfiler/history', 'script' : 1 })
 endfunction"}}}
 function! s:pushd()"{{{
   call unite#sources#vimfiler_popd#pushd()
 endfunction"}}}
 function! s:popd()"{{{
-  call unite#start([['vimfiler/popd']])
+  call unite#start(['vimfiler/popd'],
+        \ { 'buffer_name' : 'vimfiler/popd', 'script' : 1 })
 endfunction"}}}
 
 function! s:toggle_visible_dot_files()"{{{
@@ -1368,10 +1372,12 @@ function! s:clipboard_paste()"{{{
 endfunction"}}}
 
 function! s:set_current_mask()"{{{
-  call unite#start([['vimfiler/mask']], { 'start_insert' : 1 })
+  call unite#start(['vimfiler/mask'],
+        \ { 'start_insert' : 1, 'buffer_name' : 'vimfiler/mask', 'script' : 1 })
 endfunction"}}}
 function! s:select_sort_type()"{{{
-  call unite#start([['vimfiler/sort']])
+  call unite#start(['vimfiler/sort'],
+        \ { 'buffer_name' : 'vimfiler/sort', 'script' : 1 })
 endfunction"}}}
 function! s:switch_vim_buffer_mode()"{{{
   redir => nmaps
@@ -1400,7 +1406,8 @@ function! s:restore_vimfiler_mode()"{{{
   echo 'Switched vimfiler mode'
 endfunction"}}}
 function! s:help()"{{{
-  call unite#start([['mapping']])
+  call unite#start(['mapping'],
+        \ { 'buffer_name' : 'vimfiler/mapping', 'script' : 1 })
 endfunction"}}}
 function! s:execute_external_filer()"{{{
   call vimfiler#mappings#do_current_dir_action('vimfiler__execute')

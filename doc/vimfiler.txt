@@ -909,6 +909,9 @@ https://github.com/andreafrancia/trash-cli
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-10-19
+- Improved start unite behavior.
+
 2012-10-09
 - Fixed function name.
 
