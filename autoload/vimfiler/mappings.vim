@@ -322,18 +322,23 @@ endfunction"}}}
 function! vimfiler#mappings#do_dir_action(action, directory, ...)"{{{
   let context = get(a:000, 0, {})
   let vimfiler = vimfiler#get_current_vimfiler()
+  let context.vimfiler__current_directory = a:directory
 
-  let dummy_files = unite#get_vimfiler_candidates(
-        \ [[vimfiler.source, a:directory]], extend(context, {
-        \ 'vimfiler__is_dummy' : 1,
-        \ 'vimfiler__current_directory' : a:directory,
-        \ }))
-  if empty(dummy_files)
-    return
+  let files = vimfiler#get_marked_files()
+  if empty(files)
+    let context.vimfiler__is_dummy = 1
+
+    let files = unite#get_vimfiler_candidates(
+          \ [[vimfiler.source, a:directory]], context)
+    if empty(files)
+      return
+    endif
+  else
+    let context.vimfiler__is_dummy = 0
   endif
 
   " Execute action.
-  call unite#mappings#do_action(a:action, dummy_files, context)
+  call unite#mappings#do_action(a:action, files, context)
 endfunction"}}}
 
 function! vimfiler#mappings#cd(dir, ...)"{{{

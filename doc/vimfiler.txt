@@ -499,6 +499,7 @@ Normal mode key mappings.
 <Plug>(vimfiler_make_directory)			*<Plug>(vimfiler_make_directory)*
 		Creates new directory. If directory tree is opened, will
 		create new directory in directory tree.
+		If you marked files, will move the files in new directory.
 		Note: This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_new_file)			*<Plug>(vimfiler_new_file)*
@@ -911,6 +912,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-10-19
 - Improved start unite behavior.
+- Improved <Plug>(vimfiler_make_directory).
 
 2012-10-09
 - Fixed function name.
