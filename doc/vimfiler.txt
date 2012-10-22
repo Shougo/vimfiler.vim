@@ -910,6 +910,9 @@ https://github.com/andreafrancia/trash-cli
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-10-22
+- Improved write handler.
+
 2012-10-19
 - Improved start unite behavior.
 - Improved <Plug>(vimfiler_make_directory).
