@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Oct 2012.
+" Last Modified: 27 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -763,13 +763,16 @@ function! vimfiler#sort(files, type)"{{{
     " Ignore.
     let files = a:files
   elseif a:type =~? '^s\%[ize]$'
-    let files = sort(a:files, 's:compare_size')
+    let files = vimfiler#util#sort_by(
+          \ a:files, 'v:val.vimfiler__filesize')
   elseif a:type =~? '^e\%[xtension]$'
-    let files = sort(a:files, 's:compare_extension')
+    let files = vimfiler#util#sort_by(
+          \ a:files, 'v:val.vimfiler__extension')
   elseif a:type =~? '^f\%[ilename]$'
-    let files = sort(a:files, 's:compare_name')
+    let files = sort(a:files, 's:compare_filename')
   elseif a:type =~? '^t\%[ime]$'
-    let files = sort(a:files, 's:compare_time')
+    let files = vimfiler#util#sort_by(
+          \ a:files, 'v:val.vimfiler__filetime')
   elseif a:type =~? '^m\%[anual]$'
     " Not implemented.
     let files = a:files
@@ -784,35 +787,24 @@ function! vimfiler#sort(files, type)"{{{
 
   return files
 endfunction"}}}
-function! s:compare_size(a, b)"{{{
-  let not_over_a = a:a.vimfiler__filesize >= 0
-  let not_over_b = a:b.vimfiler__filesize >= 0
-  if not_over_a && not_over_b
-    return (a:a.vimfiler__filesize - a:b.vimfiler__filesize)
-  elseif not_over_a && !not_over_b
-    return -1
-  elseif !not_over_a && not_over_b
-    return 1
-  else
-    return s:compare_filesize_pattern(a:a, a:b)
-  endif
-endfunction"}}}
-function! s:compare_extension(i1, i2)"{{{
-  return a:i1.vimfiler__extension > a:i2.vimfiler__extension ?
-        \ -1 : a:i1.vimfiler__extension == a:i2.vimfiler__extension ? 0 : 1
-endfunction"}}}
-function! s:compare_name(i1, i2)"{{{
-  return a:i1.vimfiler__filename ># a:i2.vimfiler__filename ?
-        \ 1 : a:i1.vimfiler__filename == a:i2.vimfiler__filename ? 0 : -1
-endfunction"}}}
-function! s:compare_time(i1, i2)"{{{
-  return a:i1.vimfiler__filetime - a:i2.vimfiler__filetime
-endfunction"}}}
-function! s:compare_filesize_pattern(a, b)"{{{
-  let pattern_a = s:get_filesize(a:a)
-  let pattern_b = s:get_filesize(a:b)
-  return pattern_a ># pattern_b ?
-        \ 1 : pattern_a == pattern_b ? 0 : -1
+" Compare filename by human order."{{{
+function! s:compare_filename(i1, i2)
+  let words_1 = map(split(a:i1.vimfiler__filename, '\D\zs\ze\d'),
+        \ "v:val =~ '^\\d' ? str2nr(v:val) : v:val")
+  let words_2 = map(split(a:i2.vimfiler__filename, '\D\zs\ze\d'),
+        \ "v:val =~ '^\\d' ? str2nr(v:val) : v:val")
+  let words_1_len = len(words_1)
+  let words_2_len = len(words_2)
+
+  for i in range(0, min([words_1_len, words_2_len])-1)
+    if words_1[i] ># words_2[i]
+      return 1
+    elseif words_1[i] <# words_2[i]
+      return -1
+    endif
+  endfor
+
+  return words_1_len - words_2_len
 endfunction"}}}
 
 " Complete.

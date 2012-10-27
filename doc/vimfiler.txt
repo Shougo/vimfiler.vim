@@ -948,6 +948,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2012-10-27
 - Improved documentation.
+- Improved sort orders.
 
 2012-10-22
 - Improved write handler.
