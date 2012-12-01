@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Oct 2012.
+" Last Modified: 01 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -98,7 +98,7 @@ endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions."{{{
-function! vimfiler#get_current_vimfiler()"{{{
+function! vimfiler#get_current_vimfiler() "{{{
   return exists('b:vimfiler') ? b:vimfiler : s:current_vimfiler
 endfunction"}}}
 function! vimfiler#set_current_vimfiler(vimfiler)"{{{
@@ -261,7 +261,7 @@ function! vimfiler#get_directory_files(directory, ...)"{{{
 
   return current_files
 endfunction"}}}
-function! vimfiler#force_redraw_screen(...)"{{{
+function! vimfiler#force_redraw_screen(...) "{{{
   let is_manualed = get(a:000, 0, 0)
 
   let old_original_files = {}
@@ -292,7 +292,7 @@ function! vimfiler#force_redraw_screen(...)"{{{
   redraw
   echo ''
 endfunction"}}}
-function! vimfiler#redraw_screen()"{{{
+function! vimfiler#redraw_screen() "{{{
   let is_switch = &filetype !=# 'vimfiler'
   if is_switch
     " Switch vimfiler.
@@ -353,7 +353,7 @@ function! vimfiler#redraw_screen()"{{{
     execute save_winnr . 'wincmd w'
   endif
 endfunction"}}}
-function! vimfiler#redraw_prompt()"{{{
+function! vimfiler#redraw_prompt() "{{{
   if &filetype !=# 'vimfiler'
     return
   endif
@@ -386,10 +386,15 @@ function! vimfiler#redraw_prompt()"{{{
     let dir .= '/'
   endif
 
+  if line('$') == 1
+    call append(1, '')
+  endif
+
   call setline(1, prefix .  dir . mask)
+
   let &l:modifiable = modifiable_save
 endfunction"}}}
-function! vimfiler#get_marked_files()"{{{
+function! vimfiler#get_marked_files() "{{{
   return vimfiler#util#sort_by(filter(copy(vimfiler#get_current_vimfiler().current_files),
         \ 'v:val.vimfiler__is_marked'), 'v:val.vimfiler__marked_time')
 endfunction"}}}
@@ -477,7 +482,7 @@ function! vimfiler#input_yesno(message)"{{{
 
   return yesno =~? 'y\%[es]'
 endfunction"}}}
-function! vimfiler#force_redraw_all_vimfiler(...)"{{{
+function! vimfiler#force_redraw_all_vimfiler(...) "{{{
   let is_manualed = get(a:000, 0, 0)
 
   let current_nr = winnr()
@@ -495,7 +500,7 @@ function! vimfiler#force_redraw_all_vimfiler(...)"{{{
 
   execute current_nr . 'wincmd w'
 endfunction"}}}
-function! vimfiler#redraw_all_vimfiler()"{{{
+function! vimfiler#redraw_all_vimfiler() "{{{
   let current_nr = winnr()
   let bufnr = 1
   while bufnr <= winnr('$')
@@ -511,7 +516,7 @@ function! vimfiler#redraw_all_vimfiler()"{{{
 
   execute current_nr . 'wincmd w'
 endfunction"}}}
-function! vimfiler#get_filetype(file)"{{{
+function! vimfiler#get_filetype(file) "{{{
   let ext = tolower(a:file.vimfiler__extension)
 
   if (vimfiler#util#is_windows() && ext ==? 'LNK')

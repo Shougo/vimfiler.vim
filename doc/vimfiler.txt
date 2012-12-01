@@ -946,6 +946,9 @@ https://github.com/andreafrancia/trash-cli
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2012-12-02
+- Fixed explorer behavior.
+
 2012-10-27
 - Improved documentation.
 - Improved sort orders.

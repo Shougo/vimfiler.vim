@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2012.
+" Last Modified: 01 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -156,7 +156,7 @@ augroup vimfiler
         \ call vimfiler#handler#_event_handler('FileAppendCmd')
   autocmd FileReadCmd ??*:{*,*/*}
         \ call vimfiler#handler#_event_handler('FileReadCmd')
-  autocmd BufEnter,BufWinEnter
+  autocmd BufCreate,BufEnter,BufWinEnter
         \ * call s:browse_check(expand('<amatch>'))
 augroup END
 
@@ -170,7 +170,7 @@ command! -bang -bar -complete=customlist,vimfiler#complete -nargs=1
 command! -bang -bar -complete=customlist,vimfiler#complete -nargs=* -range=%
       \ Write  <line1>,<line2>write<bang> <args>
 
-function! s:browse_check(path)"{{{
+function! s:browse_check(path) "{{{
   if !g:vimfiler_as_default_explorer
     return
   endif
@@ -195,7 +195,7 @@ function! s:browse_check(path)"{{{
   endif
 endfunction"}}}
 
-function! s:call_vimfiler(default, args)"{{{
+function! s:call_vimfiler(default, args) "{{{
   let args = []
   let options = a:default
   for arg in split(a:args, '\%(\\\@<!\s\)\+')
