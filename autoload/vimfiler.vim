@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Dec 2012.
+" Last Modified: 02 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -387,10 +387,13 @@ function! vimfiler#redraw_prompt() "{{{
   endif
 
   if line('$') == 1
+    " Note: Dirty Hack for open file.
     call append(1, '')
+    call setline(2, prefix .  dir . mask)
+    delete _
+  else
+    call setline(1, prefix .  dir . mask)
   endif
-
-  call setline(1, prefix .  dir . mask)
 
   let &l:modifiable = modifiable_save
 endfunction"}}}
