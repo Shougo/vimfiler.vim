@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Dec 2012.
+" Last Modified: 08 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -64,11 +64,11 @@ call s:manager.config('range', 'current')
 "}}}
 
 " User utility functions."{{{
-function! vimfiler#default_settings()"{{{
+function! vimfiler#default_settings() "{{{
   call s:buffer_default_settings()
 
   " Set autocommands.
-  augroup vimfiler"{{{
+  augroup vimfiler "{{{
     autocmd WinEnter,BufWinEnter <buffer>
           \ call s:event_bufwin_enter(expand('<abuf>'))
     autocmd WinLeave,BufWinLeave <buffer>
@@ -77,21 +77,21 @@ function! vimfiler#default_settings()"{{{
           \ call vimfiler#redraw_all_vimfiler()
   augroup end"}}}
 endfunction"}}}
-function! vimfiler#set_execute_file(exts, command)"{{{
+function! vimfiler#set_execute_file(exts, command) "{{{
   return vimfiler#util#set_dictionary_helper(g:vimfiler_execute_file_list,
         \ a:exts, a:command)
 endfunction"}}}
-function! vimfiler#set_extensions(kind, exts)"{{{
+function! vimfiler#set_extensions(kind, exts) "{{{
   let g:vimfiler_extensions[a:kind] = {}
   for ext in split(a:exts, '\s*,\s*')
     let g:vimfiler_extensions[a:kind][ext] = 1
   endfor
 endfunction"}}}
-function! vimfiler#do_action(action)"{{{
+function! vimfiler#do_action(action) "{{{
   return printf(":\<C-u>call vimfiler#mappings#do_action(%s)\<CR>",
         \             string(a:action))
 endfunction"}}}
-function! vimfiler#smart_cursor_map(directory_map, file_map)"{{{
+function! vimfiler#smart_cursor_map(directory_map, file_map) "{{{
   return vimfiler#mappings#smart_cursor_map(a:directory_map, a:file_map)
 endfunction"}}}
 
@@ -101,13 +101,13 @@ endfunction"}}}
 function! vimfiler#get_current_vimfiler() "{{{
   return exists('b:vimfiler') ? b:vimfiler : s:current_vimfiler
 endfunction"}}}
-function! vimfiler#set_current_vimfiler(vimfiler)"{{{
+function! vimfiler#set_current_vimfiler(vimfiler) "{{{
   let s:current_vimfiler = a:vimfiler
 endfunction"}}}
-function! vimfiler#get_context()"{{{
+function! vimfiler#get_context() "{{{
   return vimfiler#get_current_vimfiler().context
 endfunction"}}}
-function! vimfiler#set_context(context)"{{{
+function! vimfiler#set_context(context) "{{{
   let old_context = vimfiler#get_context()
 
   if exists('b:vimfiler')
@@ -118,10 +118,10 @@ function! vimfiler#set_context(context)"{{{
 
   return old_context
 endfunction"}}}
-function! vimfiler#get_options()"{{{
+function! vimfiler#get_options() "{{{
   return copy(s:vimfiler_options)
 endfunction"}}}
-function! vimfiler#start(path, ...)"{{{
+function! vimfiler#start(path, ...) "{{{
   if vimfiler#util#is_cmdwin()
     call vimfiler#print_error(
           \ '[vimfiler] Command line buffer is detected!')
@@ -169,7 +169,7 @@ function! vimfiler#start(path, ...)"{{{
   " Create window.
   call s:create_filer(path, context)
 endfunction"}}}
-function! s:create_filer(path, context)"{{{
+function! s:create_filer(path, context) "{{{
   let path = a:path
   if path == ''
     " Use current directory.
@@ -227,7 +227,7 @@ function! s:create_filer(path, context)"{{{
 
   call s:event_bufwin_enter(bufnr('%'))
 endfunction"}}}
-function! vimfiler#get_directory_files(directory, ...)"{{{
+function! vimfiler#get_directory_files(directory, ...) "{{{
   " Save current files.
 
   let is_manualed = get(a:000, 0, 0)
@@ -401,27 +401,27 @@ function! vimfiler#get_marked_files() "{{{
   return vimfiler#util#sort_by(filter(copy(vimfiler#get_current_vimfiler().current_files),
         \ 'v:val.vimfiler__is_marked'), 'v:val.vimfiler__marked_time')
 endfunction"}}}
-function! vimfiler#get_marked_filenames()"{{{
+function! vimfiler#get_marked_filenames() "{{{
   return map(vimfiler#get_marked_files(), 'v:val.action__path')
 endfunction"}}}
-function! vimfiler#get_escaped_marked_files()"{{{
+function! vimfiler#get_escaped_marked_files() "{{{
   return map(vimfiler#get_marked_filenames(),
         \ '"\"" . v:val . "\""')
 endfunction"}}}
-function! vimfiler#get_filename(...)"{{{
+function! vimfiler#get_filename(...) "{{{
   let line_num = get(a:000, 0, line('.'))
   return line_num == 1 ? '' :
    \ getline(line_num) == '..' ? '..' :
    \ b:vimfiler.current_files[vimfiler#get_file_index(line_num)].action__path
 endfunction"}}}
-function! vimfiler#get_file(...)"{{{
+function! vimfiler#get_file(...) "{{{
   let line_num = get(a:000, 0, line('.'))
   let vimfiler = vimfiler#get_current_vimfiler()
   let index = vimfiler#get_file_index(line_num)
   return index < 0 ? {} :
         \ get(vimfiler.current_files, index, {})
 endfunction"}}}
-function! vimfiler#get_file_directory(...)"{{{
+function! vimfiler#get_file_directory(...) "{{{
   let line_num = get(a:000, 0, line('.'))
 
   let file = vimfiler#get_file(line_num)
@@ -439,19 +439,19 @@ function! vimfiler#get_file_directory(...)"{{{
 
   return directory
 endfunction"}}}
-function! vimfiler#get_file_index(line_num)"{{{
+function! vimfiler#get_file_index(line_num) "{{{
   return a:line_num - vimfiler#get_file_offset()
 endfunction"}}}
-function! vimfiler#get_original_file_index(line_num)"{{{
+function! vimfiler#get_original_file_index(line_num) "{{{
   return index(b:vimfiler.original_files, vimfiler#get_file(a:line_num))
 endfunction"}}}
-function! vimfiler#get_line_number(index)"{{{
+function! vimfiler#get_line_number(index) "{{{
   return a:index + vimfiler#get_file_offset()
 endfunction"}}}
-function! vimfiler#get_file_offset()"{{{
+function! vimfiler#get_file_offset() "{{{
   return vimfiler#get_context().explorer ?  2 : 3
 endfunction"}}}
-function! vimfiler#input_directory(message)"{{{
+function! vimfiler#input_directory(message) "{{{
   echo a:message
   let dir = input('', '', 'dir')
   while !isdirectory(dir)
@@ -469,7 +469,7 @@ function! vimfiler#input_directory(message)"{{{
 
   return dir
 endfunction"}}}
-function! vimfiler#input_yesno(message)"{{{
+function! vimfiler#input_yesno(message) "{{{
   let yesno = input(a:message . ' [yes/no] : ')
   while yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
     redraw
@@ -553,7 +553,7 @@ function! vimfiler#get_filetype(file) "{{{
     return '     '
   endif
 endfunction"}}}
-function! vimfiler#get_datemark(file)"{{{
+function! vimfiler#get_datemark(file) "{{{
   if a:file.vimfiler__filetime !~ '^\d\+$'
     return '~'
   endif
@@ -569,31 +569,31 @@ function! vimfiler#get_datemark(file)"{{{
     return '~'
   endif
 endfunction"}}}
-function! vimfiler#head_match(checkstr, headstr)"{{{
+function! vimfiler#head_match(checkstr, headstr) "{{{
   return stridx(a:checkstr, a:headstr) == 0
 endfunction"}}}
-function! vimfiler#exists_another_vimfiler()"{{{
+function! vimfiler#exists_another_vimfiler() "{{{
   return bufnr('%') != b:vimfiler.another_vimfiler_bufnr
         \ && getbufvar(b:vimfiler.another_vimfiler_bufnr,
         \         '&filetype') ==# 'vimfiler'
         \ && bufloaded(b:vimfiler.another_vimfiler_bufnr) > 0
 endfunction"}}}
-function! vimfiler#winnr_another_vimfiler()"{{{
+function! vimfiler#winnr_another_vimfiler() "{{{
   return winnr() == bufwinnr(b:vimfiler.another_vimfiler_bufnr) ?
         \ -1 : bufwinnr(b:vimfiler.another_vimfiler_bufnr)
 endfunction"}}}
-function! vimfiler#get_another_vimfiler()"{{{
+function! vimfiler#get_another_vimfiler() "{{{
   return vimfiler#exists_another_vimfiler() ?
         \ getbufvar(b:vimfiler.another_vimfiler_bufnr, 'vimfiler') : ''
 endfunction"}}}
-function! vimfiler#resolve(filename)"{{{
+function! vimfiler#resolve(filename) "{{{
   return ((vimfiler#util#is_windows() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
         \ vimfiler#util#substitute_path_separator(resolve(a:filename)) : a:filename
 endfunction"}}}
-function! vimfiler#print_error(message)"{{{
+function! vimfiler#print_error(message) "{{{
   echohl WarningMsg | echo a:message | echohl None
 endfunction"}}}
-function! vimfiler#set_variables(variables)"{{{
+function! vimfiler#set_variables(variables) "{{{
   let variables_save = {}
   for [key, value] in items(a:variables)
     let save_value = exists(key) ? eval(key) : ''
@@ -604,12 +604,12 @@ function! vimfiler#set_variables(variables)"{{{
 
   return variables_save
 endfunction"}}}
-function! vimfiler#restore_variables(variables_save)"{{{
+function! vimfiler#restore_variables(variables_save) "{{{
   for [key, value] in items(a:variables_save)
     execute 'let' key '= value'
   endfor
 endfunction"}}}
-function! vimfiler#parse_path(path)"{{{
+function! vimfiler#parse_path(path) "{{{
   let path = a:path
 
   let source_name = matchstr(path, '^\h[^:]*\ze:')
@@ -632,7 +632,7 @@ function! vimfiler#parse_path(path)"{{{
 
   return insert(source_args, source_name)
 endfunction"}}}
-function! vimfiler#initialize_context(context)"{{{
+function! vimfiler#initialize_context(context) "{{{
   let default_context = {
     \ 'buffer_name' : 'default',
     \ 'no_quit' : 0,
@@ -669,13 +669,13 @@ function! vimfiler#initialize_context(context)"{{{
 
   return context
 endfunction"}}}
-function! vimfiler#get_histories()"{{{
+function! vimfiler#get_histories() "{{{
   return copy(s:vimfiler_current_histories)
 endfunction"}}}
-function! vimfiler#set_histories(histories)"{{{
+function! vimfiler#set_histories(histories) "{{{
   let s:vimfiler_current_histories = a:histories
 endfunction"}}}
-function! vimfiler#get_print_lines(files)"{{{
+function! vimfiler#get_print_lines(files) "{{{
   let is_simple = b:vimfiler.context.simple
   if s:max_padding_width + g:vimfiler_min_filename_width > winwidth(0)
     " Force simple.
@@ -735,7 +735,7 @@ function! vimfiler#get_print_lines(files)"{{{
 
   return lines
 endfunction"}}}
-function! vimfiler#close(buffer_name)"{{{
+function! vimfiler#close(buffer_name) "{{{
   let buffer_name = a:buffer_name
   if buffer_name !~ '@\d\+$'
     " Add postfix.
@@ -766,7 +766,7 @@ endfunction"}}}
 "}}}
 
 " Sort.
-function! vimfiler#sort(files, type)"{{{
+function! vimfiler#sort(files, type) "{{{
   if a:type =~? '^n\%[one]$'
     " Ignore.
     let files = a:files
@@ -816,7 +816,7 @@ function! s:compare_filename(i1, i2)
 endfunction"}}}
 
 " Complete.
-function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
+function! vimfiler#complete(arglead, cmdline, cursorpos) "{{{
   let ret = vimfiler#parse_path(join(split(a:cmdline)[1:]))
   let source_name = ret[0]
   let source_args = ret[1:]
@@ -838,7 +838,7 @@ function! vimfiler#complete(arglead, cmdline, cursorpos)"{{{
 
   return sort(_)
 endfunction"}}}
-function! vimfiler#complete_path(arglead, cmdline, cursorpos)"{{{
+function! vimfiler#complete_path(arglead, cmdline, cursorpos) "{{{
   let ret = vimfiler#parse_path(a:cmdline)
   let source_name = ret[0]
   let source_args = ret[1:]
@@ -868,7 +868,7 @@ function! vimfiler#complete_path(arglead, cmdline, cursorpos)"{{{
 endfunction"}}}
 
 " Event functions.
-function! s:buffer_default_settings()"{{{
+function! s:buffer_default_settings() "{{{
   setlocal buftype=nofile
   setlocal noswapfile
   setlocal noreadonly
@@ -891,8 +891,12 @@ function! s:buffer_default_settings()"{{{
     setlocal conceallevel=3
     setlocal concealcursor=n
   endif
+
+  if vimfiler#get_context().explorer
+    setlocal nobuflisted
+  endif
 endfunction"}}}
-function! s:event_bufwin_enter(bufnr)"{{{
+function! s:event_bufwin_enter(bufnr) "{{{
   if &filetype ==# 'vimfiler'
     call s:buffer_default_settings()
   endif
@@ -950,13 +954,13 @@ function! s:event_bufwin_enter(bufnr)"{{{
     execute winnr.'wincmd w'
   endif
 endfunction"}}}
-function! s:event_bufwin_leave(bufnr)"{{{
+function! s:event_bufwin_leave(bufnr) "{{{
   if !exists('b:vimfiler')
     return
   endif
 endfunction"}}}
 
-function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
+function! vimfiler#_switch_vimfiler(bufnr, context, directory) "{{{
   let context = vimfiler#initialize_context(a:context)
 
   if context.split
@@ -999,7 +1003,7 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory)"{{{
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 
-function! s:get_postfix(prefix, is_create)"{{{
+function! s:get_postfix(prefix, is_create) "{{{
   let buffers = get(a:000, 0, range(1, bufnr('$')))
   let buflist = vimfiler#util#sort_by(filter(map(buffers,
         \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'),
@@ -1012,7 +1016,7 @@ function! s:get_postfix(prefix, is_create)"{{{
   return num == '' && !a:is_create ? '' :
         \ '@' . (a:is_create ? (num + 1) : num)
 endfunction"}}}
-function! s:get_filesize(file)"{{{
+function! s:get_filesize(file) "{{{
   if a:file.vimfiler__is_directory
     return '       '
   endif
@@ -1056,7 +1060,7 @@ function! s:get_filesize(file)"{{{
 
   return printf('%s%s', pattern, suffix)
 endfunction"}}}
-function! s:get_python_file_size(filename)"{{{
+function! s:get_python_file_size(filename) "{{{
     " Use python.
 python <<END
 import os.path
@@ -1075,14 +1079,14 @@ END
 
   return pattern
 endfunction"}}}
-function! s:get_filetime(file)"{{{
+function! s:get_filetime(file) "{{{
   return (a:file.vimfiler__filetime =~ '^-\?\d\+$' ?
         \  (a:file.vimfiler__filetime <= 0 ? '' :
         \    a:file.vimfiler__datemark .
         \    strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
         \ : a:file.vimfiler__datemark . a:file.vimfiler__filetime)
 endfunction"}}}
-function! s:convert_filetype(filetype)"{{{
+function! s:convert_filetype(filetype) "{{{
   return ' ' . get({'[TXT]' : '~', '[IMG]' : '!',
         \ '[ARC]' : '@', '[EXE]' : '#', '[MUL]' : '$', '[DIR]' : '%',
         \ '[SYS]' : '^', '[LNK]' : '&',}, a:filetype, '')
