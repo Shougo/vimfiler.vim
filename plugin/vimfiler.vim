@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Dec 2012.
+" Last Modified: 13 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -172,6 +172,7 @@ command! -bang -bar -complete=customlist,vimfiler#complete -nargs=* -range=%
 
 function! s:browse_check(path) "{{{
   if !g:vimfiler_as_default_explorer
+        \ || bufnr('%') != expand('<abuf>')
     return
   endif
 
