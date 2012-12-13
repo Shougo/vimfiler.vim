@@ -100,31 +100,31 @@ function! vimfiler#util#escape_file_searching(...)
   return call(s:V.escape_file_searching, a:000)
 endfunction
 
-function! vimfiler#util#is_cmdwin()"{{{
+function! vimfiler#util#is_cmdwin() "{{{
   return bufname('%') ==# '[Command Line]'
 endfunction"}}}
 
-function! vimfiler#util#expand(path)"{{{
+function! vimfiler#util#expand(path) "{{{
   return s:V.substitute_path_separator(
         \ (a:path =~ '^\~') ? substitute(a:path, '^\~', expand('~'), '') :
         \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
         \               '^\$\h\w*', '\=eval(submatch(0))', '') :
         \ a:path)
 endfunction"}}}
-function! vimfiler#util#set_default_dictionary_helper(variable, keys, value)"{{{
+function! vimfiler#util#set_default_dictionary_helper(variable, keys, value) "{{{
   for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
       let a:variable[key] = a:value
     endif
   endfor
 endfunction"}}}
-function! vimfiler#util#set_dictionary_helper(variable, keys, value)"{{{
+function! vimfiler#util#set_dictionary_helper(variable, keys, value) "{{{
   for key in split(a:keys, '\s*,\s*')
     let a:variable[key] = a:value
   endfor
 endfunction"}}}
 
-function! vimfiler#util#alternate_buffer()"{{{
+function! vimfiler#util#alternate_buffer() "{{{
   if getbufvar('#', '&filetype') !=# 'vimfiler'
         \ && s:buflisted(bufnr('#'))
     buffer #
@@ -145,7 +145,7 @@ function! vimfiler#util#alternate_buffer()"{{{
 
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
-function! vimfiler#util#delete_buffer(...)"{{{
+function! vimfiler#util#delete_buffer(...) "{{{
   let context = vimfiler#get_context()
   let bufnr = get(a:000, 0, bufnr('%'))
 
@@ -157,7 +157,7 @@ function! vimfiler#util#delete_buffer(...)"{{{
   endif
   execute 'silent bdelete!' bufnr
 endfunction"}}}
-function! s:buflisted(bufnr)"{{{
+function! s:buflisted(bufnr) "{{{
   return exists('t:unite_buffer_dictionary') ?
         \ has_key(t:unite_buffer_dictionary, a:bufnr) && buflisted(a:bufnr) :
         \ buflisted(a:bufnr)

@@ -37,11 +37,11 @@ elseif $SUDO_USER != '' && $USER !=# $SUDO_USER
   finish
 endif
 
-if exists(':NeoBundleDepends')"{{{
+if exists(':NeoBundleDepends') "{{{
   NeoBundleDepends 'Shougo/unite.vim.git'
 endif"}}}
 
-" Check unite.vim."{{{
+" Check unite.vim. "{{{
 try
   let s:exists_unite_version = unite#version()
 catch
@@ -58,7 +58,7 @@ endif"}}}
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Global options definition."{{{
+" Global options definition. "{{{
 let g:vimfiler_as_default_explorer =
       \ get(g:, 'vimfiler_as_default_explorer', 0)
 let g:vimfiler_execute_file_list =
@@ -112,7 +112,7 @@ let g:vimfiler_extensions =
       \ get(g:, 'vimfiler_extensions', {})
 "}}}
 
-" Plugin keymappings"{{{
+" Plugin keymappings "{{{
 nnoremap <silent> <Plug>(vimfiler_split_switch)
       \ :<C-u><SID>call_vimfiler({ 'split' : 1 }, '')<CR>
 nnoremap <silent> <Plug>(vimfiler_split_create)

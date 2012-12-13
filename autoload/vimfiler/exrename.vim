@@ -24,7 +24,7 @@
 " }}}
 "=============================================================================
 
-function! vimfiler#exrename#create_buffer(files)"{{{
+function! vimfiler#exrename#create_buffer(files) "{{{
   let vimfiler_save = deepcopy(b:vimfiler)
   let bufnr = bufnr('%')
 
@@ -87,7 +87,7 @@ function! vimfiler#exrename#create_buffer(files)"{{{
 
   setlocal nomodified
 endfunction"}}}
-function! s:exit()"{{{
+function! s:exit() "{{{
   let exrename_buf = bufnr('%')
   " Switch buffer.
   if winnr('$') != 1
@@ -99,7 +99,7 @@ function! s:exit()"{{{
 
   call vimfiler#redraw_all_vimfiler()
 endfunction"}}}
-function! s:do_rename()"{{{
+function! s:do_rename() "{{{
   if line('$') != len(b:exrename.current_filenames)
     echohl Error | echo 'Invalid rename buffer!' | echohl None
     return
@@ -131,7 +131,7 @@ function! s:do_rename()"{{{
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 
-function! s:check_lines()"{{{
+function! s:check_lines() "{{{
   if !exists('b:exrename')
     return
   endif
@@ -142,7 +142,7 @@ function! s:check_lines()"{{{
   endif
 endfunction"}}}
 
-function! s:custom_alternate_buffer()"{{{
+function! s:custom_alternate_buffer() "{{{
   if bufnr('%') != bufnr('#') && buflisted(bufnr('#'))
     buffer #
   endif

@@ -27,11 +27,11 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#vimfiler_popd#define()"{{{
+function! unite#sources#vimfiler_popd#define() "{{{
   return s:source
 endfunction"}}}
 
-function! unite#sources#vimfiler_popd#pushd()"{{{
+function! unite#sources#vimfiler_popd#pushd() "{{{
   if &filetype !=# 'vimfiler'
     return
   endif
@@ -54,7 +54,7 @@ let s:source = {
       \ 'alias_table' : { 'cd' : 'lcd' },
       \ }
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   let num = 0
   let _ = []
   for stack in s:directory_stack
@@ -73,7 +73,7 @@ function! s:source.gather_candidates(args, context)"{{{
   return _
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:action_table = {}
 
 let s:action_table.delete = {
@@ -82,21 +82,21 @@ let s:action_table.delete = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:action_table.delete.func(candidates)"{{{
+function! s:action_table.delete.func(candidates) "{{{
   for candidate in sort(a:candidates, 's:compare')
     call remove(s:directory_stack,
           \ candidate.action__nr)
   endfor
 endfunction"}}}
 
-function! s:compare(candidate_a, candidate_b)"{{{
+function! s:compare(candidate_a, candidate_b) "{{{
   return a:candidate_b.action__nr - a:candidate_a.action__nr
 endfunction"}}}
 
 let s:action_table.cd = {
       \ 'description' : 'cd vimfiler directory from directory stack',
       \ }
-function! s:action_table.cd.func(candidate)"{{{
+function! s:action_table.cd.func(candidate) "{{{
   if &filetype != 'vimfiler'
     return
   endif
@@ -117,7 +117,7 @@ let s:source.action_table['*'] = s:action_table
 unlet! s:action_table
 "}}}
 
-function! s:compare(candidate_a, candidate_b)"{{{
+function! s:compare(candidate_a, candidate_b) "{{{
   return a:candidate_b.action__nr - a:candidate_a.action__nr
 endfunction"}}}
 

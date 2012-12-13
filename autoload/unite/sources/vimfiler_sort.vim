@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#vimfiler_sort#define()"{{{
+function! unite#sources#vimfiler_sort#define() "{{{
   return s:source
 endfunction"}}}
 
@@ -42,7 +42,7 @@ let s:source = {
       \ 'is_listed' : 0,
       \ }
 
-function! s:source.hooks.on_init(args, context)"{{{
+function! s:source.hooks.on_init(args, context) "{{{
   if &filetype !=# 'vimfiler'
     return
   endif
@@ -50,7 +50,7 @@ function! s:source.hooks.on_init(args, context)"{{{
   let a:context.source__sort = b:vimfiler.local_sort_type
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context)"{{{
+function! s:source.gather_candidates(args, context) "{{{
   if !has_key(a:context, 'source__sort')
     return []
   endif
@@ -72,13 +72,13 @@ function! s:source.gather_candidates(args, context)"{{{
         \ }')
 endfunction"}}}
 
-" Actions"{{{
+" Actions "{{{
 let s:action_table = {}
 
 let s:action_table.sort = {
       \ 'description' : 'sort vimfiler items',
       \ }
-function! s:action_table.sort.func(candidate)"{{{
+function! s:action_table.sort.func(candidate) "{{{
   if &filetype != 'vimfiler'
     call unite#print_error('Current vimfiler is not found.')
     return

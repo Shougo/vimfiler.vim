@@ -160,7 +160,7 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
 
   set filetype=vimfiler
 
-  " Initialize syntax."{{{
+  " Initialize syntax. "{{{
   let leaf_icon = vimfiler#util#escape_pattern(
         \ g:vimfiler_tree_leaf_icon)
   let opened_icon = vimfiler#util#escape_pattern(

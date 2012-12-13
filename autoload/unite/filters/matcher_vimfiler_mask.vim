@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#filters#matcher_vimfiler_mask#define()"{{{
+function! unite#filters#matcher_vimfiler_mask#define() "{{{
   return s:matcher
 endfunction"}}}
 
@@ -36,7 +36,7 @@ let s:matcher = {
       \ 'description' : 'vimfiler mask matcher',
       \}
 
-function! s:matcher.filter(candidates, context)"{{{
+function! s:matcher.filter(candidates, context) "{{{
   if a:context.input == ''
     return a:candidates
   endif

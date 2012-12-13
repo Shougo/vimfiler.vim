@@ -28,7 +28,7 @@ if !exists('g:loaded_vimfiler')
   runtime! plugin/vimfiler.vim
 endif
 
-" Check unite.vim."{{{
+" Check unite.vim. "{{{
 try
   let s:exists_unite_version = unite#version()
 catch
@@ -42,7 +42,7 @@ if s:exists_unite_version < 300
   finish
 endif"}}}
 
-" Variables"{{{
+" Variables "{{{
 let s:current_vimfiler = {}
 
 let s:min_padding_width = 2
@@ -63,7 +63,7 @@ call s:manager.config('opener', 'silent edit')
 call s:manager.config('range', 'current')
 "}}}
 
-" User utility functions."{{{
+" User utility functions. "{{{
 function! vimfiler#default_settings() "{{{
   call s:buffer_default_settings()
 
@@ -97,7 +97,7 @@ endfunction"}}}
 
 "}}}
 
-" vimfiler plugin utility functions."{{{
+" vimfiler plugin utility functions. "{{{
 function! vimfiler#get_current_vimfiler() "{{{
   return exists('b:vimfiler') ? b:vimfiler : s:current_vimfiler
 endfunction"}}}
@@ -795,7 +795,7 @@ function! vimfiler#sort(files, type) "{{{
 
   return files
 endfunction"}}}
-" Compare filename by human order."{{{
+" Compare filename by human order. "{{{
 function! s:compare_filename(i1, i2)
   let words_1 = map(split(a:i1.vimfiler__filename, '\D\zs\ze\d'),
         \ "v:val =~ '^\\d' ? str2nr(v:val) : v:val")
@@ -1092,7 +1092,7 @@ function! s:convert_filetype(filetype) "{{{
         \ '[SYS]' : '^', '[LNK]' : '&',}, a:filetype, '')
 endfunction"}}}
 
-" Global options definition."{{{
+" Global options definition. "{{{
 let g:vimfiler_execute_file_list =
       \ get(g:, 'vimfiler_execute_file_list', {})
 let g:vimfiler_extensions =
