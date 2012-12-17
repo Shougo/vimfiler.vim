@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Dec 2012.
+" Last Modified: 17 Dec 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1081,7 +1081,7 @@ END
 endfunction"}}}
 function! s:get_filetime(file) "{{{
   return (a:file.vimfiler__filetime =~ '^-\?\d\+$' ?
-        \  (a:file.vimfiler__filetime <= 0 ? '' :
+        \  (a:file.vimfiler__filetime == -1 ? '' :
         \    a:file.vimfiler__datemark .
         \    strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
         \ : a:file.vimfiler__datemark . a:file.vimfiler__filetime)
