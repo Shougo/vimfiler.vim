@@ -1,5 +1,5 @@
-9813ec6
+08a462e
 
-Data.List
 System.Cache
-Vim.Buffer.Manager
+Data.List
+Vim.BufferManager
