@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Jan 2013.
+" Last Modified: 13 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -69,9 +69,9 @@ function! vimfiler#default_settings() "{{{
 
   " Set autocommands.
   augroup vimfiler "{{{
-    autocmd WinEnter,BufWinEnter <buffer>
+    autocmd BufEnter,WinEnter,BufWinEnter <buffer>
           \ call s:event_bufwin_enter(expand('<abuf>'))
-    autocmd WinLeave,BufWinLeave <buffer>
+    autocmd BufLeave,WinLeave,BufWinLeave <buffer>
           \ call s:event_bufwin_leave(expand('<abuf>'))
     autocmd VimResized <buffer>
           \ call vimfiler#redraw_all_vimfiler()
@@ -901,58 +901,52 @@ function! s:event_bufwin_enter(bufnr) "{{{
     call s:buffer_default_settings()
   endif
 
-  let vimfiler = getbufvar(a:bufnr, 'vimfiler')
-  if type(vimfiler) != type({})
-        \ || bufwinnr(a:bufnr) < 1
-        \ || count(map(range(1, winnr('$')),
-        \       'winbufnr(v:val)'), a:bufnr) > 1
-    return
-  endif
-
-  if bufwinnr(a:bufnr) != winnr()
+  if a:bufnr != bufnr('%') && bufwinnr(a:bufnr) > 0
     let winnr = winnr()
     execute bufwinnr(a:bufnr) 'wincmd w'
   endif
 
-  if !exists('b:vimfiler')
-    return
-  endif
-
-  call vimfiler#set_current_vimfiler(vimfiler)
-
-  let vimfiler = vimfiler#get_current_vimfiler()
-  if !has_key(vimfiler, 'context')
-    return
-  endif
-
-  let context = vimfiler#get_context()
-  if context.winwidth != 0
-    execute 'vertical resize' context.winwidth
-
-    if context.split
-      setlocal winfixwidth
-    endif
-  elseif context.winheight != 0
-    execute 'resize' context.winheight
-    if line('.') < winheight(0)
-      normal! zb
+  try
+    if !exists('b:vimfiler')
+      return
     endif
 
-    if context.split
-      setlocal winfixheight
-    endif
-  endif
+    call vimfiler#set_current_vimfiler(b:vimfiler)
 
-  let winwidth = (winwidth(0)+1)/2*2
-  if exists('vimfiler.winwidth')
+    let vimfiler = vimfiler#get_current_vimfiler()
+    if !has_key(vimfiler, 'context')
+      return
+    endif
+
+    let context = vimfiler#get_context()
+    if context.winwidth != 0
+      execute 'vertical resize' context.winwidth
+
+      if context.split
+        setlocal winfixwidth
+      endif
+    elseif context.winheight != 0
+      execute 'resize' context.winheight
+      if line('.') < winheight(0)
+        normal! zb
+      endif
+
+      if context.split
+        setlocal winfixheight
+      endif
+    endif
+
+    let winwidth = (winwidth(0)+1)/2*2
+    if exists('vimfiler.winwidth')
       if vimfiler.winwidth != winwidth
         call vimfiler#redraw_screen()
       endif
-  endif
-
-  if exists('winnr')
-    execute winnr.'wincmd w'
-  endif
+    endif
+  finally
+    if exists('winnr')
+      execute winnr.'wincmd w'
+    endif
+  endtry
 endfunction"}}}
 function! s:event_bufwin_leave(bufnr) "{{{
   if !exists('b:vimfiler')

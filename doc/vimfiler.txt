@@ -946,6 +946,9 @@ https://github.com/andreafrancia/trash-cli
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2013-01-13
+- Improved vimfiler autocmd.
+
 2013-01-02
 - Improved initialization.
 
