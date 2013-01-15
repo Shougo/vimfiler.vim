@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Jan 2013.
+" Last Modified: 15 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,7 +53,7 @@ let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-quit', '-toggle', '-create',
       \ '-simple', '-double', '-split', '-horizontal', '-direction=',
       \ '-winheight=', '-winwidth=', '-winminwidth=', '-auto-cd', '-explorer',
-      \ '-reverse',
+      \ '-reverse', '-project',
       \]
 
 let s:V = vital#of('vimfiler')
@@ -174,6 +174,9 @@ function! s:create_filer(path, context) "{{{
   if path == ''
     " Use current directory.
     let path = vimfiler#util#substitute_path_separator(getcwd())
+    if a:context.project
+      let path = vimfiler#util#path2project_directory(path)
+    endif
   endif
 
   if &l:modified && !&l:hidden
@@ -650,6 +653,7 @@ function! vimfiler#initialize_context(context) "{{{
     \ 'auto_cd' : g:vimfiler_enable_auto_cd,
     \ 'explorer' : 0,
     \ 'reverse' : 0,
+    \ 'project' : 0,
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
     \ 'vimfiler__prev_winnr' : winbufnr('%'),
     \ }
