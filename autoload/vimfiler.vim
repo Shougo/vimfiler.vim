@@ -174,9 +174,10 @@ function! s:create_filer(path, context) "{{{
   if path == ''
     " Use current directory.
     let path = vimfiler#util#substitute_path_separator(getcwd())
-    if a:context.project
-      let path = vimfiler#util#path2project_directory(path)
-    endif
+  endif
+
+  if a:context.project
+    let path = vimfiler#util#path2project_directory(path)
   endif
 
   if &l:modified && !&l:hidden
