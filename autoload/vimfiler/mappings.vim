@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Oct 2012.
+" Last Modified: 20 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1225,7 +1225,8 @@ function! s:copy() "{{{
   " Execute copy.
   call unite#mappings#do_action('vimfiler__copy', marked_files, {
         \ 'action__directory' : dest_dir,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ 'vimfiler__current_directory' :
+        \       s:get_action_current_dir(marked_files),
         \ })
   call s:clear_mark_all_lines()
   silent call vimfiler#force_redraw_all_vimfiler(1)
@@ -1262,7 +1263,8 @@ function! s:move() "{{{
   " Execute move.
   call unite#mappings#do_action('vimfiler__move', marked_files, {
         \ 'action__directory' : dest_dir,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ 'vimfiler__current_directory' :
+        \       s:get_action_current_dir(marked_files),
         \ })
   call s:clear_mark_all_lines()
   silent call vimfiler#force_redraw_all_vimfiler(1)
@@ -1283,7 +1285,8 @@ function! s:delete() "{{{
 
   " Execute delete.
   call unite#mappings#do_action('vimfiler__delete', marked_files, {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ 'vimfiler__current_directory' :
+        \       s:get_action_current_dir(marked_files),
         \ })
   call s:clear_mark_all_lines()
   silent call vimfiler#force_redraw_all_vimfiler(1)
@@ -1302,13 +1305,15 @@ function! s:rename() "{{{
   endif
 
   call unite#mappings#do_action('vimfiler__rename', [file], {
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ 'vimfiler__current_directory' :
+        \       s:get_action_current_dir([file]),
         \ })
   silent call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:make_directory() "{{{
   let directory = vimfiler#get_file_directory()
-  let old_files = copy(vimfiler#get_current_vimfiler().current_files)
+  let old_files =
+        \ copy(vimfiler#get_current_vimfiler().current_files)
 
   call vimfiler#mappings#do_dir_action('vimfiler__mkdir', directory)
   silent call vimfiler#force_redraw_all_vimfiler(1)
@@ -1369,7 +1374,7 @@ function! s:clipboard_paste() "{{{
         \ 'vimfiler__' . b:vimfiler.clipboard.operation,
         \ b:vimfiler.clipboard.files, {
         \ 'action__directory' : dest_dir,
-        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
+        \ 'vimfiler__current_directory' : dest_dir,
         \ })
   silent call vimfiler#force_redraw_all_vimfiler(1)
 
@@ -1588,6 +1593,19 @@ function! s:toggle_maximize_window() "{{{
   call vimfiler#redraw_screen()
 
   setlocal winfixwidth
+endfunction"}}}
+
+function! s:get_action_current_dir(files) "{{{
+  let current_dir = b:vimfiler.current_dir
+  if len(a:files) == 1
+    let current_dir = a:files[0].action__directory
+    if a:files[0].vimfiler__is_directory
+      let current_dir = vimfiler#util#substitute_path_separator(
+            \   fnamemodify(current_dir, ':h'))
+    endif
+  endif
+
+  return current_dir
 endfunction"}}}
 
 " vim: foldmethod=marker
