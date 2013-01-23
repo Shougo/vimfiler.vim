@@ -953,6 +953,9 @@ CHANGELOG					*vimfiler-changelog*
 2013-01-23
 - Fixed redraw behavior.
 
+2013-01-22
+- Improved expand path.
+
 2013-01-20
 - Fixed vimfiler current directory behavior.
 
