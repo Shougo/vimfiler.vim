@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jan 2013.
+" Last Modified: 23 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -316,6 +316,8 @@ function! vimfiler#redraw_screen() "{{{
     return
   endif
 
+  let current_file = vimfiler#get_file()
+
   let b:vimfiler.current_files =
         \ unite#filters#matcher_vimfiler_mask#define().filter(
         \ copy(b:vimfiler.original_files),
@@ -323,12 +325,14 @@ function! vimfiler#redraw_screen() "{{{
   if !b:vimfiler.is_visible_dot_files
     call filter(b:vimfiler.current_files,
           \  'v:val.vimfiler__filename !~ "^\\."')
+
+    let b:vimfiler.current_files = vimfiler#check_tree(
+          \ b:vimfiler.current_files)
   endif
 
   let b:vimfiler.winwidth = (winwidth(0)+1)/2*2
 
   setlocal modifiable
-  let current_file = vimfiler#get_file()
 
   " Clean up the screen.
   % delete _
@@ -352,6 +356,8 @@ function! vimfiler#redraw_screen() "{{{
   endif
 
   setlocal nomodifiable
+
+  normal! zb
 
   if is_switch
     execute save_winnr . 'wincmd w'
@@ -767,6 +773,18 @@ function! vimfiler#close(buffer_name) "{{{
   endif
 
   return quit_winnr > 0
+endfunction"}}}
+function! vimfiler#check_tree(files) "{{{
+  let level = -1
+  let _ = []
+  for file in a:files
+    if file.vimfiler__nest_level <= level + 1
+      call add(_, file)
+      let level = file.vimfiler__nest_level
+    endif
+  endfor
+
+  return _
 endfunction"}}}
 "}}}
 
