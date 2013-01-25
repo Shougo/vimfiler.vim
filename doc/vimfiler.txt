@@ -381,6 +381,19 @@ g:vimfiler_no_default_key_mappings	*g:vimfiler_no_default_key_mappings*
 
 		This variable is undefined in default.
 
+g:vimfiler_quick_look_command		*g:vimfiler_quick_look_command*
+		It is quick look command for |<Plug>(vimfiler_quick_look)|.
+		Default value is "", so you must set it to use
+		|<Plug>(vimfiler_quick_look)| after installing quick look
+		command.
+>
+		" Windows.
+		" let g:vimfiler_quick_look_command = 'maComfort.exe -ql'
+		" Linux.
+		" let g:vimfiler_quick_look_command = 'gloobus-preview'
+		" Mac OS X.
+		" let g:vimfiler_quick_look_command = 'qlmanage -p'
+<
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
 g:unite_kind_file_delete_file_command
@@ -737,6 +750,11 @@ Normal mode key mappings.
 		If cursor is on the file, execute
 		|<Plug>(vimfiler_execute_system_associated)| mapping.
 
+<Plug>(vimfiler_quick_look)		*<Plug>(vimfiler_quick_look)*
+		Preview the file by |g:vimfiler_quick_look_command|.
+		Note: To use this feature, |vimproc| is needed.
+		http://github.com/Shougo/vimproc
+
 Visual mode key mappings.
 
 <Plug>(vimfiler_toggle_mark_selected_lines)
@@ -949,6 +967,9 @@ https://github.com/andreafrancia/trash-cli
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2013-01-25
+- Added <Plug>(vimfiler_quick_look) mapping.
 
 2013-01-23
 - Fixed redraw behavior.

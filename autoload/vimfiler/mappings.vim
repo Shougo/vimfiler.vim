@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Jan 2013.
+" Last Modified: 25 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -158,6 +158,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>cd_input_directory()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_double_click)
         \ :<C-u>call <SID>on_double_click()<CR>
+  nmap <buffer> <Plug>(vimfiler_quick_look)
+        \ :<C-u>call <SID>quick_look()<CR>
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()
@@ -1513,6 +1515,31 @@ function! s:on_double_click() "{{{
   else
     call s:toggle_tree()
   endif
+endfunction"}}}
+function! s:quick_look() "{{{
+  if !vimfiler#util#has_vimproc()
+    call vimfiler#print_error(
+          \ 'vimproc is needed for this feature.')
+    return
+  endif
+
+  if !executable(g:vimfiler_quick_look_command)
+    call vimfiler#print_error(
+          \ 'g:vimfiler_quick_look_command "'.
+          \ g:vimfiler_quick_look_command.'"is not executable.')
+    return
+  endif
+
+  let file = vimfiler#get_file()
+  if empty(file)
+    return
+  endif
+
+  let command = vimproc#util#iconv(
+        \ g:vimfiler_quick_look_command . ' ' .
+        \   file.action__path, &encoding, 'char')
+
+  call vimproc#system_gui(command)
 endfunction"}}}
 
 " For safe mode.
