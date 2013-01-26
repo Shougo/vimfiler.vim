@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jan 2013.
+" Last Modified: 26 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -775,10 +775,11 @@ function! vimfiler#close(buffer_name) "{{{
   return quit_winnr > 0
 endfunction"}}}
 function! vimfiler#check_tree(files) "{{{
-  let level = -1
+  let level = 0
   let _ = []
   for file in a:files
-    if file.vimfiler__nest_level <= level + 1
+    if file.vimfiler__nest_level == 0 ||
+          \ file.vimfiler__nest_level <= level + 1
       call add(_, file)
       let level = file.vimfiler__nest_level
     endif
