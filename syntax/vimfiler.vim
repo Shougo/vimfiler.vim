@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Sep 2012.
+" Last Modified: 28 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -102,6 +102,8 @@ highlight def link vimfilerTypeMultimedia Identifier
 highlight def link vimfilerTypeDirectory Preproc
 highlight def link vimfilerTypeSystem Comment
 highlight def link vimfilerTypeLink Comment
+
+call vimfiler#_initialize_syntax()
 
 let b:current_syntax = 'vimfiler'
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Oct 2012.
+" Last Modified: 28 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,29 +159,6 @@ function! s:initialize_vimfiler_directory(directory, context) "{{{1
   call vimfiler#mappings#define_default_mappings(a:context)
 
   set filetype=vimfiler
-
-  " Initialize syntax. "{{{
-  let leaf_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_tree_leaf_icon)
-  let opened_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_tree_opened_icon)
-  let closed_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_tree_closed_icon)
-  let ro_file_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_readonly_file_icon)
-  let file_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_file_icon)
-  let marked_file_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_marked_file_icon)
-
-  execute 'syntax match   vimfilerMarkedFile'
-        \ '''^\s*\%('  . leaf_icon .'\)\?'
-        \ . marked_file_icon . ' .*$'''
-        \ 'contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek'
-  execute 'syntax match   vimfilerNonMark'
-        \ '''^\s*\%('.leaf_icon.'\)\?\%('.opened_icon.'\|'
-        \ .closed_icon.'\|'.ro_file_icon'\|'.file_icon.'\)'' contained'
-  "}}}
 
   if a:context.double
     " Create another vimfiler.
