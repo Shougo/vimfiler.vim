@@ -78,6 +78,29 @@ else
   syntax match   vimfilerMarker        '[~!@#$%^&]$' contained
 endif
 
+" Initialize icon patterns."{{{
+let leaf_icon = vimfiler#util#escape_pattern(
+      \ g:vimfiler_tree_leaf_icon)
+let opened_icon = vimfiler#util#escape_pattern(
+      \ g:vimfiler_tree_opened_icon)
+let closed_icon = vimfiler#util#escape_pattern(
+      \ g:vimfiler_tree_closed_icon)
+let ro_file_icon = vimfiler#util#escape_pattern(
+      \ g:vimfiler_readonly_file_icon)
+let file_icon = vimfiler#util#escape_pattern(
+      \ g:vimfiler_file_icon)
+let marked_file_icon = vimfiler#util#escape_pattern(
+      \ g:vimfiler_marked_file_icon)
+
+execute 'syntax match   vimfilerMarkedFile'
+      \ '''^\s*\%('  . leaf_icon .'\)\?'
+      \ . marked_file_icon . ' .*$'''
+      \ 'contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek'
+execute 'syntax match   vimfilerNonMark'
+      \ '''^\s*\%('.leaf_icon.'\)\?\%('.opened_icon.'\|'
+      \ .closed_icon.'\|'.ro_file_icon'\|'.file_icon.'\)'' contained'
+"}}}
+
 highlight def link vimfilerCurrentDirectory Identifier
 highlight def link vimfilerMask Statement
 
@@ -102,8 +125,6 @@ highlight def link vimfilerTypeMultimedia Identifier
 highlight def link vimfilerTypeDirectory Preproc
 highlight def link vimfilerTypeSystem Comment
 highlight def link vimfilerTypeLink Comment
-
-call vimfiler#_initialize_syntax()
 
 let b:current_syntax = 'vimfiler'
 

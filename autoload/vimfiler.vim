@@ -1036,28 +1036,6 @@ function! vimfiler#_switch_vimfiler(bufnr, context, directory) "{{{
 
   call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
-function! vimfiler#_initialize_syntax() "{{{
-  let leaf_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_tree_leaf_icon)
-  let opened_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_tree_opened_icon)
-  let closed_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_tree_closed_icon)
-  let ro_file_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_readonly_file_icon)
-  let file_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_file_icon)
-  let marked_file_icon = vimfiler#util#escape_pattern(
-        \ g:vimfiler_marked_file_icon)
-
-  execute 'syntax match   vimfilerMarkedFile'
-        \ '''^\s*\%('  . leaf_icon .'\)\?'
-        \ . marked_file_icon . ' .*$'''
-        \ 'contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek'
-  execute 'syntax match   vimfilerNonMark'
-        \ '''^\s*\%('.leaf_icon.'\)\?\%('.opened_icon.'\|'
-        \ .closed_icon.'\|'.ro_file_icon'\|'.file_icon.'\)'' contained'
-endfunction"}}}
 
 function! s:get_postfix(prefix, is_create) "{{{
   let buffers = get(a:000, 0, range(1, bufnr('$')))
