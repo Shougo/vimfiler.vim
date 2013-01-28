@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jan 2013.
+" Last Modified: 28 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -663,6 +663,8 @@ function! vimfiler#initialize_context(context) "{{{
     \ 'project' : 0,
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
     \ 'vimfiler__prev_winnr' : winbufnr('%'),
+    \ 'vimfiler__winfixwidth' : &l:winfixwidth,
+    \ 'vimfiler__winfixheight' : &l:winfixheight,
     \ }
   if get(a:context, 'explorer', 0)
     " Change default value.
@@ -946,6 +948,7 @@ function! s:event_bufwin_enter(bufnr) "{{{
     if context.winwidth != 0
       execute 'vertical resize' context.winwidth
 
+      let context.vimfiler__winfixwidth = &l:winfixwidth
       if context.split
         setlocal winfixwidth
       endif
@@ -955,6 +958,7 @@ function! s:event_bufwin_enter(bufnr) "{{{
         normal! zb
       endif
 
+      let context.vimfiler__winfixheight = &l:winfixheight
       if context.split
         setlocal winfixheight
       endif
@@ -971,10 +975,22 @@ function! s:event_bufwin_enter(bufnr) "{{{
       execute winnr.'wincmd w'
     endif
   endtry
+
+  let b:hge = 2
 endfunction"}}}
 function! s:event_bufwin_leave(bufnr) "{{{
-  if !exists('b:vimfiler')
+  let vimfiler = getbufvar(str2nr(a:bufnr), 'vimfiler')
+
+  if type(vimfiler) != type({})
     return
+  endif
+
+  " Restore winfix.
+  let context = b:vimfiler.context
+  if context.winwidth != 0 && context.split
+    let &l:winfixwidth = context.vimfiler__winfixwidth
+  elseif context.winheight != 0 && context.split
+    let &l:winfixheight = context.vimfiler__winfixheight
   endif
 endfunction"}}}
 
