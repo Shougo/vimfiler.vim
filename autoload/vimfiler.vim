@@ -729,7 +729,7 @@ function! vimfiler#get_print_lines(files) "{{{
     let mark .= ' '
 
     let filename = vimfiler#util#truncate_smart(
-          \ mark . filename, max_len, max_len/3, '..')
+          \ mark . filename, max_len, max_len/2, '..')
     if is_simple
       let line = substitute(
             \ filename . s:convert_filetype(file.vimfiler__filetype),
