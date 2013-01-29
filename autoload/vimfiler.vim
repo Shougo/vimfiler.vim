@@ -46,7 +46,7 @@ endif"}}}
 let s:current_vimfiler = {}
 
 let s:min_padding_width = 2
-let s:max_padding_width = 30
+let s:max_padding_width = 27
 let s:vimfiler_current_histories = []
 
 let s:vimfiler_options = [
@@ -534,32 +534,32 @@ function! vimfiler#get_filetype(file) "{{{
   if (vimfiler#util#is_windows() && ext ==? 'LNK')
         \ || get(a:file, 'vimfiler__ftype', '') ==# 'link'
     " Symbolic link.
-    return '[LNK]'
+    return '[L]'
   elseif a:file.vimfiler__is_directory
     " Directory.
     return '[DIR]'
   elseif has_key(g:vimfiler_extensions.text, ext)
     " Text.
-    return '[TXT]'
+    return '[T]'
   elseif has_key(g:vimfiler_extensions.image, ext)
     " Image.
-    return '[IMG]'
+    return '[I]'
   elseif has_key(g:vimfiler_extensions.archive, ext)
     " Archive.
-    return '[ARC]'
+    return '[A]'
   elseif has_key(g:vimfiler_extensions.multimedia, ext)
     " Multimedia.
-    return '[MUL]'
+    return '[M]'
   elseif a:file.vimfiler__filename =~ '^\.'
         \ || has_key(g:vimfiler_extensions.system, ext)
     " System.
-    return '[SYS]'
+    return '[S]'
   elseif a:file.vimfiler__is_executable
     " Execute.
-    return '[EXE]'
+    return '[X]'
   else
     " Others filetype.
-    return '     '
+    return '   '
   endif
 endfunction"}}}
 function! vimfiler#get_datemark(file) "{{{
@@ -1051,7 +1051,7 @@ function! s:get_postfix(prefix, is_create) "{{{
 endfunction"}}}
 function! s:get_filesize(file) "{{{
   if a:file.vimfiler__is_directory
-    return '       '
+    return '    '
   endif
 
   " Get human file size.
@@ -1067,31 +1067,34 @@ function! s:get_filesize(file) "{{{
       let pattern = ''
     endif
     let suffix = (pattern != '') ? 'G' : ''
-  elseif filesize >= 1000000000
-    " GB.
-    let suffix = 'G'
-    let mega = filesize / 1024 / 1024
-    let float = (mega%1024)*100/1024
-    let pattern = printf('%3d.%02d', mega/1024, float)
-  elseif filesize >= 1000000
-    " MB.
-    let suffix = 'M'
-    let kilo = filesize / 1024
-    let float = (kilo%1024)*100/1024
-    let pattern = printf('%3d.%02d', kilo/1024, float)
-  elseif filesize >= 1000
-    " KB.
-    let suffix = 'K'
-    let float = (filesize%1024)*100/1024
-    let pattern = printf('%3d.%02d', filesize/1024, float)
-  else
+  elseif filesize < 1000
     " B.
     let suffix = 'B'
     let float = ''
-    let pattern = printf('%6d', filesize)
+    let pattern = printf('%5d', filesize)
+  else
+    if filesize >= 1000000000
+      " GB.
+      let suffix = 'G'
+      let size = filesize / 1024 / 1024
+    elseif filesize >= 1000000
+      " MB.
+      let suffix = 'M'
+      let size = filesize / 1024
+    elseif filesize >= 1000
+      " KB.
+      let suffix = 'K'
+      let size = filesize
+    endif
+
+    let float = (size%1024)*100/1024
+    let digit = size / 1024
+    let pattern = (digit < 100) ?
+          \ printf('%2d.%02d', digit, float) :
+          \ printf('%2d.%01d', digit, float/10)
   endif
 
-  return printf('%s%s', pattern, suffix)
+  return pattern.suffix
 endfunction"}}}
 function! s:get_python_file_size(filename) "{{{
     " Use python.

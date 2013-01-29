@@ -48,21 +48,21 @@ syntax match   vimfilerCurrentDirectory  '\s\zs.*$' contained contains=vimfilerM
 syntax match   vimfilerMask  '\[.*\]$' contained
 syntax match   vimfilerFileLine          '\[.*\]$' contained
 
-syntax match   vimfilerTypeText          '.*\[TXT\]' contained
+syntax match   vimfilerTypeText          '.*\[T\]' contained
 syntax match   vimfilerTypeText          '.* \~$' contained contains=vimfilerMarker
-syntax match   vimfilerTypeImage         '.*\[IMG\]' contained
+syntax match   vimfilerTypeImage         '.*\[I\]' contained
 syntax match   vimfilerTypeImage         '.* !$' contained contains=vimfilerMarker
-syntax match   vimfilerTypeArchive       '.*\[ARC\]' contained
+syntax match   vimfilerTypeArchive       '.*\[A\]' contained
 syntax match   vimfilerTypeArchive       '.* @$' contained contains=vimfilerMarker
-syntax match   vimfilerTypeExecute       '.*\[EXE\]' contained
+syntax match   vimfilerTypeExecute       '.*\[X\]' contained
 syntax match   vimfilerTypeExecute       '.* #$' contained contains=vimfilerMarker
-syntax match   vimfilerTypeMultimedia    '.*\[MUL\]' contained
+syntax match   vimfilerTypeMultimedia    '.*\[M\]' contained
 syntax match   vimfilerTypeMultimedia    '.* \$$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeDirectory     '.*\[DIR\]' contained
 syntax match   vimfilerTypeDirectory     '.* %$' contained contains=vimfilerMarker
-syntax match   vimfilerTypeSystem        '.*\[SYS\]' contained
+syntax match   vimfilerTypeSystem        '.*\[S\]' contained
 syntax match   vimfilerTypeSystem        '.* \^$' contained contains=vimfilerMarker
-syntax match   vimfilerTypeLink          '.*\[LNK\]' contained
+syntax match   vimfilerTypeLink          '.*\[L\]' contained
 syntax match   vimfilerTypeLink          '.* &$' contained contains=vimfilerMarker
 
 syntax match   vimfilerSize              '\s\zs[[:digit:].]\+\s*[GMKB]' contained
