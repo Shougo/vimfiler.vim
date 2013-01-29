@@ -46,7 +46,7 @@ endif"}}}
 let s:current_vimfiler = {}
 
 let s:min_padding_width = 2
-let s:max_padding_width = 35
+let s:max_padding_width = 30
 let s:vimfiler_current_histories = []
 
 let s:vimfiler_options = [

@@ -968,6 +968,9 @@ https://github.com/andreafrancia/trash-cli
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2013-01-29
+- Improved padding.
+
 2013-01-28
 - Restore winfix problem.
 - Fixed set syntax behavior.
