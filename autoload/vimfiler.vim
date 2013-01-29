@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2013.
+" Last Modified: 29 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -281,6 +281,7 @@ function! vimfiler#force_redraw_screen(...) "{{{
   for file in copy(b:vimfiler.original_files)
     if file.vimfiler__is_directory
           \ && has_key(old_original_files, file.action__path)
+      " Insert children.
       let children = vimfiler#mappings#expand_tree_rec(file, old_original_files)
 
       let b:vimfiler.original_files = b:vimfiler.original_files[: index]
@@ -324,7 +325,7 @@ function! vimfiler#redraw_screen() "{{{
         \ { 'input' : b:vimfiler.current_mask })
   if !b:vimfiler.is_visible_dot_files
     call filter(b:vimfiler.current_files,
-          \  'v:val.vimfiler__filename !~ "^\\."')
+          \  "v:val.vimfiler__filename !~ '^\\.'")
 
     let b:vimfiler.current_files = vimfiler#check_tree(
           \ b:vimfiler.current_files)
@@ -499,19 +500,17 @@ function! vimfiler#force_redraw_all_vimfiler(...) "{{{
   let is_manualed = get(a:000, 0, 0)
 
   let current_nr = winnr()
-  let bufnr = 1
-  while bufnr <= winnr('$')
+
+  try
     " Search vimfiler window.
-    if getwinvar(bufnr, '&filetype') ==# 'vimfiler'
-
-      execute bufnr . 'wincmd w'
+    for winnr in filter(range(1, winnr('$')),
+          \ "getwinvar(v:val, '&filetype') ==# 'vimfiler'")
+      execute winnr . 'wincmd w'
       call vimfiler#force_redraw_screen(is_manualed)
-    endif
-
-    let bufnr += 1
-  endwhile
-
-  execute current_nr . 'wincmd w'
+    endfor
+  finally
+    execute current_nr . 'wincmd w'
+  endtry
 endfunction"}}}
 function! vimfiler#redraw_all_vimfiler() "{{{
   let current_nr = winnr()
