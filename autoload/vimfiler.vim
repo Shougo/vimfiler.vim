@@ -985,7 +985,7 @@ function! s:event_bufwin_leave(bufnr) "{{{
   endif
 
   " Restore winfix.
-  let context = b:vimfiler.context
+  let context = vimfiler.context
   if context.winwidth != 0 && context.split
     let &l:winfixwidth = context.vimfiler__winfixwidth
   elseif context.winheight != 0 && context.split
