@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2013.
+" Last Modified: 29 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -98,7 +98,7 @@ execute 'syntax match   vimfilerMarkedFile'
       \ 'contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek'
 execute 'syntax match   vimfilerNonMark'
       \ '''^\s*\%('.leaf_icon.'\)\?\%('.opened_icon.'\|'
-      \ .closed_icon.'\|'.ro_file_icon'\|'.file_icon.'\)'' contained'
+      \ .closed_icon.'\|'.ro_file_icon.'\|'.file_icon.'\)'' contained'
 "}}}
 
 highlight def link vimfilerCurrentDirectory Identifier
