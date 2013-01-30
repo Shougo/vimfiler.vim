@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jan 2013.
+" Last Modified: 31 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -531,8 +531,7 @@ endfunction"}}}
 function! vimfiler#get_filetype(file) "{{{
   let ext = tolower(a:file.vimfiler__extension)
 
-  if (vimfiler#util#is_windows() && ext ==? 'LNK')
-        \ || get(a:file, 'vimfiler__ftype', '') ==# 'link'
+  if s:is_link(a:file)
     " Symbolic link.
     return '[L]'
   elseif a:file.vimfiler__is_directory
@@ -1051,7 +1050,7 @@ function! s:get_postfix(prefix, is_create) "{{{
 endfunction"}}}
 function! s:get_filesize(file) "{{{
   if a:file.vimfiler__is_directory
-    return '    '
+    return '    ' . (s:is_link(a:file) ? '  ' : '')
   endif
 
   " Get human file size.
@@ -1129,6 +1128,11 @@ function! s:convert_filetype(filetype) "{{{
   return ' ' . get({'[TXT]' : '~', '[IMG]' : '!',
         \ '[ARC]' : '@', '[EXE]' : '#', '[MUL]' : '$', '[DIR]' : '%',
         \ '[SYS]' : '^', '[LNK]' : '&',}, a:filetype, '')
+endfunction"}}}
+function! s:is_link(file) "{{{
+  let ext = tolower(a:file.vimfiler__extension)
+  return (vimfiler#util#is_windows() && ext ==? 'LNK')
+        \ || get(a:file, 'vimfiler__ftype', '') ==# 'link'
 endfunction"}}}
 
 " Global options definition. "{{{
