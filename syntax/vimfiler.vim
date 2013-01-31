@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jan 2013.
+" Last Modified: 31 Jan 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -79,26 +79,32 @@ else
 endif
 
 " Initialize icon patterns."{{{
-let leaf_icon = vimfiler#util#escape_pattern(
+let s:leaf_icon = vimfiler#util#escape_pattern(
       \ g:vimfiler_tree_leaf_icon)
-let opened_icon = vimfiler#util#escape_pattern(
+let s:opened_icon = vimfiler#util#escape_pattern(
       \ g:vimfiler_tree_opened_icon)
-let closed_icon = vimfiler#util#escape_pattern(
+let s:closed_icon = vimfiler#util#escape_pattern(
       \ g:vimfiler_tree_closed_icon)
-let ro_file_icon = vimfiler#util#escape_pattern(
+let s:ro_file_icon = vimfiler#util#escape_pattern(
       \ g:vimfiler_readonly_file_icon)
-let file_icon = vimfiler#util#escape_pattern(
+let s:file_icon = vimfiler#util#escape_pattern(
       \ g:vimfiler_file_icon)
-let marked_file_icon = vimfiler#util#escape_pattern(
+let s:marked_file_icon = vimfiler#util#escape_pattern(
       \ g:vimfiler_marked_file_icon)
 
 execute 'syntax match   vimfilerMarkedFile'
-      \ '''^\s*\%('  . leaf_icon .'\)\?'
-      \ . marked_file_icon . ' .*$'''
+      \ '''^\s*\%('  . s:leaf_icon .'\)\?'
+      \ . s:marked_file_icon . ' .*$'''
       \ 'contains=vimfilerDate,vimfilerDateToday,vimfilerDateWeek'
 execute 'syntax match   vimfilerNonMark'
-      \ '''^\s*\%('.leaf_icon.'\)\?\%('.opened_icon.'\|'
-      \ .closed_icon.'\|'.ro_file_icon.'\|'.file_icon.'\)'' contained'
+      \ '''^\s*\%('.s:leaf_icon.'\)\?\%('.s:opened_icon.'\|'
+      \ .s:closed_icon.'\|'.s:ro_file_icon.'\|'.s:file_icon.'\)'' contained'
+
+unlet s:opened_icon
+unlet s:closed_icon
+unlet s:ro_file_icon
+unlet s:file_icon
+unlet s:marked_file_icon
 "}}}
 
 highlight def link vimfilerCurrentDirectory Identifier
