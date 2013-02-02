@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Oct 2012.
+" Last Modified: 02 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -121,6 +121,27 @@ endfunction"}}}
 function! vimfiler#util#set_dictionary_helper(variable, keys, value) "{{{
   for key in split(a:keys, '\s*,\s*')
     let a:variable[key] = a:value
+  endfor
+endfunction"}}}
+function! vimfiler#util#resolve(filename) "{{{
+  return ((vimfiler#util#is_windows() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
+        \ vimfiler#util#substitute_path_separator(resolve(a:filename)) : a:filename
+endfunction"}}}
+
+function! vimfiler#util#set_variables(variables) "{{{
+  let variables_save = {}
+  for [key, value] in items(a:variables)
+    let save_value = exists(key) ? eval(key) : ''
+
+    let variables_save[key] = save_value
+    execute 'let' key '= value'
+  endfor
+
+  return variables_save
+endfunction"}}}
+function! vimfiler#util#restore_variables(variables_save) "{{{
+  for [key, value] in items(a:variables_save)
+    execute 'let' key '= value'
   endfor
 endfunction"}}}
 

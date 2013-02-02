@@ -206,7 +206,7 @@ function! vimfiler#init#_start(path, ...) "{{{
   endif
 
   if context.toggle && !context.create
-    if vimfiler#close(context.buffer_name)
+    if vimfiler#mappings#close(context.buffer_name)
       return
     endif
   endif

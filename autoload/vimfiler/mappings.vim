@@ -26,6 +26,10 @@
 
 let s:Cache = vital#of('vimfiler').import('System.Cache')
 
+function! s:SID_PREFIX()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+
 function! vimfiler#mappings#define_default_mappings(context) "{{{
   " Plugin keymappings "{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)
@@ -419,7 +423,7 @@ function! vimfiler#mappings#cd(dir, ...) "{{{
   let fullpath = vimfiler#util#substitute_path_separator(dir)
 
   if vimfiler#util#is_windows()
-    let fullpath = vimfiler#resolve(fullpath)
+    let fullpath = vimfiler#util#resolve(fullpath)
   endif
 
   if fullpath !~ '/$'
@@ -529,9 +533,34 @@ function! s:search_new_file(old_files) "{{{
   endfor
 endfunction"}}}
 
-function! s:SID_PREFIX()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
-endfunction
+function! vimfiler#mappings#close(buffer_name) "{{{
+  let buffer_name = a:buffer_name
+  if buffer_name !~ '@\d\+$'
+    " Add postfix.
+    let prefix = vimfiler#util#is_windows() ?
+          \ '[vimfiler] - ' : '*vimfiler* - '
+    let prefix .= buffer_name
+    let buffer_name = prefix . vimfiler#init#_get_postfix(prefix, 0)
+  endif
+
+  " Note: must escape file-pattern.
+  let buffer_name =
+        \ vimfiler#util#escape_file_searching(buffer_name)
+
+  let quit_winnr = bufwinnr(buffer_name)
+  if quit_winnr > 0
+    " Hide unite buffer.
+    silent execute quit_winnr 'wincmd w'
+
+    if winnr('$') != 1
+      close
+    else
+      call vimfiler#util#alternate_buffer()
+    endif
+  endif
+
+  return quit_winnr > 0
+endfunction"}}}
 
 function! s:switch() "{{{
   let context = vimfiler#get_context()
@@ -1481,7 +1510,7 @@ function! s:cd_file_directory() "{{{
 
     let filename = cursor_line . cursor_next
   else
-    let filename = vimfiler#resolve(
+    let filename = vimfiler#util#resolve(
           \ vimfiler#get_file().action__path)
   endif
 
