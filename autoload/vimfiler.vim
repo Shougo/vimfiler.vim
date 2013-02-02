@@ -536,7 +536,7 @@ function! vimfiler#get_filetype(file) "{{{
     return '[L]'
   elseif a:file.vimfiler__is_directory
     " Directory.
-    return '[DIR]'
+    return '[D]'
   elseif has_key(g:vimfiler_extensions.text, ext)
     " Text.
     return '[T]'
@@ -1050,7 +1050,7 @@ function! s:get_postfix(prefix, is_create) "{{{
 endfunction"}}}
 function! s:get_filesize(file) "{{{
   if a:file.vimfiler__is_directory
-    return '    ' . (s:is_link(a:file) ? '  ' : '')
+    return '      '
   endif
 
   " Get human file size.

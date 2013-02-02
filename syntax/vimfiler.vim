@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2013.
+" Last Modified: 02 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -58,7 +58,7 @@ syntax match   vimfilerTypeExecute       '.*\[X\]' contained
 syntax match   vimfilerTypeExecute       '.* #$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeMultimedia    '.*\[M\]' contained
 syntax match   vimfilerTypeMultimedia    '.* \$$' contained contains=vimfilerMarker
-syntax match   vimfilerTypeDirectory     '.*\[DIR\]' contained
+syntax match   vimfilerTypeDirectory     '.*\[D\]' contained
 syntax match   vimfilerTypeDirectory     '.* %$' contained contains=vimfilerMarker
 syntax match   vimfilerTypeSystem        '.*\[S\]' contained
 syntax match   vimfilerTypeSystem        '.* \^$' contained contains=vimfilerMarker
