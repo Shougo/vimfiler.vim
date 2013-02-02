@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Jan 2013.
+" Last Modified: 02 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -46,7 +46,7 @@ endif"}}}
 let s:current_vimfiler = {}
 
 let s:min_padding_width = 2
-let s:max_padding_width = 27
+let s:max_padding_width = 26
 let s:vimfiler_current_histories = []
 
 let s:vimfiler_options = [
