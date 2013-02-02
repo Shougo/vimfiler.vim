@@ -37,6 +37,13 @@ function! s:uniq(list, ...)
   return a:0 ? map(list, 'v:val[0]') : list
 endfunction
 
+function! s:clear(list)
+  if !empty(a:list)
+    unlet! a:list[0 : len(a:list) - 1]
+  endif
+  return a:list
+endfunction
+
 " Concatenates a list of lists.
 " XXX: Should we verify the input?
 function! s:concat(list)

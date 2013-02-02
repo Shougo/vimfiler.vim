@@ -289,11 +289,23 @@ function! s:path2project_directory(path, ...)
   let directory = ''
 
   " Search VCS directory.
-  for d in ['.git', '.bzr', '.hg']
-    let d = finddir(d, s:escape_file_searching(search_directory) . ';')
-    if d != ''
-      let directory = fnamemodify(d, ':p:h:h')
-      break
+  for vcs in ['.git', '.bzr', '.hg', '.svn']
+    let find_directory = s:escape_file_searching(search_directory)
+    let d = finddir(vcs, find_directory . ';')
+    if d == ''
+      continue
+    endif
+
+    let directory = fnamemodify(d, ':p:h:h')
+
+    if vcs ==# '.svn'
+      " Search parent directories.
+      let parent_directory = s:path2directory(
+            \ fnamemodify(directory, ':h'))
+
+      if parent_directory != ''
+        let directory = parent_directory
+      endif
     endif
   endfor
 
