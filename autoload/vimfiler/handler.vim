@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Jan 2013.
+" Last Modified: 02 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,6 +24,8 @@
 " }}}
 "=============================================================================
 
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
   let context = vimfiler#initialize_context(get(a:000, 0, {}))
@@ -56,9 +58,10 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
   let b:vimfiler.context = a:context
   let b:vimfiler.bufnr = bufnr('%')
   if type ==# 'directory'
-    call s:initialize_vimfiler_directory(info, a:context)
+    call vimfiler#init#_initialize_vimfiler_directory(info, a:context)
   elseif type ==# 'file'
-    call s:initialize_vimfiler_file(a:source_args, info[0], info[1])
+    call vimfiler#init#_initialize_vimfiler_file(
+          \ a:source_args, info[0], info[1])
   else
     call vimfiler#print_error('Unknown filetype.')
   endif
@@ -131,72 +134,81 @@ function! s:write(source_name, source_args, line1, line2, event_name)  "{{{1
   endtry
 endfunction
 
-function! s:initialize_vimfiler_directory(directory, context) "{{{1
-  " Set current directory.
-  let current = vimfiler#util#substitute_path_separator(
-        \ a:directory)
-  let b:vimfiler.current_dir = current
-  if b:vimfiler.current_dir !~ '[:/]$'
-    let b:vimfiler.current_dir .= '/'
-  endif
-  let b:vimfiler.current_files = []
-  let b:vimfiler.original_files = []
-
-  let b:vimfiler.is_visible_dot_files = 0
-  let b:vimfiler.simple = a:context.simple
-  let b:vimfiler.directory_cursor_pos = {}
-  let b:vimfiler.current_mask = ''
-  let b:vimfiler.clipboard = {}
-
-  let b:vimfiler.global_sort_type = g:vimfiler_sort_type
-  let b:vimfiler.local_sort_type = g:vimfiler_sort_type
-  let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
-  let b:vimfiler.winwidth = winwidth(0)
-  let b:vimfiler.another_vimfiler_bufnr = -1
-  call vimfiler#set_current_vimfiler(b:vimfiler)
-
-  call vimfiler#default_settings()
-  call vimfiler#mappings#define_default_mappings(a:context)
-
-  set filetype=vimfiler
-
-  if a:context.double
-    " Create another vimfiler.
-    call vimfiler#mappings#create_another_vimfiler()
-    wincmd p
+" Event functions.
+function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
+  if &filetype ==# 'vimfiler'
+    call vimfiler#init#_default_settings()
   endif
 
-  if a:context.winwidth != 0
-    execute 'vertical resize' a:context.winwidth
+  if a:bufnr != bufnr('%') && bufwinnr(a:bufnr) > 0
+    let winnr = winnr()
+    execute bufwinnr(a:bufnr) 'wincmd w'
   endif
 
-  call vimfiler#force_redraw_all_vimfiler()
+  try
+    if !exists('b:vimfiler')
+      return
+    endif
+
+    call vimfiler#set_current_vimfiler(b:vimfiler)
+
+    let vimfiler = vimfiler#get_current_vimfiler()
+    if !has_key(vimfiler, 'context')
+      return
+    endif
+
+    let context = vimfiler#get_context()
+    if context.winwidth != 0
+      execute 'vertical resize' context.winwidth
+
+      let context.vimfiler__winfixwidth = &l:winfixwidth
+      if context.split
+        setlocal winfixwidth
+      endif
+    elseif context.winheight != 0
+      execute 'resize' context.winheight
+      if line('.') < winheight(0)
+        normal! zb
+      endif
+
+      let context.vimfiler__winfixheight = &l:winfixheight
+      if context.split
+        setlocal winfixheight
+      endif
+    endif
+
+    let winwidth = (winwidth(0)+1)/2*2
+    if exists('vimfiler.winwidth')
+      if vimfiler.winwidth != winwidth
+        call vimfiler#redraw_screen()
+      endif
+    endif
+  finally
+    if exists('winnr')
+      execute winnr.'wincmd w'
+    endif
+  endtry
+
+  let b:hge = 2
 endfunction"}}}
-function! s:initialize_vimfiler_file(path, lines, dict) "{{{1
-  " Set current directory.
-  let b:vimfiler.current_path = a:path
-  let b:vimfiler.current_file = a:dict
 
-  " Clean up the screen.
-  % delete _
+function! vimfiler#handler#_event_bufwin_leave(bufnr) "{{{
+  let vimfiler = getbufvar(str2nr(a:bufnr), 'vimfiler')
 
-  augroup vimfiler
-    autocmd! * <buffer>
-    autocmd BufWriteCmd <buffer>
-          \ call vimfiler#handler#_event_handler('BufWriteCmd')
-  augroup END
+  if type(vimfiler) != type({})
+    return
+  endif
 
-  call setline(1, a:lines)
-
-  setlocal buftype=acwrite
-  setlocal noswapfile
-
-  " For filetype detect.
-  execute 'doautocmd BufRead' fnamemodify(a:path[-1], ':t')
-
-  let &fileencoding = get(a:dict, 'vimfiler__encoding', '')
-
-  setlocal nomodified
+  " Restore winfix.
+  let context = vimfiler.context
+  if context.winwidth != 0 && context.split
+    let &l:winfixwidth = context.vimfiler__winfixwidth
+  elseif context.winheight != 0 && context.split
+    let &l:winfixheight = context.vimfiler__winfixheight
+  endif
 endfunction"}}}
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim: foldmethod=marker

@@ -55,27 +55,11 @@ let s:vimfiler_options = [
       \ '-winheight=', '-winwidth=', '-winminwidth=', '-auto-cd', '-explorer',
       \ '-reverse', '-project',
       \]
-
-let s:V = vital#of('vimfiler')
-let s:BM = s:V.import('Vim.BufferManager')
-let s:manager = s:BM.new()  " creates new manager
-call s:manager.config('opener', 'silent edit')
-call s:manager.config('range', 'current')
 "}}}
 
 " User utility functions. "{{{
 function! vimfiler#default_settings() "{{{
-  call s:buffer_default_settings()
-
-  " Set autocommands.
-  augroup vimfiler "{{{
-    autocmd BufEnter,WinEnter,BufWinEnter <buffer>
-          \ call s:event_bufwin_enter(expand('<abuf>'))
-    autocmd BufLeave,WinLeave,BufWinLeave <buffer>
-          \ call s:event_bufwin_leave(expand('<abuf>'))
-    autocmd VimResized <buffer>
-          \ call vimfiler#redraw_all_vimfiler()
-  augroup end"}}}
+  return vimfiler#init#_default_settings()
 endfunction"}}}
 function! vimfiler#set_execute_file(exts, command) "{{{
   return vimfiler#util#set_dictionary_helper(g:vimfiler_execute_file_list,
@@ -122,114 +106,7 @@ function! vimfiler#get_options() "{{{
   return copy(s:vimfiler_options)
 endfunction"}}}
 function! vimfiler#start(path, ...) "{{{
-  if vimfiler#util#is_cmdwin()
-    call vimfiler#print_error(
-          \ '[vimfiler] Command line buffer is detected!')
-    call vimfiler#print_error(
-          \ '[vimfiler] Please close command line buffer.')
-    return
-  endif
-
-  let path = a:path
-  if vimfiler#util#is_win_path(path)
-    let path = vimfiler#util#substitute_path_separator(
-          \ fnamemodify(vimfiler#util#expand(path), ':p'))
-  endif
-
-  let context = vimfiler#initialize_context(get(a:000, 0, {}))
-  if &l:modified && !&l:hidden
-    " Split automatically.
-    let context.split = 1
-  endif
-
-  if context.toggle && !context.create
-    if vimfiler#close(context.buffer_name)
-      return
-    endif
-  endif
-
-  if !context.create
-    " Search vimfiler buffer.
-    for bufnr in filter(insert(range(1, bufnr('$')), bufnr('%')),
-          \ "bufloaded(v:val) &&
-          \ getbufvar(v:val, '&filetype') ==# 'vimfiler'")
-      let vimfiler = getbufvar(bufnr, 'vimfiler')
-      if type(vimfiler) == type({})
-            \ && vimfiler.context.profile_name ==# context.profile_name
-            \ && (!exists('t:unite_buffer_dictionary')
-            \      || has_key(t:unite_buffer_dictionary, bufnr))
-        call vimfiler#_switch_vimfiler(bufnr, context, path)
-        return
-      endif
-
-      unlet vimfiler
-    endfor
-  endif
-
-  " Create window.
-  call s:create_filer(path, context)
-endfunction"}}}
-function! s:create_filer(path, context) "{{{
-  let path = a:path
-  if path == ''
-    " Use current directory.
-    let path = vimfiler#util#substitute_path_separator(getcwd())
-  endif
-
-  if a:context.project
-    let path = vimfiler#util#path2project_directory(path)
-  endif
-
-  if &l:modified && !&l:hidden
-    " Split automatically.
-    let a:context.split = 1
-  endif
-
-  " Create new buffer name.
-  let prefix = vimfiler#util#is_windows() ?
-        \ '[vimfiler] - ' : '*vimfiler* - '
-  let prefix .= a:context.profile_name
-
-  let postfix = s:get_postfix(prefix, 1)
-
-  let bufname = prefix . postfix
-
-  " Set buffer_name.
-  let a:context.profile_name = a:context.buffer_name
-  let a:context.buffer_name = bufname
-
-  if a:context.split
-    if a:context.horizontal || a:context.double
-      execute a:context.direction 'new'
-    else
-      execute a:context.direction 'vnew'
-    endif
-  endif
-
-  " Save swapfile option.
-  let swapfile_save = &swapfile
-  set noswapfile
-
-  try
-    let ret = s:manager.open(bufname)
-    " silent edit `=bufname`
-    setlocal noswapfile
-  finally
-    let &swapfile = swapfile_save
-  endtry
-
-  if !ret.loaded
-    call vimshell#echo_error(
-          \ '[vimfiler] Failed to open Buffer "'. bufname .'".')
-    return
-  endif
-
-  let a:context.path = path
-  " echomsg path
-
-  call vimfiler#handler#_event_handler('BufReadCmd', a:context)
-
-  call s:event_bufwin_enter(bufnr('%'))
+  return call('vimfiler#init#_start', [a:path] + a:000)
 endfunction"}}}
 function! vimfiler#get_directory_files(directory, ...) "{{{
   " Save current files.
@@ -641,44 +518,7 @@ function! vimfiler#parse_path(path) "{{{
   return insert(source_args, source_name)
 endfunction"}}}
 function! vimfiler#initialize_context(context) "{{{
-  let default_context = {
-    \ 'buffer_name' : 'default',
-    \ 'no_quit' : 0,
-    \ 'quit' : 0,
-    \ 'toggle' : 0,
-    \ 'create' : 0,
-    \ 'simple' : 0,
-    \ 'double' : 0,
-    \ 'split' : 0,
-    \ 'horizontal' : 0,
-    \ 'winheight' : 0,
-    \ 'winwidth' : 0,
-    \ 'winminwidth' : 0,
-    \ 'direction' : g:vimfiler_split_rule,
-    \ 'auto_cd' : g:vimfiler_enable_auto_cd,
-    \ 'explorer' : 0,
-    \ 'reverse' : 0,
-    \ 'project' : 0,
-    \ 'vimfiler__prev_bufnr' : bufnr('%'),
-    \ 'vimfiler__prev_winnr' : winbufnr('%'),
-    \ 'vimfiler__winfixwidth' : &l:winfixwidth,
-    \ 'vimfiler__winfixheight' : &l:winfixheight,
-    \ }
-  if get(a:context, 'explorer', 0)
-    " Change default value.
-    let default_context.buffer_name = 'explorer'
-    let default_context.split = 1
-    let default_context.toggle = 1
-    let default_context.no_quit = 1
-    let default_context.winwidth = 35
-  endif
-  let context = extend(default_context, a:context)
-
-  if !has_key(context, 'profile_name')
-    let context.profile_name = context.buffer_name
-  endif
-
-  return context
+  return vimfiler#init#_initialize_context(a:context)
 endfunction"}}}
 function! vimfiler#get_histories() "{{{
   return copy(s:vimfiler_current_histories)
@@ -753,7 +593,7 @@ function! vimfiler#close(buffer_name) "{{{
     let prefix = vimfiler#util#is_windows() ?
           \ '[vimfiler] - ' : '*vimfiler* - '
     let prefix .= buffer_name
-    let buffer_name = prefix . s:get_postfix(prefix, 0)
+    let buffer_name = prefix . vimfiler#init#_get_postfix(prefix, 0)
   endif
 
   " Note: must escape file-pattern.
@@ -891,163 +731,6 @@ function! vimfiler#complete_path(arglead, cmdline, cursorpos) "{{{
   return sort(_)
 endfunction"}}}
 
-" Event functions.
-function! s:buffer_default_settings() "{{{
-  setlocal buftype=nofile
-  setlocal noswapfile
-  setlocal noreadonly
-  setlocal nowrap
-  setlocal bufhidden=hide
-  setlocal nolist
-  setlocal foldcolumn=0
-  setlocal nofoldenable
-  setlocal nowrap
-  setlocal nomodifiable
-  setlocal nomodified
-  if has('netbeans_intg') || has('sun_workshop')
-    setlocal noautochdir
-  endif
-  if exists('&colorcolumn')
-    setlocal colorcolumn=
-  endif
-
-  if has('conceal')
-    setlocal conceallevel=3
-    setlocal concealcursor=n
-  endif
-
-  if vimfiler#get_context().explorer
-    setlocal nobuflisted
-  endif
-endfunction"}}}
-function! s:event_bufwin_enter(bufnr) "{{{
-  if &filetype ==# 'vimfiler'
-    call s:buffer_default_settings()
-  endif
-
-  if a:bufnr != bufnr('%') && bufwinnr(a:bufnr) > 0
-    let winnr = winnr()
-    execute bufwinnr(a:bufnr) 'wincmd w'
-  endif
-
-  try
-    if !exists('b:vimfiler')
-      return
-    endif
-
-    call vimfiler#set_current_vimfiler(b:vimfiler)
-
-    let vimfiler = vimfiler#get_current_vimfiler()
-    if !has_key(vimfiler, 'context')
-      return
-    endif
-
-    let context = vimfiler#get_context()
-    if context.winwidth != 0
-      execute 'vertical resize' context.winwidth
-
-      let context.vimfiler__winfixwidth = &l:winfixwidth
-      if context.split
-        setlocal winfixwidth
-      endif
-    elseif context.winheight != 0
-      execute 'resize' context.winheight
-      if line('.') < winheight(0)
-        normal! zb
-      endif
-
-      let context.vimfiler__winfixheight = &l:winfixheight
-      if context.split
-        setlocal winfixheight
-      endif
-    endif
-
-    let winwidth = (winwidth(0)+1)/2*2
-    if exists('vimfiler.winwidth')
-      if vimfiler.winwidth != winwidth
-        call vimfiler#redraw_screen()
-      endif
-    endif
-  finally
-    if exists('winnr')
-      execute winnr.'wincmd w'
-    endif
-  endtry
-
-  let b:hge = 2
-endfunction"}}}
-function! s:event_bufwin_leave(bufnr) "{{{
-  let vimfiler = getbufvar(str2nr(a:bufnr), 'vimfiler')
-
-  if type(vimfiler) != type({})
-    return
-  endif
-
-  " Restore winfix.
-  let context = vimfiler.context
-  if context.winwidth != 0 && context.split
-    let &l:winfixwidth = context.vimfiler__winfixwidth
-  elseif context.winheight != 0 && context.split
-    let &l:winfixheight = context.vimfiler__winfixheight
-  endif
-endfunction"}}}
-
-function! vimfiler#_switch_vimfiler(bufnr, context, directory) "{{{
-  let context = vimfiler#initialize_context(a:context)
-
-  if context.split
-    if context.horizontal || context.double
-      execute context.direction 'new'
-    else
-      execute context.direction 'vnew'
-    endif
-  endif
-
-  execute 'buffer' . a:bufnr
-  call s:event_bufwin_enter(a:bufnr)
-
-  " Set current directory.
-  if a:directory != ''
-    let directory = vimfiler#util#substitute_path_separator(
-          \ a:directory)
-    if directory =~ ':'
-      " Parse path.
-      let ret = vimfiler#parse_path(directory)
-      let b:vimfiler.source = ret[0]
-      let directory = join(ret[1:], ':')
-    endif
-
-    let b:vimfiler.current_dir = directory
-    if b:vimfiler.current_dir !~ '/$'
-      let b:vimfiler.current_dir .= '/'
-    endif
-  endif
-
-  let b:vimfiler.context = extend(b:vimfiler.context, context)
-  call vimfiler#set_current_vimfiler(b:vimfiler)
-
-  if a:context.double
-    " Create another vimfiler.
-    call vimfiler#mappings#create_another_vimfiler()
-    wincmd p
-  endif
-
-  call vimfiler#force_redraw_all_vimfiler()
-endfunction"}}}
-
-function! s:get_postfix(prefix, is_create) "{{{
-  let buffers = get(a:000, 0, range(1, bufnr('$')))
-  let buflist = vimfiler#util#sort_by(filter(map(buffers,
-        \ 'bufname(v:val)'), 'stridx(v:val, a:prefix) >= 0'),
-        \ "str2nr(matchstr(v:val, '\\d\\+$'))")
-  if empty(buflist)
-    return ''
-  endif
-
-  let num = matchstr(buflist[-1], '@\zs\d\+$')
-  return num == '' && !a:is_create ? '' :
-        \ '@' . (a:is_create ? (num + 1) : num)
-endfunction"}}}
 function! s:get_filesize(file) "{{{
   if a:file.vimfiler__is_directory
     return '      '
