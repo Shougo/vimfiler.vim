@@ -112,7 +112,7 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
     execute 'vertical resize' a:context.winwidth
   endif
 
-  call vimfiler#force_redraw_all_vimfiler()
+  call vimfiler#view#_force_redraw_all_vimfiler()
 endfunction"}}}
 function! vimfiler#init#_initialize_vimfiler_file(path, lines, dict) "{{{1
   " Set current directory.
@@ -139,6 +139,49 @@ function! vimfiler#init#_initialize_vimfiler_file(path, lines, dict) "{{{1
   let &fileencoding = get(a:dict, 'vimfiler__encoding', '')
 
   setlocal nomodified
+endfunction"}}}
+function! vimfiler#init#_initialize_candidates(candidates, source_name) "{{{
+  " Set default vimfiler property.
+  for candidate in a:candidates
+    if !has_key(candidate, 'vimfiler__filename')
+      let candidate.vimfiler__filename = candidate.word
+    endif
+    if !has_key(candidate, 'vimfiler__abbr')
+      let candidate.vimfiler__abbr = candidate.word
+    endif
+    if !has_key(candidate, 'vimfiler__is_directory')
+      let candidate.vimfiler__is_directory = 0
+    endif
+    if !has_key(candidate, 'vimfiler__is_executable')
+      let candidate.vimfiler__is_executable = 0
+    endif
+    if !has_key(candidate, 'vimfiler__is_writable')
+      let candidate.vimfiler__is_writable = 1
+    endif
+    if !has_key(candidate, 'vimfiler__filesize')
+      let candidate.vimfiler__filesize = -1
+    endif
+    if !has_key(candidate, 'vimfiler__filetime')
+      let candidate.vimfiler__filetime = 0
+    endif
+    if !has_key(candidate, 'vimfiler__datemark')
+      let candidate.vimfiler__datemark = vimfiler#get_datemark(candidate)
+    endif
+    if !has_key(candidate, 'vimfiler__extension')
+      let candidate.vimfiler__extension =
+            \ candidate.vimfiler__is_directory ?
+            \ '' : fnamemodify(candidate.vimfiler__filename, ':e')
+    endif
+    if !has_key(candidate, 'vimfiler__filetype')
+      let candidate.vimfiler__filetype = vimfiler#get_filetype(candidate)
+    endif
+
+    let candidate.vimfiler__is_marked = 0
+    let candidate.source = a:source_name
+    let candidate.unite__abbr = candidate.vimfiler__abbr
+  endfor
+
+  return a:candidates
 endfunction"}}}
 
 function! vimfiler#init#_start(path, ...) "{{{
@@ -228,7 +271,7 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     wincmd p
   endif
 
-  call vimfiler#force_redraw_all_vimfiler()
+  call vimfiler#view#_force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:create_vimfiler_buffer(path, context) "{{{
   let path = a:path
@@ -303,7 +346,7 @@ function! vimfiler#init#_default_settings() "{{{
     autocmd BufLeave,WinLeave,BufWinLeave <buffer>
           \ call vimfiler#handler#_event_bufwin_leave(expand('<abuf>'))
     autocmd VimResized <buffer>
-          \ call vimfiler#redraw_all_vimfiler()
+          \ call vimfiler#view#_redraw_all_vimfiler()
   augroup end"}}}
 endfunction"}}}
 
@@ -348,6 +391,56 @@ function! vimfiler#init#_get_postfix(prefix, is_create) "{{{
   let num = matchstr(buflist[-1], '@\zs\d\+$')
   return num == '' && !a:is_create ? '' :
         \ '@' . (a:is_create ? (num + 1) : num)
+endfunction"}}}
+function! vimfiler#init#_get_filetype(file) "{{{
+  let ext = tolower(a:file.vimfiler__extension)
+
+  if (vimfiler#util#is_windows() && ext ==? 'LNK')
+        \ || get(a:file, 'vimfiler__ftype', '') ==# 'link'
+    " Symbolic link.
+    return '[L]'
+  elseif a:file.vimfiler__is_directory
+    " Directory.
+    return '[D]'
+  elseif has_key(g:vimfiler_extensions.text, ext)
+    " Text.
+    return '[T]'
+  elseif has_key(g:vimfiler_extensions.image, ext)
+    " Image.
+    return '[I]'
+  elseif has_key(g:vimfiler_extensions.archive, ext)
+    " Archive.
+    return '[A]'
+  elseif has_key(g:vimfiler_extensions.multimedia, ext)
+    " Multimedia.
+    return '[M]'
+  elseif a:file.vimfiler__filename =~ '^\.'
+        \ || has_key(g:vimfiler_extensions.system, ext)
+    " System.
+    return '[S]'
+  elseif a:file.vimfiler__is_executable
+    " Execute.
+    return '[X]'
+  else
+    " Others filetype.
+    return '   '
+  endif
+endfunction"}}}
+function! vimfiler#init#_get_datemark(file) "{{{
+  if a:file.vimfiler__filetime !~ '^\d\+$'
+    return '~'
+  endif
+
+  let time = localtime() - a:file.vimfiler__filetime
+  if time < 86400
+    " 60 * 60 * 24
+    return '!'
+  elseif time < 604800
+    " 60 * 60 * 24 * 7
+    return '#'
+  else
+    return '~'
+  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo

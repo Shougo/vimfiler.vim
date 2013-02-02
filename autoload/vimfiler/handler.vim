@@ -180,7 +180,7 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
     let winwidth = (winwidth(0)+1)/2*2
     if exists('vimfiler.winwidth')
       if vimfiler.winwidth != winwidth
-        call vimfiler#redraw_screen()
+        call vimfiler#view#_redraw_screen()
       endif
     endif
   finally
