@@ -279,18 +279,6 @@ g:vimfiler_preview_action			*g:vimfiler_preview_action*
 		
 		Default value is "preview".
 
-g:vimfiler_min_filename_width			*g:vimfiler_min_filename_width*
-		This variable controls vimfiler displays min filename width.
-		If filename range is shorter than it, vimfiler force use simple
-		interface.
-		
-		Default value is 30.
-
-g:vimfiler_max_filename_width		*g:vimfiler_max_filename_width*
-		This variable controls vimfiler displays max filename width.
-		
-		Default value is 120.
-
 g:vimfiler_sort_type				*g:vimfiler_sort_type*
 		This variable controls default vimfiler sort type.
 		
@@ -972,6 +960,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed freeze bug.
 - Implemented columns feature.
 - Added columns line.
+- Deleted obsolete options.
 
 2013-02-02
 - Changed directory mark.
