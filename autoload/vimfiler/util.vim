@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 03 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,6 +182,10 @@ function! s:buflisted(bufnr) "{{{
   return exists('t:unite_buffer_dictionary') ?
         \ has_key(t:unite_buffer_dictionary, a:bufnr) && buflisted(a:bufnr) :
         \ buflisted(a:bufnr)
+endfunction"}}}
+
+function! vimfiler#util#convert2list(expr) "{{{
+  return type(a:expr) ==# type([]) ? a:expr : [a:expr]
 endfunction"}}}
 
 let &cpo = s:save_cpo

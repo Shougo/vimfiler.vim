@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 03 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,9 +26,6 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
-
-let s:min_padding_width = 2
-let s:max_padding_width = 26
 
 function! vimfiler#view#_force_redraw_screen(...) "{{{
   let is_manualed = get(a:000, 0, 0)
@@ -207,16 +204,30 @@ function! vimfiler#view#_redraw_prompt() "{{{
 endfunction"}}}
 function! vimfiler#view#_get_print_lines(files) "{{{
   let is_simple = b:vimfiler.context.simple
-  if s:max_padding_width + g:vimfiler_min_filename_width > winwidth(0)
+
+  let columns = vimfiler#init#_initialize_columns(
+        \ b:vimfiler.columns, b:vimfiler.context)
+
+  for column in columns
+    let column.vimfiler__length = column.length(
+          \ a:files, b:vimfiler.context)
+  endfor
+  let columns = filter(columns, 'v:val.vimfiler__length > 0')
+
+  " Calc padding width.
+  let padding = 0
+  for column in columns
+    let padding += column.vimfiler__length + 1
+  endfor
+
+  let max_len = winwidth(0) - padding
+  if max_len < g:vimfiler_min_filename_width
     " Force simple.
     let is_simple = 1
   endif
-  let max_len = winwidth(0) -
-        \ (is_simple ? s:min_padding_width : s:max_padding_width)
-  if max_len > g:vimfiler_max_filename_width
-    let max_len = g:vimfiler_max_filename_width
-  elseif max_len < s:min_padding_width
-    let max_len = s:min_padding_width
+
+  if is_simple
+    let columns = []
   endif
 
   " Print files.
@@ -246,106 +257,17 @@ function! vimfiler#view#_get_print_lines(files) "{{{
     endif
     let mark .= ' '
 
-    let filename = vimfiler#util#truncate_smart(
+    let line = vimfiler#util#truncate_smart(
           \ mark . filename, max_len, max_len/2, '..')
-    if is_simple
-      let line = substitute(
-            \ filename . s:convert_filetype(file.vimfiler__filetype),
-            \   '\s\+$', '', '')
-    else
-      let line = printf('%s %s %s %s',
-            \ filename,
-            \ file.vimfiler__filetype,
-            \ s:get_filesize(file), s:get_filetime(file),
-            \)
-    endif
+    for column in columns
+      let line .= ' ' . vimfiler#util#truncate(
+            \ column.get(file, b:vimfiler.context), column.vimfiler__length)
+    endfor
 
-    call add(lines, line)
+    call add(lines, substitute(line, '\s\+$', '', ''))
   endfor
 
   return lines
-endfunction"}}}
-
-function! s:get_filesize(file) "{{{
-  if a:file.vimfiler__is_directory
-    return '      '
-  endif
-
-  " Get human file size.
-  let filesize = a:file.vimfiler__filesize
-  if filesize < 0
-    if a:file.action__path !~ '^\a\w\+:' &&
-          \ has('python') && getftype(a:file.action__path) !=# 'link'
-      let pattern = s:get_python_file_size(a:file.action__path)
-    elseif filesize == -2
-      " Above 2GB?
-      let pattern = '>2.0'
-    else
-      let pattern = ''
-    endif
-    let suffix = (pattern != '') ? 'G' : ''
-  elseif filesize < 1000
-    " B.
-    let suffix = 'B'
-    let float = ''
-    let pattern = printf('%5d', filesize)
-  else
-    if filesize >= 1000000000
-      " GB.
-      let suffix = 'G'
-      let size = filesize / 1024 / 1024
-    elseif filesize >= 1000000
-      " MB.
-      let suffix = 'M'
-      let size = filesize / 1024
-    elseif filesize >= 1000
-      " KB.
-      let suffix = 'K'
-      let size = filesize
-    endif
-
-    let float = (size%1024)*100/1024
-    let digit = size / 1024
-    let pattern = (digit < 100) ?
-          \ printf('%2d.%02d', digit, float) :
-          \ printf('%2d.%01d', digit, float/10)
-  endif
-
-  return pattern.suffix
-endfunction"}}}
-function! s:get_python_file_size(filename) "{{{
-    " Use python.
-python <<END
-import os.path
-import vim
-try:
-  filesize = os.path.getsize(vim.eval(\
-      'unite#util#iconv(a:filename, &encoding, "char")'))
-except:
-  filesize = -1
-if filesize < 0:
-  pattern = ''
-else:
-  mega = filesize / 1024 / 1024
-  float = int((mega%1024)*100/1024)
-  pattern = '%3d.%02d' % (mega/1024, float)
-
-vim.command("let pattern = '%s'" % pattern)
-END
-
-  return pattern
-endfunction"}}}
-function! s:get_filetime(file) "{{{
-  return (a:file.vimfiler__filetime =~ '^-\?\d\+$' ?
-        \  (a:file.vimfiler__filetime == -1 ? '' :
-        \    a:file.vimfiler__datemark .
-        \    strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
-        \ : a:file.vimfiler__datemark . a:file.vimfiler__filetime)
-endfunction"}}}
-function! s:convert_filetype(filetype) "{{{
-  return ' ' . get({'[TXT]' : '~', '[IMG]' : '!',
-        \ '[ARC]' : '@', '[EXE]' : '#', '[MUL]' : '$', '[DIR]' : '%',
-        \ '[SYS]' : '^', '[LNK]' : '&',}, a:filetype, '')
 endfunction"}}}
 
 function! s:check_tree(files) "{{{

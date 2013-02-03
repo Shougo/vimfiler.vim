@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 03 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,6 +32,8 @@ let s:BM = s:V.import('Vim.BufferManager')
 let s:manager = s:BM.new()  " creates new manager
 call s:manager.config('opener', 'silent edit')
 call s:manager.config('range', 'current')
+
+let s:loaded_columns = {}
 
 function! vimfiler#init#_initialize_context(context) "{{{
   let default_context = {
@@ -89,6 +91,7 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.directory_cursor_pos = {}
   let b:vimfiler.current_mask = ''
   let b:vimfiler.clipboard = {}
+  let b:vimfiler.columns = ['type', 'size', 'time']
 
   let b:vimfiler.global_sort_type = g:vimfiler_sort_type
   let b:vimfiler.local_sort_type = g:vimfiler_sort_type
@@ -182,6 +185,32 @@ function! vimfiler#init#_initialize_candidates(candidates, source_name) "{{{
   endfor
 
   return a:candidates
+endfunction"}}}
+function! vimfiler#init#_initialize_columns(columns, context) "{{{
+  let columns = []
+
+  for column in a:columns
+    if !has_key(s:loaded_columns, column)
+      let name = substitute(column, '^[^/_]\+\zs[/_].*$', '', '')
+
+      for define in map(split(globpath(&runtimepath,
+            \ 'autoload/vimfiler/columns/'.name.'*.vim'), '\n'),
+            \ "vimfiler#columns#{fnamemodify(v:val, ':t:r')}#define()")
+        for dict in vimfiler#util#convert2list(define)
+          if !empty(dict) && !has_key(s:loaded_columns, dict.name)
+            let s:loaded_columns[dict.name] = dict
+          endif
+        endfor
+        unlet define
+      endfor
+    endif
+
+    if has_key(s:loaded_columns, column)
+      call add(columns, s:loaded_columns[column])
+    endif
+  endfor
+
+  return columns
 endfunction"}}}
 
 function! vimfiler#init#_start(path, ...) "{{{

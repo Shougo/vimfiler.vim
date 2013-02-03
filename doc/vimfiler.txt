@@ -970,6 +970,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2013-02-03
 - Fixed freeze bug.
+- Implemented columns feature.
 
 2013-02-02
 - Changed directory mark.
