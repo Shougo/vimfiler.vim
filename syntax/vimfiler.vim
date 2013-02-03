@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 03 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -78,6 +78,8 @@ else
   syntax match   vimfilerMarker        '[~!@#$%^&]$' contained
 endif
 
+syntax match vimfilerColumnPrompt /^Columns:/
+
 " Initialize icon patterns."{{{
 let s:leaf_icon = vimfiler#util#escape_pattern(
       \ g:vimfiler_tree_leaf_icon)
@@ -131,6 +133,8 @@ highlight def link vimfilerTypeMultimedia Identifier
 highlight def link vimfilerTypeDirectory Preproc
 highlight def link vimfilerTypeSystem Comment
 highlight def link vimfilerTypeLink Comment
+
+highlight default link vimfilerColumnPrompt  Statement
 
 let b:current_syntax = 'vimfiler'
 

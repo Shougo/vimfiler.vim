@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 03 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -156,7 +156,11 @@ function! vimfiler#get_line_number(index) "{{{
   return a:index + vimfiler#get_file_offset()
 endfunction"}}}
 function! vimfiler#get_file_offset() "{{{
-  return vimfiler#get_context().explorer ?  2 : 3
+  let offset = vimfiler#get_context().explorer ?  2 : 3
+  if !vimfiler#get_context().simple
+    let offset += 1
+  endif
+  return offset
 endfunction"}}}
 function! vimfiler#force_redraw_all_vimfiler(...) "{{{
   return call('vimfiler#view#_force_redraw_all_vimfiler', a:000)

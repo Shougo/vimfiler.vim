@@ -200,11 +200,13 @@ function! vimfiler#view#_redraw_prompt() "{{{
     call setline(1, prefix .  dir . mask)
   endif
 
+  if !b:vimfiler.simple
+    call append(1, 'Columns: ' . join(b:vimfiler.columns, ', '))
+  endif
+
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! vimfiler#view#_get_print_lines(files) "{{{
-  let is_simple = b:vimfiler.context.simple
-
   let columns = vimfiler#init#_initialize_columns(
         \ b:vimfiler.columns, b:vimfiler.context)
 
@@ -221,12 +223,9 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   endfor
 
   let max_len = winwidth(0) - padding
-  if max_len < g:vimfiler_min_filename_width
-    " Force simple.
-    let is_simple = 1
-  endif
 
-  if is_simple
+  if b:vimfiler.context.simple
+    " Disable columns.
     let columns = []
   endif
 
