@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 03 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -595,7 +595,7 @@ function! s:toggle_mark_current_line(...) "{{{
   let file.vimfiler__marked_time = localtime()
 
   setlocal modifiable
-  call setline('.', vimfiler#view#get_print_lines([file]))
+  call setline('.', vimfiler#view#_get_print_lines([file]))
   setlocal nomodifiable
 
   let map = get(a:000, 0, '')
@@ -775,7 +775,7 @@ function! s:expand_tree() "{{{
   setlocal modifiable
 
   let file.vimfiler__is_opened = 1
-  call setline('.', vimfiler#view#get_print_lines([file]))
+  call setline('.', vimfiler#view#_get_print_lines([file]))
 
   " Expand tree.
   let nestlevel = file.vimfiler__nest_level + 1
@@ -807,7 +807,7 @@ function! s:expand_tree() "{{{
         \  + original_files
         \  + b:vimfiler.original_files[index_orig+1 :]
 
-  call append('.', vimfiler#view#get_print_lines(files))
+  call append('.', vimfiler#view#_get_print_lines(files))
 
   setlocal nomodifiable
 endfunction"}}}
@@ -839,7 +839,7 @@ function! s:toggle_tree_recursive() "{{{
   setlocal modifiable
 
   let file.vimfiler__is_opened = 1
-  call setline('.', vimfiler#view#get_print_lines([file]))
+  call setline('.', vimfiler#view#_get_print_lines([file]))
 
   " Expand tree.
   let nestlevel = file.vimfiler__nest_level + 1
@@ -859,7 +859,7 @@ function! s:toggle_tree_recursive() "{{{
   let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
         \ + original_files + b:vimfiler.original_files[index_orig+1 :]
 
-  call append('.', vimfiler#view#get_print_lines(files))
+  call append('.', vimfiler#view#_get_print_lines(files))
 
   setlocal nomodifiable
 endfunction"}}}
@@ -923,7 +923,7 @@ function! s:unexpand_tree() "{{{
   setlocal modifiable
 
   let file.vimfiler__is_opened = 0
-  call setline('.', vimfiler#view#get_print_lines([file]))
+  call setline('.', vimfiler#view#_get_print_lines([file]))
 
   let index = vimfiler#get_file_index(line('.'))
   let index_orig = vimfiler#get_original_file_index(line('.'))

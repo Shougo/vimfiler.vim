@@ -968,6 +968,9 @@ https://github.com/andreafrancia/trash-cli
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2013-02-03
+- Fixed freeze bug.
+
 2013-02-02
 - Changed directory mark.
 - Refactored.

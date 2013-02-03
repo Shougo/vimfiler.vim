@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 03 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -72,18 +72,18 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
   endif
 
   call vimfiler#set_current_vimfiler(b:vimfiler)
-endfunction
+endfunction"}}}
 
 function! s:on_BufWriteCmd(source_name, source_args, context)  "{{{1
   " BufWriteCmd is published by :write or other commands with 1,$ range.
   return s:write(a:source_name, a:source_args, 1, line('$'), 'BufWriteCmd')
-endfunction
+endfunction"}}}
 
 
 function! s:on_FileAppendCmd(source_name, source_args, context)  "{{{1
   " FileAppendCmd is published by :write or other commands with >>.
   return s:write(a:source_name, a:source_args, line("'["), line("']"), 'FileAppendCmd')
-endfunction
+endfunction"}}}
 
 
 function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
@@ -105,16 +105,16 @@ function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
   endif
 
   call append(line('.'), info[0])
-endfunction
+endfunction"}}}
 
 
-function! s:on_FileWriteCmd(source_name, source_args, context)  "{{{1
+function! s:on_FileWriteCmd(source_name, source_args, context)  "{{{
   " FileWriteCmd is published by :write or other commands with partial range
   " such as 1,2 where 2 < line('$').
   return s:write(a:source_name, a:source_args, line("'["), line("']"), 'FileWriteCmd')
-endfunction
+endfunction"}}}
 
-function! s:write(source_name, source_args, line1, line2, event_name)  "{{{1
+function! s:write(source_name, source_args, line1, line2, event_name)  "{{{
   if !exists('b:vimfiler') || !has_key(b:vimfiler, 'current_file') || !&l:modified
     return
   endif
@@ -132,14 +132,10 @@ function! s:write(source_name, source_args, line1, line2, event_name)  "{{{1
     call vimfiler#print_error(v:exception . ' ' . v:throwpoint)
     setlocal modified
   endtry
-endfunction
+endfunction"}}}
 
 " Event functions.
 function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
-  if &filetype ==# 'vimfiler'
-    call vimfiler#init#_default_settings()
-  endif
-
   if a:bufnr != bufnr('%') && bufwinnr(a:bufnr) > 0
     let winnr = winnr()
     execute bufwinnr(a:bufnr) 'wincmd w'
@@ -212,3 +208,4 @@ let &cpo = s:save_cpo
 unlet s:save_cpo
 
 " vim: foldmethod=marker
+
