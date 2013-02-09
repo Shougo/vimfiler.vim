@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 09 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -119,9 +119,8 @@ function! vimfiler#redraw_prompt() "{{{
   return vimfiler#view#_redraw_prompt()
 endfunction"}}}
 function! vimfiler#get_marked_files() "{{{
-  return vimfiler#util#sort_by(filter(
-        \ copy(vimfiler#get_current_vimfiler().current_files),
-        \ 'v:val.vimfiler__is_marked'), 'v:val.vimfiler__marked_time')
+  return filter(copy(vimfiler#get_current_vimfiler().current_files),
+        \ 'v:val.vimfiler__is_marked')
 endfunction"}}}
 function! vimfiler#get_marked_filenames() "{{{
   return map(vimfiler#get_marked_files(), 'v:val.action__path')

@@ -956,6 +956,9 @@ https://github.com/andreafrancia/trash-cli
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2013-02-09
+- Disabled sort in vimfiler#get_marked_files().
+
 2013-02-03
 - Fixed freeze bug.
 - Implemented columns feature.
