@@ -636,9 +636,17 @@ function! s:mark_similar_lines() "{{{
   endif
 
   " Get pattern.
-  let pattern = substitute(file.vimfiler__filename,
-        \ '[^a-zA-Z\d192-\d255]\+', '.\\+', 'g')
-  echomsg pattern
+  let idents = []
+  let pos = 0
+  let ident = matchstr(file.vimfiler__filename, '\I\+')
+  while ident != ''
+    call add(idents, ident)
+    let pos = matchend(file.vimfiler__filename, '\I\+', pos)
+
+    let ident = matchstr(file.vimfiler__filename, '\I\+', pos)
+  endwhile
+
+  let pattern = join(idents, '.\+')
   for file in filter(copy(
         \ vimfiler#get_current_vimfiler().current_files),
         \ 'v:val.vimfiler__filename =~# pattern')
