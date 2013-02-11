@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Feb 2013.
+" Last Modified: 11 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -186,10 +186,10 @@ function! s:sort(files, type) "{{{
 endfunction"}}}
 " Compare filename by human order. "{{{
 function! s:compare_filename(i1, i2)
-  let words_1 = map(split(a:i1.vimfiler__filename, '\D\zs\ze\d'),
-        \ "v:val =~ '^\\d' ? str2nr(v:val) : v:val")
-  let words_2 = map(split(a:i2.vimfiler__filename, '\D\zs\ze\d'),
-        \ "v:val =~ '^\\d' ? str2nr(v:val) : v:val")
+  let words_1 = map(split(a:i1.vimfiler__filename, '\D\zs\ze\d\+'),
+        \ "v:val =~ '^\\d\\+$' ? str2nr(v:val) : v:val")
+  let words_2 = map(split(a:i2.vimfiler__filename, '\D\zs\ze\d\+'),
+        \ "v:val =~ '^\\d\\+$' ? str2nr(v:val) : v:val")
   let words_1_len = len(words_1)
   let words_2_len = len(words_2)
 
