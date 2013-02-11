@@ -770,6 +770,7 @@ gg			<Plug>(vimfiler_cursor_top)
 <Space>			<Plug>(vimfiler_toggle_mark_current_line)
 <S-Space>		<Plug>(vimfiler_toggle_mark_current_line_up)
 *			<Plug>(vimfiler_toggle_mark_all_lines)
+&			<Plug>(vimfiler_mark_similar_lines)
 U			<Plug>(vimfiler_clear_mark_all_lines)
 c			<Plug>(vimfiler_copy_file)
 m			<Plug>(vimfiler_move_file)
@@ -962,6 +963,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2013-02-11
 - Added <Plug>(vimfiler_mark_similar_lines).
+- Improved cursor behavior.
 
 2013-02-10
 - Fixed parse options.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 11 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -97,6 +97,8 @@ function! vimfiler#view#_redraw_screen() "{{{
 
   setlocal modifiable
 
+  let last_line = line('.')
+
   " Clean up the screen.
   % delete _
 
@@ -120,7 +122,9 @@ function! vimfiler#view#_redraw_screen() "{{{
 
   setlocal nomodifiable
 
-  normal! zb
+  if last_line != line('.')
+    execute 'normal!' (line('.') <= winheight(0) ? 'zb' : 'zz')
+  endif
 
   if is_switch
     execute save_winnr . 'wincmd w'
