@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 11 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -23,6 +23,8 @@
 "     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 " }}}
 "=============================================================================
+
+scriptencoding utf-8
 
 let s:Cache = vital#of('vimfiler').import('System.Cache')
 
@@ -47,6 +49,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>toggle_mark_lines(getpos("'<")[1], getpos("'>")[1])<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_all_lines)
         \ :<C-u>call <SID>toggle_mark_all_lines()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_mark_similar_lines)
+        \ :<C-u>call <SID>mark_similar_lines()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_clear_mark_all_lines)
         \ :<C-u>call <SID>clear_mark_all_lines()<CR>
   nmap <buffer><silent><expr> <Plug>(vimfiler_execute)
@@ -194,6 +198,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
 
   " Toggle marks in all lines.
   nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
+  nmap <buffer> & <Plug>(vimfiler_mark_similar_lines)
   " Clear marks in all lines.
   nmap <buffer> U <Plug>(vimfiler_clear_mark_all_lines)
 
@@ -618,6 +623,26 @@ endfunction"}}}
 function! s:toggle_mark_all_lines() "{{{
   for file in vimfiler#get_current_vimfiler().current_files
     let file.vimfiler__is_marked = !file.vimfiler__is_marked
+    let file.vimfiler__marked_time = localtime()
+  endfor
+
+  call vimfiler#redraw_screen()
+endfunction"}}}
+function! s:mark_similar_lines() "{{{
+  let file = vimfiler#get_file()
+  if empty(file)
+    " Don't toggle.
+    return
+  endif
+
+  " Get pattern.
+  let pattern = substitute(file.vimfiler__filename,
+        \ '[^a-zA-Z\d192-\d255]\+', '.\\+', 'g')
+  echomsg pattern
+  for file in filter(copy(
+        \ vimfiler#get_current_vimfiler().current_files),
+        \ 'v:val.vimfiler__filename =~# pattern')
+    let file.vimfiler__is_marked = 1
     let file.vimfiler__marked_time = localtime()
   endfor
 
