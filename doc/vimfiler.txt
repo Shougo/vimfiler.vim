@@ -121,24 +121,24 @@ COMMANDS 					*vimfiler-commands*
 		Defines split position rule. The default value is same to
 		|g:vimfiler_split_rule|.
 
-						*unite-options-toggle*
+						*vimfiler-options-toggle*
 		-toggle
 		Close vimfiler buffer window if this vimfiler buffer name
 		window is exists.
 
-						*unite-options-simple*
+						*vimfiler-options-simple*
 		-simple
 		Enable vimfiler simple mode.
 
-						*unite-options-split*
+						*vimfiler-options-split*
 		-split
 		Split vimfiler buffer.
 
-						*unite-options-horizontal*
+						*vimfiler-options-horizontal*
 		-horizontal
 		Split horizontally.
 
-						*unite-options-double*
+						*vimfiler-options-double*
 		-double
 		Open vimfiler buffers in double mode.
 
@@ -146,13 +146,13 @@ COMMANDS 					*vimfiler-commands*
 		-create
 		Create new vimfiler buffer.
 
-						*unite-options-auto-cd*
+						*vimfiler-options-auto-cd*
 		-auto-cd
 		Enable auto cd behavior.
 		If omit it, use |g:vimfiler_enable_auto_cd|.
 		Note: This option works in file source.
 
-						*unite-options-explorer*
+						*vimfiler-options-explorer*
 		-explorer
 		Enable the behavior like explorer.
 		Note: This option changes some default options.
