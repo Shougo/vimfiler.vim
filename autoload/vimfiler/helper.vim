@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2013.
+" Last Modified: 16 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -194,9 +194,9 @@ function! s:compare_filename(i1, i2)
   let words_2_len = len(words_2)
 
   for i in range(0, min([words_1_len, words_2_len])-1)
-    if words_1[i] ># words_2[i]
+    if words_1[i] >? words_2[i]
       return 1
-    elseif words_1[i] <# words_2[i]
+    elseif words_1[i] <? words_2[i]
       return -1
     endif
   endfor
