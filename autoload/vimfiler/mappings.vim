@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Feb 2013.
+" Last Modified: 21 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1180,7 +1180,7 @@ function! vimfiler#mappings#switch_another_vimfiler(...) "{{{
       let context.horizontal = !context.horizontal
     endif
 
-    call vimfiler#_switch_vimfiler(
+    call vimfiler#init#_switch_vimfiler(
           \ current_vimfiler.another_vimfiler_bufnr,
           \ context, directory)
   endif
