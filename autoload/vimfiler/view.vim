@@ -220,6 +220,11 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   endfor
   let columns = filter(columns, 'v:val.vimfiler__length > 0')
 
+  " Disable columns.
+  if b:vimfiler.context.simple
+    let columns = []
+  endif
+
   " Calc padding width.
   let padding = 0
   for column in columns
@@ -227,11 +232,6 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   endfor
 
   let max_len = winwidth(0) - padding
-
-  if b:vimfiler.context.simple
-    " Disable columns.
-    let columns = []
-  endif
 
   " Print files.
   let lines = []
