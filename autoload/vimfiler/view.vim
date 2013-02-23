@@ -271,7 +271,7 @@ endfunction"}}}
 function! vimfiler#view#_check_redraw()
   if &l:number || (exists('&relativenumber') && &l:relativenumber)
     " Force redraw.
-    call vimfiler#view#_redraw_screen()
+    call vimfiler#view#_force_redraw_screen()
   endif
 endfunction
 

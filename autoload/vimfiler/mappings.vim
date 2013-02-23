@@ -780,6 +780,8 @@ function! s:toggle_tree() "{{{
   else
     call s:expand_tree()
   endif
+
+  call vimfiler#view#_check_redraw()
 endfunction"}}}
 function! s:expand_tree() "{{{
   let file = vimfiler#get_file()
@@ -842,8 +844,6 @@ function! s:expand_tree() "{{{
 
   call append('.', vimfiler#view#_get_print_lines(files))
 
-  call vimfiler#view#_check_redraw()
-
   setlocal nomodifiable
 endfunction"}}}
 function! s:toggle_tree_recursive() "{{{
@@ -868,6 +868,7 @@ function! s:toggle_tree_recursive() "{{{
 
   if file.vimfiler__is_opened
     call s:unexpand_tree()
+    call vimfiler#view#_check_redraw()
     return
   endif
 
@@ -896,9 +897,9 @@ function! s:toggle_tree_recursive() "{{{
 
   call append('.', vimfiler#view#_get_print_lines(files))
 
-  call vimfiler#view#_check_redraw()
-
   setlocal nomodifiable
+
+  call vimfiler#view#_check_redraw()
 endfunction"}}}
 function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   if get(a:file, 'vimfiler__ftype', '') ==# 'link'
@@ -950,6 +951,7 @@ function! s:unexpand_tree() "{{{
         break
       endif
     endfor
+
     return
   endif
 
@@ -997,8 +999,6 @@ function! s:unexpand_tree() "{{{
     silent execute (line('.')+1).','.(vimfiler#get_line_number(end)).'delete _'
     call setpos('.', pos)
   endif
-
-  call vimfiler#view#_check_redraw()
 
   setlocal nomodifiable
 endfunction"}}}

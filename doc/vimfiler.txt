@@ -994,6 +994,7 @@ CHANGELOG					*vimfiler-changelog*
 - Removed columns line.
 - Improved columns behavior.
 - Supported number and relativenumber options.
+- Improved check redraw.
 
 2013-02-21
 - Fixed vimfiler#_switch_vimfiler() error.
