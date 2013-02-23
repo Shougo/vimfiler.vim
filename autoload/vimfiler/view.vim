@@ -222,6 +222,10 @@ function! vimfiler#view#_get_print_lines(files) "{{{
     let padding += column.vimfiler__length + 1
   endfor
 
+  if &l:number || (exists('&relativenumber') && &l:relativenumber)
+    let padding += len(line('$') + len(a:files)) + 1
+  endif
+
   let max_len = winwidth(0) - padding
 
   " Print files.

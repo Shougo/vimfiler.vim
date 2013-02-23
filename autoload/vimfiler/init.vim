@@ -400,7 +400,6 @@ function! s:buffer_default_settings() "{{{
   setlocal nowrap
   setlocal nomodifiable
   setlocal nomodified
-  setlocal nonumber
   if has('netbeans_intg') || has('sun_workshop')
     setlocal noautochdir
   endif
