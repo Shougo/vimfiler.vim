@@ -268,6 +268,12 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
   return lines
 endfunction"}}}
+function! vimfiler#view#_check_redraw()
+  if &l:number || (exists('&relativenumber') && &l:relativenumber)
+    " Force redraw.
+    call vimfiler#view#_redraw_screen()
+  endif
+endfunction
 
 function! s:check_tree(files) "{{{
   let level = 0

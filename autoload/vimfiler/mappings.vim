@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Feb 2013.
+" Last Modified: 23 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -842,6 +842,8 @@ function! s:expand_tree() "{{{
 
   call append('.', vimfiler#view#_get_print_lines(files))
 
+  call vimfiler#view#_check_redraw()
+
   setlocal nomodifiable
 endfunction"}}}
 function! s:toggle_tree_recursive() "{{{
@@ -893,6 +895,8 @@ function! s:toggle_tree_recursive() "{{{
         \ + original_files + b:vimfiler.original_files[index_orig+1 :]
 
   call append('.', vimfiler#view#_get_print_lines(files))
+
+  call vimfiler#view#_check_redraw()
 
   setlocal nomodifiable
 endfunction"}}}
@@ -993,6 +997,8 @@ function! s:unexpand_tree() "{{{
     silent execute (line('.')+1).','.(vimfiler#get_line_number(end)).'delete _'
     call setpos('.', pos)
   endif
+
+  call vimfiler#view#_check_redraw()
 
   setlocal nomodifiable
 endfunction"}}}
