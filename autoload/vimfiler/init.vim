@@ -60,6 +60,7 @@ function! vimfiler#init#_initialize_context(context) "{{{
     \ 'vimfiler__winfixwidth' : &l:winfixwidth,
     \ 'vimfiler__winfixheight' : &l:winfixheight,
     \ }
+
   if get(a:context, 'explorer', 0)
     " Change default value.
     let default_context.buffer_name = 'explorer'
@@ -69,6 +70,12 @@ function! vimfiler#init#_initialize_context(context) "{{{
     let default_context.winwidth = 35
     let default_context.columns = 'type'
   endif
+
+  if get(a:context, 'simple', 0)
+    " Disable columns.
+    let default_context.columns = ''
+  endif
+
   let context = extend(default_context, a:context)
 
   if !has_key(context, 'profile_name')
