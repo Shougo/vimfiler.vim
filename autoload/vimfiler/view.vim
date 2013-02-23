@@ -223,7 +223,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   endfor
 
   if &l:number || (exists('&relativenumber') && &l:relativenumber)
-    let padding += len(line('$') + len(a:files)) + 1
+    let padding += &l:numberwidth
   endif
 
   let max_len = winwidth(0) - padding
