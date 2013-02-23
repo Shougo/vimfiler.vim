@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 23 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -391,6 +391,7 @@ function! s:buffer_default_settings() "{{{
   setlocal nowrap
   setlocal nomodifiable
   setlocal nomodified
+  setlocal nonumber
   if has('netbeans_intg') || has('sun_workshop')
     setlocal noautochdir
   endif
