@@ -173,7 +173,8 @@ COMMANDS 					*vimfiler-commands*
 
 						*vimfiler-options-columns*
 		-columns={columns1:columns2:...}
-		Specify vimfiler columns.
+		Specify vimfiler columns. If omit it,
+		|g:vimfiler_default_columns| will be used.
 
 :VimFilerCreate [{options}...] [{path}]		*:VimFilerCreate*
 		Equivalent to |:VimFiler| except that it creates a new vimfiler
@@ -848,7 +849,14 @@ Visual mode mappings.
 ==============================================================================
 COLUMNS						*vimfiler-columns*
 
-Todo
+						*vimfiler-column-type*
+type		File type.
+
+						*vimfiler-column-size*
+size		File size.
+
+						*vimfiler-column-time*
+time		File time stamp.
 
 ==============================================================================
 EXAMPLES					*vimfiler-examples*
