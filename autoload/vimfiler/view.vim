@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Feb 2013.
+" Last Modified: 23 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -202,15 +202,6 @@ function! vimfiler#view#_redraw_prompt() "{{{
     delete _
   else
     call setline(1, prefix .  dir . mask)
-  endif
-
-  if !b:vimfiler.simple
-    let columns = 'Columns: ' . join(b:vimfiler.columns, ', ')
-    if line('$') == 1
-      call append(1, columns)
-    else
-      call setline(2, columns)
-    endif
   endif
 
   let &l:modifiable = modifiable_save
