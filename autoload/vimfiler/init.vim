@@ -54,6 +54,7 @@ function! vimfiler#init#_initialize_context(context) "{{{
     \ 'explorer' : 0,
     \ 'reverse' : 0,
     \ 'project' : 0,
+    \ 'columns' : 'type:size:time',
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
     \ 'vimfiler__prev_winnr' : winbufnr('%'),
     \ 'vimfiler__winfixwidth' : &l:winfixwidth,
@@ -66,6 +67,7 @@ function! vimfiler#init#_initialize_context(context) "{{{
     let default_context.toggle = 1
     let default_context.no_quit = 1
     let default_context.winwidth = 35
+    let default_context.columns = 'type'
   endif
   let context = extend(default_context, a:context)
 
@@ -91,7 +93,7 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.directory_cursor_pos = {}
   let b:vimfiler.current_mask = ''
   let b:vimfiler.clipboard = {}
-  let b:vimfiler.columns = ['type', 'size', 'time']
+  let b:vimfiler.columns = split(a:context.columns, ':')
 
   let b:vimfiler.global_sort_type = g:vimfiler_sort_type
   let b:vimfiler.local_sort_type = g:vimfiler_sort_type
