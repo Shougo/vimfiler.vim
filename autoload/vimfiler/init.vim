@@ -54,7 +54,7 @@ function! vimfiler#init#_initialize_context(context) "{{{
     \ 'explorer' : 0,
     \ 'reverse' : 0,
     \ 'project' : 0,
-    \ 'columns' : 'type:size:time',
+    \ 'columns' : g:vimfiler_default_columns,
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
     \ 'vimfiler__prev_winnr' : winbufnr('%'),
     \ 'vimfiler__winfixwidth' : &l:winfixwidth,
@@ -68,7 +68,7 @@ function! vimfiler#init#_initialize_context(context) "{{{
     let default_context.toggle = 1
     let default_context.no_quit = 1
     let default_context.winwidth = 35
-    let default_context.columns = 'type'
+    let default_context.columns = g:vimfiler_explorer_columns
   endif
 
   if get(a:context, 'simple', 0)

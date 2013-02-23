@@ -51,7 +51,7 @@ let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-quit', '-toggle', '-create',
       \ '-simple', '-double', '-split', '-horizontal', '-direction=',
       \ '-winheight=', '-winwidth=', '-winminwidth=', '-auto-cd', '-explorer',
-      \ '-reverse', '-project',
+      \ '-reverse', '-project', '-columns=',
       \]
 "}}}
 

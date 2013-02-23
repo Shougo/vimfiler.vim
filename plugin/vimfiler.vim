@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Feb 2013.
+" Last Modified: 23 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -87,6 +87,10 @@ let g:vimfiler_enable_auto_cd =
       \ get(g:, 'vimfiler_enable_auto_cd', 0)
 let g:vimfiler_quick_look_command =
       \ get(g:, 'vimfiler_quick_look_command', '')
+let g:vimfiler_default_columns =
+      \ get(g:, 'vimfiler_default_columns', 'type:size:time')
+let g:vimfiler_explorer_columns =
+      \ get(g:, 'vimfiler_explorer_columns', 'type')
 let g:vimfiler_data_directory =
       \ substitute(fnamemodify(get(
       \   g:, 'vimfiler_data_directory', '~/.vimfiler'),

@@ -31,6 +31,7 @@ Interface		|vimfiler-interface|
   Variables		  |vimfiler-variables|
     Sources variables	    |vimfiler-sources-variables|
   Key mappings		  |vimfiler-key-mappings|
+Columns			|vimfiler-columns|
 Examples		|vimfiler-examples|
 Unite sources		|vimfiler-unite-sources|
 FAQ			|vimfiler-faq|
@@ -169,6 +170,10 @@ COMMANDS 					*vimfiler-commands*
 						*vimfiler-options-project*
 		-project
 		Move to project directory.
+
+						*vimfiler-options-columns*
+		-columns={columns1:columns2:...}
+		Specify vimfiler columns.
 
 :VimFilerCreate [{options}...] [{path}]		*:VimFilerCreate*
 		Equivalent to |:VimFiler| except that it creates a new vimfiler
@@ -382,6 +387,17 @@ g:vimfiler_quick_look_command		*g:vimfiler_quick_look_command*
 		" Mac OS X.
 		" let g:vimfiler_quick_look_command = 'qlmanage -p'
 <
+g:vimfiler_default_columns				*g:vimfiler_default_columns*
+		This variable controls default vimfiler columns.
+		
+		Default value is "type:size:time".
+
+g:vimfiler_explorer_columns			 *g:vimfiler_explorer_columns*
+		This variable controls default vimfiler columns in explorer
+		mode.
+		
+		Default value is "type".
+
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
 g:unite_kind_file_delete_file_command
@@ -828,6 +844,11 @@ Visual mode mappings.
 {lhs}			{rhs}
 --------		-----------------------------
 <Space>			<Plug>(vimfiler_toggle_mark_selected_lines)
+
+==============================================================================
+COLUMNS						*vimfiler-columns*
+
+Todo
 
 ==============================================================================
 EXAMPLES					*vimfiler-examples*
