@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 24 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -207,9 +207,14 @@ function! vimfiler#view#_redraw_prompt() "{{{
   let &l:modifiable = modifiable_save
 endfunction"}}}
 function! vimfiler#view#_get_print_lines(files) "{{{
-  let columns = vimfiler#init#_initialize_columns(
-        \ b:vimfiler.columns, b:vimfiler.context)
+  " Clear previous syntax.
+  for syntax in b:vimfiler.syntaxes
+    execute 'syntax clear' syntax
+  endfor
 
+  let columns = b:vimfiler.columns
+
+  let start = 0
   for column in columns
     let column.vimfiler__length = column.length(
           \ a:files, b:vimfiler.context)
@@ -228,6 +233,37 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   endif
 
   let max_len = winwidth(0) - padding
+
+  let start = 1
+  for [offset, syntax, containedin] in [
+        \ [len(g:vimfiler_tree_opened_icon),
+        \   'vimfilerOpendFileName', 'vimfilerOpendFile'],
+        \ [len(g:vimfiler_tree_closed_icon),
+        \   'vimfilerClosedFileName', 'vimfilerClosedFile']]
+    execute 'syntax region' syntax 'start=''\%'.(start + offset).
+          \ 'c'' end='.string(empty(columns) ? '$' :
+          \        '\%'.(start + max_len +offset).'c').
+          \ ' contained keepend containedin='.containedin
+  endfor
+
+  let start = max_len + 1
+  for column in columns
+    if get(column, 'syntax', '') != ''
+      for [offset, syntax] in [
+            \ [len(g:vimfiler_tree_opened_icon), 'vimfilerOpendFile'],
+            \ [len(g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
+            \ [len(g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
+            \ [len(g:vimfiler_file_icon), 'vimfilerNormalFile']]
+        execute 'syntax region' column.syntax 'start=''\%'.(start+offset).
+              \ 'c'' end=''\%'.(start + column.vimfiler__length+offset).
+              \ 'c'' contained keepend containedin='.syntax
+      endfor
+
+      call add(b:vimfiler.syntaxes, column.syntax)
+    endif
+
+    let start += column.vimfiler__length + 1
+  endfor
 
   " Print files.
   let lines = []

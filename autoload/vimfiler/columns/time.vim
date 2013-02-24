@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: time.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Feb 2013.
+" Last Modified: 24 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,13 +34,34 @@ endfunction"}}}
 let s:column = {
       \ 'name' : 'time',
       \ 'description' : 'get filetime',
+      \ 'syntax' : 'vimfilerColumn__Time',
       \ }
 
 function! s:column.length(files, context) "{{{
   return len(strftime(g:vimfiler_time_format, 0)) + 1
 endfunction"}}}
 
-function! s:column.define_syntax(files, context) "{{{
+function! s:column.define_syntax(context) "{{{
+  syntax match   vimfilerColumn__TimeNormal
+        \ '#[^#]\+' contained containedin=vimfilerColumn__Time
+        \ contains=vimfilerColumn__TimeIgnore
+  syntax match   vimfilerColumn__TimeToday
+        \ '\~[^~]\+' contained containedin=vimfilerColumn__Time
+        \ contains=vimfilerColumn__TimeIgnore
+  syntax match   vimfilerColumn__TimeWeek
+        \ '![^!]\+' contained containedin=vimfilerColumn__Time
+        \ contains=vimfilerColumn__TimeIgnore
+
+  if has('conceal')
+    " Supported conceal features.
+    syntax match   vimfilerColumn__TimeIgnore
+          \ '[#~!]' contained conceal
+  endif
+
+  highlight def link vimfilerColumn__TimeNormal Identifier
+  highlight def link vimfilerColumn__TimeToday Statement
+  highlight def link vimfilerColumn__TimeWeek Special
+  highlight def link vimfilerColumn__TimeIgnore Ignore
 endfunction"}}}
 
 function! s:column.get(file, context) "{{{

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 24 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -100,7 +100,11 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.directory_cursor_pos = {}
   let b:vimfiler.current_mask = ''
   let b:vimfiler.clipboard = {}
-  let b:vimfiler.columns = split(a:context.columns, ':')
+
+  let b:vimfiler.column_names = split(a:context.columns, ':')
+  let b:vimfiler.columns = vimfiler#init#_initialize_columns(
+        \ b:vimfiler.column_names, b:vimfiler.context)
+  let b:vimfiler.syntaxes = []
 
   let b:vimfiler.global_sort_type = g:vimfiler_sort_type
   let b:vimfiler.local_sort_type = g:vimfiler_sort_type
@@ -123,6 +127,12 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   if a:context.winwidth != 0
     execute 'vertical resize' a:context.winwidth
   endif
+
+  " Defind syntax.
+  for column in filter(
+        \ copy(b:vimfiler.columns), "get(v:val, 'syntax', '') != ''")
+    call column.define_syntax(b:vimfiler.context)
+  endfor
 
   call vimfiler#view#_force_redraw_all_vimfiler()
 endfunction"}}}

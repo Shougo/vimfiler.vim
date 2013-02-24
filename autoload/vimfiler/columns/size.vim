@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: size.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 24 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,11 +34,17 @@ endfunction"}}}
 let s:column = {
       \ 'name' : 'size',
       \ 'description' : 'get filesize by human',
-      \ 'highlight' : 'Constant',
+      \ 'syntax' : 'vimfilerColumn__Size',
       \ }
 
 function! s:column.length(files, context) "{{{
   return 6
+endfunction"}}}
+
+function! s:column.define_syntax(context) "{{{
+  syntax match   vimfilerColumn__SizeLine
+        \ '.*' contained containedin=vimfilerColumn__Size
+  highlight def link vimfilerColumn__SizeLine Constant
 endfunction"}}}
 
 function! s:column.get(file, context) "{{{

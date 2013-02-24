@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 24 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,9 +44,6 @@ function! vimfiler#util#strwidthpart(...)
 endfunction
 function! vimfiler#util#strwidthpart_reverse(...)
   return call(s:V.strwidthpart_reverse, a:000)
-endfunction
-function! vimfiler#util#wcswidth(...)
-  return call(s:V.wcswidth, a:000)
 endfunction
 function! vimfiler#util#wcswidth(...)
   return call(s:V.wcswidth, a:000)

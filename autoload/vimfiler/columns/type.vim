@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: type.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 24 Feb 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,13 +34,39 @@ endfunction"}}}
 let s:column = {
       \ 'name' : 'type',
       \ 'description' : 'get filetype',
+      \ 'syntax' : 'vimfilerColumn__Type',
       \ }
 
 function! s:column.length(files, context) "{{{
   return 3
 endfunction"}}}
 
-function! s:column.define_syntax(files, context) "{{{
+function! s:column.define_syntax(context) "{{{
+  syntax match   vimfilerColumn__TypeText       '\[T\]'
+        \ contained containedin=vimfilerColumn__Type
+  syntax match   vimfilerColumn__TypeImage      '\[I\]'
+        \ contained containedin=vimfilerColumn__Type
+  syntax match   vimfilerColumn__TypeArchive    '\[A\]'
+        \ contained containedin=vimfilerColumn__Type
+  syntax match   vimfilerColumn__TypeExecute    '\[X\]'
+        \ contained containedin=vimfilerColumn__Type
+  syntax match   vimfilerColumn__TypeMultimedia '\[M\]'
+        \ contained containedin=vimfilerColumn__Type
+  syntax match   vimfilerColumn__TypeDirectory  '\[D\]'
+        \ contained containedin=vimfilerColumn__Type
+  syntax match   vimfilerColumn__TypeSystem     '\[S\]'
+        \ contained containedin=vimfilerColumn__Type
+  syntax match   vimfilerColumn__TypeLink       '\[L\]'
+        \ contained containedin=vimfilerColumn__Type
+
+  highlight def link vimfilerColumn__TypeText Constant
+  highlight def link vimfilerColumn__TypeImage Type
+  highlight def link vimfilerColumn__TypeArchive Special
+  highlight def link vimfilerColumn__TypeExecute Statement
+  highlight def link vimfilerColumn__TypeMultimedia Identifier
+  highlight def link vimfilerColumn__TypeDirectory Preproc
+  highlight def link vimfilerColumn__TypeSystem Comment
+  highlight def link vimfilerColumn__TypeLink Comment
 endfunction"}}}
 
 function! s:column.get(file, context) "{{{
