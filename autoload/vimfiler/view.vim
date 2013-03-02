@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Feb 2013.
+" Last Modified: 02 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -116,14 +116,17 @@ function! vimfiler#view#_redraw_screen() "{{{
   let index = index(b:vimfiler.current_files, current_file)
   if index > 0
     call cursor(vimfiler#get_line_number(index), 0)
-  else
-    call cursor(vimfiler#get_file_offset(), 0)
   endif
 
   setlocal nomodifiable
 
   if last_line != line('.')
-    execute 'normal!' (line('.') <= winheight(0) ? 'zb' : 'zz')
+    let pos = getpos('.')
+
+    execute 'normal!' (line('.') <= winheight(0) ? 'zb' :
+          \ line('$') - line('.') > winheight(0) ? 'zz' : line('$').'zb')
+
+    call setpos('.', pos)
   endif
 
   if is_switch
