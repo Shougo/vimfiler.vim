@@ -273,7 +273,8 @@ function! vimfiler#view#_get_print_lines(files) "{{{
     if file.vimfiler__is_marked
       let mark .= g:vimfiler_marked_file_icon
     elseif file.vimfiler__is_directory
-      let mark .= !get(file, 'vimfiler__is_readable', 1) ?
+      let mark .= !get(file, 'vimfiler__is_readable', 1)
+            \    && !file.vimfiler__is_opened ?
             \ g:vimfiler_readonly_file_icon :
             \ file.vimfiler__is_opened ? g:vimfiler_tree_opened_icon :
             \                            g:vimfiler_tree_closed_icon
