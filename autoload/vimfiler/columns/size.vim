@@ -105,14 +105,15 @@ try:
   'unite#util#iconv(a:filename, &encoding, "char")'))
 except:
   filesize = -1
-  if filesize < 0:
-    pattern = ''
-  else:
-    mega = filesize / 1024 / 1024
-    float = int((mega%1024)*100/1024)
-    pattern = '%3d.%02d' % (mega/1024, float)
 
-  vim.command("let pattern = '%s'" % pattern)
+if filesize < 0:
+  pattern = ''
+else:
+  mega = filesize / 1024 / 1024
+  float = int((mega%1024)*100/1024)
+  pattern = '%3d.%02d' % (mega/1024, float)
+
+vim.command("let pattern = '%s'" % pattern)
 END
 
   return pattern
