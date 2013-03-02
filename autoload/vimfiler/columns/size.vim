@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: size.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Feb 2013.
+" Last Modified: 02 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -98,21 +98,21 @@ endfunction"}}}
 function! s:get_python_file_size(filename) "{{{
   " Use python.
 python <<END
-  import os.path
-  import vim
-  try:
-  filesize = os.path.getsize(vim.eval(\
-  'unite#util#iconv(a:filename, &encoding, "char")'))
-  except:
-  filesize = -1
-  if filesize < 0:
-    pattern = ''
-  else:
-  mega = filesize / 1024 / 1024
-  float = int((mega%1024)*100/1024)
-  pattern = '%3d.%02d' % (mega/1024, float)
+import os.path
+import vim
+try:
+filesize = os.path.getsize(vim.eval(\
+'unite#util#iconv(a:filename, &encoding, "char")'))
+except:
+filesize = -1
+if filesize < 0:
+  pattern = ''
+else:
+mega = filesize / 1024 / 1024
+float = int((mega%1024)*100/1024)
+pattern = '%3d.%02d' % (mega/1024, float)
 
-  vim.command("let pattern = '%s'" % pattern)
+vim.command("let pattern = '%s'" % pattern)
 END
 
   return pattern
