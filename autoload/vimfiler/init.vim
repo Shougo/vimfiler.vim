@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Feb 2013.
+" Last Modified: 02 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -135,6 +135,9 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   endfor
 
   call vimfiler#view#_force_redraw_all_vimfiler()
+
+  " Initialize cursor position.
+  call cursor(3, 0)
 endfunction"}}}
 function! vimfiler#init#_initialize_vimfiler_file(path, lines, dict) "{{{1
   " Set current directory.
