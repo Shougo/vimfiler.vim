@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 03 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1194,6 +1194,8 @@ function! vimfiler#mappings#switch_another_vimfiler(...) "{{{
   call cursor(line, 0)
 endfunction"}}}
 function! s:sync_with_current_vimfiler() "{{{
+  let line = line('.')
+
   " Search vimfiler window.
   if vimfiler#exists_another_vimfiler()
     " Change another vimfiler directory.
@@ -1203,6 +1205,8 @@ function! s:sync_with_current_vimfiler() "{{{
     call vimfiler#mappings#create_another_vimfiler()
   endif
 
+  call cursor(line, 0)
+
   wincmd p
   call vimfiler#redraw_screen()
 endfunction"}}}
@@ -1210,16 +1214,21 @@ function! s:sync_with_another_vimfiler() "{{{
   " Search vimfiler window.
   if vimfiler#exists_another_vimfiler()
     " Change current vimfiler directory.
+
     let another = vimfiler#get_another_vimfiler()
     call vimfiler#mappings#switch_another_vimfiler()
+    let line = line('.')
     wincmd p
     call vimfiler#mappings#cd(
           \ another.source . ':' . another.current_dir)
   else
     call vimfiler#mappings#create_another_vimfiler()
+    let line = line('.')
     wincmd p
     call vimfiler#redraw_screen()
   endif
+
+  call cursor(line, 0)
 endfunction"}}}
 function! s:open_file_in_another_vimfiler() "{{{
   " Search vimfiler window.
