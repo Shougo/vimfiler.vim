@@ -156,8 +156,10 @@ function! vimfiler#helper#_get_file_directory(...) "{{{
 endfunction"}}}
 
 function! vimfiler#helper#_set_cursor()
+  let pos = getpos('.')
   execute 'normal!' (line('.') <= winheight(0) ? 'zb' :
         \ line('$') - line('.') > winheight(0) ? 'zz' : line('$').'zb')
+  call setpos('.', pos)
 endfunction
 
 function! s:sort(files, type) "{{{

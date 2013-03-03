@@ -504,9 +504,7 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir) "{{{
     call cursor(vimfiler#get_file_offset(), 0)
   endif
 
-  if line('.') < winheight(0)
-    normal! zb
-  endif
+  call vimfiler#helper#_set_cursor()
 endfunction"}}}
 
 function! vimfiler#mappings#search_cursor(path) "{{{
@@ -1308,7 +1306,7 @@ function! s:copy() "{{{
         \       s:get_action_current_dir(marked_files),
         \ })
   call s:clear_mark_all_lines()
-  silent call vimfiler#force_redraw_all_vimfiler(1)
+  call vimfiler#force_redraw_all_vimfiler(1)
 
   call s:search_new_file(old_files)
 endfunction"}}}
@@ -1346,7 +1344,7 @@ function! s:move() "{{{
         \       s:get_action_current_dir(marked_files),
         \ })
   call s:clear_mark_all_lines()
-  silent call vimfiler#force_redraw_all_vimfiler(1)
+  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:delete() "{{{
   let marked_files = vimfiler#get_marked_files()
@@ -1368,7 +1366,7 @@ function! s:delete() "{{{
         \       s:get_action_current_dir(marked_files),
         \ })
   call s:clear_mark_all_lines()
-  silent call vimfiler#force_redraw_all_vimfiler(1)
+  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:rename() "{{{
   let marked_files = vimfiler#get_marked_filenames()
@@ -1387,7 +1385,7 @@ function! s:rename() "{{{
         \ 'vimfiler__current_directory' :
         \       s:get_action_current_dir([file]),
         \ })
-  silent call vimfiler#force_redraw_all_vimfiler(1)
+  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:make_directory() "{{{
   let directory = vimfiler#get_file_directory()
@@ -1395,7 +1393,7 @@ function! s:make_directory() "{{{
         \ copy(vimfiler#get_current_vimfiler().current_files)
 
   call vimfiler#mappings#do_dir_action('vimfiler__mkdir', directory)
-  silent call vimfiler#force_redraw_all_vimfiler(1)
+  call vimfiler#force_redraw_all_vimfiler(1)
 
   call s:search_new_file(old_files)
 endfunction"}}}
@@ -1405,7 +1403,7 @@ function! s:new_file() "{{{
   call s:switch()
 
   call vimfiler#mappings#do_dir_action('vimfiler__newfile', directory)
-  silent call vimfiler#force_redraw_all_vimfiler(1)
+  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:clipboard_copy() "{{{
   let marked_files = vimfiler#get_marked_files()
@@ -1455,7 +1453,7 @@ function! s:clipboard_paste() "{{{
         \ 'action__directory' : dest_dir,
         \ 'vimfiler__current_directory' : dest_dir,
         \ })
-  silent call vimfiler#force_redraw_all_vimfiler(1)
+  call vimfiler#force_redraw_all_vimfiler(1)
 
   let b:vimfiler.clipboard = {}
 endfunction"}}}

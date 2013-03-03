@@ -116,14 +116,16 @@ function! vimfiler#view#_redraw_screen() "{{{
   let index = index(b:vimfiler.current_files, current_file)
   if index > 0
     call cursor(vimfiler#get_line_number(index), 0)
-  elseif line('.') == 1
+  elseif line('.') == 1 && last_line == 1
     " Initialize cursor position.
     call cursor(3, 0)
+  else
+    call cursor(last_line, 0)
   endif
 
   setlocal nomodifiable
 
-  if last_line != line('.')
+  if last_line != line('.') || (line('$') - line('.')) <= winheight(0)
     call vimfiler#helper#_set_cursor()
   endif
 
