@@ -994,6 +994,7 @@ CHANGELOG					*vimfiler-changelog*
 - Fixed syntax highlight.
 - Improved readonly highlight.
 - Fixed icon default value.
+- Fixed cursor position.
 
 2013-03-02
 - Improved redraw behavior.

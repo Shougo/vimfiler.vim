@@ -116,6 +116,9 @@ function! vimfiler#view#_redraw_screen() "{{{
   let index = index(b:vimfiler.current_files, current_file)
   if index > 0
     call cursor(vimfiler#get_line_number(index), 0)
+  elseif line('.') == 1
+    " Initialize cursor position.
+    call cursor(3, 0)
   endif
 
   setlocal nomodifiable
