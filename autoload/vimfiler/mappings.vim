@@ -1204,6 +1204,8 @@ function! s:sync_with_current_vimfiler() "{{{
     call vimfiler#mappings#create_another_vimfiler()
   endif
 
+  call vimfiler#helper#_set_cursor()
+
   wincmd p
   call cursor(line, 0)
   call vimfiler#redraw_screen()
