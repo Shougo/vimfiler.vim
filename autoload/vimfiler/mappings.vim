@@ -1157,6 +1157,7 @@ function! vimfiler#mappings#create_another_vimfiler() "{{{
         \ current_vimfiler.source.':'.
         \ current_vimfiler.current_dir, context)
   call cursor(line, 0)
+  call vimfiler#helper#_set_cursor()
 
   let b:vimfiler.another_vimfiler_bufnr = current_bufnr
   call vimfiler#set_current_vimfiler(b:vimfiler)
@@ -1194,20 +1195,19 @@ function! vimfiler#mappings#switch_another_vimfiler(...) "{{{
   call cursor(line, 0)
 endfunction"}}}
 function! s:sync_with_current_vimfiler() "{{{
-  let line = line('.')
-
   " Search vimfiler window.
+  let line = line('.')
   if vimfiler#exists_another_vimfiler()
     " Change another vimfiler directory.
     call vimfiler#mappings#switch_another_vimfiler(
           \ b:vimfiler.source . ':' . b:vimfiler.current_dir)
+    call cursor(line, 0)
   else
     call vimfiler#mappings#create_another_vimfiler()
   endif
 
-  call cursor(line, 0)
-
   wincmd p
+  call cursor(line, 0)
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:sync_with_another_vimfiler() "{{{

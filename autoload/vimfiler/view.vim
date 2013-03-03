@@ -124,12 +124,7 @@ function! vimfiler#view#_redraw_screen() "{{{
   setlocal nomodifiable
 
   if last_line != line('.')
-    let pos = getpos('.')
-
-    execute 'normal!' (line('.') <= winheight(0) ? 'zb' :
-          \ line('$') - line('.') > winheight(0) ? 'zz' : line('$').'zb')
-
-    call setpos('.', pos)
+    call vimfiler#helper#_set_cursor()
   endif
 
   if is_switch

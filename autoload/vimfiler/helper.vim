@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Feb 2013.
+" Last Modified: 03 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -154,6 +154,11 @@ function! vimfiler#helper#_get_file_directory(...) "{{{
 
   return directory
 endfunction"}}}
+
+function! vimfiler#helper#_set_cursor()
+  execute 'normal!' (line('.') <= winheight(0) ? 'zb' :
+        \ line('$') - line('.') > winheight(0) ? 'zz' : line('$').'zb')
+endfunction
 
 function! s:sort(files, type) "{{{
   if a:type =~? '^n\%[one]$'
