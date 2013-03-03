@@ -1163,8 +1163,6 @@ function! vimfiler#mappings#create_another_vimfiler() "{{{
 endfunction"}}}
 function! vimfiler#mappings#switch_another_vimfiler(...) "{{{
   let directory = get(a:000, 0, '')
-  let line = line('.')
-
   if vimfiler#winnr_another_vimfiler() > 0
     " Switch to another vimfiler window.
     execute vimfiler#winnr_another_vimfiler().'wincmd w'
@@ -1189,8 +1187,6 @@ function! vimfiler#mappings#switch_another_vimfiler(...) "{{{
           \ current_vimfiler.another_vimfiler_bufnr,
           \ context, directory)
   endif
-
-  call cursor(line, 0)
 endfunction"}}}
 function! s:sync_with_current_vimfiler() "{{{
   " Search vimfiler window.
