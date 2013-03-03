@@ -237,6 +237,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
   let max_len = winwidth(0) - padding
 
+  " Column region.
   let start = max_len + 1
   for column in columns
     if get(column, 'syntax', '') != ''
