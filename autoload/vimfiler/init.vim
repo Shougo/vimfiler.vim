@@ -111,6 +111,7 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
   let b:vimfiler.winwidth = winwidth(0)
   let b:vimfiler.another_vimfiler_bufnr = -1
+  let b:vimfiler.prompt_linenr = 1
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#default_settings()

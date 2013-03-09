@@ -100,17 +100,15 @@ function! vimfiler#view#_redraw_screen() "{{{
   let last_line = line('.')
 
   " Clean up the screen.
-  % delete _
+  if b:vimfiler.prompt_linenr + len(b:vimfiler.current_files) < line('$')
+    silent execute '$-'.(line('$')-b:vimfiler.prompt_linenr-
+          \ len(b:vimfiler.current_files)+1).',$delete _'
+  endif
 
   call vimfiler#view#_redraw_prompt()
 
-  if !vimfiler#get_context().explorer
-    " Append up directory.
-    call append('$', '..')
-  endif
-
   " Print files.
-  call append('$',
+  call setline(b:vimfiler.prompt_linenr + 1,
         \ vimfiler#view#_get_print_lines(b:vimfiler.current_files))
 
   let index = index(b:vimfiler.current_files, current_file)
@@ -205,6 +203,12 @@ function! vimfiler#view#_redraw_prompt() "{{{
     delete _
   else
     call setline(1, prefix .  dir . mask)
+  endif
+
+  if !vimfiler#get_context().explorer && getline(2) != '..'
+    " Append up directory.
+    call setline(2, '..')
+    let b:vimfiler.prompt_linenr = 2
   endif
 
   let &l:modifiable = modifiable_save
