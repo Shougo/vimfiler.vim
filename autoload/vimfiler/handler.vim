@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Feb 2013.
+" Last Modified: 09 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -184,8 +184,6 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
       execute winnr.'wincmd w'
     endif
   endtry
-
-  let b:hge = 2
 endfunction"}}}
 
 function! vimfiler#handler#_event_bufwin_leave(bufnr) "{{{
