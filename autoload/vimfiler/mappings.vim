@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Mar 2013.
+" Last Modified: 10 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -166,7 +166,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>cd_input_directory()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_double_click)
         \ :<C-u>call <SID>on_double_click()<CR>
-  nmap <buffer> <Plug>(vimfiler_quick_look)
+  nmap <buffer><silent> <Plug>(vimfiler_quick_look)
         \ :<C-u>call <SID>quick_look()<CR>
 
   if b:vimfiler.is_safe_mode
@@ -303,7 +303,12 @@ function! vimfiler#mappings#do_action(action, ...) "{{{
   let vimfiler = vimfiler#get_current_vimfiler()
   let marked_files = vimfiler#get_marked_files()
   if empty(marked_files)
-    let marked_files = [ vimfiler#get_file(cursor_linenr) ]
+    let file = vimfiler#get_file(cursor_linenr)
+    if empty(file)
+      return
+    endif
+
+    let marked_files = [ file ]
   endif
 
   call s:clear_mark_all_lines()
