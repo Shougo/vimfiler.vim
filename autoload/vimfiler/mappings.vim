@@ -53,6 +53,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>mark_similar_lines()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_clear_mark_all_lines)
         \ :<C-u>call <SID>clear_mark_all_lines()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_mark_current_line)
+        \ :<C-u>call <SID>mark_current_line()<CR>
   nmap <buffer><silent><expr> <Plug>(vimfiler_execute)
         \ vimfiler#mappings#smart_cursor_map(
         \  "\<Plug>(vimfiler_cd_file)",
@@ -622,6 +624,20 @@ function! s:toggle_mark_current_line(...) "{{{
   else
     execute 'normal!' map
   endif
+endfunction"}}}
+function! s:mark_current_line() "{{{
+  let file = vimfiler#get_file()
+  if empty(file)
+    " Don't toggle.
+    return
+  endif
+
+  let file.vimfiler__is_marked = 1
+  let file.vimfiler__marked_time = localtime()
+
+  setlocal modifiable
+  call setline('.', vimfiler#view#_get_print_lines([file]))
+  setlocal nomodifiable
 endfunction"}}}
 function! s:toggle_mark_all_lines() "{{{
   for file in vimfiler#get_current_vimfiler().current_files

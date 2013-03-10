@@ -504,6 +504,10 @@ Normal mode key mappings.
 				*<Plug>(vimfiler_clear_mark_all_lines)*
 		Clears marks in all lines.
 
+<Plug>(vimfiler_mark_current_line)
+				*<Plug>(vimfiler_mark_current_line)*
+		Mark in cursor line.
+
 <Plug>(vimfiler_copy_file)			*<Plug>(vimfiler_copy_file)*
 		Copies marked files to destination directory. If exists
 		another vimfiler buffer, destination directory is another
@@ -987,8 +991,18 @@ https://github.com/andreafrancia/trash-cli
 	$ sudo apt-get install trash-cli
 <
 
+Q: I want to move/copy/delete cursor file in one key.
+A: You should use |<Plug>(vimfiler_mark_current_line)|.
+>
+	nmap <buffer> c <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_copy_file)
+	nmap <buffer> m <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_move_file)
+	nmap <buffer> d <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_delete_file)
+<
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2013-03-10
+- Added <Plug>(vimfiler_mark_current_line).
 
 2013-03-09
 - Improved autocmd event.
