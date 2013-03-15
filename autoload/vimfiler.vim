@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Feb 2013.
+" Last Modified: 16 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -232,7 +232,7 @@ if !has_key(g:vimfiler_extensions, 'multimedia')
   call vimfiler#set_extensions('multimedia',
         \ 'avi,asf,wmv,mpg,flv,swf,divx,mov,mpa,m1a,'.
         \ 'm2p,m2a,mpeg,m1v,m2v,mp2v,mp4,qt,ra,rm,ram,'.
-        \ 'rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au'
+        \ 'rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au,flac'
         \ )
 endif
 "}}}
