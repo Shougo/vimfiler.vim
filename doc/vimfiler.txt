@@ -1001,6 +1001,9 @@ A: You should use |<Plug>(vimfiler_mark_current_line)|.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2013-03-20
+- Deleted vimfiler#util#smart_execute_command().
+
 2013-03-16
 - Fixed mark colors.
 
