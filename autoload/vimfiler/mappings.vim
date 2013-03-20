@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Mar 2013.
+" Last Modified: 20 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1163,14 +1163,18 @@ function! vimfiler#mappings#create_another_vimfiler() "{{{
 
   " Create another vimfiler.
   let context = deepcopy(vimfiler#get_context())
-  let context.split = 1
-  let context.double = 0
-  let context.create = 1
-  let context.direction = 'belowright'
+  if context.split || context.explorer
+    " Note: Horizontal automatically.
+    let context.horizontal = 1
+  endif
   if context.reverse
     " Reverse split direction.
     let context.horizontal = !context.horizontal
   endif
+  let context.split = 1
+  let context.double = 0
+  let context.create = 1
+  let context.direction = 'belowright'
 
   call vimfiler#start(
         \ current_vimfiler.source.':'.
