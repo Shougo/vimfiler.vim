@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Mar 2013.
+" Last Modified: 23 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -180,6 +180,18 @@ endfunction"}}}
 
 function! vimfiler#util#convert2list(expr) "{{{
   return type(a:expr) ==# type([]) ? a:expr : [a:expr]
+endfunction"}}}
+function! vimfiler#util#get_vimfiler_winnr(buffer_name) "{{{
+  for winnr in filter(range(1, winnr('$')),
+        \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'vimfiler'")
+    let buffer_context = getbufvar(
+          \ winbufnr(winnr), 'vimfiler').context
+    if buffer_context.profile_name ==# a:buffer_name
+      return winnr
+    endif
+  endfor
+
+  return -1
 endfunction"}}}
 
 let &cpo = s:save_cpo

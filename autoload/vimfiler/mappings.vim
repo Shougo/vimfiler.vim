@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Mar 2013.
+" Last Modified: 23 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -544,20 +544,7 @@ function! s:search_new_file(old_files) "{{{
 endfunction"}}}
 
 function! vimfiler#mappings#close(buffer_name) "{{{
-  let buffer_name = a:buffer_name
-  if buffer_name !~ '@\d\+$'
-    " Add postfix.
-    let prefix = vimfiler#util#is_windows() ?
-          \ '[vimfiler] - ' : '*vimfiler* - '
-    let prefix .= buffer_name
-    let buffer_name = prefix . vimfiler#init#_get_postfix(prefix, 0)
-  endif
-
-  " Note: must escape file-pattern.
-  let buffer_name =
-        \ vimfiler#util#escape_file_searching(buffer_name)
-
-  let quit_winnr = bufwinnr(buffer_name)
+  let quit_winnr = vimfiler#util#get_vimfiler_winnr(a:buffer_name)
   if quit_winnr > 0
     " Hide unite buffer.
     silent execute quit_winnr 'wincmd w'

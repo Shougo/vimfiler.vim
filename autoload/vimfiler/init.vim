@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Mar 2013.
+" Last Modified: 23 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -284,11 +284,8 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
   let context = vimfiler#initialize_context(a:context)
 
   if context.split
-    if context.horizontal
-      execute context.direction 'new'
-    else
-      execute context.direction 'vnew'
-    endif
+    execute context.direction
+          \ (context.horizontal ? 'split' : 'vsplit')
   endif
 
   execute 'buffer' . a:bufnr
