@@ -70,9 +70,9 @@ COMMANDS 					*vimfiler-commands*
 :VimFiler [{options}...] [[{source-name}:]{path}]
 						*:VimFiler*
 		Run vimfiler. This command reuses a buffer if a vimfiler
-		buffer already exists. If you ommit {path}, vimfiler opens current
+		buffer already exists. If you omit {path}, vimfiler opens current
 		directory. [[{source-name}:]{path}] arg is same as |:Unite|.
-		But you ommit source name, "file" source will be used.
+		But you omit source name, "file" source will be used.
 		If {path} is directory, browse in {path} directory files.
 		If {path} is file, edit {path} file.
 
@@ -574,7 +574,7 @@ Normal mode key mappings.
 <Plug>(vimfiler_execute_file)		*<Plug>(vimfiler_execute_file)*
 		Executes marked files or cursor file by system associated
 		command.
-		Note: <Plug>(vimfiler_execute_file) is obsolute name.
+		Note: <Plug>(vimfiler_execute_file) is obsolete name.
 
 <Plug>(vimfiler_execute_vimfiler_associated)
 				*<Plug>(vimfiler_execute_vimfiler_associated)*
@@ -733,7 +733,7 @@ Normal mode key mappings.
 		disabled.
 
 <Plug>(vimfiler_toggle_simple_mode)	*<Plug>(vimfiler_toggle_simple_mode)*
-		Toggles simple mode. In simple mode, dispayed information is
+		Toggles simple mode. In simple mode, displayed information is
 		simple.
 
 <Plug>(vimfiler_pushd)				*<Plug>(vimfiler_pushd)*
