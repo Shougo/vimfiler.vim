@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Mar 2013.
+" Last Modified: 29 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -239,12 +239,12 @@ function! vimfiler#view#_get_print_lines(files) "{{{
           \ len(line('$') + len(a:files))+1])
   endif
 
-  let max_len = winwidth(0) - padding
+  let max_len = max([max([winwidth(0), &winwidth]) - padding, 10])
 
   " Column region.
   let start = max_len + 1
   for column in columns
-    if get(column, 'syntax', '') != ''
+    if get(column, 'syntax', '') != '' && max_len > 0
       for [offset, syntax] in [
             \ [len(g:vimfiler_tree_opened_icon), 'vimfilerOpendFile'],
             \ [len(g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
