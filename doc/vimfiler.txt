@@ -998,6 +998,9 @@ A: You should use |<Plug>(vimfiler_mark_current_line)|.
 	nmap <buffer> m <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_move_file)
 	nmap <buffer> d <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_delete_file)
 <
+Q: What's the key to refresh the file list?
+A: It is |<Plug>(vimfiler_redraw_screen)|. It is mapped to <C-l> by default.
+
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
