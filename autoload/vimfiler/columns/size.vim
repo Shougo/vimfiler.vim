@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: size.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Mar 2013.
+" Last Modified: 30 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,7 +56,7 @@ function! s:column.get(file, context) "{{{
   let filesize = a:file.vimfiler__filesize
   if filesize < 0
     if a:file.action__path !~ '^\a\w\+:' &&
-          \ has('python') && getftype(a:file.action__path) !=# 'link'
+          \ has('python3') && getftype(a:file.action__path) !=# 'link'
       let pattern = s:get_python_file_size(a:file.action__path)
     elseif filesize == -2
       " Above 2GB?
@@ -96,8 +96,8 @@ function! s:column.get(file, context) "{{{
 endfunction"}}}
 
 function! s:get_python_file_size(filename) "{{{
-  " Use python.
-python <<END
+  " Use python3 interface.
+python3 <<END
 import os.path
 import vim
 try:
