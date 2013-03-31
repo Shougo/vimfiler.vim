@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Mar 2013.
+" Last Modified: 31 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -219,7 +219,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
     execute 'syntax clear' syntax
   endfor
 
-  let columns = b:vimfiler.columns
+  let columns = (b:vimfiler.context.simple) ? [] : b:vimfiler.columns
 
   let start = 0
   for column in columns

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Mar 2013.
+" Last Modified: 31 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -69,11 +69,6 @@ function! vimfiler#init#_initialize_context(context) "{{{
     let default_context.no_quit = 1
     let default_context.winwidth = 35
     let default_context.columns = g:vimfiler_explorer_columns
-  endif
-
-  if get(a:context, 'simple', 0)
-    " Disable columns.
-    let default_context.columns = ''
   endif
 
   let context = extend(default_context, a:context)
