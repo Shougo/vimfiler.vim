@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Mar 2013.
+" Last Modified: 01 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -296,7 +296,11 @@ function! vimfiler#view#_get_print_lines(files) "{{{
             \ column.get(file, b:vimfiler.context), column.vimfiler__length)
     endfor
 
-    call add(lines, substitute(line, '\s\+$', '', ''))
+    if line[-1] == ' '
+      let line = substitute(line, '\s\+$', '', '')
+    endif
+
+    call add(lines, line)
   endfor
 
   return lines

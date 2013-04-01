@@ -1004,6 +1004,9 @@ A: It is |<Plug>(vimfiler_redraw_screen)|. It is mapped to <C-l> by default.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2013-04-01
+- Optimized for files.
+
 2013-03-31
 - Fixed <Plug>(vimfiler_toggle_simple_mode) problem.
 
