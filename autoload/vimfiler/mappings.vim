@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Mar 2013.
+" Last Modified: 02 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1284,7 +1284,6 @@ function! s:split_edit_file() "{{{
   " Resize.
   execute 'vertical resize'
         \ (winnr('$') == 1 ? winwidth : winwidth/(winnr('$') - 1))
-  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 
 " File operations.
@@ -1316,7 +1315,6 @@ function! s:copy() "{{{
         \       s:get_action_current_dir(marked_files),
         \ })
   call s:clear_mark_all_lines()
-  call vimfiler#force_redraw_all_vimfiler(1)
 
   call s:search_new_file(old_files)
 endfunction"}}}
@@ -1354,7 +1352,6 @@ function! s:move() "{{{
         \       s:get_action_current_dir(marked_files),
         \ })
   call s:clear_mark_all_lines()
-  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:delete() "{{{
   let marked_files = vimfiler#get_marked_files()
@@ -1376,7 +1373,6 @@ function! s:delete() "{{{
         \       s:get_action_current_dir(marked_files),
         \ })
   call s:clear_mark_all_lines()
-  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:rename() "{{{
   let marked_files = vimfiler#get_marked_filenames()
@@ -1395,7 +1391,6 @@ function! s:rename() "{{{
         \ 'vimfiler__current_directory' :
         \       s:get_action_current_dir([file]),
         \ })
-  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:make_directory() "{{{
   let directory = vimfiler#get_file_directory()
@@ -1403,7 +1398,6 @@ function! s:make_directory() "{{{
         \ copy(vimfiler#get_current_vimfiler().current_files)
 
   call vimfiler#mappings#do_dir_action('vimfiler__mkdir', directory)
-  call vimfiler#force_redraw_all_vimfiler(1)
 
   call s:search_new_file(old_files)
 endfunction"}}}
@@ -1413,7 +1407,6 @@ function! s:new_file() "{{{
   call s:switch()
 
   call vimfiler#mappings#do_dir_action('vimfiler__newfile', directory)
-  call vimfiler#force_redraw_all_vimfiler(1)
 endfunction"}}}
 function! s:clipboard_copy() "{{{
   let marked_files = vimfiler#get_marked_files()
@@ -1463,7 +1456,6 @@ function! s:clipboard_paste() "{{{
         \ 'action__directory' : dest_dir,
         \ 'vimfiler__current_directory' : dest_dir,
         \ })
-  call vimfiler#force_redraw_all_vimfiler(1)
 
   let b:vimfiler.clipboard = {}
 endfunction"}}}
