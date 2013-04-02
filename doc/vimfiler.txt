@@ -1007,6 +1007,16 @@ CHANGELOG					*vimfiler-changelog*
 2013-04-02
 - Improved redraw behavior.
 
+2013-04-01
+- Optimized for files.
+
+2013-03-31
+- Fixed <Plug>(vimfiler_toggle_simple_mode) problem.
+
+2013-03-30
+- Use python3 interface.
+>>>>>>> 9d165154feb8ed6e3380e0fd13dc2ddce7b69c74
+
 2013-03-29
 - Improved max_width.
 
