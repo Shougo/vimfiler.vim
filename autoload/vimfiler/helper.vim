@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Mar 2013.
+" Last Modified: 06 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -100,7 +100,8 @@ function! vimfiler#helper#_complete(arglead, cmdline, cursorpos) "{{{
   let _ += vimfiler#complete_path(a:arglead,
         \ join(split(a:cmdline)[1:]), a:cursorpos)
 
-  let args = split(join(split(a:cmdline)[1:]), '\\\@<!\s\+')
+  let args = split(join(split(a:cmdline,
+        \ '\\\@<!\s\+')[1:]), '\\\@<!\s\+')
   if !empty(args) && args[-1] !=# a:arglead
     call map(_, "v:val[len(args[-1])-len(a:arglead) :]")
   endif
@@ -128,7 +129,8 @@ function! vimfiler#helper#_complete_path(arglead, cmdline, cursorpos) "{{{
     let _  = map(_, 'source_name.":".v:val')
   endif
 
-  let args = split(join(split(a:cmdline)[1:]), '\\\@<!\s\+')
+  let args = split(join(split(a:cmdline,
+        \ '\\\@<!\s\+')[1:]), '\\\@<!\s\+')
   if !empty(args) && args[-1] !=# a:arglead
     call map(_, "v:val[len(args[-1])-len(a:arglead) :]")
   endif

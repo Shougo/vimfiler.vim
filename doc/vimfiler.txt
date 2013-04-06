@@ -1006,6 +1006,7 @@ CHANGELOG					*vimfiler-changelog*
 
 2013-04-06
 - Fixed toggle tree recursive behavior.
+- Fixed filename completion behavior.
 
 2013-04-02
 - Improved redraw behavior.
