@@ -710,7 +710,7 @@ Normal mode key mappings.
 <Plug>(vimfiler_cd)				*<Plug>(vimfiler_cd)*
 		Changes system current directory to vimfiler current directory
 		using |g:unite_kind_openable_lcd_command|.
-		Note: |<Plug>(vimfiler_cd)| is obsolute name.
+		Note: |<Plug>(vimfiler_cd)| is obsolete name.
 
 <Plug>(vimfiler_cd_file)			*<Plug>(vimfiler_cd_file)*
 		Changes vimfiler current directory.
@@ -1006,6 +1006,9 @@ CHANGELOG					*vimfiler-changelog*
 
 2013-04-06
 - Fixed toggle tree recursive behavior.
+
+2013-04-02
+- Improved redraw behavior.
 
 2013-04-01
 - Optimized for files.
