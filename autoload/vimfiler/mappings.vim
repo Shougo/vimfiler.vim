@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Apr 2013.
+" Last Modified: 24 Apr 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -570,12 +570,18 @@ function! s:switch() "{{{
     if winnr < 0
       let winnr = context.vimfiler__prev_winnr
     endif
+
     if context.split
       wincmd w
     elseif winnr == winnr() || winnr < 0
       vnew
     else
       execute winnr 'wincmd w'
+    endif
+
+    if context.auto_cd
+      " Change current directory.
+      call s:change_vim_current_dir()
     endif
   elseif context.quit
     call s:exit()
@@ -1502,7 +1508,8 @@ function! s:execute_external_filer() "{{{
   call vimfiler#mappings#do_current_dir_action('vimfiler__execute')
 endfunction"}}}
 function! s:change_vim_current_dir() "{{{
-  if b:vimfiler.source !=# 'file'
+  let vimfiler = vimfiler#get_current_vimfiler()
+  if vimfiler.source !=# 'file'
     call vimfiler#print_error('Invalid operation in not file source.')
     return
   endif
@@ -1510,7 +1517,8 @@ function! s:change_vim_current_dir() "{{{
   " Initialize load.
   call unite#kinds#openable#define()
 
-  execute g:unite_kind_openable_lcd_command '`=b:vimfiler.current_dir`'
+  execute g:unite_kind_openable_lcd_command
+        \ fnameescape(vimfiler.current_dir)
 endfunction"}}}
 function! s:grep() "{{{
   if !vimfiler#util#has_vimproc()
