@@ -1002,7 +1002,7 @@ A: You should use |<Plug>(vimfiler_mark_current_line)|.
 Q: What's the key to refresh the file list?
 A: It is |<Plug>(vimfiler_redraw_screen)|. It is mapped to <C-l> by default.
 
-Q: I want to change Vim current directory when editting file using vimfiler.
+Q: I want to change Vim current directory when editing file using vimfiler.
 A: Set |g:vimfiler_enable_auto_cd| to 1, or use |vimfiler-options-auto-cd|
 option.
 
