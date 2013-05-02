@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Apr 2013.
+" Last Modified: 02 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -246,13 +246,17 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   for column in columns
     if get(column, 'syntax', '') != '' && max_len > 0
       for [offset, syntax] in [
-            \ [len(g:vimfiler_tree_opened_icon), 'vimfilerOpendFile'],
-            \ [len(g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
-            \ [len(g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
-            \ [len(g:vimfiler_file_icon), 'vimfilerNormalFile']]
+            \ [vimfiler#util#wcswidth(
+            \  g:vimfiler_tree_opened_icon), 'vimfilerOpendFile'],
+            \ [vimfiler#util#wcswidth(
+            \  g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
+            \ [vimfiler#util#wcswidth(
+            \  g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
+            \ [vimfiler#util#wcswidth(
+            \  g:vimfiler_file_icon), 'vimfilerNormalFile']]
         execute 'syntax region' column.syntax 'start=''\%'.(start+offset).
-              \ 'c'' end=''\%'.(start + column.vimfiler__length+offset).
-              \ 'c'' contained keepend containedin='.syntax
+              \ 'v'' end=''\%'.(start + column.vimfiler__length+offset).
+              \ 'v'' contained keepend containedin='.syntax
       endfor
 
       call add(b:vimfiler.syntaxes, column.syntax)
