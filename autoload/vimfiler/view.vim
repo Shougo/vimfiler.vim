@@ -258,7 +258,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
               \ (v:version >= 703 ? 'v' : 'c').
               \ ''' end=''\%'.(start + column.vimfiler__length+offset).
               \ (v:version >= 703 ? 'v' : 'c').
-              \ ''' contained keepend containedin='.syntax
+              \ ''' contained keepend containedin=vimfilerMarkedFile,'.syntax
       endfor
 
       call add(b:vimfiler.syntaxes, column.syntax)

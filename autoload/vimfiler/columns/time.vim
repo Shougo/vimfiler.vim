@@ -44,15 +44,15 @@ endfunction"}}}
 function! s:column.define_syntax(context) "{{{
   syntax match   vimfilerColumn__TimeNormal
         \ '#[^#]\+' contained
-        \ containedin=vimfilerColumn__Time,vimfilerMarkedFile
+        \ containedin=vimfilerColumn__Time
         \ contains=vimfilerColumn__TimeIgnore
   syntax match   vimfilerColumn__TimeToday
         \ '\~[^~]\+' contained
-        \ containedin=vimfilerColumn__Time,vimfilerMarkedFile
+        \ containedin=vimfilerColumn__Time
         \ contains=vimfilerColumn__TimeIgnore
   syntax match   vimfilerColumn__TimeWeek
         \ '![^!]\+' contained
-        \ containedin=vimfilerColumn__Time,vimfilerMarkedFile
+        \ containedin=vimfilerColumn__Time
         \ contains=vimfilerColumn__TimeIgnore
 
   if has('conceal')
