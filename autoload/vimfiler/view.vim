@@ -255,8 +255,10 @@ function! vimfiler#view#_get_print_lines(files) "{{{
             \ [vimfiler#util#wcswidth(
             \  g:vimfiler_file_icon), 'vimfilerNormalFile']]
         execute 'syntax region' column.syntax 'start=''\%'.(start+offset).
-              \ 'v'' end=''\%'.(start + column.vimfiler__length+offset).
-              \ 'v'' contained keepend containedin='.syntax
+              \ (v:version >= 703 ? 'v' : 'c').
+              \ ''' end=''\%'.(start + column.vimfiler__length+offset).
+              \ (v:version >= 703 ? 'v' : 'c').
+              \ ''' contained keepend containedin='.syntax
       endfor
 
       call add(b:vimfiler.syntaxes, column.syntax)

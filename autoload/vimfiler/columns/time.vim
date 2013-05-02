@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: time.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Feb 2013.
+" Last Modified: 02 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,13 +43,16 @@ endfunction"}}}
 
 function! s:column.define_syntax(context) "{{{
   syntax match   vimfilerColumn__TimeNormal
-        \ '#[^#]\+' contained containedin=vimfilerColumn__Time
+        \ '#[^#]\+' contained
+        \ containedin=vimfilerColumn__Time,vimfilerMarkedFile
         \ contains=vimfilerColumn__TimeIgnore
   syntax match   vimfilerColumn__TimeToday
-        \ '\~[^~]\+' contained containedin=vimfilerColumn__Time
+        \ '\~[^~]\+' contained
+        \ containedin=vimfilerColumn__Time,vimfilerMarkedFile
         \ contains=vimfilerColumn__TimeIgnore
   syntax match   vimfilerColumn__TimeWeek
-        \ '![^!]\+' contained containedin=vimfilerColumn__Time
+        \ '![^!]\+' contained
+        \ containedin=vimfilerColumn__Time,vimfilerMarkedFile
         \ contains=vimfilerColumn__TimeIgnore
 
   if has('conceal')
