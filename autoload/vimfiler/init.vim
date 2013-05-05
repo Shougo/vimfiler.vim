@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Mar 2013.
+" Last Modified: 05 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -321,34 +321,33 @@ function! s:create_vimfiler_buffer(path, context) "{{{
     let path = vimfiler#util#substitute_path_separator(getcwd())
   endif
 
-  if a:context.project
+  let context = a:context
+
+  if context.project
     let path = vimfiler#util#path2project_directory(path)
   endif
 
   if &l:modified && !&l:hidden
     " Split automatically.
-    let a:context.split = 1
+    let context.split = 1
   endif
 
   " Create new buffer name.
   let prefix = vimfiler#util#is_windows() ?
         \ '[vimfiler] - ' : '*vimfiler* - '
-  let prefix .= a:context.profile_name
+  let prefix .= context.profile_name
 
   let postfix = vimfiler#init#_get_postfix(prefix, 1)
 
   let bufname = prefix . postfix
 
   " Set buffer_name.
-  let a:context.profile_name = a:context.buffer_name
-  let a:context.buffer_name = bufname
+  let context.profile_name = context.buffer_name
+  let context.buffer_name = bufname
 
-  if a:context.split
-    if a:context.horizontal
-      execute a:context.direction 'new'
-    else
-      execute a:context.direction 'vnew'
-    endif
+  if context.split
+    execute context.direction
+          \ (context.horizontal ? 'split' : 'vsplit')
   endif
 
   " Save swapfile option.
@@ -369,10 +368,10 @@ function! s:create_vimfiler_buffer(path, context) "{{{
     return
   endif
 
-  let a:context.path = path
+  let context.path = path
   " echomsg path
 
-  call vimfiler#handler#_event_handler('BufReadCmd', a:context)
+  call vimfiler#handler#_event_handler('BufReadCmd', context)
 
   call vimfiler#handler#_event_bufwin_enter(bufnr('%'))
 endfunction"}}}
