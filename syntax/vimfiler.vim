@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Mar 2013.
+" Last Modified: 08 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -29,18 +29,6 @@ if version < 700
 elseif exists('b:current_syntax')
   finish
 endif
-
-syntax match   vimfilerDirectory         '^..$'
-
-syntax match   vimfilerPrompt            '^\[in\]: .*$'
-      \ contains=vimfilerSpecial,vimfilerCurrentDirectory
-syntax match   vimfilerPromptUnSafe        '^! \[in\]: .*$'
-      \ contains=vimfilerSpecial,vimfilerSpecialUnSafe,vimfilerCurrentDirectory
-syntax match   vimfilerSpecialUnSafe       '^! ' contained
-syntax match   vimfilerSpecial           '\[in\]:' contained
-syntax match   vimfilerCurrentDirectory  '\s\zs.*$' contained contains=vimfilerMask
-syntax match   vimfilerMask  '\[.*\]$' contained
-syntax match   vimfilerFileLine          '\[.*\]$' contained
 
 " Initialize icon patterns."{{{
 let s:leaf_icon = vimfiler#util#escape_pattern(
@@ -85,11 +73,7 @@ unlet s:file_icon
 unlet s:marked_file_icon
 "}}}
 
-highlight def link vimfilerCurrentDirectory Identifier
-highlight def link vimfilerMask Statement
-
-highlight def link vimfilerSpecial Special
-highlight def link vimfilerSpecialUnSafe Statement
+syntax match   vimfilerDirectory         '^..$'
 
 highlight def link vimfilerNonMark Special
 highlight def link vimfilerMarkedFile Type

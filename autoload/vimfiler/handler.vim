@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 May 2013.
+" Last Modified: 08 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -179,6 +179,8 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
         call vimfiler#view#_redraw_screen()
       endif
     endif
+
+    call s:restore_statusline()
   finally
     if exists('winnr')
       execute winnr.'wincmd w'
@@ -199,6 +201,17 @@ function! vimfiler#handler#_event_bufwin_leave(bufnr) "{{{
     let &l:winfixwidth = context.vimfiler__winfixwidth
   elseif context.winheight != 0 && context.split
     let &l:winfixheight = context.vimfiler__winfixheight
+  endif
+endfunction"}}}
+
+function! s:restore_statusline()  "{{{
+  if &filetype !=# 'vimfiler' || !g:vimfiler_force_overwrite_statusline
+    return
+  endif
+
+  if &l:statusline != b:vimfiler.statusline
+    " Restore statusline.
+    let &l:statusline = b:vimfiler.statusline
   endif
 endfunction"}}}
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 May 2013.
+" Last Modified: 08 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -116,7 +116,7 @@ function! vimfiler#view#_redraw_screen() "{{{
     call cursor(vimfiler#get_line_number(index), 0)
   elseif line('.') == 1 && last_line == 1
     " Initialize cursor position.
-    call cursor(3, 0)
+    call cursor(b:vimfiler.prompt_linenr+1, 0)
   else
     call cursor(last_line, 0)
   endif
@@ -168,17 +168,13 @@ function! vimfiler#view#_redraw_prompt() "{{{
     return
   endif
 
-  let modifiable_save = &l:modifiable
-  setlocal modifiable
   let mask = !b:vimfiler.is_visible_dot_files
         \ && b:vimfiler.current_mask == '' ?
         \ '' : '[' . (b:vimfiler.is_visible_dot_files ? '.:' : '')
         \       . b:vimfiler.current_mask . ']'
 
-  let prefix = printf('%s[in]: %s',
-        \ (b:vimfiler.is_safe_mode ? '' : '! '),
-        \ (b:vimfiler.source ==# 'file' ? '' :
-        \                 b:vimfiler.source.':'))
+  let prefix = (b:vimfiler.is_safe_mode ? '[safe] ' : '') .
+        \ (b:vimfiler.source ==# 'file' ? '' : b:vimfiler.source.':')
 
   let dir = b:vimfiler.current_dir
   if b:vimfiler.source ==# 'file'
@@ -195,23 +191,26 @@ function! vimfiler#view#_redraw_prompt() "{{{
   if dir !~ '/$'
     let dir .= '/'
   endif
-
-  if line('$') == 1
-    " Note: Dirty Hack for open file.
-    call append(1, '')
-    call setline(2, prefix .  dir . mask)
-    delete _
-  else
-    call setline(1, prefix .  dir . mask)
-  endif
+  let b:vimfiler.status = prefix .  dir . mask
 
   if !vimfiler#get_context().explorer && getline(2) != '..'
     " Append up directory.
-    call setline(2, '..')
-    let b:vimfiler.prompt_linenr = 2
-  endif
+    let modifiable_save = &l:modifiable
+    setlocal modifiable
 
-  let &l:modifiable = modifiable_save
+    if line('$') == 1
+      " Note: Dirty Hack for open file.
+      call append(1, '')
+      call setline(2, '..')
+      delete _
+    else
+      call setline(1, '..')
+    endif
+
+    let b:vimfiler.prompt_linenr = 1
+
+    let &l:modifiable = modifiable_save
+  endif
 endfunction"}}}
 function! vimfiler#view#_get_print_lines(files) "{{{
   " Clear previous syntax.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Apr 2013.
+" Last Modified: 08 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -69,6 +69,8 @@ let g:vimfiler_max_directories_history =
       \ get(g:, 'vimfiler_max_directories_history', 50)
 let g:vimfiler_safe_mode_by_default =
       \ get(g:, 'vimfiler_safe_mode_by_default', 1)
+let g:vimfiler_force_overwrite_statusline =
+      \ get(g:, 'vimfiler_force_overwrite_statusline', 1)
 let g:vimfiler_time_format =
       \ get(g:, 'vimfiler_time_format', '%y/%m/%d %H:%M')
 let g:vimfiler_tree_leaf_icon =

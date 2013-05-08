@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Mar 2013.
+" Last Modified: 08 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -76,6 +76,13 @@ endfunction"}}}
 function! vimfiler#smart_cursor_map(directory_map, file_map) "{{{
   return vimfiler#mappings#smart_cursor_map(a:directory_map, a:file_map)
 endfunction"}}}
+function! vimfiler#get_status_string() "{{{
+  if !exists('b:vimfiler')
+    return ''
+  endif
+
+  return !exists('b:vimfiler') ? '' : b:vimfiler.status
+endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions. "{{{
@@ -131,14 +138,13 @@ function! vimfiler#get_escaped_marked_files() "{{{
 endfunction"}}}
 function! vimfiler#get_filename(...) "{{{
   let line_num = get(a:000, 0, line('.'))
-  return line_num == 1 ? '' :
-   \ getline(line_num) == '..' ? '..' :
+  return getline(line_num) == '..' ? '..' :
    \ b:vimfiler.current_files[vimfiler#get_file_index(line_num)].action__path
 endfunction"}}}
 function! vimfiler#get_file(...) "{{{
   let line_num = get(a:000, 0, line('.'))
   let vimfiler = vimfiler#get_current_vimfiler()
-  let index = vimfiler#get_file_index(line_num)
+  let index = vimfiler#get_file_index(line_num) - 1
   return index < 0 ? {} :
         \ get(vimfiler.current_files, index, {})
 endfunction"}}}
@@ -152,11 +158,11 @@ function! vimfiler#get_original_file_index(line_num) "{{{
   return index(b:vimfiler.original_files, vimfiler#get_file(a:line_num))
 endfunction"}}}
 function! vimfiler#get_line_number(index) "{{{
-  return a:index + vimfiler#get_file_offset()
+  return a:index + vimfiler#get_file_offset() + 1
 endfunction"}}}
 function! vimfiler#get_file_offset() "{{{
-  let offset = vimfiler#get_context().explorer ?  2 : 3
-  return offset
+  let vimfiler = vimfiler#get_current_vimfiler()
+  return vimfiler.prompt_linenr
 endfunction"}}}
 function! vimfiler#force_redraw_all_vimfiler(...) "{{{
   return call('vimfiler#view#_force_redraw_all_vimfiler', a:000)

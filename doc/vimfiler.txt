@@ -245,6 +245,11 @@ vimfiler#smart_cursor_map({directory-map}, {file-map})
 				\  "\<Plug>(vimfiler_edit_file)")
 
 vimfiler#set_execute_file({exts}, {command})	*vimfiler#set_execute_file()*
+	Todo
+
+vimfiler#get_status_string()			 *vimfiler#get_status_string()*
+		Returns vimfiler status string. It is useful to custom
+		statusline.
 
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
@@ -368,6 +373,15 @@ g:vimfiler_enable_auto_cd			*g:vimfiler_enable_auto_cd*
 		Note: This variable works in file source.
 		
 		Default value is 0
+
+					*g:vimfiler_force_overwrite_statusline*
+g:vimfiler_force_overwrite_statusline
+		If this variable is 1, vimfiler will overwrite 'statusline'
+		automatically.
+		Note: If you want to change 'statusline' in vimfiler buffer,
+		you must set it to 0.
+
+		The default value is 1.
 
 g:vimfiler_no_default_key_mappings	*g:vimfiler_no_default_key_mappings*
 		If it is non-zero, will disable vimfiler default
@@ -1006,8 +1020,27 @@ Q: I want to change Vim current directory when editing file using vimfiler.
 A: Set |g:vimfiler_enable_auto_cd| to 1, or use |vimfiler-options-auto-cd|
 option.
 
+Q: vimfiler statusline conflicts with powerline.
+https://github.com/Lokaltog/powerline
+https://github.com/Lokaltog/vim-powerline (deprecated)
+
+A: You must set |g:vimfiler_force_overwrite_statusline| to 0.
+>
+	let g:vimfiler_force_overwrite_statusline = 0
+<
+
+And you must install below custom theme for powerline.
+
+For powerline:
+
+1. vim powerline local themes
+https://github.com/zhaocai/linepower.vim
+
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2013-05-08
+- Implemented statusline for vimfiler.
 
 2013-05-02
 - Fixed column region.

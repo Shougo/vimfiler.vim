@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 24 Apr 2013.
+" Last Modified: 08 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -36,7 +36,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   " Plugin keymappings "{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)
         \ (line('.') == line('$'))?
-        \  vimfiler#get_file_offset().'Gzb' : 'j'
+        \  (vimfiler#get_file_offset()+1).'Gzb' : 'j'
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_up)
         \ (line('.') == 1)? 'G' : 'k'
   nnoremap <buffer><silent> <Plug>(vimfiler_redraw_screen)
@@ -145,21 +145,17 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>popd()<CR>
   if a:context.explorer
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
-          \ line('.') == 1 ? 'h' :
-          \  ":\<C-u>call \<SID>unexpand_tree()\<CR>"
+          \ ":\<C-u>call \<SID>unexpand_tree()\<CR>"
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
-          \ line('.') == 1 ? 'l' :
-          \  ":\<C-u>call \<SID>expand_tree()\<CR>"
+          \ ":\<C-u>call \<SID>expand_tree()\<CR>"
   else
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
-          \ line('.') == 1 ? 'h' :
-          \  ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
+          \ ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
-          \ line('.') == 1 ? 'l' :
-          \  ":\<C-u>call \<SID>execute()\<CR>"
+          \ ":\<C-u>call \<SID>execute()\<CR>"
   endif
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_cursor_top)
-        \ vimfiler#get_file_offset().'Gzb'
+        \ (vimfiler#get_file_offset()+1).'Gzb'
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree)
         \ :<C-u>call <SID>toggle_tree()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree_recursive)
@@ -508,7 +504,7 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir) "{{{
   elseif has_key(b:vimfiler.directory_cursor_pos, a:fullpath)
     call setpos('.', b:vimfiler.directory_cursor_pos[a:fullpath])
   else
-    call cursor(vimfiler#get_file_offset(), 0)
+    call cursor(vimfiler#get_file_offset()+1, 0)
   endif
 
   call vimfiler#helper#_set_cursor()
@@ -695,8 +691,7 @@ function! s:execute() "{{{
   let file = vimfiler#get_file()
   return  filename == '..' || empty(file)
         \ || file.vimfiler__is_directory ?
-        \ s:cd_file_directory() :
-        \ s:execute_vimfiler_associated()
+        \ s:cd_file_directory() : s:execute_vimfiler_associated()
 endfunction"}}}
 function! s:execute_vimfiler_associated() "{{{
   call unite#start(['vimfiler/execute'],
@@ -1553,19 +1548,7 @@ endfunction"}}}
 function! s:cd_file_directory() "{{{
   let filename = vimfiler#get_filename()
 
-  if filename == '..'
-  elseif empty(vimfiler#get_file())
-    let line = getline('.')
-    let cursor_line = matchstr(line[: col('.') - 1], '\[in\]: \zs.*')
-    if cursor_line == ''
-      return
-    endif
-
-    " Change current directory.
-    let cursor_next = matchstr(line[col('.') :], '.\{-}\ze[/\\]')
-
-    let filename = cursor_line . cursor_next
-  else
+  if filename != '..'
     let filename = vimfiler#util#resolve(
           \ vimfiler#get_file().action__path)
   endif
