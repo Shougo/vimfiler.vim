@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 May 2013.
+" Last Modified: 09 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -73,7 +73,17 @@ unlet s:file_icon
 unlet s:marked_file_icon
 "}}}
 
+syntax match   vimfilerStatus            '^\%1l\[in\]: \%(\[unsafe\]\)\?'
+      \ nextgroup=vimfilerCurrentDirectory
+syntax match   vimfilerCurrentDirectory  '.*$'
+      \ contained contains=vimfilerMask
+syntax match   vimfilerMask  '\[.*\]$' contained
+
 syntax match   vimfilerDirectory         '^..$'
+
+highlight def link vimfilerStatus Special
+highlight def link vimfilerCurrentDirectory Identifier
+highlight def link vimfilerMask Statement
 
 highlight def link vimfilerNonMark Special
 highlight def link vimfilerMarkedFile Type

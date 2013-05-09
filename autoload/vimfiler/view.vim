@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 May 2013.
+" Last Modified: 09 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -193,21 +193,31 @@ function! vimfiler#view#_redraw_prompt() "{{{
   endif
   let b:vimfiler.status = prefix .  dir . mask
 
-  if !vimfiler#get_context().explorer && getline(2) != '..'
+  let context = vimfiler#get_context()
+
+  if !context.explorer
     " Append up directory.
     let modifiable_save = &l:modifiable
     setlocal modifiable
 
-    if line('$') == 1
-      " Note: Dirty Hack for open file.
-      call append(1, '')
-      call setline(2, '..')
-      delete _
-    else
-      call setline(1, '..')
+    if getline(b:vimfiler.prompt_linenr) != '..'
+      if line('$') == 1
+        " Note: Dirty Hack for open file.
+        call append(1, '')
+        call setline(2, '..')
+        delete _
+      else
+        call setline(1, '..')
+      endif
     endif
 
-    let b:vimfiler.prompt_linenr = 1
+    if context.status
+      if getline(1) == '..'
+        call append(0, '[in]: ' . b:vimfiler.status)
+      else
+        call setline(0, '[in]: ' . b:vimfiler.status)
+      endif
+    endif
 
     let &l:modifiable = modifiable_save
   endif

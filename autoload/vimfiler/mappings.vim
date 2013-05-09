@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 May 2013.
+" Last Modified: 09 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1546,15 +1546,8 @@ function! s:find() "{{{
   call vimfiler#mappings#do_current_dir_action('find')
 endfunction"}}}
 function! s:cd_file_directory() "{{{
-  let filename = vimfiler#get_filename()
-
-  if filename != '..'
-    let filename = vimfiler#util#resolve(
-          \ vimfiler#get_file().action__path)
-  endif
-
   " Change directory.
-  call vimfiler#mappings#cd(filename)
+  call vimfiler#mappings#cd(vimfiler#get_filename())
 endfunction"}}}
 function! s:cd_input_directory() "{{{
   let vimfiler = vimfiler#get_current_vimfiler()

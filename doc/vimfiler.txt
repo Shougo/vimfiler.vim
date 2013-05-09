@@ -176,6 +176,10 @@ COMMANDS 					*vimfiler-commands*
 		Specify vimfiler columns. If omit it,
 		|g:vimfiler_default_columns| will be used.
 
+						*vimfiler-options-status*
+		-status
+		Display status line in vimfiler buffer.
+
 :VimFilerCreate [{options}...] [{path}]		*:VimFilerCreate*
 		Equivalent to |:VimFiler| except that it creates a new vimfiler
 		buffer.
@@ -1036,8 +1040,18 @@ For powerline:
 1. vim powerline local themes
 https://github.com/zhaocai/linepower.vim
 
+Q: I want to display vimfiler status in vimfiler buffer.
+
+A: You can enable status line by |vimfiler-options-status|.
+>
+	VimFiler -status
+<
+
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2013-05-09
+- Added -status option.
 
 2013-05-08
 - Implemented statusline for vimfiler.
