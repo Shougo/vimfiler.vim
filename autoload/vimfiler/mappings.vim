@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 May 2013.
+" Last Modified: 12 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -179,7 +179,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
     return
   endif
 
-  if a:context.split && a:context.no_quit
+  if a:context.split || a:context.no_quit || a:context.explorer
     " Change default mapping.
     nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_other_window)
   else
@@ -975,13 +975,11 @@ function! s:unexpand_tree() "{{{
   let file.vimfiler__is_opened = 0
   call setline('.', vimfiler#view#_get_print_lines([file]))
 
-  let index = vimfiler#get_file_index(line('.'))
-  let index_orig = vimfiler#get_original_file_index(line('.'))
-
   " Unexpand tree.
   let nestlevel = file.vimfiler__nest_level
 
   " Search children.
+  let index = vimfiler#get_file_index(line('.'))
   let end = index
   for file in b:vimfiler.current_files[index+1 :]
     if file.vimfiler__nest_level <= nestlevel
@@ -991,21 +989,22 @@ function! s:unexpand_tree() "{{{
     let end += 1
   endfor
 
-  let end_orig = index_orig
-  for file in b:vimfiler.original_files[index_orig+1 :]
-    if file.vimfiler__nest_level <= nestlevel
-      break
-    endif
-
-    let end_orig += 1
-  endfor
-
   if end - index > 0
+    let index_orig = vimfiler#get_original_file_index(line('.'))
+    let end_orig = index_orig
+    for file in b:vimfiler.original_files[index_orig+1 :]
+      if file.vimfiler__nest_level <= nestlevel
+        break
+      endif
+
+      let end_orig += 1
+    endfor
+
     " Delete children.
     let b:vimfiler.current_files = b:vimfiler.current_files[: index]
           \ + b:vimfiler.current_files[end+1 :]
     let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
-          \ + b:vimfiler.current_files[end_orig+1 :]
+          \ + b:vimfiler.original_files[end_orig+1 :]
     let pos = getpos('.')
     silent execute (line('.')+1).','.(vimfiler#get_line_number(end)).'delete _'
     call setpos('.', pos)
