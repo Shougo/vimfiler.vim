@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Apr 2013.
+" Last Modified: 14 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -164,15 +164,22 @@ function! vimfiler#util#alternate_buffer() "{{{
 endfunction"}}}
 function! vimfiler#util#delete_buffer(...) "{{{
   let context = vimfiler#get_context()
-  let bufnr = get(a:000, 0, bufnr('%'))
+  let delete_bufnr = get(a:000, 0, bufnr('%'))
 
   if winnr('$') != 1 && (context.split || context.toggle
         \ || vimfiler#exists_another_vimfiler())
-    close
+    " Move to delete buffer window.
+    let current_bufnr = winbufnr(winnr())
+    try
+      execute bufwinnr(delete_bufnr).'wincmd w'
+      close
+    finally
+      execute bufwinnr(current_bufnr).'wincmd w'
+    endtry
   else
     call vimfiler#util#alternate_buffer()
   endif
-  execute 'silent bdelete!' bufnr
+  execute 'silent bdelete!' delete_bufnr
 endfunction"}}}
 function! s:buflisted(bufnr) "{{{
   return exists('t:unite_buffer_dictionary') ?

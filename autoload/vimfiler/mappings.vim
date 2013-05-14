@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 May 2013.
+" Last Modified: 14 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -312,7 +312,7 @@ function! vimfiler#mappings#do_action(action, ...) "{{{
   call s:clear_mark_all_lines()
 
   if vimfiler.context.quit
-    call s:exit()
+    call s:exit(vimfiler)
   endif
 
   return vimfiler#mappings#do_files_action(
@@ -561,30 +561,30 @@ endfunction"}}}
 
 function! s:switch() "{{{
   let context = vimfiler#get_context()
-  if context.no_quit
-    let vimfiler = vimfiler#get_current_vimfiler()
+  if !context.no_quit
+    return
+  endif
 
-    call vimfiler#set_current_vimfiler(vimfiler)
+  let vimfiler = vimfiler#get_current_vimfiler()
 
-    let winnr = bufwinnr(context.vimfiler__prev_bufnr)
-    if winnr < 0
-      let winnr = context.vimfiler__prev_winnr
-    endif
+  call vimfiler#set_current_vimfiler(vimfiler)
 
-    if context.split
-      wincmd w
-    elseif winnr == winnr() || winnr < 0
-      vnew
-    else
-      execute winnr 'wincmd w'
-    endif
+  let winnr = bufwinnr(context.vimfiler__prev_bufnr)
+  if winnr < 0
+    let winnr = context.vimfiler__prev_winnr
+  endif
 
-    if context.auto_cd
-      " Change current directory.
-      call s:change_vim_current_dir()
-    endif
-  elseif context.quit
-    call s:exit()
+  if context.split
+    wincmd w
+  elseif winnr == winnr() || winnr < 0
+    vnew
+  else
+    execute winnr 'wincmd w'
+  endif
+
+  if context.auto_cd
+    " Change current directory.
+    call s:change_vim_current_dir()
   endif
 endfunction"}}}
 function! s:toggle_mark_current_line(...) "{{{
@@ -1119,15 +1119,14 @@ function! s:hide() "{{{
     call vimfiler#util#alternate_buffer()
   endif
 endfunction"}}}
-function! s:exit() "{{{
-  if vimfiler#winnr_another_vimfiler() > 0
-    let bufnr = b:vimfiler.another_vimfiler_bufnr
+function! s:exit(vimfiler) "{{{
+  let another_bufnr = a:vimfiler.another_vimfiler_bufnr
+  call vimfiler#util#delete_buffer(a:vimfiler.bufnr)
+
+  if another_bufnr > 0
     " Exit another vimfiler.
-    call vimfiler#util#delete_buffer()
-    execute bufwinnr(bufnr).'wincmd w'
-    call vimfiler#util#delete_buffer()
-  else
-    call vimfiler#util#delete_buffer()
+    execute bufwinnr(another_bufnr).'wincmd w'
+    call vimfiler#util#delete_buffer(another_bufnr)
   endif
 endfunction"}}}
 function! s:close() "{{{
