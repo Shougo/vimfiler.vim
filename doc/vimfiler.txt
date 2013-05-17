@@ -1050,6 +1050,9 @@ A: You can enable status line by |vimfiler-options-status|.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2013-05-17
+- Fixed <Plug>(vimfiler_exit).
+
 2013-05-14
 - Fixed vimfiler#util#delete_buffer().
 

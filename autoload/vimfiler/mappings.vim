@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 May 2013.
+" Last Modified: 17 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,7 +92,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_hide)
         \ :<C-u>call <SID>hide()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_exit)
-        \ :<C-u>call <SID>exit()<CR>
+        \ :<C-u>call <SID>exit(b:vimfiler)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_close)
         \ :<C-u>call <SID>close()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_help)
