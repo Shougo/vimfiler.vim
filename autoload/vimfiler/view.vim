@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 May 2013.
+" Last Modified: 20 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -105,7 +105,7 @@ function! vimfiler#view#_redraw_screen() "{{{
           \ len(b:vimfiler.current_files)+1).',$delete _'
   endif
 
-  call vimfiler#view#_redraw_prompt()
+  call s:redraw_prompt()
 
   " Print files.
   call setline(b:vimfiler.prompt_linenr + 1,
@@ -163,7 +163,7 @@ function! vimfiler#view#_redraw_all_vimfiler() "{{{
 
   execute current_nr . 'wincmd w'
 endfunction"}}}
-function! vimfiler#view#_redraw_prompt() "{{{
+function! s:redraw_prompt() "{{{
   if &filetype !=# 'vimfiler'
     return
   endif
@@ -204,7 +204,7 @@ function! vimfiler#view#_redraw_prompt() "{{{
       " Note: Dirty Hack for open file.
       call append(1, '')
       call setline(2, '..')
-      delete _
+      silent delete _
     else
       call setline(1, '..')
     endif
@@ -220,7 +220,7 @@ function! vimfiler#view#_redraw_prompt() "{{{
 
   if context.explorer
     " Delete prompt
-    1,2delete _
+    silent 1,2delete _
   endif
 
   let &l:modifiable = modifiable_save

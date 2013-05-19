@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 17 May 2013.
+" Last Modified: 20 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1609,7 +1609,7 @@ endfunction"}}}
 function! s:toggle_safe_mode() "{{{
   let b:vimfiler.is_safe_mode = !b:vimfiler.is_safe_mode
   echo 'Safe mode is ' . (b:vimfiler.is_safe_mode ? 'enabled' : 'disabled')
-  call vimfiler#redraw_prompt()
+  call vimfiler#view#_redraw_screen()
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()

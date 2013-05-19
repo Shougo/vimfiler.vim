@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 May 2013.
+" Last Modified: 20 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -121,9 +121,6 @@ function! vimfiler#force_redraw_screen(...) "{{{
 endfunction"}}}
 function! vimfiler#redraw_screen() "{{{
   return vimfiler#view#_redraw_screen()
-endfunction"}}}
-function! vimfiler#redraw_prompt() "{{{
-  return vimfiler#view#_redraw_prompt()
 endfunction"}}}
 function! vimfiler#get_marked_files() "{{{
   return filter(copy(vimfiler#get_current_vimfiler().current_files),
