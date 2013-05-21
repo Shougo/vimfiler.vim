@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 May 2013.
+" Last Modified: 21 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -353,6 +353,12 @@ function! vimfiler#mappings#do_dir_action(action, directory, ...) "{{{
     endif
   else
     let context.vimfiler__is_dummy = 0
+  endif
+
+  call s:clear_mark_all_lines()
+
+  if vimfiler.context.quit
+    call s:exit(vimfiler)
   endif
 
   " Execute action.
