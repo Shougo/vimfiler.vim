@@ -147,7 +147,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
           \ ":\<C-u>call \<SID>unexpand_tree()\<CR>"
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
-          \ ":\<C-u>call \<SID>expand_tree()\<CR>"
+          \ ":\<C-u>call \<SID>expand_tree(0)\<CR>"
   else
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
           \ ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
