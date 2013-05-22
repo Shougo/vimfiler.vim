@@ -880,6 +880,11 @@ function! s:expand_tree(is_recursive) "{{{
 
   setlocal nomodifiable
 
+  if !a:is_recursive && !empty(files)
+    " Move to next line.
+    call cursor(line('.')+1, 0)
+  endif
+
   call vimfiler#view#_check_redraw()
 endfunction"}}}
 function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
