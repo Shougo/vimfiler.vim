@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 May 2013.
+" Last Modified: 23 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -55,9 +55,6 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
   endfor
 
   call vimfiler#view#_redraw_screen()
-
-  redraw
-  echo ''
 endfunction"}}}
 function! vimfiler#view#_redraw_screen() "{{{
   let is_switch = &filetype !=# 'vimfiler'
@@ -307,11 +304,21 @@ function! vimfiler#view#_get_print_lines(files) "{{{
     endif
     let mark .= ' '
 
-    let line = vimfiler#util#truncate_smart(
-          \ mark . filename, max_len, max_len/2, '..')
+    let line = mark . filename
+    if len(line) > max_len
+      let line = vimfiler#util#truncate_smart(
+            \ line, max_len, max_len/2, '..')
+    else
+      let line .= repeat(' ', max_len - vimfiler#util#wcswidth(line))
+    endif
+
     for column in columns
-      let line .= ' ' . vimfiler#util#truncate(
-            \ column.get(file, b:vimfiler.context), column.vimfiler__length)
+      let column_string = column.get(file, b:vimfiler.context)
+      if len(column_string) > column.vimfiler__length
+        let column_string = vimfiler#util#truncate(
+            \ column_string, column.vimfiler__length)
+      endif
+      let line .= ' ' . column_string
     endfor
 
     if line[-1] == ' '

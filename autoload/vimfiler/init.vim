@@ -169,28 +169,22 @@ function! vimfiler#init#_initialize_vimfiler_file(path, lines, dict) "{{{1
   setlocal nomodified
 endfunction"}}}
 function! vimfiler#init#_initialize_candidates(candidates, source_name) "{{{
+  let default = {
+        \ 'vimfiler__is_directory' : 0,
+        \ 'vimfiler__is_executable' : 0,
+        \ 'vimfiler__is_writable' : 1,
+        \ 'vimfiler__filesize' : -1,
+        \ 'vimfiler__filetime' : 0,
+        \}
   " Set default vimfiler property.
   for candidate in a:candidates
+    let candidate = extend(candidate, default, 'keep')
+
     if !has_key(candidate, 'vimfiler__filename')
       let candidate.vimfiler__filename = candidate.word
     endif
     if !has_key(candidate, 'vimfiler__abbr')
       let candidate.vimfiler__abbr = candidate.word
-    endif
-    if !has_key(candidate, 'vimfiler__is_directory')
-      let candidate.vimfiler__is_directory = 0
-    endif
-    if !has_key(candidate, 'vimfiler__is_executable')
-      let candidate.vimfiler__is_executable = 0
-    endif
-    if !has_key(candidate, 'vimfiler__is_writable')
-      let candidate.vimfiler__is_writable = 1
-    endif
-    if !has_key(candidate, 'vimfiler__filesize')
-      let candidate.vimfiler__filesize = -1
-    endif
-    if !has_key(candidate, 'vimfiler__filetime')
-      let candidate.vimfiler__filetime = 0
     endif
     if !has_key(candidate, 'vimfiler__datemark')
       let candidate.vimfiler__datemark = vimfiler#get_datemark(candidate)
@@ -480,10 +474,6 @@ function! vimfiler#init#_get_filetype(file) "{{{
   endif
 endfunction"}}}
 function! vimfiler#init#_get_datemark(file) "{{{
-  if a:file.vimfiler__filetime !~ '^\d\+$'
-    return '~'
-  endif
-
   let time = localtime() - a:file.vimfiler__filetime
   if time < 86400
     " 60 * 60 * 24

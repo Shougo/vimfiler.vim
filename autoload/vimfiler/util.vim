@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 May 2013.
+" Last Modified: 23 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -94,6 +94,12 @@ function! vimfiler#util#sort_by(...)
 endfunction
 function! vimfiler#util#escape_file_searching(...)
   return call(s:V.escape_file_searching, a:000)
+endfunction
+
+function! vimfiler#util#has_lua()
+  " Note: Disabled if_lua feature if less than 7.3.885.
+  " Because if_lua has double free problem.
+  return has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
 endfunction
 
 function! vimfiler#util#is_cmdwin() "{{{
