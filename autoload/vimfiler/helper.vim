@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 May 2013.
+" Last Modified: 27 May 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -206,7 +206,7 @@ function! vimfiler#helper#_sort_human(candidates, has_lua) "{{{
   lua << EOF
 do
   local candidates = vim.eval('a:candidates')
-  t = {}
+  local t = {}
   for i = 1, #candidates do
     t[i] = candidates[i-1]
   end
