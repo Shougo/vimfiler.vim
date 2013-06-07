@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 May 2013.
+" Last Modified: 07 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -94,7 +94,6 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.simple = a:context.simple
   let b:vimfiler.directory_cursor_pos = {}
   let b:vimfiler.current_mask = ''
-  let b:vimfiler.clipboard = {}
 
   let b:vimfiler.column_names = split(a:context.columns, ':')
   let b:vimfiler.columns = vimfiler#init#_initialize_columns(

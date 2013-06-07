@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 May 2013.
+" Last Modified: 07 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1394,10 +1394,9 @@ function! s:clipboard_copy() "{{{
     return
   endif
 
-  let b:vimfiler.clipboard = {
-        \ 'operation' : 'copy',
-        \ 'files' : marked_files,
-        \ }
+  let clipboard = vimfiler#variables#get_clipboard()
+  let clipboard.operation = 'copy'
+  let clipboard.files = marked_files
   call s:clear_mark_all_lines()
 
   echo 'Copied files to vimfiler clipboard.'
@@ -1410,16 +1409,16 @@ function! s:clipboard_move() "{{{
     return
   endif
 
-  let b:vimfiler.clipboard = {
-        \ 'operation' : 'move',
-        \ 'files' : marked_files,
-        \ }
+  let clipboard = vimfiler#variables#get_clipboard()
+  let clipboard.operation = 'move'
+  let clipboard.files = marked_files
   call s:clear_mark_all_lines()
 
   echo 'Moved files to vimfiler clipboard.'
 endfunction"}}}
 function! s:clipboard_paste() "{{{
-  if empty(b:vimfiler.clipboard)
+  let clipboard = vimfiler#variables#get_clipboard()
+  if empty(clipboard.files)
     call vimfiler#print_error('Clipboard is empty.')
     return
   endif
@@ -1429,13 +1428,14 @@ function! s:clipboard_paste() "{{{
 
   " Execute file operation.
   call unite#mappings#do_action(
-        \ 'vimfiler__' . b:vimfiler.clipboard.operation,
-        \ b:vimfiler.clipboard.files, {
+        \ 'vimfiler__' . clipboard.operation,
+        \ clipboard.files, {
         \ 'action__directory' : dest_dir,
         \ 'vimfiler__current_directory' : dest_dir,
         \ })
 
-  let b:vimfiler.clipboard = {}
+  let clipboard.operation = ''
+  let clipboard.files = []
 endfunction"}}}
 
 function! s:set_current_mask() "{{{
