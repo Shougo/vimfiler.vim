@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 May 2013.
+" Last Modified: 08 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -150,7 +150,7 @@ augroup vimfiler
         \ call vimfiler#handler#_event_handler('FileAppendCmd')
   autocmd FileReadCmd ??*:{*,*/*}
         \ call vimfiler#handler#_event_handler('FileReadCmd')
-  autocmd BufEnter,VimEnter,BufNew
+  autocmd BufEnter,VimEnter,BufNew,BufWinEnter
         \ * call s:browse_check(expand('<amatch>'))
 augroup END
 
