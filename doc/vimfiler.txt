@@ -420,6 +420,8 @@ g:vimfiler_explorer_columns			 *g:vimfiler_explorer_columns*
 g:vimfiler_ignore_pattern			 *g:vimfiler_ignore_pattern*
 		Specify the regexp pattern to ignore candidates of the source.
 		This applies on the path of candidates.  It's case sensitive.
+		Note: If vimfiler is visible dot file, the ignore pattern is
+		disabled.
 
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
