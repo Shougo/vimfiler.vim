@@ -40,16 +40,16 @@ Changelog		|vimfiler-changelog|
 ==============================================================================
 INTRODUCTION					*vimfiler-introduction*
 
-*vimfiler* is a powerful file explorer(filer) written by Vim script.
+*vimfiler* is a powerful file explorer (or filer) written in Vim script.
 
 ==============================================================================
 USAGE						*vimfiler-usage*
 
-	To run vimfiler, execute this command.
+	Execute the following command to start vimfiler.
 >
 	:VimFiler
 <
-	If you set |g:vimfiler_as_default_explorer| to 1, vimfiler behaves
+	If you've set |g:vimfiler_as_default_explorer| to 1, vimfiler behaves
 	as default explorer like |netrw|.
 >
 	:let g:vimfiler_as_default_explorer = 1
@@ -57,9 +57,9 @@ USAGE						*vimfiler-usage*
 vimfiler needs |unite|
 http://github.com/Shougo/unite.vim
 
-Please install unite.vim Ver.3.0(or later) before use vimfiler.
+Please install unite.vim Ver.3.0 or later before using vimfiler.
 
-Note: To use 4GB(>) files in vimfiler, vimfiler require |+python| interface.
+Note: To use 4GB+ files in vimfiler, vimfiler requires |+python| interface.
 
 ==============================================================================
 INTERFACE					*vimfiler-interface*
@@ -69,12 +69,12 @@ COMMANDS 					*vimfiler-commands*
 
 :VimFiler [{options}...] [[{source-name}:]{path}]
 						*:VimFiler*
-		Run vimfiler. This command reuses a buffer if a vimfiler
-		buffer already exists. If you omit {path}, vimfiler opens current
-		directory. [[{source-name}:]{path}] arg is same as |:Unite|.
-		But you omit source name, "file" source will be used.
-		If {path} is directory, browse in {path} directory files.
-		If {path} is file, edit {path} file.
+		Runs vimfiler. This command reuses a buffer if a vimfiler
+		buffer already exists. If you omit {path}, vimfiler opens
+		current directory. [[{source-name}:]{path}] arg is same as
+		|:Unite|.  But you omit source name, "file" source will be
+		used.  If {path} is directory, browse in {path} directory
+		files.  If {path} is file, edit {path} file.
 
 		Examples:
 		"foo": the parameters of source file are
@@ -87,7 +87,7 @@ COMMANDS 					*vimfiler-commands*
 		:VimFilerExplorer
 <
 						*vimfiler-options*
-		{options} are options for a vimfiler buffer.  You may give the
+		{options} are for a vimfiler buffer.  You may give the
 		following parameters for a option; you must escape with \ when
 		it contains spaces.
 
