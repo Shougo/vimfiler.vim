@@ -417,6 +417,10 @@ g:vimfiler_explorer_columns			 *g:vimfiler_explorer_columns*
 		
 		Default value is "type".
 
+g:vimfiler_ignore_pattern			 *g:vimfiler_ignore_pattern*
+		Specify the regexp pattern to ignore candidates of the source.
+		This applies on the path of candidates.  It's case sensitive.
+
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
 g:unite_kind_file_delete_file_command
@@ -1049,6 +1053,9 @@ A: You can enable status line by |vimfiler-options-status|.
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2013-06-09
+- Added g:vimfiler_ignore_pattern variable.
 
 2013-06-07
 - Improved vimfiler clipboard behavior.

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Jun 2013.
+" Last Modified: 09 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -85,6 +85,10 @@ function! vimfiler#view#_redraw_screen() "{{{
   if !b:vimfiler.is_visible_dot_files
     call filter(b:vimfiler.current_files,
           \  "v:val.vimfiler__filename !~ '^\\.'")
+    if g:vimfiler_ignore_pattern != ''
+      call filter(b:vimfiler.current_files,
+            \  "v:val.vimfiler__filename !~# g:vimfiler_ignore_pattern")
+    endif
 
     let b:vimfiler.current_files =
           \ s:check_tree(b:vimfiler.current_files)
