@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Jun 2013.
+" Last Modified: 14 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1304,14 +1304,6 @@ function! s:move() "{{{
     return
   endif
 
-  if !unite#util#input_yesno('Really move files?')
-    redraw
-    echo 'Canceled.'
-    return
-  endif
-
-  redraw
-
   " Get destination directory.
   let dest_dir = ''
   if vimfiler#winnr_another_vimfiler() > 0
@@ -1336,12 +1328,6 @@ function! s:delete() "{{{
   if empty(marked_files)
     " Mark current line.
     call s:toggle_mark_current_line()
-    return
-  endif
-
-  if !unite#util#input_yesno('Really force delete files?')
-    redraw
-    echo 'Canceled.'
     return
   endif
 

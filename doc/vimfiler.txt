@@ -1056,6 +1056,9 @@ A: You can enable status line by |vimfiler-options-status|.
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
+2013-06-14
+- Fixed prompts in file operations.
+
 2013-06-09
 - Added g:vimfiler_ignore_pattern variable.
 
