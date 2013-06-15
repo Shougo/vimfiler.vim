@@ -23,5 +23,10 @@ Note: To use 4GB(>) files in vimfiler, vimfiler require +python interface.
 
 ## Screen shots
 
+vimfiler standard operations
+----------------------------
 ![Vimfiler standard operations](https://f.cloud.github.com/assets/214488/657681/c40265e6-d56f-11e2-96fd-03d01f10cc4e.gif)
 
+vimfiler explorer feature(like NERDTree)
+----------------------------------------
+![Vimfiler explorer](https://f.cloud.github.com/assets/214488/657685/95011fc4-d571-11e2-9934-159196cf9e59.gif)
