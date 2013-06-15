@@ -136,7 +136,8 @@ endfunction"}}}
 function! vimfiler#get_filename(...) "{{{
   let line_num = get(a:000, 0, line('.'))
   return getline(line_num) == '..' ? '..' :
-   \ line_num < b:vimfiler.prompt_linenr ? '' :
+   \ (line_num < b:vimfiler.prompt_linenr ||
+   \  empty(b:vimfiler.current_files)) ? '' :
    \ b:vimfiler.current_files[vimfiler#get_file_index(line_num)].action__path
 endfunction"}}}
 function! vimfiler#get_file(...) "{{{
