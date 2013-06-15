@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 May 2013.
+" Last Modified: 15 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -94,5 +94,15 @@ highlight def link vimfilerClosedFile Preproc
 highlight def link vimfilerROFile Comment
 
 let b:current_syntax = 'vimfiler'
+
+if !empty(b:vimfiler.syntaxes)
+  " Redraw syntax.
+  for column in filter(
+        \ copy(b:vimfiler.columns), "get(v:val, 'syntax', '') != ''")
+    call column.define_syntax(b:vimfiler.context)
+  endfor
+
+  call vimfiler#view#_redraw_screen()
+endif
 
 " vim: foldmethod=marker
