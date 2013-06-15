@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jun 2013.
+" Last Modified: 15 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -101,7 +101,8 @@ function! vimfiler#view#_redraw_screen() "{{{
   let last_line = line('.')
 
   " Clean up the screen.
-  if b:vimfiler.prompt_linenr + len(b:vimfiler.current_files) < line('$')
+  if !empty(b:vimfiler.current_files) &&
+        \ b:vimfiler.prompt_linenr + len(b:vimfiler.current_files) < line('$')
     silent execute '$-'.(line('$')-b:vimfiler.prompt_linenr-
           \ len(b:vimfiler.current_files)+1).',$delete _'
   endif

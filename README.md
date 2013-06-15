@@ -22,7 +22,6 @@ Please install unite.vim Ver.3.0(or later) before use vimfiler.
 Note: To use 4GB(>) files in vimfiler, vimfiler require +python interface.
 
 ## Screen shots
-============
 
 ![Vimfiler standard operations](https://f.cloud.github.com/assets/214488/657681/c40265e6-d56f-11e2-96fd-03d01f10cc4e.gif)
 
