@@ -1079,6 +1079,8 @@ https://github.com/Shougo/unite-ssh
 
  8. Double screen file explorer.
 
+ 9. Multi file renaming(see <Plug>(vimfiler_rename_file)).
+
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
 
