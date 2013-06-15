@@ -1019,9 +1019,12 @@ https://github.com/andreafrancia/trash-cli
 Q: I want to move/copy/delete cursor file in one key.
 A: You should use |<Plug>(vimfiler_mark_current_line)|.
 >
-	nmap <buffer> c <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_copy_file)
-	nmap <buffer> m <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_move_file)
-	nmap <buffer> d <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_delete_file)
+	nmap <buffer> c
+	\ <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_copy_file)
+	nmap <buffer> m
+	\ <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_move_file)
+	nmap <buffer> d
+	\ <Plug>(vimfiler_mark_current_line)<Plug>(vimfiler_delete_file)
 <
 Q: What's the key to refresh the file list?
 A: It is |<Plug>(vimfiler_redraw_screen)|. It is mapped to <C-l> by default.
@@ -1052,6 +1055,29 @@ A: You can enable status line by |vimfiler-options-status|.
 >
 	VimFiler -status
 <
+
+Q: What's the difference between vimfiler and NERDTree?
+
+A:
+Vimfiler advantages are:
+ 1. Integration with unite.vim.
+https://github.com/Shougo/unite.vim
+
+ 2. Integration with vimshell.
+https://github.com/Shougo/vimshell.vim
+
+ 3. More customization.
+
+ 4. External sources(for example, unite-ssh).
+https://github.com/Shougo/unite-ssh
+
+ 5. More options(see |vimfiler-options|)
+
+ 6. Fast(if you use |if_lua| enabled Vim).
+
+ 7. Column customization.
+
+ 8. Double screen file explorer.
 
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
