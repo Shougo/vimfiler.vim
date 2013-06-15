@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jun 2013.
+" Last Modified: 15 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -371,81 +371,9 @@ function! vimfiler#mappings#cd(dir, ...) "{{{
   endif
   let save_history = get(a:000, 0, 1)
 
-  let dir = vimfiler#util#substitute_path_separator(a:dir)
-  if b:vimfiler.source !=# 'file' &&
-        \ dir !~ ':' && dir =~ '^/\|^\a:'
-    " Use file source.
-    let dir = 'file:' . dir
-  endif
-
-  if dir =~ ':'
-    " Parse path.
-    let ret = vimfiler#parse_path(dir)
-    let b:vimfiler.source = ret[0]
-    let dir = join(ret[1:], ':')
-  endif
-
   let previous_current_dir = b:vimfiler.current_dir
   if previous_current_dir =~ '/$'
     let previous_current_dir = previous_current_dir[: -2]
-  endif
-  let current_dir = b:vimfiler.current_dir
-
-  if dir == '..'
-    if vimfiler#util#is_windows() && current_dir =~ '^//'
-      " For UNC path.
-      let current_dir = substitute(current_dir,
-            \ '^//[^/]*/[^/]*', '', '')
-    endif
-
-    let chars = split(current_dir, '\zs')
-    if count(chars, '/') <= 1
-      if count(chars, ':') < 1
-            \ || b:vimfiler.source ==# 'file'
-        " Ignore.
-        return
-      endif
-      let dir = substitute(
-            \ b:vimfiler.current_dir, ':[^:]*$', '', '')
-    else
-      let dir = fnamemodify(substitute(
-            \ b:vimfiler.current_dir, '[/\\]$', '', ''), ':h')
-    endif
-
-    if dir =~ '//$'
-      return
-    endif
-
-  elseif dir == '/'
-    " Root.
-
-    if vimfiler#util#is_windows() && current_dir =~ '^//'
-      " For UNC path.
-      let dir = matchstr(current_dir, '^//[^/]*/[^/]*')
-    else
-      let dir = vimfiler#util#is_windows() ?
-            \ matchstr(fnamemodify(current_dir, ':p'),
-            \         '^\a\+:[/\\]') : dir
-    endif
-  elseif dir == '~'
-    " Home.
-    let dir = expand('~')
-  elseif dir =~ ':'
-        \ || (vimfiler#util#is_windows() && dir =~ '^//')
-        \ || (!vimfiler#util#is_windows() && dir =~ '^/')
-    " Network drive or absolute path.
-  else
-    " Relative path.
-    let dir = simplify(current_dir . dir)
-  endif
-  let fullpath = vimfiler#util#substitute_path_separator(dir)
-
-  if vimfiler#util#is_windows()
-    let fullpath = vimfiler#util#resolve(fullpath)
-  endif
-
-  if fullpath !~ '/$'
-    let fullpath .= '/'
   endif
 
   " Save current pos.
@@ -453,6 +381,7 @@ function! vimfiler#mappings#cd(dir, ...) "{{{
   let b:vimfiler.directory_cursor_pos[b:vimfiler.current_dir] =
         \ deepcopy(save_pos)
   let prev_dir = b:vimfiler.current_dir
+  let fullpath = vimfiler#helper#_get_cd_path(a:dir)
   let b:vimfiler.current_dir = fullpath
 
   if vimfiler#get_context().auto_cd
@@ -525,9 +454,23 @@ function! vimfiler#mappings#search_cursor(path) "{{{
   let cnt = 1
   while cnt <= max
     let file = vimfiler#get_file(cnt)
-    if !empty(file) && file.action__path ==# a:path
+    if empty(file)
+      let cnt += 1
+      continue
+    endif
+
+    if file.action__path ==# a:path
       " Move cursor.
       call cursor(cnt, 0)
+      return 1
+    elseif file.vimfiler__is_directory &&
+          \ stridx(a:path, file.action__path . '/') == 0 &&
+          \ !file.vimfiler__is_opened
+      " Expand tree.
+      call cursor(cnt, 0)
+      call s:expand_tree(0)
+
+      let max = line('$')
     endif
 
     let cnt += 1

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 May 2013.
+" Last Modified: 15 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -85,6 +85,80 @@ function! vimfiler#helper#_parse_path(path) "{{{
         \      'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
 
   return insert(source_args, source_name)
+endfunction"}}}
+function! vimfiler#helper#_get_cd_path(dir) "{{{
+  let dir = vimfiler#util#substitute_path_separator(a:dir)
+  if b:vimfiler.source !=# 'file' &&
+        \ dir !~ ':' && dir =~ '^/\|^\a:'
+    " Use file source.
+    let dir = 'file:' . dir
+  endif
+
+  if dir =~ ':'
+    " Parse path.
+    let ret = vimfiler#parse_path(dir)
+    let b:vimfiler.source = ret[0]
+    let dir = join(ret[1:], ':')
+  endif
+
+  let current_dir = b:vimfiler.current_dir
+
+  if dir == '..'
+    if vimfiler#util#is_windows() && current_dir =~ '^//'
+      " For UNC path.
+      let current_dir = substitute(current_dir,
+            \ '^//[^/]*/[^/]*', '', '')
+    endif
+
+    let chars = split(current_dir, '\zs')
+    if count(chars, '/') <= 1
+      if count(chars, ':') < 1
+            \ || b:vimfiler.source ==# 'file'
+        " Ignore.
+        return current_dir
+      endif
+      let dir = substitute(current_dir, ':[^:]*$', '', '')
+    else
+      let dir = fnamemodify(substitute(current_dir, '[/\\]$', '', ''), ':h')
+    endif
+
+    if dir =~ '//$'
+      return current_dir
+    endif
+
+  elseif dir == '/'
+    " Root.
+
+    if vimfiler#util#is_windows() && current_dir =~ '^//'
+      " For UNC path.
+      let dir = matchstr(current_dir, '^//[^/]*/[^/]*')
+    else
+      let dir = vimfiler#util#is_windows() ?
+            \ matchstr(fnamemodify(current_dir, ':p'),
+            \         '^\a\+:[/\\]') : dir
+    endif
+  elseif dir == '~'
+    " Home.
+    let dir = expand('~')
+  elseif dir =~ ':'
+        \ || (vimfiler#util#is_windows() && dir =~ '^//')
+        \ || (!vimfiler#util#is_windows() && dir =~ '^/')
+    " Network drive or absolute path.
+  else
+    " Relative path.
+    let dir = simplify(current_dir . dir)
+  endif
+  let fullpath = vimfiler#util#substitute_path_separator(dir)
+
+  if vimfiler#util#is_windows()
+    let fullpath = vimfiler#util#resolve(fullpath)
+  endif
+
+  if fullpath !~ '/$'
+    let fullpath .= '/'
+  endif
+
+  return fullpath
 endfunction"}}}
 
 function! vimfiler#helper#_complete(arglead, cmdline, cursorpos) "{{{

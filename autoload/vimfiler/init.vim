@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Jun 2013.
+" Last Modified: 15 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -55,6 +55,7 @@ function! vimfiler#init#_initialize_context(context) "{{{
     \ 'explorer' : 0,
     \ 'reverse' : 0,
     \ 'project' : 0,
+    \ 'find' : 0,
     \ 'columns' : g:vimfiler_default_columns,
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
     \ 'vimfiler__prev_winnr' : winbufnr('%'),
@@ -289,10 +290,17 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
   execute 'buffer' . a:bufnr
   call vimfiler#handler#_event_bufwin_enter(a:bufnr)
 
+  let b:vimfiler.context = extend(b:vimfiler.context, context)
+  call vimfiler#set_current_vimfiler(b:vimfiler)
+  let b:vimfiler.prompt_linenr =
+        \ (b:vimfiler.context.explorer) ?  0 :
+        \ (b:vimfiler.context.status)   ?  2 : 1
+
+  let directory = vimfiler#util#substitute_path_separator(
+        \ a:directory)
+
   " Set current directory.
-  if a:directory != ''
-    let directory = vimfiler#util#substitute_path_separator(
-          \ a:directory)
+  if directory != ''
     if directory =~ ':'
       " Parse path.
       let ret = vimfiler#parse_path(directory)
@@ -300,25 +308,19 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
       let directory = join(ret[1:], ':')
     endif
 
-    let b:vimfiler.current_dir = directory
-    if b:vimfiler.current_dir !~ '/$'
-      let b:vimfiler.current_dir .= '/'
+    if !a:context.find || vimfiler#mappings#search_cursor(
+          \ substitute(vimfiler#helper#_get_cd_path(directory),
+          \   '/$', '', '')) == 0
+      call vimfiler#mappings#cd(directory)
     endif
   endif
-
-  let b:vimfiler.context = extend(b:vimfiler.context, context)
-  call vimfiler#set_current_vimfiler(b:vimfiler)
-  let b:vimfiler.prompt_linenr =
-        \ (b:vimfiler.context.explorer) ?  0 :
-        \ (b:vimfiler.context.status)   ?  2 : 1
 
   if a:context.double
     " Create another vimfiler.
     call vimfiler#mappings#create_another_vimfiler()
     wincmd p
+    call vimfiler#view#_force_redraw_all_vimfiler()
   endif
-
-  call vimfiler#view#_force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:create_vimfiler_buffer(path, context) "{{{
   let path = a:path

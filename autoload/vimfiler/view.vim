@@ -101,9 +101,8 @@ function! vimfiler#view#_redraw_screen() "{{{
   let last_line = line('.')
 
   " Clean up the screen.
-  if !empty(b:vimfiler.current_files) &&
-        \ b:vimfiler.prompt_linenr + len(b:vimfiler.current_files) < line('$')
-    silent execute '$-'.(line('$')-b:vimfiler.prompt_linenr-
+  if b:vimfiler.prompt_linenr + len(b:vimfiler.current_files) < line('$')
+    silent! execute '$-'.(line('$')-b:vimfiler.prompt_linenr-
           \ len(b:vimfiler.current_files)+1).',$delete _'
   endif
 

@@ -31,6 +31,7 @@ Interface		|vimfiler-interface|
   Variables		  |vimfiler-variables|
     Sources variables	    |vimfiler-sources-variables|
   Key mappings		  |vimfiler-key-mappings|
+  Options		  |vimfiler-options|
 Columns			|vimfiler-columns|
 Examples		|vimfiler-examples|
 Unite sources		|vimfiler-unite-sources|
@@ -75,6 +76,8 @@ COMMANDS 					*vimfiler-commands*
 		|:Unite|.  But you omit source name, "file" source will be
 		used.  If {path} is directory, browse in {path} directory
 		files.  If {path} is file, edit {path} file.
+		{options} are options for a vimfiler buffer:
+		|vimfiler-options|
 
 		Examples:
 		"foo": the parameters of source file are
@@ -85,100 +88,6 @@ COMMANDS 					*vimfiler-commands*
 		" File explorer like behavior.
 		:VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit
 		:VimFilerExplorer
-<
-						*vimfiler-options*
-		{options} are for a vimfiler buffer.  You may give the
-		following parameters for a option; you must escape with \ when
-		it contains spaces.
-
-						*vimfiler-options-buffer-name*
-		-buffer-name={buffer-name}
-		Specifies a buffer name.
-		The default buffer name is 'default'.
-		Note: Buffer name must not contain spaces.
-
-						*vimfiler-options-no-quit*
-		-no-quit
-		Doesn't close the vimfiler buffer after firing an action.
-
-						*vimfiler-options-quit*
-		-quit
-		Close the vimfiler buffer after firing an action.
-
-						*vimfiler-options-winwidth*
-		-winwidth={window-width}
-		Specifies the width of a vimfiler buffer.
-
-						*vimfiler-options-winminwidth*
-		-winminwidth={window-width}
-		Specifies the minimum width of a vimfiler buffer.
-
-						*vimfiler-options-winheight*
-		-winheight={window-height}
-		Specifies the height of a vimfiler buffer.
-
-						*vimfiler-options-direction*
-		-direction={direction}
-		Defines split position rule. The default value is same to
-		|g:vimfiler_split_rule|.
-
-						*vimfiler-options-toggle*
-		-toggle
-		Close vimfiler buffer window if this vimfiler buffer name
-		window is exists.
-
-						*vimfiler-options-simple*
-		-simple
-		Enable vimfiler simple mode.
-
-						*vimfiler-options-split*
-		-split
-		Split vimfiler buffer.
-
-						*vimfiler-options-horizontal*
-		-horizontal
-		Split horizontally.
-
-						*vimfiler-options-double*
-		-double
-		Open vimfiler buffers in double mode.
-
-						*vimfiler-options-create*
-		-create
-		Create new vimfiler buffer.
-
-						*vimfiler-options-auto-cd*
-		-auto-cd
-		Enable auto cd behavior.
-		If omit it, use |g:vimfiler_enable_auto_cd|.
-		Note: This option works in file source.
-
-						*vimfiler-options-explorer*
-		-explorer
-		Enable the behavior like explorer.
-		Note: This option changes some default options.
-		For Example, hide parent directory, change some default
-		mappings ...
-
-						*vimfiler-options-reverse*
-		-reverse
-		Reverse open another vimfiler window.
-		If "-horizontal" option is enabled, will open another vimfiler
-		vertically.  If "-horizontal" option is disabled, will open
-		another vimfiler horizontally.
-
-						*vimfiler-options-project*
-		-project
-		Move to project directory.
-
-						*vimfiler-options-columns*
-		-columns={columns1:columns2:...}
-		Specify vimfiler columns. If omit it,
-		|g:vimfiler_default_columns| will be used.
-
-						*vimfiler-options-status*
-		-status
-		Display status line in vimfiler buffer.
 
 :VimFilerCreate [{options}...] [{path}]		*:VimFilerCreate*
 		Equivalent to |:VimFiler| except that it creates a new vimfiler
@@ -874,6 +783,105 @@ Visual mode mappings.
 --------		-----------------------------
 <Space>			<Plug>(vimfiler_toggle_mark_selected_lines)
 
+------------------------------------------------------------------------------
+OPTIONS						*vimfiler-options*
+
+{options} are options for a vimfiler buffer.  You may give the following
+parameters for an option.  You need to escape spaces with "\".
+
+						*vimfiler-options-buffer-name*
+		-buffer-name={buffer-name}
+		Specifies a buffer name.
+		The default buffer name is 'default'.
+		Note: Buffer name must not contain spaces.
+
+						*vimfiler-options-no-quit*
+		-no-quit
+		Doesn't close the vimfiler buffer after firing an action.
+
+						*vimfiler-options-quit*
+		-quit
+		Close the vimfiler buffer after firing an action.
+
+						*vimfiler-options-winwidth*
+		-winwidth={window-width}
+		Specifies the width of a vimfiler buffer.
+
+						*vimfiler-options-winminwidth*
+		-winminwidth={window-width}
+		Specifies the minimum width of a vimfiler buffer.
+
+						*vimfiler-options-winheight*
+		-winheight={window-height}
+		Specifies the height of a vimfiler buffer.
+
+						*vimfiler-options-direction*
+		-direction={direction}
+		Defines split position rule. The default value is same to
+		|g:vimfiler_split_rule|.
+
+						*vimfiler-options-toggle*
+		-toggle
+		Close vimfiler buffer window if this vimfiler buffer name
+		window is exists.
+
+						*vimfiler-options-simple*
+		-simple
+		Enable vimfiler simple mode.
+
+						*vimfiler-options-split*
+		-split
+		Split vimfiler buffer.
+
+						*vimfiler-options-horizontal*
+		-horizontal
+		Split horizontally.
+
+						*vimfiler-options-double*
+		-double
+		Open vimfiler buffers in double mode.
+
+						*vimfiler-options-create*
+		-create
+		Create new vimfiler buffer.
+
+						*vimfiler-options-auto-cd*
+		-auto-cd
+		Enable auto cd behavior.
+		If omit it, use |g:vimfiler_enable_auto_cd|.
+		Note: This option works in file source.
+
+						*vimfiler-options-explorer*
+		-explorer
+		Enable the behavior like explorer.
+		Note: This option changes some default options.
+		For Example, hide parent directory, change some default
+		mappings ...
+
+						*vimfiler-options-reverse*
+		-reverse
+		Reverse open another vimfiler window.
+		If "-horizontal" option is enabled, will open another vimfiler
+		vertically.  If "-horizontal" option is disabled, will open
+		another vimfiler horizontally.
+
+						*vimfiler-options-project*
+		-project
+		Move to project directory.
+
+						*vimfiler-options-columns*
+		-columns={columns1:columns2:...}
+		Specify vimfiler columns. If omit it,
+		|g:vimfiler_default_columns| will be used.
+
+						*vimfiler-options-status*
+		-status
+		Display status line in vimfiler buffer.
+
+						*vimfiler-options-find*
+		-find
+		Find directory when switching.
+
 ==============================================================================
 COLUMNS						*vimfiler-columns*
 
@@ -1081,8 +1089,18 @@ https://github.com/Shougo/unite-ssh
 
  9. Multi file renaming(see <Plug>(vimfiler_rename_file)).
 
+Q: I want to use the feature like |:NERDTreeFind|.
+
+A:
+>
+	:VimFilerBufferDir -explorer -find
+<
+
 ==============================================================================
 CHANGELOG					*vimfiler-changelog*
+
+2013-06-15
+- Added -find option.
 
 2013-06-14
 - Fixed prompts in file operations.
