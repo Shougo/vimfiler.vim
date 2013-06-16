@@ -523,9 +523,7 @@ function! s:switch() "{{{
     let winnr = context.vimfiler__prev_winnr
   endif
 
-  if context.split
-    wincmd w
-  elseif winnr == winnr() || winnr < 0
+  if winnr == winnr() || winnr < 0
     vnew
   else
     execute winnr 'wincmd w'
