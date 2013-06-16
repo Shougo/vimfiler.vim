@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jun 2013.
+" Last Modified: 16 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -385,7 +385,7 @@ function! vimfiler#mappings#cd(dir, ...) "{{{
   let b:vimfiler.current_dir = fullpath
 
   if vimfiler#get_context().auto_cd
-    call s:change_vim_current_dir()
+    call vimfiler#mappings#_change_vim_current_dir()
   endif
 
   " Save changed directories.
@@ -533,7 +533,7 @@ function! s:switch() "{{{
 
   if context.auto_cd
     " Change current directory.
-    call s:change_vim_current_dir()
+    call vimfiler#mappings#_change_vim_current_dir()
   endif
 endfunction"}}}
 function! s:toggle_mark_current_line(...) "{{{
@@ -1408,7 +1408,7 @@ endfunction"}}}
 function! s:execute_external_filer() "{{{
   call vimfiler#mappings#do_current_dir_action('vimfiler__execute')
 endfunction"}}}
-function! s:change_vim_current_dir() "{{{
+function! vimfiler#mappings#_change_vim_current_dir() "{{{
   let vimfiler = vimfiler#get_current_vimfiler()
   if vimfiler.source !=# 'file'
     call vimfiler#print_error('Invalid operation in not file source.')
