@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Jun 2013.
+" Last Modified: 23 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -130,7 +130,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nmap <buffer> <Plug>(vimfiler_cd)
         \ <Plug>(vimfiler_cd_vim_current_dir)
   nnoremap <buffer><silent> <Plug>(vimfiler_cd_vim_current_dir)
-        \ :<C-u>call <SID>change_vim_current_dir()<CR>
+        \ :<C-u>call vimfiler#mappings#_change_vim_current_dir()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd_file)
         \ :<C-u>call <SID>cd_file_directory()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_choose_action)
