@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jun 2013.
+" Last Modified: 26 Jun 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -272,8 +272,8 @@ function! vimfiler#init#_start(path, ...) "{{{
       let vimfiler = getbufvar(bufnr, 'vimfiler')
       if type(vimfiler) == type({})
             \ && vimfiler.context.profile_name ==# context.profile_name
-            \ && (!exists('t:unite_buffer_dictionary')
-            \      || has_key(t:unite_buffer_dictionary, bufnr))
+            \ && (exists('t:unite_buffer_dictionary')
+            \      && has_key(t:unite_buffer_dictionary, bufnr))
         call vimfiler#init#_switch_vimfiler(bufnr, context, path)
         return
       endif
