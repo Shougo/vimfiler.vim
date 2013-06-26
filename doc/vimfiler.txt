@@ -79,6 +79,10 @@ COMMANDS 					*vimfiler-commands*
 		{options} are options for a vimfiler buffer:
 		|vimfiler-options|
 
+		If another vimfiler buffer exists in current tab, switches to
+		the vimfiler buffer and changes its current directory to
+		{path}.
+
 		Examples:
 		"foo": the parameters of source file are
 		                ["foo"].
@@ -86,7 +90,8 @@ COMMANDS 					*vimfiler-commands*
 		                ["bar", "baz"].
 >
 		" File explorer like behavior.
-		:VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit
+		:VimFiler -buffer-name=explorer
+		\ -split -simple -winwidth=35 -toggle -no-quit
 		:VimFilerExplorer
 
 :VimFilerCreate [{options}...] [{path}]		*:VimFilerCreate*
