@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Jun 2013.
+" Last Modified: 05 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -77,6 +77,10 @@ function! vimfiler#init#_initialize_context(context) "{{{
 
   if !has_key(context, 'profile_name')
     let context.profile_name = context.buffer_name
+  endif
+  if context.toggle && context.find
+    " Disable toggle feature.
+    let context.toggle = 0
   endif
 
   return context
@@ -287,12 +291,18 @@ endfunction"}}}
 function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
   let context = vimfiler#initialize_context(a:context)
 
-  if context.split
-    execute context.direction
-          \ (context.horizontal ? 'split' : 'vsplit')
+  if bufwinnr(a:bufnr) < 0
+    if context.split
+      execute context.direction
+            \ (context.horizontal ? 'split' : 'vsplit')
+    endif
+
+    execute 'buffer' . a:bufnr
+  else
+    " Move to vimfiler window.
+    execute bufwinnr(a:bufnr).'wincmd w'
   endif
 
-  execute 'buffer' . a:bufnr
   call vimfiler#handler#_event_bufwin_enter(a:bufnr)
 
   let b:vimfiler.context = extend(b:vimfiler.context, context)

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Jun 2013.
+" Last Modified: 05 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1026,7 +1026,8 @@ function! s:hide() "{{{
     close
     execute bufwinnr(bufnr).'wincmd w'
     call s:hide()
-  elseif winnr('$') != 1 && (context.split || context.toggle)
+  elseif winnr('$') != 1 &&
+        \ (context.split || context.toggle)
     close
   else
     call vimfiler#util#alternate_buffer()
@@ -1053,7 +1054,8 @@ function! s:close() "{{{
     close
     execute bufwinnr(bufnr).'wincmd w'
     call vimfiler#redraw_screen()
-  elseif winnr('$') != 1 && (context.split || context.toggle)
+  elseif winnr('$') != 1 &&
+        \ (context.split || context.toggle)
     close
   else
     call vimfiler#util#alternate_buffer()
