@@ -886,7 +886,7 @@ parameters for an option.  You need to escape spaces with "\".
 
 						*vimfiler-options-find*
 		-find
-		Find directory when switching.
+		Find current file when switching.
 
 ==============================================================================
 COLUMNS						*vimfiler-columns*

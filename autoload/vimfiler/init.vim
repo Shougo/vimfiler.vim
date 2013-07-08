@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Jul 2013.
+" Last Modified: 08 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -289,6 +289,8 @@ function! vimfiler#init#_start(path, ...) "{{{
   call s:create_vimfiler_buffer(path, context)
 endfunction"}}}
 function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
+  let search_path = fnamemodify(bufname('%'), ':p')
+
   let context = vimfiler#initialize_context(a:context)
 
   if bufwinnr(a:bufnr) < 0
@@ -323,11 +325,13 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
       let directory = join(ret[1:], ':')
     endif
 
-    if !a:context.find || vimfiler#mappings#search_cursor(
-          \ substitute(vimfiler#helper#_get_cd_path(directory),
-          \   '/$', '', '')) == 0
-      call vimfiler#mappings#cd(directory)
-    endif
+    call vimfiler#mappings#cd(directory)
+  endif
+
+  if a:context.find
+    call vimfiler#mappings#search_cursor(
+          \ substitute(vimfiler#helper#_get_cd_path(
+          \ search_path), '/$', '', ''))
   endif
 
   if a:context.double
