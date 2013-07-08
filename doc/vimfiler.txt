@@ -338,7 +338,7 @@ g:vimfiler_ignore_pattern			 *g:vimfiler_ignore_pattern*
 		|<Plug>(vimfiler_toggle_visible_ignore_files)|, the ignore
 		pattern is disabled.
 >
-		let g:vimfiler_ignore_pattern = '^\%(.git\|.DS_Store\)'
+		let g:vimfiler_ignore_pattern = '^\%(.git\|.DS_Store\)$'
 <
 		Default value is '^\.' (dot files pattern).
 
