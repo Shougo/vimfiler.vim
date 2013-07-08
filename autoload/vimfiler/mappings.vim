@@ -75,8 +75,10 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>switch_to_drive()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_history_directory)
         \ :<C-u>call <SID>switch_to_history_directory()<CR>
-  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_visible_dot_files)
-        \ :<C-u>call <SID>toggle_visible_dot_files()<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_toggle_visible_ignore_files)
+        \ :<C-u>call <SID>toggle_visible_ignore_files()<CR>
+  nmap <buffer><silent> <Plug>(vimfiler_toggle_visible_dot_files)
+        \ <Plug>(vimfiler_toggle_visible_ignore_files)
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)
         \ :<C-u>call <SID>popup_shell()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)
@@ -239,7 +241,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nmap <buffer> <BS> <Plug>(vimfiler_switch_to_parent_directory)
 
   nmap <buffer> gv <Plug>(vimfiler_execute_new_gvim)
-  nmap <buffer> . <Plug>(vimfiler_toggle_visible_dot_files)
+  nmap <buffer> . <Plug>(vimfiler_toggle_visible_ignore_files)
   nmap <buffer> H <Plug>(vimfiler_popup_shell)
 
   " Edit file.
@@ -798,7 +800,7 @@ function! s:expand_tree(is_recursive) "{{{
           \ { 'input' : b:vimfiler.current_mask })
   endif
 
-  if !a:is_recursive && !b:vimfiler.is_visible_dot_files
+  if !a:is_recursive && !b:vimfiler.is_visible_ignore_files
     call filter(files, 'v:val.vimfiler__filename !~ "^\\."')
   endif
 
@@ -842,7 +844,7 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
     " Initialize.
     let file.vimfiler__nest_level = nestlevel
 
-    if !b:vimfiler.is_visible_dot_files
+    if !b:vimfiler.is_visible_ignore_files
           \ && file.vimfiler__filename =~ '^\.'
       continue
     endif
@@ -942,8 +944,8 @@ function! s:popd() "{{{
         \ { 'buffer_name' : 'vimfiler/popd', 'script' : 1 })
 endfunction"}}}
 
-function! s:toggle_visible_dot_files() "{{{
-  let b:vimfiler.is_visible_dot_files = !b:vimfiler.is_visible_dot_files
+function! s:toggle_visible_ignore_files() "{{{
+  let b:vimfiler.is_visible_ignore_files = !b:vimfiler.is_visible_ignore_files
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:popup_shell() "{{{

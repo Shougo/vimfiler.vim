@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jun 2013.
+" Last Modified: 08 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,9 +82,7 @@ function! vimfiler#view#_redraw_screen() "{{{
         \ unite#filters#matcher_vimfiler_mask#define().filter(
         \ copy(b:vimfiler.original_files),
         \ { 'input' : b:vimfiler.current_mask })
-  if !b:vimfiler.is_visible_dot_files
-    call filter(b:vimfiler.current_files,
-          \  "v:val.vimfiler__filename !~ '^\\.'")
+  if !b:vimfiler.is_visible_ignore_files
     if g:vimfiler_ignore_pattern != ''
       call filter(b:vimfiler.current_files,
             \  "v:val.vimfiler__filename !~# g:vimfiler_ignore_pattern")
@@ -170,9 +168,9 @@ function! s:redraw_prompt() "{{{
     return
   endif
 
-  let mask = !b:vimfiler.is_visible_dot_files
+  let mask = !b:vimfiler.is_visible_ignore_files
         \ && b:vimfiler.current_mask == '' ?
-        \ '' : '[' . (b:vimfiler.is_visible_dot_files ? '.:' : '')
+        \ '' : '[' . (b:vimfiler.is_visible_ignore_files ? '.:' : '')
         \       . b:vimfiler.current_mask . ']'
 
   let prefix = (b:vimfiler.is_safe_mode ? '[safe] ' : '') .

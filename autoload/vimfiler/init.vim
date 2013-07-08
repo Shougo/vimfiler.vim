@@ -95,7 +95,7 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.current_files = []
   let b:vimfiler.original_files = []
 
-  let b:vimfiler.is_visible_dot_files = 0
+  let b:vimfiler.is_visible_ignore_files = 0
   let b:vimfiler.simple = a:context.simple
   let b:vimfiler.directory_cursor_pos = {}
   let b:vimfiler.current_mask = ''

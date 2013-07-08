@@ -332,9 +332,15 @@ g:vimfiler_explorer_columns			 *g:vimfiler_explorer_columns*
 
 g:vimfiler_ignore_pattern			 *g:vimfiler_ignore_pattern*
 		Specify the regexp pattern to ignore candidates of the source.
-		This applies on the path of candidates.  It's case sensitive.
-		Note: If vimfiler is visible dot file, the ignore pattern is
-		disabled.
+		This applies on the filenames of candidates.  It's case
+		sensitive.
+		Note: If you use
+		|<Plug>(vimfiler_toggle_visible_ignore_files)|, the ignore
+		pattern is disabled.
+>
+		let g:vimfiler_ignore_pattern = '^\%(.git\|.DS_Store\)'
+<
+		Default value is '^\.' (dot files pattern).
 
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
@@ -538,9 +544,10 @@ Normal mode key mappings.
 				*<Plug>(vimfiler_switch_to_history_directory)*
 		Switches to history directory by |unite| interface.
 
-<Plug>(vimfiler_toggle_visible_dot_files)
+<Plug>(vimfiler_toggle_visible_ignore_files)
+				*<Plug>(vimfiler_toggle_visible_ignore_files)*
 				*<Plug>(vimfiler_toggle_visible_dot_files)*
-		Toggles visible dot files.
+		Toggles visible ignore files. cf: |g:vimfiler_ignore_pattern|
 
 <Plug>(vimfiler_popup_shell)			*<Plug>(vimfiler_popup_shell)*
 		Executes |:VimShellPop|or |:shell|.
@@ -748,7 +755,7 @@ L			<Plug>(vimfiler_switch_to_drive)
 \			<Plug>(vimfiler_switch_to_root_directory)
 <C-j>			<Plug>(vimfiler_switch_to_history_directory)
 <BS>			<Plug>(vimfiler_switch_to_parent_directory)
-.			<Plug>(vimfiler_toggle_visible_dot_files)
+.			<Plug>(vimfiler_toggle_visible_ignore_files)
 H			<Plug>(vimfiler_popup_shell)
 e			<Plug>(vimfiler_edit_file)
 E			<Plug>(vimfiler_split_edit_file)
