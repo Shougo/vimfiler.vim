@@ -1107,7 +1107,7 @@ Q: I want to use the feature like |:NERDTreeFind|.
 
 A:
 >
-	:VimFilerBufferDir -explorer -find
+	:VimFilerExplorer -find
 <
 
 ==============================================================================
