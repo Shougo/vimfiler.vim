@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: syntax/vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jun 2013.
+" Last Modified: 14 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -44,10 +44,6 @@ let s:file_icon = vimfiler#util#escape_pattern(
 let s:marked_file_icon = vimfiler#util#escape_pattern(
       \ g:vimfiler_marked_file_icon)
 
-execute 'syntax match   vimfilerMarkedFile'
-      \ '''^\s*\%('  . s:leaf_icon .'\)*'
-      \ . s:marked_file_icon . ' .*$'''
-
 execute 'syntax match   vimfilerNormalFile'
       \ '''^\s*\%('.s:leaf_icon.'\)\?'.
       \ s:file_icon.'.*'' contains=vimfilerNonMark oneline'
@@ -61,6 +57,10 @@ execute 'syntax match   vimfilerClosedFile'
 execute 'syntax match   vimfilerROFile'
       \ '''^\s*\%('.s:leaf_icon.'\)\?'.
       \ s:ro_file_icon.'.*'' contains=vimfilerNonMark oneline'
+
+execute 'syntax match   vimfilerMarkedFile'
+      \ '''^\s*\%('  . s:leaf_icon .'\)\?'
+      \ . s:marked_file_icon . ' .*$'''
 
 execute 'syntax match   vimfilerNonMark'
       \ '''^\s*\%('.s:leaf_icon.'\)\?\%('.s:opened_icon.'\|'
