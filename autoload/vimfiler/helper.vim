@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jun 2013.
+" Last Modified: 16 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -104,12 +104,6 @@ function! vimfiler#helper#_get_cd_path(dir) "{{{
   let current_dir = b:vimfiler.current_dir
 
   if dir == '..'
-    if vimfiler#util#is_windows() && current_dir =~ '^//'
-      " For UNC path.
-      let current_dir = substitute(current_dir,
-            \ '^//[^/]*/[^/]*', '', '')
-    endif
-
     let chars = split(current_dir, '\zs')
     if count(chars, '/') <= 1
       if count(chars, ':') < 1
