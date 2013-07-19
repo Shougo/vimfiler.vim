@@ -712,6 +712,12 @@ Normal mode key mappings.
 		Note: To use this feature, |vimproc| is needed.
 		http://github.com/Shougo/vimproc
 
+<Plug>(vimfiler_jump_first_child)	 *<Plug>(vimfiler_jump_first_child)*
+		Move to first child of current files.
+
+<Plug>(vimfiler_jump_last_child)	 *<Plug>(vimfiler_jump_last_child)*
+		Move to last child of current files.
+
 Visual mode key mappings.
 
 <Plug>(vimfiler_toggle_mark_selected_lines)
@@ -788,6 +794,8 @@ t			<Plug>(vimfiler_expand_tree)
 T			<Plug>(vimfiler_expand_tree_recursive)
 I			<Plug>(vimfiler_cd_input_directory)
 <2-LeftMouse>		<Plug>(vimfiler_double_click)
+gj			<Plug>(vimfiler_jump_last_child)
+gk			<Plug>(vimfiler_jump_first_child)
 
 Visual mode mappings.
 {lhs}			{rhs}

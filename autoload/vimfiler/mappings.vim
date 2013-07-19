@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jul 2013.
+" Last Modified: 19 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -168,6 +168,10 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>on_double_click()<CR>
   nmap <buffer><silent> <Plug>(vimfiler_quick_look)
         \ :<C-u>call <SID>quick_look()<CR>
+  nmap <buffer><silent> <Plug>(vimfiler_jump_first_child)
+        \ :<C-u>call <SID>jump_child(1)<CR>
+  nmap <buffer><silent> <Plug>(vimfiler_jump_last_child)
+        \ :<C-u>call <SID>jump_child(0)<CR>
 
   if b:vimfiler.is_safe_mode
     call s:unmapping_file_operations()
@@ -288,6 +292,9 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   " pushd/popd
   nmap <buffer> Y <Plug>(vimfiler_pushd)
   nmap <buffer> P <Plug>(vimfiler_popd)
+
+  nmap <buffer> gj <Plug>(vimfiler_jump_last_child)
+  nmap <buffer> gk <Plug>(vimfiler_jump_first_child)
 endfunction"}}}
 
 function! vimfiler#mappings#smart_cursor_map(directory_map, file_map) "{{{
@@ -926,6 +933,45 @@ function! s:unexpand_tree() "{{{
   endif
 
   setlocal nomodifiable
+endfunction"}}}
+function! s:jump_child(is_first) "{{{
+  if empty(vimfiler#get_file())
+    return
+  endif
+
+  let max = a:is_first ? 1 : line('$')
+  let cnt = line('.')
+  let file = vimfiler#get_file(cnt)
+  let level = file.vimfiler__nest_level
+  while cnt != max
+    let file = vimfiler#get_file(cnt)
+
+    if level > file.vimfiler__nest_level
+      if a:is_first
+        let cnt += 1
+      else
+        let cnt -= 1
+      endif
+
+      break
+    endif
+
+    if a:is_first
+      let cnt -= 1
+    else
+      let cnt += 1
+    endif
+  endwhile
+
+  if empty(vimfiler#get_file(cnt))
+    if a:is_first
+      let cnt += 1
+    else
+      let cnt -= 1
+    endif
+  endif
+
+  call cursor(cnt, 0)
 endfunction"}}}
 
 function! s:switch_to_drive() "{{{
