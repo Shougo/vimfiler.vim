@@ -290,8 +290,8 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
     let mark = ''
     if file.vimfiler__nest_level > 0
-      let mark .= repeat(' ',
-            \   (file.vimfiler__nest_level - 1) * g:vimfiler_tree_indentation)
+      let mark .= repeat(' ', file.vimfiler__nest_level
+            \       * g:vimfiler_tree_indentation)
             \ . g:vimfiler_tree_leaf_icon
     endif
     if file.vimfiler__is_marked
