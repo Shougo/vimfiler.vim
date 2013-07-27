@@ -260,6 +260,11 @@ g:vimfiler_tree_closed_icon			*g:vimfiler_tree_closed_icon*
 		
 		Default value is "+"
 
+g:vimfiler_tree_indentation			*g:vimfiler_tree_indentation*
+		This variable controls vimfiler indentation of tree.
+		
+		Default value is " "
+
 g:vimfiler_readonly_file_icon		*g:vimfiler_readonly_file_icon*
 		This variable controls vimfiler readonly file icon.
 		

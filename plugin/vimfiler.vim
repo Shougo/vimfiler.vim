@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jul 2013.
+" Last Modified: 27 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -79,6 +79,8 @@ let g:vimfiler_tree_opened_icon =
       \ get(g:, 'vimfiler_tree_opened_icon', '-')
 let g:vimfiler_tree_closed_icon =
       \ get(g:, 'vimfiler_tree_closed_icon', '+')
+let g:vimfiler_tree_indentation =
+      \ get(g:, 'vimfiler_tree_indentation', ' ')
 let g:vimfiler_file_icon =
       \ get(g:, 'vimfiler_file_icon', ' ')
 let g:vimfiler_readonly_file_icon =

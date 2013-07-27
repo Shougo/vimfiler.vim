@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Jul 2013.
+" Last Modified: 27 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -290,7 +290,8 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
     let mark = ''
     if file.vimfiler__nest_level > 0
-      let mark .= repeat(' ', file.vimfiler__nest_level - 1)
+      let mark .= repeat(g:vimfiler_tree_indentation,
+            \   file.vimfiler__nest_level - 1)
             \ . g:vimfiler_tree_leaf_icon
     endif
     if file.vimfiler__is_marked
