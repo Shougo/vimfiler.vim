@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 May 2013.
+" Last Modified: 29 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -28,7 +28,12 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:V = vital#of('vimfiler')
-let s:List = vital#of('vimfiler').import('Data.List')
+
+function! vimfiler#util#get_vital() "{{{
+  return s:V
+endfunction"}}}
+
+let s:List = s:V.import('Data.List')
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
 

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/sort.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Nov 2011.
+" Last Modified: 29 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,7 +31,7 @@ function! unite#sources#vimfiler_sort#define() "{{{
   return s:source
 endfunction"}}}
 
-let s:Cache = vital#of('vimfiler').import('System.Cache')
+let s:Cache = vimfiler#util#get_vital().import('System.Cache')
 
 let s:source = {
       \ 'name' : 'vimfiler/sort',
