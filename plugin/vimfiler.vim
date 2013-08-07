@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jul 2013.
+" Last Modified: 07 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -139,7 +139,7 @@ command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSimple
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSplit
       \ call s:call_vimfiler({ 'split' : 1, }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerTab
-      \ tabnew | call s:call_vimfiler({ 'create' : 1 }, <q-args>)
+      \ call s:call_vimfiler({ 'tab' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerExplorer
       \ call s:call_vimfiler({ 'explorer' : 1, }, <q-args>)
 command! VimFilerDetectDrives call vimfiler#detect_drives()

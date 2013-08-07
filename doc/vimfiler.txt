@@ -912,6 +912,11 @@ parameters for an option.  You need to escape spaces with "\".
 		Find current file when switching.
 		Note: This option is available in exists vimfiler buffer.
 
+						*vimfiler-options-tab*
+		-tab
+		Create new tab for vimfiler.
+		Note: It creates new vimfiler buffer.
+
 ==============================================================================
 COLUMNS						*vimfiler-columns*
 

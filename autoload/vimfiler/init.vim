@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jul 2013.
+" Last Modified: 07 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -55,6 +55,7 @@ function! vimfiler#init#_initialize_context(context) "{{{
     \ 'reverse' : 0,
     \ 'project' : 0,
     \ 'find' : 0,
+    \ 'tab' : 0,
     \ 'columns' : g:vimfiler_default_columns,
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
     \ 'vimfiler__prev_winnr' : winbufnr('%'),
@@ -80,6 +81,10 @@ function! vimfiler#init#_initialize_context(context) "{{{
   if context.toggle && context.find
     " Disable toggle feature.
     let context.toggle = 0
+  endif
+  if context.tab
+    " Force create new vimfiler buffer.
+    let context.create = 1
   endif
 
   return context
@@ -375,6 +380,10 @@ function! s:create_vimfiler_buffer(path, context) "{{{
   if context.split
     execute context.direction
           \ (context.horizontal ? 'split' : 'vsplit')
+  endif
+
+  if context.tab
+    tabnew
   endif
 
   " Save swapfile option.

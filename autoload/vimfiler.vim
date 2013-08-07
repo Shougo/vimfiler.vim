@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Jun 2013.
+" Last Modified: 07 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -51,7 +51,7 @@ let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-quit', '-toggle', '-create',
       \ '-simple', '-double', '-split', '-horizontal', '-direction=',
       \ '-winheight=', '-winwidth=', '-winminwidth=', '-auto-cd', '-explorer',
-      \ '-reverse', '-project', '-columns=', '-status', '-find',
+      \ '-reverse', '-project', '-columns=', '-status', '-find', '-tab',
       \]
 "}}}
 
