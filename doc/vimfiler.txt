@@ -266,7 +266,7 @@ g:vimfiler_tree_indentation			*g:vimfiler_tree_indentation*
 		" Two columns of indentation.
 		let g:vimfiler_tree_indentation = 2
 <
-		Default value is " "
+		Default value is 1
 
 g:vimfiler_readonly_file_icon		*g:vimfiler_readonly_file_icon*
 		This variable controls vimfiler readonly file icon.
