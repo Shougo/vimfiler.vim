@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jul 2013.
+" Last Modified: 13 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -530,7 +530,7 @@ function! s:switch() "{{{
   let winnr = context.vimfiler__prev_winnr
 
   if winnr == winnr() || winnr < 0
-    vnew
+    rightbelow vnew
   else
     execute winnr 'wincmd w'
   endif
