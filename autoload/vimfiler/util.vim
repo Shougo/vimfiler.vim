@@ -43,9 +43,6 @@ endfunction
 function! vimfiler#util#truncate(...)
   return call(s:V.truncate, a:000)
 endfunction
-function! vimfiler#util#strchars(...)
-  return call(s:V.strchars, a:000)
-endfunction
 function! vimfiler#util#strwidthpart(...)
   return call(s:V.strwidthpart, a:000)
 endfunction

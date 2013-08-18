@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Jul 2013.
+" Last Modified: 18 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -184,7 +184,7 @@ function! s:redraw_prompt() "{{{
     endif
   endif
 
-  if vimfiler#util#strchars(prefix.dir) > winwidth(0)
+  if vimfiler#util#wcswidth(prefix.dir) > winwidth(0)
     let dir = fnamemodify(substitute(dir, '/$', '', ''), ':t')
   endif
 
