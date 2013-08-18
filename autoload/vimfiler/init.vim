@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Aug 2013.
+" Last Modified: 18 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -365,8 +365,7 @@ function! s:create_vimfiler_buffer(path, context) "{{{
   endif
 
   " Create new buffer name.
-  let prefix = vimfiler#util#is_windows() ?
-        \ '[vimfiler] - ' : '*vimfiler* - '
+  let prefix = '[vimfiler] - '
   let prefix .= context.profile_name
 
   let postfix = vimfiler#init#_get_postfix(prefix, 1)
