@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jul 2013.
+" Last Modified: 18 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -38,7 +38,7 @@ let s:List = s:V.import('Data.List')
 let s:is_windows = has('win16') || has('win32') || has('win64')
 
 function! vimfiler#util#truncate_smart(...)
-  return call(s:V.truncate_smart, a:000)
+  return call(s:V.truncate_skipping, a:000)
 endfunction
 function! vimfiler#util#truncate(...)
   return call(s:V.truncate, a:000)
