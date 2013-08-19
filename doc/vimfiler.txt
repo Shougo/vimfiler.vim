@@ -713,7 +713,7 @@ Normal mode key mappings.
 		If cursor is on the directory, execute
 		|<Plug>(vimfiler_expand_tree)| mapping.
 		If cursor is on the file, execute
-		|<Plug>(vimfiler_execute_system_associated)| mapping.
+		|<Plug>(vimfiler_edit_file)| mapping.
 
 <Plug>(vimfiler_quick_look)		*<Plug>(vimfiler_quick_look)*
 		Preview the file by |g:vimfiler_quick_look_command|.
