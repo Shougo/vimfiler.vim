@@ -1522,7 +1522,7 @@ function! s:on_double_click() "{{{
     if vimfiler#get_filename() ==# '..'
       call vimfiler#mappings#cd('..')
     else
-      call s:execute_system_associated()
+      call s:edit()
     endif
   else
     call s:toggle_tree(0)
