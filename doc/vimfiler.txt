@@ -512,7 +512,8 @@ Normal mode key mappings.
 		Renames cursor file or selected files.
 		If selected files, vimfiler will open exrename buffer.
 		In exrename buffer, you can rename with Vim features like
-		|renamer.vim|.
+		|renamer.vim|. In rename buffer, you must write buffer to
+		finish renaming.
 		http://www.vim.org/scripts/script.php?script_id=1721
 		Note: This mappings is disabled in vimfiler safe mode.
 
