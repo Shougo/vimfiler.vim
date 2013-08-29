@@ -146,9 +146,18 @@ vimfiler#do_action({action-name})		*vimfiler#do_action()*
 		the top of the candidates when none of the candidates are marked.
 
 		This is usually used as nnoremap <silent><buffer><expr>.
+
+vimfiler#do_switch_action({action-name})	*vimfiler#do_switch_action()*
+		It is same to |vimfiler#do_action()|. But it switches current
+		window to other window if |vimfiler-options-no-quit|.
+
+		This is usually used as nnoremap <silent><buffer><expr>.
 		For example,
 >
-		nnoremap <silent><buffer><expr> v vimfiler#do_action('vsplit')
+		nnoremap <silent><buffer><expr> v
+		\ vimfiler#do_switch_action('vsplit')
+		nnoremap <silent><buffer><expr> s
+		\ vimfiler#do_switch_action('split')
 >
 vimfiler#smart_cursor_map({directory-map}, {file-map})
 						*vimfiler#smart_cursor_map()*

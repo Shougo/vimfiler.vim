@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Aug 2013.
+" Last Modified: 29 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -82,7 +82,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)
         \ :<C-u>call <SID>popup_shell()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)
-        \ :<C-u>call <SID>edit()<CR>
+        \ :<C-u>call vimfiler#mappings#do_switch_action(g:vimfiler_edit_action)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)
         \ :<C-u>call <SID>split_edit_file()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)
@@ -326,6 +326,13 @@ function! vimfiler#mappings#do_action(action, ...) "{{{
 
   return vimfiler#mappings#do_files_action(
         \ a:action, marked_files, cursor_linenr)
+endfunction"}}}
+
+function! vimfiler#mappings#do_switch_action(action) "{{{
+  let current_linenr = line('.')
+  call s:switch()
+
+  call vimfiler#mappings#do_action(a:action, current_linenr)
 endfunction"}}}
 
 function! vimfiler#mappings#do_files_action(action, files, ...) "{{{
@@ -1001,12 +1008,6 @@ function! s:popup_shell() "{{{
   call vimfiler#mappings#do_current_dir_action('vimfiler__shell', {
         \ 'vimfiler__files' : files,
         \})
-endfunction"}}}
-function! s:edit() "{{{
-  let current_linenr = line('.')
-  call s:switch()
-
-  call vimfiler#mappings#do_action(g:vimfiler_edit_action, current_linenr)
 endfunction"}}}
 function! s:edit_binary_file() "{{{
   let file = vimfiler#get_file()
