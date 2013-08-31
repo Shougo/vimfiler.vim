@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Aug 2013.
+" Last Modified: 31 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -946,7 +946,7 @@ function! s:jump_child(is_first) "{{{
     return
   endif
 
-  let max = a:is_first ? 1 : line('$')
+  let max = a:is_first ? b:vimfiler.prompt_linenr : line('$')
   let cnt = line('.')
   let file = vimfiler#get_file(cnt)
   let level = file.vimfiler__nest_level
