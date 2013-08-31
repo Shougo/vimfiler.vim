@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Aug 2013.
+" Last Modified: 31 Aug 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -342,8 +342,9 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     " Create another vimfiler.
     call vimfiler#mappings#create_another_vimfiler()
     wincmd p
-    call vimfiler#view#_force_redraw_all_vimfiler()
   endif
+
+  call vimfiler#view#_force_redraw_all_vimfiler()
 endfunction"}}}
 function! s:create_vimfiler_buffer(path, context) "{{{
   let search_path = fnamemodify(bufname('%'), ':p')
