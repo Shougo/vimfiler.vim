@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jun 2013.
+" Last Modified: 01 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -31,6 +31,11 @@ function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
   let context = vimfiler#initialize_context(get(a:000, 0, {}))
   let path = get(context, 'path',
         \ vimfiler#util#substitute_path_separator(expand('<afile>')))
+
+  if filereadable(path)
+    call vimfiler#print_error('You cannot open the file contained ":"(see FAQ).')
+    return
+  endif
 
   let ret = vimfiler#parse_path(path)
   let source_name = ret[0]
