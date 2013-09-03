@@ -393,7 +393,7 @@ function! s:create_vimfiler_buffer(path, context) "{{{
     set noswapfile
     let ret = s:manager.open(bufname)
   finally
-    let &swapfile = swapfile_save
+    let &g:swapfile = swapfile_save
   endtry
 
   if !ret.loaded
