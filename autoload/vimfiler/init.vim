@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2013.
+" Last Modified: 03 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -366,7 +366,7 @@ function! s:create_vimfiler_buffer(path, context) "{{{
   endif
 
   " Create new buffer name.
-  let prefix = '[vimfiler] - '
+  let prefix = 'vimfiler:'
   let prefix .= context.profile_name
 
   let postfix = vimfiler#init#_get_postfix(prefix, 1)
@@ -388,12 +388,10 @@ function! s:create_vimfiler_buffer(path, context) "{{{
 
   " Save swapfile option.
   let swapfile_save = &swapfile
-  set noswapfile
 
   try
+    set noswapfile
     let ret = s:manager.open(bufname)
-    " silent edit `=bufname`
-    setlocal noswapfile
   finally
     let &swapfile = swapfile_save
   endtry
