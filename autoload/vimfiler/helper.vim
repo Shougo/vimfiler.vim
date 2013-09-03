@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 16 Jul 2013.
+" Last Modified: 04 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -235,27 +235,34 @@ function! vimfiler#helper#_set_cursor()
 endfunction
 
 function! s:sort(files, type) "{{{
-  if a:type =~? '^n\%[one]$'
-    " Ignore.
-    let files = a:files
-  elseif a:type =~? '^s\%[ize]$'
-    let files = vimfiler#util#sort_by(
-          \ a:files, 'v:val.vimfiler__filesize')
-  elseif a:type =~? '^e\%[xtension]$'
-    let files = vimfiler#util#sort_by(
-          \ a:files, 'v:val.vimfiler__extension')
-  elseif a:type =~? '^f\%[ilename]$'
-    let files = vimfiler#helper#_sort_human(
-          \ a:files, vimfiler#util#has_lua())
-  elseif a:type =~? '^t\%[ime]$'
-    let files = vimfiler#util#sort_by(
-          \ a:files, 'v:val.vimfiler__filetime')
-  elseif a:type =~? '^m\%[anual]$'
-    " Not implemented.
-    let files = a:files
-  else
-    throw 'Invalid sort type.'
-  endif
+  let ignorecase_save = &ignorecase
+  try
+    let &ignorecase = vimfiler#util#is_windows()
+
+    if a:type =~? '^n\%[one]$'
+      " Ignore.
+      let files = a:files
+    elseif a:type =~? '^s\%[ize]$'
+      let files = vimfiler#util#sort_by(
+            \ a:files, 'v:val.vimfiler__filesize')
+    elseif a:type =~? '^e\%[xtension]$'
+      let files = vimfiler#util#sort_by(
+            \ a:files, 'v:val.vimfiler__extension')
+    elseif a:type =~? '^f\%[ilename]$'
+      let files = vimfiler#helper#_sort_human(
+            \ a:files, vimfiler#util#has_lua())
+    elseif a:type =~? '^t\%[ime]$'
+      let files = vimfiler#util#sort_by(
+            \ a:files, 'v:val.vimfiler__filetime')
+    elseif a:type =~? '^m\%[anual]$'
+      " Not implemented.
+      let files = a:files
+    else
+      throw 'Invalid sort type.'
+    endif
+  finally
+    let &ignorecase = ignorecase_save
+  endtry
 
   if a:type =~ '^\u'
     " Reverse order.
@@ -273,14 +280,20 @@ function! vimfiler#helper#_sort_human(candidates, has_lua) "{{{
   " Use lua interface.
   lua << EOF
 do
+  local ignorecase = vim.eval('&ignorecase')
   local candidates = vim.eval('a:candidates')
   local t = {}
   for i = 1, #candidates do
     t[i] = candidates[i-1]
+    if ignorecase ~= 0 then
+      t[i].vimfiler__filename = string.lower(t[i].vimfiler__filename)
+    end
   end
+
   table.sort(t, function(a, b)
-        return a.vimfiler__filename < b.vimfiler__filename
-      end)
+    return a.vimfiler__filename < b.vimfiler__filename
+  end)
+
   for i = 0, #candidates-1 do
     candidates[i] = t[i+1]
   end
