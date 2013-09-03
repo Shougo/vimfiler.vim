@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Sep 2013.
+" Last Modified: 04 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -435,6 +435,7 @@ function! s:buffer_default_settings() "{{{
   setlocal noswapfile
   setlocal noreadonly
   setlocal nowrap
+  setlocal nospell
   setlocal bufhidden=hide
   setlocal nolist
   setlocal foldcolumn=0
