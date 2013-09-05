@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Aug 2013.
+" Last Modified: 06 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -343,6 +343,7 @@ function! vimfiler#mappings#do_files_action(action, files, ...) "{{{
   let current_dir = vimfiler.current_dir
   call unite#mappings#do_action(a:action, a:files, {
         \ 'vimfiler__current_directory' : current_dir,
+        \ 'unite__is_interactive' : 1,
         \ })
 endfunction"}}}
 
@@ -357,6 +358,7 @@ function! vimfiler#mappings#do_dir_action(action, directory, ...) "{{{
   let context = get(a:000, 0, {})
   let vimfiler = vimfiler#get_current_vimfiler()
   let context.vimfiler__current_directory = a:directory
+  let context.unite__is_interactive = 1
 
   let files = vimfiler#get_marked_files()
   if empty(files)
