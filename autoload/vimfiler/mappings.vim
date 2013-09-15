@@ -166,11 +166,11 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>cd_input_directory()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_double_click)
         \ :<C-u>call <SID>on_double_click()<CR>
-  nmap <buffer><silent> <Plug>(vimfiler_quick_look)
+  nnoremap <buffer><silent> <Plug>(vimfiler_quick_look)
         \ :<C-u>call <SID>quick_look()<CR>
-  nmap <buffer><silent> <Plug>(vimfiler_jump_first_child)
+  nnoremap <buffer><silent> <Plug>(vimfiler_jump_first_child)
         \ :<C-u>call <SID>jump_child(1)<CR>
-  nmap <buffer><silent> <Plug>(vimfiler_jump_last_child)
+  nnoremap <buffer><silent> <Plug>(vimfiler_jump_last_child)
         \ :<C-u>call <SID>jump_child(0)<CR>
 
   if b:vimfiler.is_safe_mode
