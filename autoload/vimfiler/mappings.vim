@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 08 Sep 2013.
+" Last Modified: 16 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1546,13 +1546,6 @@ function! s:quick_look() "{{{
     return
   endif
 
-  if !executable(g:vimfiler_quick_look_command)
-    call vimfiler#print_error(
-          \ 'g:vimfiler_quick_look_command "'.
-          \ g:vimfiler_quick_look_command.'"is not executable.')
-    return
-  endif
-
   let file = vimfiler#get_file()
   if empty(file)
     return
@@ -1562,7 +1555,14 @@ function! s:quick_look() "{{{
         \ g:vimfiler_quick_look_command . ' ' .
         \   file.action__path, &encoding, 'char')
 
-  call vimproc#system_gui(command)
+  try
+    call vimproc#system_gui(command)
+  catch /vimproc#get_command_name: /
+    call vimfiler#print_error(
+          \ 'g:vimfiler_quick_look_command "'.
+          \ g:vimfiler_quick_look_command.'" is not executable.')
+    return
+  endtry
 endfunction"}}}
 
 " For safe mode.
