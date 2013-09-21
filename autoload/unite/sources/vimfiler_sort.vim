@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/sort.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 29 Jul 2013.
+" Last Modified: 21 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -92,7 +92,7 @@ function! s:action_table.sort.func(candidate) "{{{
   elseif a:candidate.action__sort ==# 'nosave'
     " Nosave current sort type.
     if s:Cache.filereadable(cache_dir, path)
-      call s:Cache.delete(cache_dir, path)
+      call s:Cache.deletefile(cache_dir, path)
     endif
   else
     let b:vimfiler.local_sort_type = a:candidate.action__sort
