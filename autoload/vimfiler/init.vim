@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2013.
+" Last Modified: 23 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -91,7 +91,7 @@ function! vimfiler#init#_initialize_context(context) "{{{
 endfunction"}}}
 function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   " Set current unite.
-  let b:unite = unite#get_current_unite()
+  let b:vimfiler.unite = unite#get_current_unite()
 
   " Set current directory.
   let current = vimfiler#util#substitute_path_separator(a:directory)
@@ -160,7 +160,7 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
 endfunction"}}}
 function! vimfiler#init#_initialize_vimfiler_file(path, lines, dict) "{{{1
   " Set current unite.
-  let b:unite = unite#get_current_unite()
+  let b:vimfiler.unite = unite#get_current_unite()
 
   " Set current directory.
   let b:vimfiler.current_path = a:path

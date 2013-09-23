@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2013.
+" Last Modified: 23 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -155,7 +155,6 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
     endif
 
     call vimfiler#set_current_vimfiler(b:vimfiler)
-    call unite#set_current_unite(b:unite)
 
     let vimfiler = vimfiler#get_current_vimfiler()
     if !has_key(vimfiler, 'context')
