@@ -437,6 +437,7 @@ function! vimfiler#mappings#cd(dir, ...) "{{{
   let b:vimfiler.original_files = []
   let b:vimfiler.all_files = []
   let b:vimfiler.current_files = []
+  let b:vimfiler.all_files_len = 0
 
   " Redraw.
   call vimfiler#force_redraw_screen()
@@ -838,6 +839,7 @@ function! s:expand_tree(is_recursive) "{{{
   call extend(b:vimfiler.all_files, files, index+1)
   call extend(b:vimfiler.current_files, files, index+1)
   call extend(b:vimfiler.original_files, original_files, index_orig+1)
+  let b:vimfiler.all_files_len += len(files)
 
   call append('.', vimfiler#view#_get_print_lines(files))
 
@@ -941,6 +943,7 @@ function! s:unexpand_tree() "{{{
     " Delete children.
     let b:vimfiler.all_files = b:vimfiler.all_files[: index]
           \ + b:vimfiler.all_files[end+1 :]
+    let b:vimfiler.all_files_len += len(b:vimfiler.all_files)
     let b:vimfiler.current_files = b:vimfiler.current_files[: index]
           \ + b:vimfiler.current_files[end+1 :]
     let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
