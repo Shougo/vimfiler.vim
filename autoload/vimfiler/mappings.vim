@@ -37,8 +37,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)
         \ (line('.') == line('$'))?
         \  (vimfiler#get_file_offset()+1).'Gzb' : 'j'
-  nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_up)
-        \ (line('.') == 1)? 'G' : 'k'
+  nnoremap <buffer><silent><expr> <Plug>(vimfiler_loop_cursor_up)
+        \ (line('.') == 1)? ":call \<SID>cursor_bottom()\<CR>" : 'k'
   nnoremap <buffer><silent> <Plug>(vimfiler_redraw_screen)
         \ :<C-u>call vimfiler#force_redraw_screen(1)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_toggle_mark_current_line)
@@ -158,6 +158,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   endif
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_cursor_top)
         \ (vimfiler#get_file_offset()+1).'Gzb'
+  nnoremap <buffer><silent> <Plug>(vimfiler_cursor_bottom)
+        \ :<C-u>call <SID>cursor_bottom()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree)
         \ :<C-u>call <SID>toggle_tree(0)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree_recursive)
@@ -283,6 +285,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nmap <buffer> gs <Plug>(vimfiler_toggle_safe_mode)
   nmap <buffer> gS <Plug>(vimfiler_toggle_simple_mode)
   nmap <buffer> gg <Plug>(vimfiler_cursor_top)
+  nmap <buffer> G <Plug>(vimfiler_cursor_bottom)
   nmap <buffer> t <Plug>(vimfiler_expand_tree)
   nmap <buffer> T <Plug>(vimfiler_expand_tree_recursive)
   nmap <buffer> I <Plug>(vimfiler_cd_input_directory)
@@ -466,6 +469,13 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir) "{{{
   endif
 
   call vimfiler#helper#_set_cursor()
+endfunction"}}}
+
+function! s:cursor_bottom() "{{{
+  if b:vimfiler.all_files_len != len(b:vimfiler.current_files)
+    call vimfiler#view#_redraw_screen(1)
+  endif
+  call cursor(line('$'), 0)
 endfunction"}}}
 
 function! vimfiler#mappings#search_cursor(path) "{{{
