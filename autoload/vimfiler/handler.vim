@@ -216,7 +216,7 @@ endfunction"}}}
 
 function! vimfiler#handler#_event_cursor_moved() "{{{
   if line('.') <= line('$') / 2 ||
-        \ len(b:vimfiler.all_files) == len(b:vimfiler.current_files)
+        \ b:vimfiler.all_files_len == len(b:vimfiler.current_files)
     return
   endif
 
