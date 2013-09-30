@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Sep 2013.
+" Last Modified: 01 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -825,13 +825,9 @@ function! s:expand_tree(is_recursive) "{{{
   let index_orig =
         \ vimfiler#get_original_file_index(line('.'))
 
-  let b:vimfiler.current_files =
-        \ b:vimfiler.current_files[: index]
-        \  + files + b:vimfiler.current_files[index+1 :]
-  let b:vimfiler.original_files =
-        \ b:vimfiler.original_files[: index_orig]
-        \  + original_files
-        \  + b:vimfiler.original_files[index_orig+1 :]
+  call extend(b:vimfiler.all_files, files, index+1)
+  call extend(b:vimfiler.current_files, files, index+1)
+  call extend(b:vimfiler.original_files, original_files, index_orig+1)
 
   call append('.', vimfiler#view#_get_print_lines(files))
 
@@ -933,6 +929,8 @@ function! s:unexpand_tree() "{{{
     endfor
 
     " Delete children.
+    let b:vimfiler.all_files = b:vimfiler.all_files[: index]
+          \ + b:vimfiler.all_files[end+1 :]
     let b:vimfiler.current_files = b:vimfiler.current_files[: index]
           \ + b:vimfiler.current_files[end+1 :]
     let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
