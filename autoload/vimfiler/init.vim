@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2013.
+" Last Modified: 30 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -99,6 +99,7 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   if b:vimfiler.current_dir !~ '[:/]$'
     let b:vimfiler.current_dir .= '/'
   endif
+  let b:vimfiler.all_files = []
   let b:vimfiler.current_files = []
   let b:vimfiler.original_files = []
 
@@ -120,11 +121,13 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.prompt_linenr =
         \ (b:vimfiler.context.explorer) ?  0 :
         \ (b:vimfiler.context.status)   ?  2 : 1
+  let b:vimfiler.all_files_len = 0
   let b:vimfiler.status = ''
   let b:vimfiler.statusline =
         \ ((b:vimfiler.context.explorer) ?  '' : '*vimfiler* : ')
         \ . '%{vimfiler#get_status_string()}'
-        \ . "\ %=%{printf('%4d/%d',line('.'), line('$'))}"
+        \ . "\ %=%{printf('%4d/%d',line('.'),
+        \    b:vimfiler.prompt_linenr+b:vimfiler.all_files_len)}"
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#default_settings()
@@ -431,6 +434,8 @@ function! vimfiler#init#_default_settings() "{{{
           \ call vimfiler#handler#_event_bufwin_enter(expand('<abuf>'))
     autocmd BufLeave,WinLeave,BufWinLeave <buffer>
           \ call vimfiler#handler#_event_bufwin_leave(expand('<abuf>'))
+    autocmd CursorMoved <buffer>
+          \ call vimfiler#handler#_event_cursor_moved()
     autocmd VimResized <buffer>
           \ call vimfiler#view#_redraw_all_vimfiler()
   augroup end"}}}

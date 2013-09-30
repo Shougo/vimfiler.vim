@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 23 Sep 2013.
+" Last Modified: 30 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -212,6 +212,26 @@ function! vimfiler#handler#_event_bufwin_leave(bufnr) "{{{
   elseif context.winheight != 0 && context.split
     let &l:winfixheight = context.vimfiler__winfixheight
   endif
+endfunction"}}}
+
+function! vimfiler#handler#_event_cursor_moved() "{{{
+  if line('.') <= line('$') / 2 ||
+        \ len(b:vimfiler.all_files) == len(b:vimfiler.current_files)
+    return
+  endif
+
+  " Update current files.
+  let len_files = len(b:vimfiler.current_files)
+  let new_files = b:vimfiler.all_files[
+        \ len_files : (len_files + winheight(0) * 2)]
+  let b:vimfiler.current_files += new_files
+
+  setlocal modifiable
+  try
+    call append('$', vimfiler#view#_get_print_lines(new_files))
+  finally
+    setlocal nomodifiable
+  endtry
 endfunction"}}}
 
 function! s:restore_statusline()  "{{{

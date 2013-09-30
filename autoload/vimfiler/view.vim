@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Sep 2013.
+" Last Modified: 30 Sep 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -26,6 +26,9 @@
 
 let s:save_cpo = &cpo
 set cpo&vim
+
+let g:vimfiler_draw_files_limit =
+      \ get(g:, 'vimfiler_draw_files_limit', 100)
 
 function! vimfiler#view#_force_redraw_screen(...) "{{{
   let is_manualed = get(a:000, 0, 0)
@@ -56,7 +59,9 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
 
   call vimfiler#view#_redraw_screen()
 endfunction"}}}
-function! vimfiler#view#_redraw_screen() "{{{
+function! vimfiler#view#_redraw_screen(...) "{{{
+  let is_all = get(a:000, 0, 0)
+
   let is_switch = &filetype !=# 'vimfiler'
   if is_switch
     " Switch vimfiler.
@@ -78,38 +83,48 @@ function! vimfiler#view#_redraw_screen() "{{{
 
   let current_file = vimfiler#get_file()
 
-  let b:vimfiler.current_files =
+  let b:vimfiler.all_files =
         \ unite#filters#matcher_vimfiler_mask#define().filter(
         \ copy(b:vimfiler.original_files),
         \ { 'input' : b:vimfiler.current_mask })
   if !b:vimfiler.is_visible_ignore_files
     if g:vimfiler_ignore_pattern != ''
-      call filter(b:vimfiler.current_files,
+      call filter(b:vimfiler.all_files,
             \  "v:val.vimfiler__filename !~? g:vimfiler_ignore_pattern")
     endif
 
-    let b:vimfiler.current_files =
-          \ s:check_tree(b:vimfiler.current_files)
+    let b:vimfiler.all_files =
+          \ s:check_tree(b:vimfiler.all_files)
   endif
+
+  let b:vimfiler.all_files_len = len(b:vimfiler.all_files)
 
   let b:vimfiler.winwidth = (winwidth(0)+1)/2*2
 
+  let b:vimfiler.current_files = is_all ?
+        \ b:vimfiler.all_files : b:vimfiler.all_files[ :
+        \      max([g:vimfiler_draw_files_limit, winheight(0) * 2]) - 1]
+
   setlocal modifiable
 
-  let last_line = line('.')
+  try
+    let last_line = line('.')
 
-  " Clean up the screen.
-  if line('$') > 1 &&
-        \ b:vimfiler.prompt_linenr + len(b:vimfiler.current_files) < line('$')
-    silent execute '$-'.(line('$')-b:vimfiler.prompt_linenr-
-          \ len(b:vimfiler.current_files)+1).',$delete _'
-  endif
+    " Clean up the screen.
+    if line('$') > 1 &&
+          \ b:vimfiler.prompt_linenr + len(b:vimfiler.current_files) < line('$')
+      silent execute '$-'.(line('$')-b:vimfiler.prompt_linenr-
+            \ len(b:vimfiler.current_files)+1).',$delete _'
+    endif
 
-  call s:redraw_prompt()
+    call s:redraw_prompt()
 
-  " Print files.
-  call setline(b:vimfiler.prompt_linenr + 1,
-        \ vimfiler#view#_get_print_lines(b:vimfiler.current_files))
+    " Print files.
+    call setline(b:vimfiler.prompt_linenr + 1,
+          \ vimfiler#view#_get_print_lines(b:vimfiler.current_files))
+  finally
+    setlocal nomodifiable
+  endtry
 
   let index = index(b:vimfiler.current_files, current_file)
   if index > 0
@@ -120,8 +135,6 @@ function! vimfiler#view#_redraw_screen() "{{{
   else
     call cursor(last_line, 0)
   endif
-
-  setlocal nomodifiable
 
   if last_line != line('.') || (line('$') - line('.')) <= winheight(0)
     call vimfiler#helper#_set_cursor()
