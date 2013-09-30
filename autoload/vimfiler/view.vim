@@ -28,7 +28,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let g:vimfiler_draw_files_limit =
-      \ get(g:, 'vimfiler_draw_files_limit', 50)
+      \ get(g:, 'vimfiler_draw_files_limit', 100)
 
 function! vimfiler#view#_force_redraw_screen(...) "{{{
   let is_manualed = get(a:000, 0, 0)
