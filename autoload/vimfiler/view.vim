@@ -112,7 +112,7 @@ function! vimfiler#view#_redraw_screen() "{{{
         \ vimfiler#view#_get_print_lines(b:vimfiler.current_files))
 
   let index = index(b:vimfiler.current_files, current_file)
-  if index > 0
+  if index >= 0
     call cursor(vimfiler#get_line_number(index), 0)
   elseif line('.') == 1 && last_line == 1
     " Initialize cursor position.
