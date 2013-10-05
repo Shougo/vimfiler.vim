@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: variables.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Jun 2013.
+" Last Modified: 05 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,6 +33,18 @@ function! vimfiler#variables#get_clipboard() "{{{
   endif
 
   return s:clipboard
+endfunction"}}}
+
+function! vimfiler#variables#get_data_directory() "{{{
+  let g:vimfiler_data_directory =
+        \ substitute(fnamemodify(get(
+        \   g:, 'vimfiler_data_directory', '~/.vimfiler'),
+        \  ':p'), '\\', '/', 'g')
+  if !isdirectory(g:vimfiler_data_directory)
+    call mkdir(g:vimfiler_data_directory, 'p')
+  endif
+
+  return return g:vimfiler_data_directory
 endfunction"}}}
 
 let &cpo = s:save_cpo

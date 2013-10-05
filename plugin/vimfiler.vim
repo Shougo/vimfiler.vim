@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Sep 2013.
+" Last Modified: 05 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -97,13 +97,6 @@ let g:vimfiler_explorer_columns =
       \ get(g:, 'vimfiler_explorer_columns', 'type')
 let g:vimfiler_ignore_pattern =
       \ get(g:, 'vimfiler_ignore_pattern', '^\.')
-let g:vimfiler_data_directory =
-      \ substitute(fnamemodify(get(
-      \   g:, 'vimfiler_data_directory', '~/.vimfiler'),
-      \  ':p'), '\\', '/', 'g')
-if !isdirectory(g:vimfiler_data_directory)
-  call mkdir(g:vimfiler_data_directory, 'p')
-endif
 
 " Set extensions.
 let g:vimfiler_extensions =

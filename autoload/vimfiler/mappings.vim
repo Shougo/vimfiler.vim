@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Sep 2013.
+" Last Modified: 05 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -422,7 +422,7 @@ function! vimfiler#mappings#cd(dir, ...) "{{{
   endif
 
   " Check sort type.
-  let cache_dir = g:vimfiler_data_directory . '/' . 'sort'
+  let cache_dir = vimfiler#variables#get_data_directory() . '/' . 'sort'
   let path = b:vimfiler.source.'/'.b:vimfiler.current_dir
   if s:Cache.filereadable(cache_dir, path)
     let b:vimfiler.local_sort_type =

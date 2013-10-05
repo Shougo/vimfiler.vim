@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/sort.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 21 Sep 2013.
+" Last Modified: 05 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -55,7 +55,7 @@ function! s:source.gather_candidates(args, context) "{{{
     return []
   endif
 
-  let cache_dir = g:vimfiler_data_directory . '/' . 'sort'
+  let cache_dir = vimfiler#variables#get_data_directory() . '/' . 'sort'
   let path = b:vimfiler.source.'/'.b:vimfiler.current_dir
 
   call unite#print_message(
@@ -84,7 +84,7 @@ function! s:action_table.sort.func(candidate) "{{{
     return
   endif
 
-  let cache_dir = g:vimfiler_data_directory . '/' . 'sort'
+  let cache_dir = vimfiler#variables#get_data_directory() . '/' . 'sort'
   let path = b:vimfiler.source.'/'.b:vimfiler.current_dir
   if a:candidate.action__sort ==# 'save'
     " Save current sort type.
