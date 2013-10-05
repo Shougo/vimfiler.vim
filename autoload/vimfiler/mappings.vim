@@ -612,7 +612,11 @@ function! s:toggle_mark_all_lines() "{{{
     let file.vimfiler__marked_time = localtime()
   endfor
 
-  call vimfiler#redraw_screen()
+  if b:vimfiler.all_files_len != len(b:vimfiler.current_files)
+    call vimfiler#view#_redraw_screen(1)
+  else
+    call vimfiler#redraw_screen()
+  endif
 endfunction"}}}
 function! s:mark_similar_lines() "{{{
   let file = vimfiler#get_file()
