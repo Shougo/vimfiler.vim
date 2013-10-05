@@ -44,7 +44,7 @@ function! vimfiler#variables#get_data_directory() "{{{
     call mkdir(g:vimfiler_data_directory, 'p')
   endif
 
-  return return g:vimfiler_data_directory
+  return g:vimfiler_data_directory
 endfunction"}}}
 
 let &cpo = s:save_cpo
