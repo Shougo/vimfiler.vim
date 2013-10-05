@@ -214,6 +214,26 @@ function! vimfiler#handler#_event_bufwin_leave(bufnr) "{{{
   endif
 endfunction"}}}
 
+function! vimfiler#handler#_event_cursor_moved() "{{{
+  if line('.') <= line('$') / 2 ||
+        \ b:vimfiler.all_files_len == len(b:vimfiler.current_files)
+    return
+  endif
+
+  " Update current files.
+  let len_files = len(b:vimfiler.current_files)
+  let new_files = b:vimfiler.all_files[
+        \ len_files : (len_files + winheight(0) * 2)]
+  let b:vimfiler.current_files += new_files
+
+  setlocal modifiable
+  try
+    call append('$', vimfiler#view#_get_print_lines(new_files))
+  finally
+    setlocal nomodifiable
+  endtry
+endfunction"}}}
+
 function! s:restore_statusline()  "{{{
   if &filetype !=# 'vimfiler' || !g:vimfiler_force_overwrite_statusline
     return
