@@ -359,8 +359,8 @@ g:vimfiler_ignore_pattern			 *g:vimfiler_ignore_pattern*
 <
 		Default value is '^\.' (dot files pattern).
 
-						*g:vimfiler_redraw_files_limit*
-g:vimfiler_redraw_files_limit
+						*g:vimfiler_draw_files_limit*
+g:vimfiler_draw_files_limit
 		Specify the limit of redraw files.
 
 		Default value is 100.
