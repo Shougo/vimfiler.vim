@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: size.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Mar 2013.
+" Last Modified: 13 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,11 +56,12 @@ function! s:column.get(file, context) "{{{
   let filesize = a:file.vimfiler__filesize
   if filesize < 0
     if a:file.action__path !~ '^\a\w\+:' &&
-          \ has('python3') && getftype(a:file.action__path) !=# 'link'
+          \ (has('python3') || has('python'))
+          \ && getftype(a:file.action__path) !=# 'link'
       let pattern = s:get_python_file_size(a:file.action__path)
     elseif filesize == -2
       " Above 2GB?
-      let pattern = '>2.0'
+      let pattern = '>2.00'
     else
       let pattern = ''
     endif
@@ -96,8 +97,8 @@ function! s:column.get(file, context) "{{{
 endfunction"}}}
 
 function! s:get_python_file_size(filename) "{{{
-  " Use python3 interface.
-python3 <<END
+  " Use python interface.
+execute (has('python3') ? 'python3' : 'python') ' <<END'
 import os.path
 import vim
 try:
@@ -111,7 +112,7 @@ if filesize < 0:
 else:
   mega = filesize / 1024 / 1024
   float = int((mega%1024)*100/1024)
-  pattern = '%3d.%02d' % (mega/1024, float)
+  pattern = '%2d.%02d' % (mega/1024, float)
 
 vim.command("let pattern = '%s'" % pattern)
 END
