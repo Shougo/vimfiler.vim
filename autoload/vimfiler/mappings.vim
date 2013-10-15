@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Oct 2013.
+" Last Modified: 15 Oct 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -607,7 +607,7 @@ function! s:mark_current_line() "{{{
   setlocal nomodifiable
 endfunction"}}}
 function! s:toggle_mark_all_lines() "{{{
-  for file in vimfiler#get_current_vimfiler().current_files
+  for file in vimfiler#get_current_vimfiler().all_files
     let file.vimfiler__is_marked = !file.vimfiler__is_marked
     let file.vimfiler__marked_time = localtime()
   endfor
