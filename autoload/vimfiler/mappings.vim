@@ -71,6 +71,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call vimfiler#mappings#cd('file:~')<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_root_directory)
         \ :<C-u>call vimfiler#mappings#cd('file:/')<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_project_directory)
+        \ :<C-u>call vimfiler#mappings#cd_project()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_drive)
         \ :<C-u>call <SID>switch_to_drive()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_switch_to_history_directory)
@@ -243,6 +245,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nmap <buffer> L <Plug>(vimfiler_switch_to_drive)
   nmap <buffer> ~ <Plug>(vimfiler_switch_to_home_directory)
   nmap <buffer> \ <Plug>(vimfiler_switch_to_root_directory)
+  nmap <buffer> & <Plug>(vimfiler_switch_to_project_directory)
   nmap <buffer> <C-j> <Plug>(vimfiler_switch_to_history_directory)
   nmap <buffer> <BS> <Plug>(vimfiler_switch_to_parent_directory)
 
@@ -384,6 +387,14 @@ function! vimfiler#mappings#do_dir_action(action, directory, ...) "{{{
 
   " Execute action.
   call unite#mappings#do_action(a:action, files, context)
+endfunction"}}}
+
+function! vimfiler#mappings#cd_project(...) "{{{
+  let path = get(a:000, 0,
+        \ vimfiler#util#path2project_directory(
+        \   vimfiler#get_context().path)
+        \ )
+  call vimfiler#mappings#cd(path)
 endfunction"}}}
 
 function! vimfiler#mappings#cd(dir, ...) "{{{
