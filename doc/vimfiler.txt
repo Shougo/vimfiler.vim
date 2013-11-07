@@ -564,6 +564,10 @@ Normal mode key mappings.
 				*<Plug>(vimfiler_switch_to_root_directory)*
 		Switches to root directory.
 
+<Plug>(vimfiler_switch_to_project_directory)
+				*<Plug>(vimfiler_switch_to_project_directory)*
+		Switches to project directory.
+
 <Plug>(vimfiler_switch_to_history_directory)
 				*<Plug>(vimfiler_switch_to_history_directory)*
 		Switches to history directory by |unite| interface.
@@ -783,6 +787,7 @@ h			<Plug>(vimfiler_smart_h)
 L			<Plug>(vimfiler_switch_to_drive)
 ~			<Plug>(vimfiler_switch_to_home_directory)
 \			<Plug>(vimfiler_switch_to_root_directory)
+&			<Plug>(vimfiler_switch_to_project_directory)
 <C-j>			<Plug>(vimfiler_switch_to_history_directory)
 <BS>			<Plug>(vimfiler_switch_to_parent_directory)
 .			<Plug>(vimfiler_toggle_visible_ignore_files)
