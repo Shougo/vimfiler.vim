@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/history.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Nov 2011.
+" Last Modified: 08 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -54,7 +54,8 @@ function! s:source.gather_candidates(args, context) "{{{
 
     call add(candidates, {
           \ 'word' : bufname . ' '  . history,
-          \ 'kind' : 'directory',
+          \ 'kind' : (history =~# '^ssh:' ?
+          \        'directory/ssh' : 'directory'),
           \ 'action__path' : history,
           \ 'action__directory' : history,
           \ 'action__nr' : num,
