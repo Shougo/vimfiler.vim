@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_vimfiler_mask.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Sep 2011.
+" Last Modified: 19 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -53,14 +53,14 @@ function! s:matcher.filter(candidates, context) "{{{
         endif
 
         " Exclusion.
-        let mask = unite#escape_match(mask)
+        let mask = unite#util#escape_match(mask)
         if candidate.word !~ mask
           let matched = 1
           break
         endif
       elseif mask =~ '\\\@<!\*'
         " Wildcard.
-        let mask = unite#escape_match(mask)
+        let mask = unite#util#escape_match(mask)
         if candidate.word =~ mask
           let matched = 1
           break
