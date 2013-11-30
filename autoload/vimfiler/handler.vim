@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Sep 2013.
+" Last Modified: 30 Nov 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -150,7 +150,9 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
   endif
 
   try
-    if !exists('b:vimfiler')
+    if !exists('b:vimfiler') ||
+          \ len(filter(range(1, winnr('$')),
+          \    'winbufnr(v:val) == a:bufnr')) > 1
       return
     endif
 
