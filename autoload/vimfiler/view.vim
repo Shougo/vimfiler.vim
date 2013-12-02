@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Sep 2013.
+" Last Modified: 02 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -262,6 +262,19 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   if &l:number || (exists('&relativenumber') && &l:relativenumber)
     let padding += max([&l:numberwidth,
           \ len(line('$') + len(a:files))+1])
+  endif
+
+  let padding += &l:foldcolumn
+
+  " Check sign width.
+  if has('signs')
+    redir => sign
+      sign list
+    redir END
+
+    if sign != "\n\n"
+      let padding += 2
+    endif
   endif
 
   let max_len = max([max([winwidth(0), &winwidth]) - padding, 10])
