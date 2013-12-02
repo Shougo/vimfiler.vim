@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 02 Dec 2013.
+" Last Modified: 03 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -269,7 +269,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   " Check sign width.
   if has('signs')
     redir => sign
-      sign list
+      silent sign list
     redir END
 
     if sign != "\n\n"
