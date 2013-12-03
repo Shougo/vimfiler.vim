@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Dec 2013.
+" Last Modified: 04 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -266,15 +266,9 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
   let padding += &l:foldcolumn
 
-  " Check sign width.
   if has('signs')
-    redir => sign
-      silent sign list
-    redir END
-
-    if sign !~# "^\n*$"
-      let padding += 2
-    endif
+    " Delete signs.
+    silent execute 'sign unplace buffer='.bufnr('%')
   endif
 
   let max_len = max([max([winwidth(0), &winwidth]) - padding, 10])
