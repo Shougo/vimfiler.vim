@@ -272,7 +272,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
       silent sign list
     redir END
 
-    if sign != "\n\n"
+    if sign !~# "^\n*$"
       let padding += 2
     endif
   endif
