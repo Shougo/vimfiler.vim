@@ -77,10 +77,6 @@ function! vimfiler#smart_cursor_map(directory_map, file_map) "{{{
   return vimfiler#mappings#smart_cursor_map(a:directory_map, a:file_map)
 endfunction"}}}
 function! vimfiler#get_status_string() "{{{
-  if !exists('b:vimfiler')
-    return ''
-  endif
-
   return !exists('b:vimfiler') ? '' : b:vimfiler.status
 endfunction"}}}
 "}}}
