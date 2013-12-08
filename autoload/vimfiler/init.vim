@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 01 Oct 2013.
+" Last Modified: 09 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -125,10 +125,10 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.all_files_len = 0
   let b:vimfiler.status = ''
   let b:vimfiler.statusline =
-        \ ((b:vimfiler.context.explorer) ?  '' : '*vimfiler* : ')
+        \ (b:vimfiler.context.explorer ?  '' : '*vimfiler* : ')
         \ . '%{vimfiler#get_status_string()}'
-        \ . "\ %=%{printf('%4d/%d',line('.'),
-        \    b:vimfiler.prompt_linenr+b:vimfiler.all_files_len)}"
+        \ . "\ %=%{exists('b:vimfiler') ? printf('%4d/%d',line('.'),
+        \    b:vimfiler.prompt_linenr+b:vimfiler.all_files_len) : ''}"
   call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#default_settings()
