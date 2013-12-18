@@ -27,6 +27,83 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Global options definition. "{{{
+let g:vimfiler_split_action =
+      \ get(g:, 'vimfiler_split_action', 'right')
+let g:vimfiler_edit_action =
+      \ get(g:, 'vimfiler_edit_action', 'open')
+let g:vimfiler_preview_action =
+      \ get(g:, 'vimfiler_preview_action', 'preview')
+let g:vimfiler_sort_type =
+      \ get(g:, 'vimfiler_sort_type', 'filename')
+let g:vimfiler_directory_display_top =
+      \ get(g:, 'vimfiler_directory_display_top', 1)
+let g:vimfiler_split_rule =
+      \ get(g:, 'vimfiler_split_rule', 'topleft')
+let g:vimfiler_max_directories_history =
+      \ get(g:, 'vimfiler_max_directories_history', 50)
+let g:vimfiler_safe_mode_by_default =
+      \ get(g:, 'vimfiler_safe_mode_by_default', 1)
+let g:vimfiler_force_overwrite_statusline =
+      \ get(g:, 'vimfiler_force_overwrite_statusline', 1)
+let g:vimfiler_time_format =
+      \ get(g:, 'vimfiler_time_format', '%y/%m/%d %H:%M')
+let g:vimfiler_tree_leaf_icon =
+      \ get(g:, 'vimfiler_tree_leaf_icon', '|')
+let g:vimfiler_tree_opened_icon =
+      \ get(g:, 'vimfiler_tree_opened_icon', '-')
+let g:vimfiler_tree_closed_icon =
+      \ get(g:, 'vimfiler_tree_closed_icon', '+')
+let g:vimfiler_tree_indentation =
+      \ get(g:, 'vimfiler_tree_indentation', 1)
+let g:vimfiler_file_icon =
+      \ get(g:, 'vimfiler_file_icon', ' ')
+let g:vimfiler_readonly_file_icon =
+      \ get(g:, 'vimfiler_readonly_file_icon', 'X')
+let g:vimfiler_marked_file_icon =
+      \ get(g:, 'vimfiler_marked_file_icon', '*')
+let g:vimfiler_enable_auto_cd =
+      \ get(g:, 'vimfiler_enable_auto_cd', 0)
+let g:vimfiler_quick_look_command =
+      \ get(g:, 'vimfiler_quick_look_command', '')
+let g:vimfiler_default_columns =
+      \ get(g:, 'vimfiler_default_columns', 'type:size:time')
+let g:vimfiler_explorer_columns =
+      \ get(g:, 'vimfiler_explorer_columns', 'type')
+let g:vimfiler_ignore_pattern =
+      \ get(g:, 'vimfiler_ignore_pattern', '^\.')
+
+let g:vimfiler_execute_file_list =
+      \ get(g:, 'vimfiler_execute_file_list', {})
+
+" Set extensions.
+let g:vimfiler_extensions =
+      \ get(g:, 'vimfiler_extensions', {})
+if !has_key(g:vimfiler_extensions, 'text')
+  call vimfiler#set_extensions('text',
+        \ 'txt,cfg,ini')
+endif
+if !has_key(g:vimfiler_extensions, 'image')
+  call vimfiler#set_extensions('image',
+        \ 'bmp,png,gif,jpg,jpeg,jp2,tif,ico,wdp,cur,ani')
+endif
+if !has_key(g:vimfiler_extensions, 'archive')
+  call vimfiler#set_extensions('archive',
+        \ 'lzh,zip,gz,bz2,cab,rar,7z,tgz,tar')
+endif
+if !has_key(g:vimfiler_extensions, 'system')
+  call vimfiler#set_extensions('system',
+        \ 'inf,sys,reg,dat,spi,a,so,lib,dll')
+endif
+if !has_key(g:vimfiler_extensions, 'multimedia')
+  call vimfiler#set_extensions('multimedia',
+        \ 'avi,asf,wmv,mpg,flv,swf,divx,mov,mpa,m1a,'.
+        \ 'm2p,m2a,mpeg,m1v,m2v,mp2v,mp4,qt,ra,rm,ram,'.
+        \ 'rmvb,rpm,smi,mkv,mid,wav,mp3,ogg,wma,au,flac'
+        \ )
+endif
+"}}}
+
 let s:BM = vimfiler#util#get_vital().import('Vim.BufferManager')
 let s:manager = s:BM.new()  " creates new manager
 call s:manager.config('opener', 'silent edit')
