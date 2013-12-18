@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Oct 2013.
+" Last Modified: 18 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -117,24 +117,24 @@ nnoremap <silent> <Plug>(vimfiler_simple)
 "}}}
 
 command! -nargs=? -complete=customlist,vimfiler#complete VimFiler
-      \ call s:call_vimfiler({}, <q-args>)
+      \ call vimfiler#init#_command({}, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerDouble
-      \ call s:call_vimfiler({ 'double' : 1 }, <q-args>)
+      \ call vimfiler#init#_command({ 'double' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCurrentDir
-      \ call s:call_vimfiler({}, <q-args> . ' ' . getcwd())
+      \ call vimfiler#init#_command({}, <q-args> . ' ' . getcwd())
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerBufferDir
-      \ call s:call_vimfiler({}, <q-args> . ' ' .
+      \ call vimfiler#init#_command({}, <q-args> . ' ' .
       \ vimfiler#util#substitute_path_separator(fnamemodify(bufname('%'), ':p:h')))
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCreate
-      \ call s:call_vimfiler({ 'create' : 1 }, <q-args>)
+      \ call vimfiler#init#_command({ 'create' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSimple
-      \ call s:call_vimfiler({ 'simple' : 1, 'split' : 1, 'create' : 1 }, <q-args>)
+      \ call vimfiler#init#_command({ 'simple' : 1, 'split' : 1, 'create' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSplit
-      \ call s:call_vimfiler({ 'split' : 1, }, <q-args>)
+      \ call vimfiler#init#_command({ 'split' : 1, }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerTab
-      \ call s:call_vimfiler({ 'tab' : 1 }, <q-args>)
+      \ call vimfiler#init#_command({ 'tab' : 1 }, <q-args>)
 command! -nargs=? -complete=customlist,vimfiler#complete VimFilerExplorer
-      \ call s:call_vimfiler({ 'explorer' : 1, }, <q-args>)
+      \ call vimfiler#init#_command({ 'explorer' : 1, }, <q-args>)
 command! -nargs=1 VimFilerClose call vimfiler#mappings#close(<q-args>)
 
 augroup vimfiler
@@ -185,31 +185,6 @@ function! s:browse_check(path) "{{{
   if isdirectory(vimfiler#util#expand(path))
     call vimfiler#handler#_event_handler('BufReadCmd')
   endif
-endfunction"}}}
-
-function! s:call_vimfiler(default, args) "{{{
-  let args = []
-  let options = a:default
-  for arg in split(a:args, '\%(\\\@<!\s\)\+')
-    let arg = substitute(arg, '\\\( \)', '\1', 'g')
-
-    let arg_key = substitute(arg, '=\zs.*$', '', '')
-    let matched_list = filter(copy(vimfiler#get_options()),
-          \  'v:val ==# arg_key')
-    for option in matched_list
-      let key = substitute(substitute(option, '-', '_', 'g'),
-            \ '=$', '', '')[1:]
-      let options[key] = (option =~ '=$') ?
-            \ arg[len(option) :] : 1
-      break
-    endfor
-
-    if empty(matched_list)
-      call add(args, arg)
-    endif
-  endfor
-
-  call vimfiler#start(join(args), options)
 endfunction"}}}
 
 let &cpo = s:save_cpo

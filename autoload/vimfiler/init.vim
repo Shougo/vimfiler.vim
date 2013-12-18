@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Dec 2013.
+" Last Modified: 18 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,7 +34,31 @@ call s:manager.config('range', 'current')
 
 let s:loaded_columns = {}
 
-function! vimfiler#init#_initialize_context(context) "{{{
+function! vimfiler#init#_command(default, args) "{{{
+  let args = []
+  let options = a:default
+  for arg in split(a:args, '\%(\\\@<!\s\)\+')
+    let arg = substitute(arg, '\\\( \)', '\1', 'g')
+
+    let arg_key = substitute(arg, '=\zs.*$', '', '')
+    let matched_list = filter(copy(vimfiler#get_options()),
+          \  'v:val ==# arg_key')
+    for option in matched_list
+      let key = substitute(substitute(option, '-', '_', 'g'),
+            \ '=$', '', '')[1:]
+      let options[key] = (option =~ '=$') ?
+            \ arg[len(option) :] : 1
+      break
+    endfor
+
+    if empty(matched_list)
+      call add(args, arg)
+    endif
+  endfor
+
+  call vimfiler#init#_start(join(args), options)
+endfunction"}}}
+function! vimfiler#init#_context(context) "{{{
   let default_context = {
     \ 'buffer_name' : 'default',
     \ 'no_quit' : 0,
@@ -89,7 +113,7 @@ function! vimfiler#init#_initialize_context(context) "{{{
 
   return context
 endfunction"}}}
-function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
+function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
   " Set current unite.
   let b:vimfiler.unite = unite#get_current_unite()
 
@@ -110,7 +134,7 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.current_mask = ''
 
   let b:vimfiler.column_names = split(a:context.columns, ':')
-  let b:vimfiler.columns = vimfiler#init#_initialize_columns(
+  let b:vimfiler.columns = vimfiler#init#_columns(
         \ b:vimfiler.column_names, b:vimfiler.context)
   let b:vimfiler.syntaxes = []
 
@@ -162,7 +186,7 @@ function! vimfiler#init#_initialize_vimfiler_directory(directory, context) "{{{1
     call vimfiler#mappings#_change_vim_current_dir()
   endif
 endfunction"}}}
-function! vimfiler#init#_initialize_vimfiler_file(path, lines, dict) "{{{1
+function! vimfiler#init#_vimfiler_file(path, lines, dict) "{{{1
   " Set current unite.
   let b:vimfiler.unite = unite#get_current_unite()
 
@@ -191,7 +215,7 @@ function! vimfiler#init#_initialize_vimfiler_file(path, lines, dict) "{{{1
 
   setlocal nomodified
 endfunction"}}}
-function! vimfiler#init#_initialize_candidates(candidates, source_name) "{{{
+function! vimfiler#init#_candidates(candidates, source_name) "{{{
   let default = {
         \ 'vimfiler__is_directory' : 0,
         \ 'vimfiler__is_executable' : 0,
@@ -228,7 +252,7 @@ function! vimfiler#init#_initialize_candidates(candidates, source_name) "{{{
 
   return a:candidates
 endfunction"}}}
-function! vimfiler#init#_initialize_columns(columns, context) "{{{
+function! vimfiler#init#_columns(columns, context) "{{{
   let columns = []
 
   for column in a:columns
