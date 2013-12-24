@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Dec 2013.
+" Last Modified: 25 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -159,7 +159,6 @@ function! vimfiler#init#_context(context) "{{{
     \ 'tab' : 0,
     \ 'columns' : g:vimfiler_default_columns,
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
-    \ 'vimfiler__prev_winnr' : winbufnr('%'),
     \ 'vimfiler__winfixwidth' : &l:winfixwidth,
     \ 'vimfiler__winfixheight' : &l:winfixheight,
     \ }

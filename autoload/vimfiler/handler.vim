@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Dec 2013.
+" Last Modified: 25 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -182,8 +182,6 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
         setlocal winfixheight
       endif
     endif
-
-    let context.vimfiler__prev_winnr = prev_winnr
 
     let winwidth = (winwidth(0)+1)/2*2
     if exists('vimfiler.winwidth')
