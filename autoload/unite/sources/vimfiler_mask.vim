@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/mask.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jan 2012.
+" Last Modified: 25 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -60,10 +60,12 @@ function! s:source.change_candidates(args, context) "{{{
 
   return map(add(copy(a:context.source__candidates), {
         \ 'vimfiler__abbr' : 'New mask: "' . a:context.input . '"',
-        \ 'vimfiler__is_directory' : 0,}), '{
-        \ "word" : v:val.vimfiler__abbr .
-        \        (v:val.vimfiler__is_directory ? "/" : ""),
-        \ }')
+        \ 'vimfiler__is_directory' : 0,}), "{
+        \ 'word' : v:val.vimfiler__abbr .
+        \        (v:val.vimfiler__is_directory ? '/' : ''),
+        \ 'vimfiler__is_directory' : v:val.vimfiler__is_directory,
+        \ 'vimfiler__abbr' : v:val.vimfiler__abbr,
+        \ }")
 endfunction"}}}
 
 " Actions "{{{

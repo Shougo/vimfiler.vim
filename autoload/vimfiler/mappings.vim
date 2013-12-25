@@ -562,10 +562,10 @@ function! s:switch() "{{{
 
   call vimfiler#set_current_vimfiler(vimfiler)
 
-  if winnr('$') == 1 || winnr('$') > 2
-    rightbelow vnew
-  else
+  if winnr('$') == 2
     wincmd w
+  else
+    rightbelow vnew
   endif
 
   if context.auto_cd

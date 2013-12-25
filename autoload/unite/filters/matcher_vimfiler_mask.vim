@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_vimfiler_mask.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Nov 2013.
+" Last Modified: 25 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,10 +41,12 @@ function! s:matcher.filter(candidates, context) "{{{
     return a:candidates
   endif
 
-  let candidates = []
+  let candidates = filter(copy(a:candidates),
+        \ "v:val.vimfiler__is_directory")
   let masks = map(split(a:context.input, '\\\@<! '),
           \ 'substitute(v:val, "\\\\ ", " ", "g")')
-  for candidate in a:candidates
+  for candidate in filter(copy(a:candidates),
+        \ "!v:val.vimfiler__is_directory")
     let matched = 0
     for mask in masks
       if mask =~ '^!'
@@ -54,21 +56,22 @@ function! s:matcher.filter(candidates, context) "{{{
 
         " Exclusion.
         let mask = unite#util#escape_match(mask)
-        if candidate.word !~ mask
+        if candidate.vimfiler__abbr !~ mask
           let matched = 1
           break
         endif
       elseif mask =~ '\\\@<!\*'
         " Wildcard.
         let mask = unite#util#escape_match(mask)
-        if candidate.word =~ mask
+        if candidate.vimfiler__abbr =~ mask
           let matched = 1
           break
         endif
       else
         let mask = substitute(mask, '\\\(.\)', '\1', 'g')
         if stridx((&ignorecase ?
-              \ tolower(candidate.word) : candidate.word), mask) != -1
+              \ tolower(candidate.vimfiler__abbr) :
+              \ candidate.vimfiler__abbr), mask) != -1
           let matched = 1
           break
         endif
