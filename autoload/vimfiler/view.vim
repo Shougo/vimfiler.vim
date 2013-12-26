@@ -35,7 +35,9 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
 
   let old_original_files = {}
   for file in filter(copy(b:vimfiler.original_files),
-        \ 'v:val.vimfiler__is_directory && v:val.vimfiler__is_opened')
+        \ "v:val.vimfiler__is_directory &&
+        \   (v:val.vimfiler__is_opened
+        \     || has_key(v:val, 'vimfiler__parent'))")
     let old_original_files[file.action__path] = 1
     if has_key(file, 'vimfiler__parent')
       let old_original_files[file.vimfiler__parent.action__path] = 1
