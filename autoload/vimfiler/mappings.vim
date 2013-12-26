@@ -821,7 +821,6 @@ function! s:expand_tree(is_recursive) "{{{
   setlocal modifiable
 
   let cursor_file.vimfiler__is_opened = 1
-  call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
 
   " Expand tree.
   let nestlevel = cursor_file.vimfiler__nest_level + 1
@@ -854,18 +853,16 @@ function! s:expand_tree(is_recursive) "{{{
   let index_orig =
         \ vimfiler#get_original_file_index(line('.'))
 
-  if len(files) == 1 && files[0].vimfiler__is_directory
+  if !a:is_recursive && len(files) == 1 && files[0].vimfiler__is_directory
     " Open in cursor directory.
     let opened_file = files[0]
     let opened_file.vimfiler__abbr =
           \ cursor_file.vimfiler__abbr . '/' .
           \ opened_file.vimfiler__abbr
     let opened_file.vimfiler__nest_level = cursor_file.vimfiler__nest_level
-    let b:vimfiler.all_files[index] = opened_file
-    let b:vimfiler.current_files[index] = opened_file
-    let b:vimfiler.original_files[index_orig] = opened_file
-
-    call setline('.', vimfiler#view#_get_print_lines([opened_file]))
+    for key in keys(cursor_file)
+      let cursor_file[key] = opened_file[key]
+    endfor
   else
     call extend(b:vimfiler.all_files, files, index+1)
     call extend(b:vimfiler.current_files, files, index+1)
@@ -874,6 +871,8 @@ function! s:expand_tree(is_recursive) "{{{
 
     call append('.', vimfiler#view#_get_print_lines(files))
   endif
+
+  call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
 
   setlocal nomodifiable
 
@@ -898,23 +897,42 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   let nestlevel = a:file.vimfiler__nest_level + 1
 
   let _ = []
-  for file in vimfiler#get_directory_files(a:file.action__path)
-    " Initialize.
-    let file.vimfiler__nest_level = nestlevel
+  let files = vimfiler#get_directory_files(a:file.action__path)
 
-    if !b:vimfiler.is_visible_ignore_files
-          \ && file.vimfiler__filename =~ '^\.'
-      continue
-    endif
+  if len(files) == 1 && files[0].vimfiler__is_directory
+    " Open in cursor directory.
+    let file = files[0]
+    let file.vimfiler__abbr =
+          \ a:file.vimfiler__abbr . '/' . file.vimfiler__abbr
+    let file.vimfiler__is_opened = 1
+    let file.vimfiler__nest_level = a:file.vimfiler__nest_level
+    for key in keys(a:file)
+      let a:file[key] = file[key]
+    endfor
 
-    call add(_, file)
-
-    if file.vimfiler__is_directory
-          \ && (empty(old_original_files) ||
+    if (empty(old_original_files) ||
           \ has_key(old_original_files, file.action__path))
-      let _ += vimfiler#mappings#expand_tree_rec(file, old_original_files)
+      let _ += vimfiler#mappings#expand_tree_rec(a:file, old_original_files)
     endif
-  endfor
+  else
+    for file in files
+      " Initialize.
+      let file.vimfiler__nest_level = nestlevel
+
+      if !b:vimfiler.is_visible_ignore_files
+            \ && file.vimfiler__filename =~ '^\.'
+        continue
+      endif
+
+      call add(_, file)
+
+      if file.vimfiler__is_directory
+            \ && (empty(old_original_files) ||
+            \ has_key(old_original_files, file.action__path))
+        let _ += vimfiler#mappings#expand_tree_rec(file, old_original_files)
+      endif
+    endfor
+  endif
 
   return _
 endfunction"}}}
