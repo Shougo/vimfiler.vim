@@ -856,12 +856,14 @@ function! s:expand_tree(is_recursive) "{{{
   if !a:is_recursive && len(files) == 1 && files[0].vimfiler__is_directory
     " Open in cursor directory.
     let opened_file = files[0]
-    let opened_file.vimfiler__parent = deepcopy(cursor_file)
+    let opened_file.vimfiler__parent =
+          \ has_key(cursor_file, 'vimfiler__parent') ?
+          \ cursor_file.vimfiler__parent : deepcopy(cursor_file)
     let opened_file.vimfiler__abbr =
           \ cursor_file.vimfiler__abbr . '/' .
           \ opened_file.vimfiler__abbr
     let opened_file.vimfiler__nest_level = cursor_file.vimfiler__nest_level
-    for key in keys(cursor_file)
+    for key in keys(opened_file)
       let cursor_file[key] = opened_file[key]
     endfor
   else
@@ -903,12 +905,14 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   if len(files) == 1 && files[0].vimfiler__is_directory
     " Open in cursor directory.
     let file = files[0]
-    let file.vimfiler__parent = deepcopy(a:file)
+    let file.vimfiler__parent =
+          \ has_key(a:file, 'vimfiler__parent') ?
+          \ a:file.vimfiler__parent : deepcopy(a:file)
     let file.vimfiler__abbr =
           \ a:file.vimfiler__abbr . '/' . file.vimfiler__abbr
     let file.vimfiler__is_opened = 1
     let file.vimfiler__nest_level = a:file.vimfiler__nest_level
-    for key in keys(a:file)
+    for key in keys(file)
       let a:file[key] = file[key]
     endfor
 
@@ -971,7 +975,7 @@ function! s:unexpand_tree() "{{{
     let parent_file = cursor_file.vimfiler__parent
     let parent_file.vimfiler__is_opened = 0
 
-    for key in keys(a:file)
+    for key in keys(parent_file)
       let cursor_file[key] = parent_file[key]
     endfor
   endif
