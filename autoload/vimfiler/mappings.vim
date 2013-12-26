@@ -788,19 +788,20 @@ function! s:toggle_tree(is_recursive) "{{{
   call vimfiler#view#_check_redraw()
 endfunction"}}}
 function! s:expand_tree(is_recursive) "{{{
-  let file = vimfiler#get_file()
-  if empty(file) || vimfiler#get_filename() == '..'
+  let cursor_file = vimfiler#get_file()
+  if empty(cursor_file) || vimfiler#get_filename() == '..'
     return
   endif
 
-  if !file.vimfiler__is_directory
+  if !cursor_file.vimfiler__is_directory
     " Search parent directory.
     for cnt in reverse(range(1, line('.')-1))
       let nest_level = get(vimfiler#get_file(cnt),
             \ 'vimfiler__nest_level', -1)
       if (a:is_recursive && nest_level == 0) ||
             \ (!a:is_recursive &&
-            \  nest_level >= 0 && nest_level < file.vimfiler__nest_level)
+            \  nest_level >= 0 &&
+            \ nest_level < cursor_file.vimfiler__nest_level)
         call cursor(cnt, 0)
         call s:expand_tree(a:is_recursive)
         break
@@ -809,7 +810,7 @@ function! s:expand_tree(is_recursive) "{{{
     return
   endif
 
-  if file.vimfiler__is_opened
+  if cursor_file.vimfiler__is_opened
     if a:is_recursive
       call s:unexpand_tree()
       call vimfiler#view#_check_redraw()
@@ -819,21 +820,21 @@ function! s:expand_tree(is_recursive) "{{{
 
   setlocal modifiable
 
-  let file.vimfiler__is_opened = 1
-  call setline('.', vimfiler#view#_get_print_lines([file]))
+  let cursor_file.vimfiler__is_opened = 1
+  call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
 
   " Expand tree.
-  let nestlevel = file.vimfiler__nest_level + 1
+  let nestlevel = cursor_file.vimfiler__nest_level + 1
 
   if a:is_recursive
-    let original_files = vimfiler#mappings#expand_tree_rec(file)
+    let original_files = vimfiler#mappings#expand_tree_rec(cursor_file)
     let files =
           \ unite#filters#matcher_vimfiler_mask#define().filter(
           \ copy(original_files),
           \ { 'input' : b:vimfiler.current_mask })
   else
     let original_files =
-          \ vimfiler#get_directory_files(file.action__path)
+          \ vimfiler#get_directory_files(cursor_file.action__path)
     for file in original_files
       " Initialize.
       let file.vimfiler__nest_level = nestlevel
@@ -853,16 +854,31 @@ function! s:expand_tree(is_recursive) "{{{
   let index_orig =
         \ vimfiler#get_original_file_index(line('.'))
 
-  call extend(b:vimfiler.all_files, files, index+1)
-  call extend(b:vimfiler.current_files, files, index+1)
-  call extend(b:vimfiler.original_files, original_files, index_orig+1)
-  let b:vimfiler.all_files_len += len(files)
+  if len(files) == 1 && files[0].vimfiler__is_directory
+    " Open in cursor directory.
+    let opened_file = files[0]
+    let opened_file.vimfiler__abbr =
+          \ cursor_file.vimfiler__abbr . '/' .
+          \ opened_file.vimfiler__abbr
+    let opened_file.vimfiler__nest_level = cursor_file.vimfiler__nest_level
+    let b:vimfiler.all_files[index] = opened_file
+    let b:vimfiler.current_files[index] = opened_file
+    let b:vimfiler.original_files[index_orig] = opened_file
 
-  call append('.', vimfiler#view#_get_print_lines(files))
+    call setline('.', vimfiler#view#_get_print_lines([opened_file]))
+  else
+    call extend(b:vimfiler.all_files, files, index+1)
+    call extend(b:vimfiler.current_files, files, index+1)
+    call extend(b:vimfiler.original_files, original_files, index_orig+1)
+    let b:vimfiler.all_files_len += len(files)
+
+    call append('.', vimfiler#view#_get_print_lines(files))
+  endif
 
   setlocal nomodifiable
 
-  if !a:is_recursive && !empty(files)
+  if !a:is_recursive && !empty(files) &&
+        \ !(len(files) == 1 && files[0].vimfiler__is_directory)
     " Move to next line.
     call cursor(line('.')+1, 0)
   endif
