@@ -857,7 +857,8 @@ function! s:expand_tree(is_recursive) "{{{
     " Open in cursor directory.
     let opened_file = files[0]
     let opened_file.vimfiler__parent =
-          \ has_key(cursor_file, 'vimfiler__parent') ?
+          \ !vimfiler#get_context().explorer &&
+          \   has_key(cursor_file, 'vimfiler__parent') ?
           \ cursor_file.vimfiler__parent : deepcopy(cursor_file)
     let opened_file.vimfiler__abbr =
           \ cursor_file.vimfiler__abbr . '/' .
@@ -906,7 +907,8 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
     " Open in cursor directory.
     let file = files[0]
     let file.vimfiler__parent =
-          \ has_key(a:file, 'vimfiler__parent') ?
+          \ !vimfiler#get_context().explorer &&
+          \   has_key(a:file, 'vimfiler__parent') ?
           \ a:file.vimfiler__parent : deepcopy(a:file)
     let file.vimfiler__abbr =
           \ a:file.vimfiler__abbr . '/' . file.vimfiler__abbr
@@ -949,7 +951,8 @@ function! s:unexpand_tree() "{{{
   endif
 
   if !cursor_file.vimfiler__is_directory ||
-        \ !cursor_file.vimfiler__is_opened
+        \ (!has_key(cursor_file, 'vimfiler__parent')
+        \ && !cursor_file.vimfiler__is_opened)
     " Search parent directory.
     for cnt in reverse(range(1, line('.')-1))
       let nest_level = get(vimfiler#get_file(cnt),
@@ -964,10 +967,6 @@ function! s:unexpand_tree() "{{{
     return
   endif
 
-  if !cursor_file.vimfiler__is_opened
-    return
-  endif
-
   setlocal modifiable
 
   let cursor_file.vimfiler__is_opened = 0
@@ -975,10 +974,12 @@ function! s:unexpand_tree() "{{{
     let parent_file = cursor_file.vimfiler__parent
     let parent_file.vimfiler__is_opened = 0
 
+    call remove(cursor_file, 'vimfiler__parent')
     for key in keys(parent_file)
       let cursor_file[key] = parent_file[key]
     endfor
   endif
+
   call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
 
   " Unexpand tree.
