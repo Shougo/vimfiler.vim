@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Dec 2013.
+" Last Modified: 26 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -201,6 +201,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   " Toggle mark.
   nmap <buffer> <C-l> <Plug>(vimfiler_redraw_screen)
   nmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_current_line)
+  nmap <buffer> <S-LeftMouse> <Plug>(vimfiler_toggle_mark_current_line)
   nmap <buffer> <S-Space> <Plug>(vimfiler_toggle_mark_current_line_up)
   vmap <buffer> <Space> <Plug>(vimfiler_toggle_mark_selected_lines)
 
