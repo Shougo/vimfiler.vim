@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Dec 2013.
+" Last Modified: 27 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -37,6 +37,9 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
   for file in filter(copy(b:vimfiler.original_files),
         \ 'v:val.vimfiler__is_directory && v:val.vimfiler__is_opened')
     let old_original_files[file.action__path] = 1
+    if has_key(file, 'vimfiler__parent')
+      let old_original_files[file.vimfiler__parent.action__path] = 1
+    endif
   endfor
 
   " Use matcher_glob.
@@ -113,8 +116,8 @@ function! vimfiler#view#_redraw_screen(...) "{{{
     " Clean up the screen.
     if line('$') > 1 &&
           \ b:vimfiler.prompt_linenr + len(b:vimfiler.current_files) < line('$')
-      silent! execute '$-'.(line('$')-b:vimfiler.prompt_linenr-
-            \ len(b:vimfiler.current_files)+1).',$delete _'
+      silent execute '$-'.(line('$')-b:vimfiler.prompt_linenr-
+            \ len(b:vimfiler.current_files)).',$delete _'
     endif
 
     call s:redraw_prompt()
