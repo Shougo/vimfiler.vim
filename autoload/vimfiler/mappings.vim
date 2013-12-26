@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Dec 2013.
+" Last Modified: 27 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -969,8 +969,8 @@ function! s:unexpand_tree() "{{{
 
   setlocal modifiable
 
-  let cursor_file.vimfiler__is_opened = 0
-  if has_key(cursor_file, 'vimfiler__parent')
+  if !cursor_file.vimfiler__is_opened &&
+        \ has_key(cursor_file, 'vimfiler__parent')
     let parent_file = cursor_file.vimfiler__parent
     let parent_file.vimfiler__is_opened = 0
 
@@ -980,6 +980,7 @@ function! s:unexpand_tree() "{{{
     endfor
   endif
 
+  let cursor_file.vimfiler__is_opened = 0
   call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
 
   " Unexpand tree.
