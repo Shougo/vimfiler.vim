@@ -856,6 +856,7 @@ function! s:expand_tree(is_recursive) "{{{
   if !a:is_recursive && len(files) == 1 && files[0].vimfiler__is_directory
     " Open in cursor directory.
     let opened_file = files[0]
+    let opened_file.vimfiler__parent = deepcopy(cursor_file)
     let opened_file.vimfiler__abbr =
           \ cursor_file.vimfiler__abbr . '/' .
           \ opened_file.vimfiler__abbr
@@ -902,6 +903,7 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   if len(files) == 1 && files[0].vimfiler__is_directory
     " Open in cursor directory.
     let file = files[0]
+    let file.vimfiler__parent = deepcopy(a:file)
     let file.vimfiler__abbr =
           \ a:file.vimfiler__abbr . '/' . file.vimfiler__abbr
     let file.vimfiler__is_opened = 1
@@ -937,17 +939,18 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   return _
 endfunction"}}}
 function! s:unexpand_tree() "{{{
-  let file = vimfiler#get_file()
-  if empty(file) || vimfiler#get_filename() == '..'
+  let cursor_file = vimfiler#get_file()
+  if empty(cursor_file) || vimfiler#get_filename() == '..'
     return
   endif
 
-  if !file.vimfiler__is_directory || !file.vimfiler__is_opened
+  if !cursor_file.vimfiler__is_directory ||
+        \ !cursor_file.vimfiler__is_opened
     " Search parent directory.
     for cnt in reverse(range(1, line('.')-1))
       let nest_level = get(vimfiler#get_file(cnt),
             \ 'vimfiler__nest_level', -1)
-      if nest_level >= 0 && nest_level < file.vimfiler__nest_level
+      if nest_level >= 0 && nest_level < cursor_file.vimfiler__nest_level
         call cursor(cnt, 0)
         call s:unexpand_tree()
         break
@@ -957,23 +960,31 @@ function! s:unexpand_tree() "{{{
     return
   endif
 
-  if !file.vimfiler__is_opened
+  if !cursor_file.vimfiler__is_opened
     return
   endif
 
   setlocal modifiable
 
-  let file.vimfiler__is_opened = 0
-  call setline('.', vimfiler#view#_get_print_lines([file]))
+  let cursor_file.vimfiler__is_opened = 0
+  if has_key(cursor_file, 'vimfiler__parent')
+    let parent_file = cursor_file.vimfiler__parent
+    let parent_file.vimfiler__is_opened = 0
+
+    for key in keys(a:file)
+      let cursor_file[key] = parent_file[key]
+    endfor
+  endif
+  call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
 
   " Unexpand tree.
-  let nestlevel = file.vimfiler__nest_level
+  let nestlevel = cursor_file.vimfiler__nest_level
 
   " Search children.
   let index = vimfiler#get_file_index(line('.'))
   let end = index
-  for file in b:vimfiler.current_files[index+1 :]
-    if file.vimfiler__nest_level <= nestlevel
+  for cursor_file in b:vimfiler.current_files[index+1 :]
+    if cursor_file.vimfiler__nest_level <= nestlevel
       break
     endif
 
