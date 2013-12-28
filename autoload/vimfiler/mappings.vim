@@ -859,9 +859,10 @@ function! s:expand_tree(is_recursive) "{{{
   let index_orig =
         \ vimfiler#get_original_file_index(line('.'))
 
-  if !a:is_recursive && len(files) == 1 && files[0].vimfiler__is_directory
-          \ && s:get_abbr_length(cursor_file, files[0])
-          \         < vimfiler#view#_get_max_len([])
+  " if !a:is_recursive && len(files) == 1 && files[0].vimfiler__is_directory
+  "         \ && s:get_abbr_length(cursor_file, files[0])
+  "         \         < vimfiler#view#_get_max_len([])
+  if 0
 
     " Open in cursor directory.
     let opened_file = files[0]
@@ -918,9 +919,10 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
 
   let _ = files
 
-  if len(files) == 1 && files[0].vimfiler__is_directory
-        \ && s:get_abbr_length(a:file, files[0])
-        \         < vimfiler#view#_get_max_len([])
+  " if len(files) == 1 && files[0].vimfiler__is_directory
+  "       \ && s:get_abbr_length(a:file, files[0])
+  "       \         < vimfiler#view#_get_max_len([])
+  if 0
 
     let _ = []
 

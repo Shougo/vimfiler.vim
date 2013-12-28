@@ -41,12 +41,14 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
     let old_original_files[file.action__path] = 1
     if has_key(file, 'vimfiler__parent')
       let path = file.vimfiler__parent.action__path
-      let old_path = path
-      while path != '' && path !=# old_path
-        let old_original_files[path] = 1
-        let old_path = path
-        let path = fnamemodify(old_path, ':h')
-      endwhile
+      let old_original_files[path] = 1
+
+      " let old_path = ''
+      " while path != '' && path !=# old_path
+      "   let old_original_files[path] = 1
+      "   let old_path = path
+      "   let path = fnamemodify(old_path, ':h')
+      " endwhile
     endif
   endfor
 
