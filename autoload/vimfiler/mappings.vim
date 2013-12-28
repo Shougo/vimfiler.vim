@@ -925,7 +925,7 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
     endfor
 
     if (empty(old_original_files) ||
-          \ has_key(old_original_files, file.action__path))
+          \ has_key(old_original_files, a:file.action__path))
       let _ += vimfiler#mappings#expand_tree_rec(a:file, old_original_files)
     endif
   else

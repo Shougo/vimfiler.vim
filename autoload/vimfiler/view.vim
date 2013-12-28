@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 27 Dec 2013.
+" Last Modified: 28 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -40,7 +40,11 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
         \     || has_key(v:val, 'vimfiler__parent'))")
     let old_original_files[file.action__path] = 1
     if has_key(file, 'vimfiler__parent')
-      let old_original_files[file.vimfiler__parent.action__path] = 1
+      let path = file.vimfiler__parent.action__path
+      while path != '' && path != '/'
+        let old_original_files[path] = 1
+        let path = fnamemodify(path, ':h')
+      endwhile
     endif
   endfor
 
@@ -51,6 +55,7 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
   for file in copy(b:vimfiler.original_files)
     if file.vimfiler__is_directory
           \ && has_key(old_original_files, file.action__path)
+
       " Insert children.
       let children = vimfiler#mappings#expand_tree_rec(file, old_original_files)
 
