@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Dec 2013.
+" Last Modified: 28 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -167,6 +167,7 @@ function! vimfiler#init#_context(context) "{{{
     " Change default value.
     let default_context.buffer_name = 'explorer'
     let default_context.split = 1
+    let default_context.simple = 1
     let default_context.toggle = 1
     let default_context.no_quit = 1
     let default_context.winwidth = 35

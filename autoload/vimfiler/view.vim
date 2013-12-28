@@ -256,32 +256,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
   let columns = (b:vimfiler.context.simple) ? [] : b:vimfiler.columns
 
-  let start = 0
-  for column in columns
-    let column.vimfiler__length = column.length(
-          \ a:files, b:vimfiler.context)
-  endfor
-  let columns = filter(columns, 'v:val.vimfiler__length > 0')
-
-  " Calc padding width.
-  let padding = 0
-  for column in columns
-    let padding += column.vimfiler__length + 1
-  endfor
-
-  if &l:number || (exists('&relativenumber') && &l:relativenumber)
-    let padding += max([&l:numberwidth,
-          \ len(line('$') + len(a:files))+1])
-  endif
-
-  let padding += &l:foldcolumn
-
-  if has('signs')
-    " Delete signs.
-    silent execute 'sign unplace buffer='.bufnr('%')
-  endif
-
-  let max_len = max([max([winwidth(0), &winwidth]) - padding, 10])
+  let max_len = vimfiler#view#_get_max_len(a:files)
 
   " Column region.
   let start = max_len + 1
@@ -364,12 +339,42 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
   return lines
 endfunction"}}}
-function! vimfiler#view#_check_redraw()
+function! vimfiler#view#_check_redraw() "{{{
   if &l:number || (exists('&relativenumber') && &l:relativenumber)
     " Force redraw.
     call vimfiler#view#_force_redraw_screen()
   endif
-endfunction
+endfunction"}}}
+function! vimfiler#view#_get_max_len(files) "{{{
+  let columns = (b:vimfiler.context.simple) ? [] : b:vimfiler.columns
+
+  let start = 0
+  for column in columns
+    let column.vimfiler__length = column.length(
+          \ a:files, b:vimfiler.context)
+  endfor
+  let columns = filter(columns, 'v:val.vimfiler__length > 0')
+
+  " Calc padding width.
+  let padding = 0
+  for column in columns
+    let padding += column.vimfiler__length + 1
+  endfor
+
+  if &l:number || (exists('&relativenumber') && &l:relativenumber)
+    let padding += max([&l:numberwidth,
+          \ len(line('$') + len(a:files))+1])
+  endif
+
+  let padding += &l:foldcolumn
+
+  if has('signs')
+    " Delete signs.
+    silent execute 'sign unplace buffer='.bufnr('%')
+  endif
+
+  return max([max([winwidth(0), &winwidth]) - padding, 10])
+endfunction"}}}
 
 function! s:check_tree(files) "{{{
   let level = 0

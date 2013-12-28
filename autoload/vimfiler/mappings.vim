@@ -860,6 +860,9 @@ function! s:expand_tree(is_recursive) "{{{
         \ vimfiler#get_original_file_index(line('.'))
 
   if !a:is_recursive && len(files) == 1 && files[0].vimfiler__is_directory
+          \ && s:get_abbr_length(cursor_file, files[0])
+          \         < vimfiler#view#_get_max_len([])
+
     " Open in cursor directory.
     let opened_file = files[0]
     let opened_file.vimfiler__parent =
@@ -910,6 +913,9 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   let files = vimfiler#get_directory_files(a:file.action__path)
 
   if len(files) == 1 && files[0].vimfiler__is_directory
+        \ && s:get_abbr_length(a:file, files[0])
+        \         < vimfiler#view#_get_max_len([])
+
     " Open in cursor directory.
     let file = files[0]
     let file.vimfiler__parent =
@@ -1742,6 +1748,13 @@ function! s:get_action_current_dir(files) "{{{
   endif
 
   return current_dir
+endfunction"}}}
+
+function! s:get_abbr_length(parent, child) "{{{
+  return vimfiler#util#wcswidth(
+        \ repeat(' ', a:parent.vimfiler__nest_level
+        \  * g:vimfiler_tree_indentation) .
+        \ a:parent.vimfiler__abbr.a:child.vimfiler__abbr) + 5
 endfunction"}}}
 
 " vim: foldmethod=marker
