@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Dec 2013.
+" Last Modified: 31 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1235,6 +1235,7 @@ function! vimfiler#mappings#create_another_vimfiler() "{{{
   let context.split = 1
   let context.double = 0
   let context.create = 1
+  let context.tab = 0
   let context.direction = 'belowright'
 
   call vimfiler#start(
