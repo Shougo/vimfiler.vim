@@ -37,18 +37,21 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
   for file in filter(copy(b:vimfiler.original_files),
         \ "v:val.vimfiler__is_directory &&
         \   (v:val.vimfiler__is_opened
-        \     || has_key(v:val, 'vimfiler__parent'))")
-    let old_original_files[file.action__path] = 1
-    if has_key(file, 'vimfiler__parent')
-      let path = file.vimfiler__parent.action__path
+        \     || v:val.vimfiler__abbr =~ './.')")
+    if file.vimfiler__abbr =~ './.'
+      let path = (file.vimfiler__is_opened ||
+            \ !has_key(file, 'vimfiler__parent')) ?
+            \ file.action__path : file.vimfiler__parent.action__path
       let old_original_files[path] = 1
 
-      " let old_path = ''
-      " while path != '' && path !=# old_path
-      "   let old_original_files[path] = 1
-      "   let old_path = path
-      "   let path = fnamemodify(old_path, ':h')
-      " endwhile
+      let old_path = ''
+      while path != '' && path !=# old_path
+        let old_original_files[path] = 1
+        let old_path = path
+        let path = fnamemodify(old_path, ':h')
+      endwhile
+    else
+      let old_original_files[file.action__path] = 1
     endif
   endfor
 

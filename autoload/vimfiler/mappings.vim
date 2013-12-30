@@ -859,11 +859,12 @@ function! s:expand_tree(is_recursive) "{{{
   let index_orig =
         \ vimfiler#get_original_file_index(line('.'))
 
-  " if !a:is_recursive && len(files) == 1 && files[0].vimfiler__is_directory
-  "         \ && s:get_abbr_length(cursor_file, files[0])
-  "         \         < vimfiler#view#_get_max_len([])
-  if 0
-
+  " let is_fold = !a:is_recursive && len(files) == 1
+  "       \ && files[0].vimfiler__is_directory
+  "       \ && s:get_abbr_length(cursor_file, files[0])
+  "       \         < vimfiler#view#_get_max_len([])
+  let is_fold = 0
+  if is_fold
     " Open in cursor directory.
     let opened_file = files[0]
     let opened_file.vimfiler__parent =
@@ -919,10 +920,11 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
 
   let _ = []
 
-  " if len(files) == 1 && files[0].vimfiler__is_directory
+  " let is_fold = len(files) == 1 && files[0].vimfiler__is_directory
   "       \ && s:get_abbr_length(a:file, files[0])
   "       \         < vimfiler#view#_get_max_len([])
-  if 0
+  let is_fold = 0
+  if is_fold
     " Open in cursor directory.
     let file = files[0]
     let file.vimfiler__parent =
@@ -931,12 +933,15 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
           \ a:file.vimfiler__parent : deepcopy(a:file)
     let file.vimfiler__abbr =
           \ a:file.vimfiler__abbr . '/' . file.vimfiler__abbr
-    let file.vimfiler__is_opened = 1
     let file.vimfiler__nest_level = a:file.vimfiler__nest_level
     for key in keys(file)
       let a:file[key] = file[key]
     endfor
   else
+    " if a:file.vimfiler__abbr =~ './.'
+    "   call add(_, a:file)
+    " endif
+
     for file in files
       " Initialize.
       let file.vimfiler__nest_level = nestlevel
@@ -944,7 +949,9 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   endif
 
   for file in files
-    call add(_, file)
+    if !is_fold
+      call add(_, file)
+    endif
 
     if file.vimfiler__is_directory
           \ && (empty(old_original_files) ||
@@ -953,8 +960,12 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
         call remove(old_original_files, file.action__path)
       endif
       let _ += vimfiler#mappings#expand_tree_rec(file, old_original_files)
+
+      " echomsg string(map(copy(_), 'v:val.action__path'))
     endif
   endfor
+
+  " echomsg string(map(copy(_), 'v:val.action__path'))
 
   return _
 endfunction"}}}
