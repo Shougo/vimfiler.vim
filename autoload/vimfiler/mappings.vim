@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Dec 2013.
+" Last Modified: 30 Dec 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -917,15 +917,12 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
           \ "v:val.vimfiler__filename !~ '^\\.'")
   endif
 
-  let _ = files
+  let _ = []
 
   " if len(files) == 1 && files[0].vimfiler__is_directory
   "       \ && s:get_abbr_length(a:file, files[0])
   "       \         < vimfiler#view#_get_max_len([])
   if 0
-
-    let _ = []
-
     " Open in cursor directory.
     let file = files[0]
     let file.vimfiler__parent =
@@ -947,9 +944,14 @@ function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   endif
 
   for file in files
+    call add(_, file)
+
     if file.vimfiler__is_directory
           \ && (empty(old_original_files) ||
           \ has_key(old_original_files, file.action__path))
+      if has_key(old_original_files, file.action__path)
+        call remove(old_original_files, file.action__path)
+      endif
       let _ += vimfiler#mappings#expand_tree_rec(file, old_original_files)
     endif
   endfor
