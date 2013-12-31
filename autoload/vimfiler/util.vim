@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 18 Aug 2013.
+" Last Modified: 01 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -187,7 +187,7 @@ function! vimfiler#util#delete_buffer(...) "{{{
   else
     call vimfiler#util#alternate_buffer()
   endif
-  execute 'silent bdelete!' delete_bufnr
+  execute 'silent bwipeout!' delete_bufnr
 endfunction"}}}
 function! s:buflisted(bufnr) "{{{
   return exists('t:unite_buffer_dictionary') ?
