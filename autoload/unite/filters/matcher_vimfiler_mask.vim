@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: matcher_vimfiler_mask.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Dec 2013.
+" Last Modified: 06 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,7 +43,11 @@ function! s:matcher.filter(candidates, context) "{{{
 
   let candidates = filter(copy(a:candidates),
         \ "v:val.vimfiler__is_directory")
-  let masks = map(split(a:context.input, '\\\@<! '),
+  let input = a:context.input
+  if &ignorecase
+    let input = tolower(input)
+  endif
+  let masks = map(split(input, '\\\@<! '),
           \ 'substitute(v:val, "\\\\ ", " ", "g")')
   for candidate in filter(copy(a:candidates),
         \ "!v:val.vimfiler__is_directory")
