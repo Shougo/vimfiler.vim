@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 31 Dec 2013.
+" Last Modified: 09 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -891,8 +891,7 @@ function! s:expand_tree(is_recursive) "{{{
 
   setlocal nomodifiable
 
-  if !a:is_recursive && !empty(files) &&
-        \ !(len(files) == 1 && files[0].vimfiler__is_directory)
+  if !a:is_recursive && !is_fold
     " Move to next line.
     call cursor(line('.')+1, 0)
   endif
