@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 09 Jan 2014.
+" Last Modified: 11 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -566,12 +566,20 @@ function! s:switch() "{{{
   if winnr('$') == 2
     wincmd w
   else
-    let winnr = unite#helper#choose_window()
-
-    if winnr == 0 || winnr == winnr()
-      rightbelow vnew
+    if exists('g:loaded_choosewin')
+          \ || hasmapto('<Plug>(choosewin)', 'n')
+      " Use vim-choosewin.
+      call choosewin#start(filter(
+            \ range(1, winnr('$')), "v:val != winnr()"))
     else
-      execute winnr.'wincmd w'
+      " Use unite-builtin choose.
+      let winnr = unite#helper#choose_window()
+
+      if winnr == 0 || winnr == winnr()
+        rightbelow vnew
+      else
+        execute winnr.'wincmd w'
+      endif
     endif
   endif
 
