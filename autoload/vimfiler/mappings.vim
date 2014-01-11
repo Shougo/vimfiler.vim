@@ -563,14 +563,13 @@ function! s:switch() "{{{
 
   call vimfiler#set_current_vimfiler(vimfiler)
 
-  if winnr('$') == 2
-    wincmd w
+  if empty(unite#helper#get_choose_windows())
+    wincmd p
   else
     if exists('g:loaded_choosewin')
           \ || hasmapto('<Plug>(choosewin)', 'n')
       " Use vim-choosewin.
-      call choosewin#start(filter(
-            \ range(1, winnr('$')), "v:val != winnr()"))
+      call choosewin#start(unite#helper#get_choose_windows())
     else
       " Use unite-builtin choose.
       let winnr = unite#helper#choose_window()
