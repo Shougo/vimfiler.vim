@@ -1182,7 +1182,9 @@ Q: I want to open bookmark files in vimfiler.
 A: You can open unite bookmark files in vimfiler by below command. >
   VimFiler bookmark:
 
-Q: Why I must choose window in |<Plug>(vimfiler_edit_file)|?
+Q: Why I must choose window in |<Plug>(vimfiler_edit_file)| when I use vimfiler
+explorer mode?  I want to restore old behavior...
+https://github.com/Shougo/vimfiler.vim/issues/157
 
 A: Because, vimfiler must know your wanted window.
 Last accessed window like old version behavior?  No.  You may have mistake
