@@ -1186,8 +1186,15 @@ Q: Why I must choose window in |<Plug>(vimfiler_edit_file)|?
 
 A: Because, vimfiler must know your wanted window.
 Last accessed window like old version behavior?  No.  You may have mistake
-window select.  You must choose the window by the keys in statusline.  You can
-change the keys by |g:unite_quick_match_table|.
+window select.  I inspired this documentation.  You should see it.
+http://vimcasts.org/blog/2013/01/oil-and-vinegar-split-windows-and-project-drawer/
+|vimfiler| with explorer mode and |NERDTree| are project drawer plugins.
+|vimfiler| with default mode and |unite.vim| and |netrw| are split windows
+plugins.
+
+You must choose the window by the keys in the statusline. If
+you input <CR> key, vimfiler will split window.  You can change the keys by
+|g:unite_quick_match_table|.
 Note: If you install |vim-choosewin|, vimfiler will use it.
 https://github.com/t9md/vim-choosewin
 
