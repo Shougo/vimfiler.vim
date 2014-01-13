@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 11 Jan 2014.
+" Last Modified: 14 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -563,7 +563,7 @@ function! s:switch() "{{{
 
   call vimfiler#set_current_vimfiler(vimfiler)
 
-  if empty(unite#helper#get_choose_windows())
+  if len(unite#helper#get_choose_windows()) <= 1
     wincmd p
   else
     if exists('g:loaded_choosewin')
