@@ -569,19 +569,28 @@ function! s:switch() "{{{
   elseif len(windows) == 1
     wincmd p
   else
+    let [tabnr, winnr] = [tabpagenr(), winnr()]
+
     if exists('g:loaded_choosewin')
           \ || hasmapto('<Plug>(choosewin)', 'n')
       " Use vim-choosewin.
-      call choosewin#start(windows)
+      let choice = choosewin#start(windows, {'noop' : 1})
+      if !empty(choice)
+        let [tabnr, winnr] = choice
+      endif
     else
       " Use unite-builtin choose.
       let winnr = unite#helper#choose_window()
+    endif
 
-      if winnr == 0 || winnr == winnr()
-        rightbelow vnew
-      else
-        execute winnr.'wincmd w'
-      endif
+    if tabnr != tabpagenr()
+      execute 'tabnext' tabnr
+    endif
+
+    if winnr == 0
+      rightbelow vnew
+    else
+      execute winnr.'wincmd w'
     endif
   endif
 
