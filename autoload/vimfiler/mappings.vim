@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Jan 2014.
+" Last Modified: 19 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -567,7 +567,7 @@ function! s:switch() "{{{
   if empty(windows)
     rightbelow vnew
   elseif len(windows) == 1
-    wincmd p
+    execute windows[0].'wincmd w'
   else
     let [tabnr, winnr] = [tabpagenr(), winnr()]
 
