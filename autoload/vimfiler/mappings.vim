@@ -620,11 +620,11 @@ function! s:toggle_mark_current_line(...) "{{{
 
   if map ==# 'j'
     if line('.') != line('$')
-      call cursor(line('.')+1, 0)
+      call cursor(line('.') + 1, 0)
     endif
   elseif map ==# 'k'
     if line('.') > 2
-      call cursor(line('.')-1, 0)
+      call cursor(line('.') - 1, 0)
     endif
   else
     execute 'normal!' map
@@ -912,7 +912,7 @@ function! s:expand_tree(is_recursive) "{{{
 
   if !a:is_recursive && !is_fold
     " Move to next line.
-    call cursor(line('.')+1, 0)
+    call cursor(line('.') + 1, 0)
   endif
 
   call vimfiler#view#_check_redraw()
