@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jan 2014.
+" Last Modified: 21 Jan 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -620,11 +620,11 @@ function! s:toggle_mark_current_line(...) "{{{
 
   if map ==# 'j'
     if line('.') != line('$')
-      normal! j
+      call cursor(line('.')+1, 0)
     endif
   elseif map ==# 'k'
     if line('.') > 2
-      normal! k
+      call cursor(line('.')-1, 0)
     endif
   else
     execute 'normal!' map
