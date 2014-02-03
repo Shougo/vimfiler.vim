@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Jan 2014.
+" Last Modified: 03 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -267,9 +267,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
   " Column region.
   let start = max_len + 1
-  for column in columns
-    if get(column, 'syntax', '') != '' && max_len > 0
-      for [offset, syntax] in [
+  let syntaxes = [
             \ [vimfiler#util#wcswidth(
             \  g:vimfiler_tree_opened_icon), 'vimfilerOpendFile'],
             \ [vimfiler#util#wcswidth(
@@ -278,6 +276,17 @@ function! vimfiler#view#_get_print_lines(files) "{{{
             \  g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
             \ [vimfiler#util#wcswidth(
             \  g:vimfiler_file_icon), 'vimfilerNormalFile']]
+  if empty(filter(copy(syntaxes), 'v:val[0] != '.
+        \ vimfiler#util#wcswidth(g:vimfiler_file_icon)))
+    " Optimize if columns are same.
+    let syntaxes = [[vimfiler#util#wcswidth(
+            \  g:vimfiler_file_icon),
+            \  'vimfilerNormalFile,vimfilerOpendFile,'.
+            \  'vimfilerClosedFile,vimfilerROFile']]
+  endif
+  for column in columns
+    if get(column, 'syntax', '') != '' && max_len > 0
+      for [offset, syntax] in syntaxes
         execute 'syntax region' column.syntax 'start=''\%'.(start+offset).
               \ (v:version >= 703 ? 'v' : 'c').
               \ ''' end=''\%'.(start + column.vimfiler__length+offset).
