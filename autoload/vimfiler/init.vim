@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jan 2014.
+" Last Modified: 10 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -358,9 +358,9 @@ endfunction"}}}
 
 function! vimfiler#init#_start(path, ...) "{{{
   if vimfiler#util#is_cmdwin()
-    call vimfiler#print_error(
+    call vimfiler#util#print_error(
           \ '[vimfiler] Command line buffer is detected!')
-    call vimfiler#print_error(
+    call vimfiler#util#print_error(
           \ '[vimfiler] Please close command line buffer.')
     return
   endif

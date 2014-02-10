@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 25 Dec 2013.
+" Last Modified: 10 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -33,7 +33,8 @@ function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
         \ vimfiler#util#substitute_path_separator(expand('<afile>')))
 
   if filereadable(path)
-    call vimfiler#print_error('You cannot open the file contained ":"(see FAQ).')
+    call vimfiler#util#print_error(
+          \ '[vimfiler] You cannot open the file contained ":"(see FAQ).')
     return
   endif
 
@@ -68,7 +69,7 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
     call vimfiler#init#_vimfiler_file(
           \ a:source_args, info[0], info[1])
   else
-    call vimfiler#print_error('Unknown filetype.')
+    call vimfiler#util#print_error('[vimfiler] Unknown filetype.')
   endif
 
   if bufnr('%') != bufnr
@@ -97,15 +98,15 @@ function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
         \ [insert(a:source_args, a:source_name)])
   if empty(ret)
     " File not found.
-    call vimfiler#print_error(
-          \ printf('Can''t open "%s".', join(a:source_args, ':')))
+    call vimfiler#util#print_error(
+          \ printf('[vimfiler] Can''t open "%s".', join(a:source_args, ':')))
     return
   endif
   let [type, info] = ret
 
   if type !=# 'file'
-    call vimfiler#print_error(
-          \ printf('"%s" is not a file.', join(a:source_args, ':')))
+    call vimfiler#util#print_error(
+          \ printf('[vimfiler] "%s" is not a file.', join(a:source_args, ':')))
     return
   endif
 
@@ -134,7 +135,7 @@ function! s:write(source_name, source_args, line1, line2, event_name)  "{{{
           \ 'vimfiler__eventname' : a:event_name,
           \ })
   catch
-    call vimfiler#print_error(v:exception . ' ' . v:throwpoint)
+    call vimfiler#util#print_error(v:exception . ' ' . v:throwpoint)
     setlocal modified
   endtry
 endfunction"}}}

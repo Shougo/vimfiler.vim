@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: vimfiler/sort.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Oct 2013.
+" Last Modified: 10 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -80,7 +80,7 @@ let s:action_table.sort = {
       \ }
 function! s:action_table.sort.func(candidate) "{{{
   if &filetype != 'vimfiler'
-    call unite#print_error('Current vimfiler is not found.')
+    call unite#print_error('[vimfiler] Current vimfiler is not found.')
     return
   endif
 
