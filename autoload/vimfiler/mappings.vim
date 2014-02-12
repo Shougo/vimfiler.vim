@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Feb 2014.
+" Last Modified: 13 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -570,6 +570,7 @@ function! s:switch() "{{{
     execute windows[0].'wincmd w'
   else
     let [tabnr, winnr] = [tabpagenr(), winnr()]
+    let [old_tabnr, old_winnr] = [tabnr, winnr]
 
     if exists('g:loaded_choosewin')
           \ || hasmapto('<Plug>(choosewin)', 'n')
@@ -587,7 +588,7 @@ function! s:switch() "{{{
       execute 'tabnext' tabnr
     endif
 
-    if winnr == 0
+    if winnr == 0 || (winnr == old_winnr && tabnr == old_tabnr)
       rightbelow vnew
     else
       execute winnr.'wincmd w'
