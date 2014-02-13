@@ -569,6 +569,7 @@ function! s:switch() "{{{
   elseif len(windows) == 1
     execute windows[0].'wincmd w'
   else
+    let alt_winnr = winnr('#')
     let [tabnr, winnr] = [tabpagenr(), winnr()]
     let [old_tabnr, old_winnr] = [tabnr, winnr]
 
@@ -586,6 +587,12 @@ function! s:switch() "{{{
 
     if tabnr != tabpagenr()
       execute 'tabnext' tabnr
+    endif
+
+    if (winnr == 0  || (winnr == old_winnr && tabnr == old_tabnr))
+          \ && alt_winnr > 0
+      " Use alternative window
+      let winnr = alt_winnr
     endif
 
     if winnr == 0 || (winnr == old_winnr && tabnr == old_tabnr)
