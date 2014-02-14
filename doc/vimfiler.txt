@@ -939,6 +939,11 @@ parameters for an option.  You need to escape spaces with "\".
 		Create new tab for vimfiler.
 		Note: It creates new vimfiler buffer.
 
+						*vimfiler-options-no-focus*
+		-no-focus
+		No the focus on the vimfiler buffer after opening a vimfiler
+		buffer.
+
 ==============================================================================
 COLUMNS						*vimfiler-columns*
 
