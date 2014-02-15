@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: init.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 14 Feb 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -104,10 +104,7 @@ if !has_key(g:vimfiler_extensions, 'multimedia')
 endif
 "}}}
 
-let s:BM = vimfiler#util#get_vital().import('Vim.BufferManager')
-let s:manager = s:BM.new()  " creates new manager
-call s:manager.config('opener', 'silent edit')
-call s:manager.config('range', 'current')
+let s:manager = vimfiler#util#get_vital().import('Vim.Buffer')
 
 let s:loaded_columns = {}
 
@@ -511,12 +508,12 @@ function! s:create_vimfiler_buffer(path, context) "{{{
 
   try
     set noswapfile
-    let ret = s:manager.open(bufname)
+    let loaded = s:manager.open(bufname, 'silent edit')
   finally
     let &g:swapfile = swapfile_save
   endtry
 
-  if !ret.loaded
+  if !loaded
     call vimshell#echo_error(
           \ '[vimfiler] Failed to open Buffer "'. bufname .'".')
     return

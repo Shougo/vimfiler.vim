@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 19 Jan 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -32,25 +32,47 @@ let s:V = vital#of('vimfiler')
 function! vimfiler#util#get_vital() "{{{
   return s:V
 endfunction"}}}
-
-let s:List = s:V.import('Data.List')
+function! s:get_prelude() "{{{
+  if !exists('s:Prelude')
+    let s:Prelude = vimfiler#util#get_vital().import('Prelude')
+  endif
+  return s:Prelude
+endfunction"}}}
+function! s:get_list() "{{{
+  if !exists('s:List')
+    let s:List = vimfiler#util#get_vital().import('Data.List')
+  endif
+  return s:List
+endfunction"}}}
+function! s:get_message() "{{{
+  if !exists('s:Message')
+    let s:Message = vimfiler#util#get_vital().import('Vim.Message')
+  endif
+  return s:Message
+endfunction"}}}
+function! s:get_process() "{{{
+  if !exists('s:Process')
+    let s:Process = vimfiler#util#get_vital().import('Process')
+  endif
+  return s:Process
+endfunction"}}}
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
 
 function! vimfiler#util#truncate_smart(...)
-  return call(s:V.truncate_skipping, a:000)
+  return call(s:get_prelude().truncate_skipping, a:000)
 endfunction
 function! vimfiler#util#truncate(...)
-  return call(s:V.truncate, a:000)
+  return call(s:get_prelude().truncate, a:000)
 endfunction
 function! vimfiler#util#strwidthpart(...)
-  return call(s:V.strwidthpart, a:000)
+  return call(s:get_prelude().strwidthpart, a:000)
 endfunction
 function! vimfiler#util#strwidthpart_reverse(...)
-  return call(s:V.strwidthpart_reverse, a:000)
+  return call(s:get_prelude().strwidthpart_reverse, a:000)
 endfunction
 function! vimfiler#util#wcswidth(...)
-  return call(s:V.wcswidth, a:000)
+  return call(s:get_prelude().wcswidth, a:000)
 endfunction
 function! vimfiler#util#is_windows(...)
   return s:is_windows
@@ -59,43 +81,43 @@ function! vimfiler#util#is_win_path(path)
   return a:path =~ '^\A*:' || a:path =~ '^\\\\[^\\]\+\\'
 endfunction
 function! vimfiler#util#print_error(...)
-  return call(s:V.print_error, a:000)
+  return call(s:get_message().print_error, a:000)
 endfunction
 function! vimfiler#util#escape_file_searching(...)
-  return call(s:V.escape_file_searching, a:000)
+  return call(s:get_prelude().escape_file_searching, a:000)
 endfunction
 function! vimfiler#util#escape_pattern(...)
-  return call(s:V.escape_pattern, a:000)
+  return call(s:get_prelude().escape_pattern, a:000)
 endfunction
 function! vimfiler#util#set_default(...)
-  return call(s:V.set_default, a:000)
+  return call(s:get_prelude().set_default, a:000)
 endfunction
 function! vimfiler#util#set_dictionary_helper(...)
-  return call(s:V.set_dictionary_helper, a:000)
+  return call(s:get_prelude().set_dictionary_helper, a:000)
 endfunction
 function! vimfiler#util#substitute_path_separator(...)
-  return call(s:V.substitute_path_separator, a:000)
+  return call(s:get_prelude().substitute_path_separator, a:000)
 endfunction
 function! vimfiler#util#path2directory(...)
-  return call(s:V.path2directory, a:000)
+  return call(s:get_prelude().path2directory, a:000)
 endfunction
 function! vimfiler#util#path2project_directory(...)
-  return call(s:V.path2project_directory, a:000)
+  return call(s:get_prelude().path2project_directory, a:000)
 endfunction
 function! vimfiler#util#has_vimproc(...)
-  return call(s:V.has_vimproc, a:000)
+  return call(s:get_process().has_vimproc, a:000)
 endfunction
 function! vimfiler#util#system(...)
-  return call(s:V.system, a:000)
+  return call(s:get_process().system, a:000)
 endfunction
 function! vimfiler#util#get_last_status(...)
-  return call(s:V.get_last_status, a:000)
+  return call(s:get_process().get_last_status, a:000)
 endfunction
 function! vimfiler#util#sort_by(...)
-  return call(s:List.sort_by, a:000)
+  return call(s:get_list().sort_by, a:000)
 endfunction
 function! vimfiler#util#escape_file_searching(...)
-  return call(s:V.escape_file_searching, a:000)
+  return call(s:get_prelude().escape_file_searching, a:000)
 endfunction
 
 function! vimfiler#util#has_lua()
@@ -109,7 +131,7 @@ function! vimfiler#util#is_cmdwin() "{{{
 endfunction"}}}
 
 function! vimfiler#util#expand(path) "{{{
-  return s:V.substitute_path_separator(
+  return s:get_prelude().substitute_path_separator(
         \ (a:path =~ '^\~') ? substitute(a:path, '^\~', expand('~'), '') :
         \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
         \               '^\$\h\w*', '\=eval(submatch(0))', '') :
