@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: util.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 15 Feb 2014.
+" Last Modified: 18 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -81,7 +81,7 @@ function! vimfiler#util#is_win_path(path)
   return a:path =~ '^\A*:' || a:path =~ '^\\\\[^\\]\+\\'
 endfunction
 function! vimfiler#util#print_error(...)
-  return call(s:get_message().print_error, a:000)
+  return call(s:get_message().error, a:000)
 endfunction
 function! vimfiler#util#escape_file_searching(...)
   return call(s:get_prelude().escape_file_searching, a:000)
