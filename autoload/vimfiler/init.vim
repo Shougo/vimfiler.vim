@@ -579,7 +579,7 @@ function! s:buffer_default_settings() "{{{
 
   if has('conceal')
     setlocal conceallevel=3
-    setlocal concealcursor=n
+    setlocal concealcursor=nvc
   endif
 
   if vimfiler#get_context().explorer
