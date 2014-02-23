@@ -1157,7 +1157,7 @@ A:
 >
 	:VimFilerExplorer -find
 <
-Q: I cannot open the file contained ":" if enabled
+Q: I cannot open the file not contained ":" if enabled
 g:vimfiler_as_default_explorer.
 
 A: It is feature now.

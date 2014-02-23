@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Feb 2014.
+" Last Modified: 23 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,7 +34,7 @@ function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
 
   if filereadable(path)
     call vimfiler#util#print_error(
-          \ '[vimfiler] You cannot open the file contained ":"(see FAQ).')
+          \ '[vimfiler] You cannot open the file not contained ":"(see FAQ).')
     return
   endif
 
@@ -53,6 +53,8 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
         \ [insert(a:source_args, a:source_name)])
   if empty(ret)
     " File not found.
+    call vimfiler#util#print_error(
+          \ printf('[vimfiler] Can''t open "%s".', join(a:source_args, ':')))
     return
   endif
   let [type, info] = ret
@@ -90,7 +92,6 @@ function! s:on_FileAppendCmd(source_name, source_args, context)  "{{{1
   " FileAppendCmd is published by :write or other commands with >>.
   return s:write(a:source_name, a:source_args, line("'["), line("']"), 'FileAppendCmd')
 endfunction"}}}
-
 
 function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
   " Check path.
