@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 26 Feb 2014.
+" Last Modified: 04 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,6 +30,11 @@ set cpo&vim
 let g:vimfiler_draw_files_limit =
       \ get(g:, 'vimfiler_draw_files_limit', 0)
 
+let g:vimfiler_min_cache_files =
+      \ get(g:, 'vimfiler_min_cache_files', 100)
+
+let s:Cache = vimfiler#util#get_vital().import('System.Cache')
+
 function! vimfiler#view#_force_redraw_screen(...) "{{{
   let is_manualed = get(a:000, 0, 0)
 
@@ -55,9 +60,20 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
     endif
   endfor
 
+  " Check cache file.
+  let cache_dir = vimfiler#variables#get_data_directory() . '/files'
+  if is_manualed || !s:Cache.filereadable(cache_dir, b:vimfiler.current_dir)
+    " Get files.
+    let files = vimfiler#get_directory_files(b:vimfiler.current_dir, is_manualed)
+    if len(files) >= g:vimfiler_min_cache_files
+      call s:Cache.writefile(cache_dir, b:vimfiler.current_dir, [string(files)])
+    endif
+  else
+    sandbox let files = eval(s:Cache.readfile(cache_dir, b:vimfiler.current_dir)[0])
+  endif
+
   " Use matcher_glob.
-  let b:vimfiler.original_files =
-        \ vimfiler#get_directory_files(b:vimfiler.current_dir, is_manualed)
+  let b:vimfiler.original_files = files
   let index = 0
   for file in copy(b:vimfiler.original_files)
     if file.vimfiler__is_directory

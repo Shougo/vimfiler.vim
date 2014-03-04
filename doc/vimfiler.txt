@@ -362,8 +362,16 @@ g:vimfiler_ignore_pattern			 *g:vimfiler_ignore_pattern*
 						*g:vimfiler_draw_files_limit*
 g:vimfiler_draw_files_limit
 		Specify the limit of redraw files.
+		If it is less than equal 0, this feature is disabled.
 
 		Default value is 0.
+
+						*g:vimfiler_min_cache_files*
+g:vimfiler_min_cache_files
+		Specify the minimum number of files that vimfiler saves the
+		caches.
+
+		Default value is 100.
 
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
