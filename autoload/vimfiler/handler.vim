@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 03 Mar 2014.
+" Last Modified: 10 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -45,14 +45,12 @@ function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
   return s:on_{a:event_name}(source_name, source_args, context)
 endfunction
 
-" Event Handlers.
-
 function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
   " Check path.
   let ret = unite#vimfiler_check_filetype(
         \ [insert(a:source_args, a:source_name)])
   if empty(ret)
-    if !empty(unite#loaded_sources_list())
+    if !empty(unite#loaded_sources_list()) && a:source_name !=# 'file'
       " File not found.
       call vimfiler#util#print_error(
             \ printf('[vimfiler] Can''t open "%s".', join(a:source_args, ':')))
