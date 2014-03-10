@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 28 Dec 2013.
+" Last Modified: 11 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -225,6 +225,23 @@ function! vimfiler#helper#_get_file_directory(...) "{{{
   endif
 
   return directory
+endfunction"}}}
+
+
+function! vimfiler#helper#_get_buffer_directory(bufnr) "{{{
+  let filetype = getbufvar(a:bufnr, '&filetype')
+  if filetype ==# 'vimfiler'
+    let dir = getbufvar(a:bufnr, 'vimfiler').current_dir
+  elseif filetype ==# 'vimshell'
+    let dir = getbufvar(a:bufnr, 'vimshell').current_dir
+  elseif filetype ==# 'vinarise'
+    let dir = getbufvar(a:bufnr, 'vinarise').current_dir
+  else
+    let path = vimfiler#util#substitute_path_separator(bufname(a:bufnr))
+    let dir = vimfiler#util#path2directory(path)
+  endif
+
+  return dir
 endfunction"}}}
 
 function! vimfiler#helper#_set_cursor()
