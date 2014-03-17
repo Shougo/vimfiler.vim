@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: handler.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 10 Mar 2014.
+" Last Modified: 17 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -56,6 +56,7 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
             \ printf('[vimfiler] Can''t open "%s".', join(a:source_args, ':')))
     endif
 
+    doautocmd BufRead
     return
   endif
   let [type, info] = ret
