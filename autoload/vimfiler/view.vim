@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: view.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 04 Mar 2014.
+" Last Modified: 17 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -134,7 +134,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
 
   let b:vimfiler.winwidth = (winwidth(0)+1)/2*2
 
-  let b:vimfiler.current_files = (is_all || g:vimfiler_draw_files_limit > 0) ?
+  let b:vimfiler.current_files = (is_all || g:vimfiler_draw_files_limit <= 0) ?
         \ b:vimfiler.all_files : b:vimfiler.all_files[ :
         \      max([g:vimfiler_draw_files_limit, winheight(0) * 2]) - 1]
 
