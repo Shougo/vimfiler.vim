@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: mappings.vim
 " AUTHOR: Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 13 Feb 2014.
+" Last Modified: 29 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -1068,7 +1068,7 @@ function! s:unexpand_tree() "{{{
     let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
           \ + b:vimfiler.original_files[end_orig+1 :]
     let pos = getpos('.')
-    silent execute (line('.')+1).','.(vimfiler#get_line_number(end)).'delete _'
+    call vimfiler#view#_redraw_screen()
     call setpos('.', pos)
   endif
 
