@@ -92,7 +92,7 @@ augroup vimfiler
         \ call vimfiler#handler#_event_handler('FileAppendCmd')
   autocmd FileReadCmd ??*:{*,*/*}
         \ call vimfiler#handler#_event_handler('FileReadCmd')
-  autocmd BufEnter,VimEnter,BufNew,BufWinEnter,BufRead
+  autocmd BufEnter,VimEnter,BufNew,BufWinEnter,BufRead,BufCreate
         \ * call s:browse_check(expand('<amatch>'))
 augroup END
 
