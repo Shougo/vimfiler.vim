@@ -63,6 +63,8 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
   " Check cache file.
   let cache_dir = vimfiler#variables#get_data_directory() . '/files'
   if is_manualed || !s:Cache.filereadable(cache_dir, b:vimfiler.current_dir)
+        \ || (b:vimfiler.source ==# 'file' &&
+        \     s:Cache.check_old_cache(cache_dir, b:vimfiler.current_dir))
     " Get files.
     let files = vimfiler#get_directory_files(b:vimfiler.current_dir, is_manualed)
     if len(files) >= g:vimfiler_min_cache_files
