@@ -72,6 +72,8 @@ let g:vimfiler_explorer_columns =
       \ get(g:, 'vimfiler_explorer_columns', 'type')
 let g:vimfiler_ignore_pattern =
       \ get(g:, 'vimfiler_ignore_pattern', '^\.')
+let g:vimfiler_expand_jump_to_first_child =
+      \ get(g:, 'vimfiler_expand_jump_to_first_child', 1)
 
 let g:vimfiler_execute_file_list =
       \ get(g:, 'vimfiler_execute_file_list', {})
