@@ -918,7 +918,7 @@ function! s:expand_tree(is_recursive) "{{{
 
   setlocal nomodifiable
 
-  if !a:is_recursive && !is_fold
+  if g:vimfiler_expand_jump_to_first_child && !a:is_recursive && !is_fold
     " Move to next line.
     call cursor(line('.') + 1, 0)
   endif

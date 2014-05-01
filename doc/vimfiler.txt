@@ -359,6 +359,13 @@ g:vimfiler_ignore_pattern			 *g:vimfiler_ignore_pattern*
 <
 		Default value is '^\.' (dot files pattern).
 
+					*g:vimfiler_expand_jump_to_first_child*
+g:vimfiler_expand_jump_to_first_child			 
+		This variable controls if you jump to the first child when you
+		expand a directory tree.
+		
+		Default value is 1.
+
 						*g:vimfiler_draw_files_limit*
 g:vimfiler_draw_files_limit
 		Specify the limit of redraw files.
