@@ -60,7 +60,7 @@ function! s:source.gather_candidates(args, context) "{{{
 
     if !empty(unite#get_all_sources('ssh'))
       " Add network drive.
-      let s:drives += map(unite#sources#ssh#command_complete_host('', '', 0),
+      let s:drives += map(unite#sources#ssh#complete_host('', '', 0),
             \ "'ssh://'.v:val.'/'")
     endif
 
