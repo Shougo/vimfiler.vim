@@ -846,7 +846,6 @@ function! s:expand_tree(is_recursive) "{{{
   if cursor_file.vimfiler__is_opened
     if a:is_recursive
       call s:unexpand_tree()
-      call vimfiler#view#_check_redraw()
     endif
     return
   endif
@@ -922,8 +921,6 @@ function! s:expand_tree(is_recursive) "{{{
     " Move to next line.
     call cursor(line('.') + 1, 0)
   endif
-
-  call vimfiler#view#_check_redraw()
 endfunction"}}}
 function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   if get(a:file, 'vimfiler__ftype', '') ==# 'link'
