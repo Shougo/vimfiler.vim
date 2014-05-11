@@ -35,6 +35,8 @@ Interface		|vimfiler-interface|
 Columns			|vimfiler-columns|
 Examples		|vimfiler-examples|
 Unite sources		|vimfiler-unite-sources|
+Create source		|vimfiler-create-source|
+Create kind		|vimfiler-create-kind|
 FAQ			|vimfiler-faq|
 
 ==============================================================================
@@ -1043,6 +1045,58 @@ vimfiler/mask					*vimfiler-unite-action-vimfiler-mask*
 
 vimfiler/popd					*vimfiler-unite-action-vimfiler-popd*
 	delete		Delete directory from directory stack
+
+==============================================================================
+CREATE SOURCE					*vimfiler-create-source*
+
+See |unite-create-source|.
+
+------------------------------------------------------------------------------
+SOURCE ATTRIBUTES				*vimfiler-source-attributes*
+
+See |unite-source-attributes|.
+
+			*vimfiler-source-attribute-vimfiler_check_filetype*
+vimfiler_check_filetype
+			Function	(Required*)
+
+			*vimfiler-source-attribute-vimfiler_gather_candidates*
+vimfiler_gather_candidates
+			Function	(Required*)
+
+			*vimfiler-source-attribute-vimfiler_dummy_candidates*
+vimfiler_dummy_candidates
+			Function	(Required*)
+
+			*vimfiler-source-attribute-vimfiler_complete*
+vimfiler_complete
+			Function	(Optional)
+
+==============================================================================
+CREATE KIND					*vimfiler-create-kind*
+
+See |unite-create-kind|.
+
+------------------------------------------------------------------------------
+KIND ATTRIBUTES					*vimfiler-kind-attributes*
+
+See |unite-kind-attributes|.
+
+------------------------------------------------------------------------------
+KIND ACTIONS					*vimfiler-kind-actions*
+
+Below "vimfiler__" prefixed actions are used for vimfiler.
+
+	vimfiler__write		Save file.  To save file in vimfiler, you must
+				define it.
+	vimfiler__shell		Create shell.
+	vimfiler__shellcmd	Execute shell command.
+	vimfiler__mkdir		Make this directory and parents directory.
+	vimfiler__newfile	Make this file.
+	vimfiler__delete	Delete files.
+	vimfiler__rename	Rename files.
+	vimfiler__copy	 	Copy files.
+	vimfiler__move	 	Move files.
 
 ==============================================================================
 FAQ						*vimfiler-faq*
