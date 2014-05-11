@@ -617,9 +617,12 @@ function! s:toggle_mark_current_line(...) "{{{
   let file.vimfiler__is_marked = !file.vimfiler__is_marked
   let file.vimfiler__marked_time = localtime()
 
-  setlocal modifiable
-  call setline('.', vimfiler#view#_get_print_lines([file]))
-  setlocal nomodifiable
+  try
+    setlocal modifiable
+    call setline('.', vimfiler#view#_get_print_lines([file]))
+  finally
+    setlocal nomodifiable
+  endtry
 
   let map = get(a:000, 0, '')
   if map == ''
@@ -648,9 +651,12 @@ function! s:mark_current_line() "{{{
   let file.vimfiler__is_marked = 1
   let file.vimfiler__marked_time = localtime()
 
-  setlocal modifiable
-  call setline('.', vimfiler#view#_get_print_lines([file]))
-  setlocal nomodifiable
+  try
+    setlocal modifiable
+    call setline('.', vimfiler#view#_get_print_lines([file]))
+  finally
+    setlocal nomodifiable
+  endtry
 endfunction"}}}
 function! s:toggle_mark_all_lines() "{{{
   for file in vimfiler#get_current_vimfiler().all_files
@@ -817,8 +823,6 @@ function! s:toggle_tree(is_recursive) "{{{
   else
     call s:expand_tree(a:is_recursive)
   endif
-
-  call vimfiler#view#_check_redraw()
 endfunction"}}}
 function! s:expand_tree(is_recursive) "{{{
   let cursor_file = vimfiler#get_file()
@@ -849,8 +853,6 @@ function! s:expand_tree(is_recursive) "{{{
     endif
     return
   endif
-
-  setlocal modifiable
 
   let cursor_file.vimfiler__is_opened = 1
 
@@ -909,18 +911,14 @@ function! s:expand_tree(is_recursive) "{{{
     call extend(b:vimfiler.current_files, files, index+1)
     call extend(b:vimfiler.original_files, original_files, index_orig+1)
     let b:vimfiler.all_files_len += len(files)
-
-    call append('.', vimfiler#view#_get_print_lines(files))
   endif
-
-  call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
-
-  setlocal nomodifiable
 
   if g:vimfiler_expand_jump_to_first_child && !a:is_recursive && !is_fold
     " Move to next line.
     call cursor(line('.') + 1, 0)
   endif
+
+  call vimfiler#view#_redraw_screen()
 endfunction"}}}
 function! vimfiler#mappings#expand_tree_rec(file, ...) "{{{
   if get(a:file, 'vimfiler__ftype', '') ==# 'link'
@@ -1015,8 +1013,6 @@ function! s:unexpand_tree() "{{{
     return
   endif
 
-  setlocal modifiable
-
   if !cursor_file.vimfiler__is_opened &&
         \ has_key(cursor_file, 'vimfiler__parent')
     let parent_file = cursor_file.vimfiler__parent
@@ -1029,7 +1025,12 @@ function! s:unexpand_tree() "{{{
   endif
 
   let cursor_file.vimfiler__is_opened = 0
-  call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
+  try
+    setlocal modifiable
+    call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
+  finally
+    setlocal nomodifiable
+  endtry
 
   " Unexpand tree.
   let nestlevel = cursor_file.vimfiler__nest_level
@@ -1068,8 +1069,6 @@ function! s:unexpand_tree() "{{{
     call vimfiler#view#_redraw_screen()
     call setpos('.', pos)
   endif
-
-  setlocal nomodifiable
 endfunction"}}}
 function! s:jump_child(is_first) "{{{
   if empty(vimfiler#get_file())
