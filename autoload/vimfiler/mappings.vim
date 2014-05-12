@@ -1591,7 +1591,13 @@ function! s:help() "{{{
         \ { 'buffer_name' : 'vimfiler/mapping', 'script' : 1 })
 endfunction"}}}
 function! s:execute_external_filer() "{{{
-  call vimfiler#mappings#do_current_dir_action('vimfiler__execute')
+  let file = vimfiler#get_file()
+  if empty(file)
+    " Use current directory
+    call vimfiler#mappings#do_current_dir_action('vimfiler__execute')
+  else
+    call vimfiler#mappings#do_files_action('vimfiler__external_filer', [file])
+  endif
 endfunction"}}}
 function! vimfiler#mappings#_change_vim_current_dir() "{{{
   let vimfiler = vimfiler#get_current_vimfiler()

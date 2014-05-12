@@ -1097,6 +1097,9 @@ Below "vimfiler__" prefixed actions are used for vimfiler.
 	vimfiler__rename	Rename files.
 	vimfiler__copy	 	Copy files.
 	vimfiler__move	 	Move files.
+	vimfiler__execute	Execute files with associated program.
+	vimfiler__external_filer
+				Execute files with external file explorer.
 
 ==============================================================================
 FAQ						*vimfiler-faq*
