@@ -95,7 +95,7 @@ highlight def link vimfilerROFile Comment
 
 let b:current_syntax = 'vimfiler'
 
-if !empty(b:vimfiler.syntaxes)
+if exists('b:vimfiler') && !empty(b:vimfiler.syntaxes)
   " Redraw syntax.
   for column in filter(
         \ copy(b:vimfiler.columns), "get(v:val, 'syntax', '') != ''")
