@@ -66,12 +66,15 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
         \ || (b:vimfiler.source ==# 'file' &&
         \     s:Cache.check_old_cache(cache_dir, b:vimfiler.current_dir))
     " Get files.
-    let files = vimfiler#get_directory_files(b:vimfiler.current_dir, is_manualed)
-    if len(files) >= g:vimfiler_min_cache_files
-      call s:Cache.writefile(cache_dir, b:vimfiler.current_dir, [string(files)])
+    let files = vimfiler#get_directory_files(
+          \ b:vimfiler.current_dir, is_manualed)
+    if len(files) >= g:vimfiler_min_cache_files && !vimfiler#util#is_sudo()
+      call s:Cache.writefile(cache_dir,
+            \ b:vimfiler.current_dir, [string(files)])
     endif
   else
-    sandbox let files = eval(s:Cache.readfile(cache_dir, b:vimfiler.current_dir)[0])
+    sandbox let files = eval(s:Cache.readfile(
+          \ cache_dir, b:vimfiler.current_dir)[0])
   endif
 
   " Use matcher_glob.

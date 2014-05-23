@@ -233,6 +233,12 @@ function! vimfiler#util#get_vimfiler_winnr(buffer_name) "{{{
   return -1
 endfunction"}}}
 
+function! vimfiler#util#is_sudo() "{{{
+  return $SUDO_USER != '' && $USER !=# $SUDO_USER
+        \ && $HOME !=# expand('~'.$USER)
+        \ && $HOME ==# expand('~'.$SUDO_USER)
+endfunction"}}}
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

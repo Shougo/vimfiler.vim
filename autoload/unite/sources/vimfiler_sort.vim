@@ -86,7 +86,7 @@ function! s:action_table.sort.func(candidate) "{{{
 
   let cache_dir = vimfiler#variables#get_data_directory() . '/' . 'sort'
   let path = b:vimfiler.source.'/'.b:vimfiler.current_dir
-  if a:candidate.action__sort ==# 'save'
+  if a:candidate.action__sort ==# 'save' && !vimfiler#util#is_sudo()
     " Save current sort type.
     call s:Cache.writefile(cache_dir, path, [b:vimfiler.local_sort_type])
   elseif a:candidate.action__sort ==# 'nosave'
@@ -96,7 +96,7 @@ function! s:action_table.sort.func(candidate) "{{{
     endif
   else
     let b:vimfiler.local_sort_type = a:candidate.action__sort
-    if s:Cache.filereadable(cache_dir, path)
+    if s:Cache.filereadable(cache_dir, path) && !vimfiler#util#is_sudo()
       call s:Cache.writefile(cache_dir, path, [b:vimfiler.local_sort_type])
     endif
 

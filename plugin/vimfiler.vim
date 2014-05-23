@@ -29,16 +29,6 @@ if exists('g:loaded_vimfiler')
 elseif v:version < 702
   echomsg 'vimfiler does not work this version of Vim "' . v:version . '".'
   finish
-elseif $SUDO_USER != '' && $USER !=# $SUDO_USER
-      \ && $HOME !=# expand('~'.$USER)
-      \ && $HOME ==# expand('~'.$SUDO_USER)
-  echohl Error
-  echomsg 'vimfiler disabled: "sudo vim" is detected and $HOME is set to '
-        \.'your user''s home. '
-        \.'You may want to use the sudo.vim plugin, the "-H" option '
-        \.'with "sudo" or set always_set_home in /etc/sudoers instead.'
-  echohl None
-  finish
 endif
 
 let s:save_cpo = &cpo
