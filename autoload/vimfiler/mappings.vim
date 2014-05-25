@@ -339,6 +339,11 @@ function! vimfiler#mappings#do_switch_action(action) "{{{
   let current_linenr = line('.')
   call s:switch()
 
+  let context = vimfiler#get_context()
+  if !context.no_quit && buflisted(context.alternate_buffer)
+    execute 'buffer' context.alternate_buffer
+  endif
+
   call vimfiler#mappings#do_action(a:action, current_linenr)
 endfunction"}}}
 

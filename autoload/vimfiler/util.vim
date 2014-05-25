@@ -172,9 +172,10 @@ function! vimfiler#util#restore_variables(variables_save) "{{{
 endfunction"}}}
 
 function! vimfiler#util#alternate_buffer() "{{{
-  if getbufvar('#', '&filetype') !=# 'vimfiler'
-        \ && s:buflisted(bufnr('#'))
-    buffer #
+  let context = vimfiler#get_context()
+
+  if s:buflisted(context.alternate_buffer)
+    execute 'buffer' context.alternate_buffer
     return
   endif
 

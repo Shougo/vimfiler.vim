@@ -156,6 +156,7 @@ function! vimfiler#init#_context(context) "{{{
     \ 'project' : 0,
     \ 'find' : 0,
     \ 'tab' : 0,
+    \ 'alternate_buffer' : bufnr('#'),
     \ 'no_focus' : 0,
     \ 'columns' : g:vimfiler_default_columns,
     \ 'vimfiler__prev_bufnr' : bufnr('%'),
