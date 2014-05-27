@@ -1250,6 +1250,7 @@ function! vimfiler#mappings#create_another_vimfiler() "{{{
   let context.double = 0
   let context.create = 1
   let context.tab = 0
+  let context.alternate_buffer = -1
   let context.direction = 'belowright'
 
   call vimfiler#start(
