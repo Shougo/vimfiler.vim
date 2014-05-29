@@ -341,6 +341,7 @@ function! vimfiler#mappings#do_switch_action(action) "{{{
 
   let context = vimfiler#get_context()
   if !context.no_quit && buflisted(context.alternate_buffer)
+      \ && g:vimfiler_restore_alternate_file
     execute 'buffer' context.alternate_buffer
   endif
 

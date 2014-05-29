@@ -176,6 +176,7 @@ function! vimfiler#util#alternate_buffer() "{{{
 
   if s:buflisted(context.alternate_buffer)
         \ && getbufvar(context.alternate_buffer, '&filetype') !=# 'vimfiler'
+        \ && g:vimfiler_restore_alternate_file
     execute 'buffer' context.alternate_buffer
     return
   endif

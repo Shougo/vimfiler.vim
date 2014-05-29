@@ -74,6 +74,8 @@ let g:vimfiler_ignore_pattern =
       \ get(g:, 'vimfiler_ignore_pattern', '^\.')
 let g:vimfiler_expand_jump_to_first_child =
       \ get(g:, 'vimfiler_expand_jump_to_first_child', 1)
+let g:vimfiler_restore_alternate_file =
+      \ get(g:, 'vimfiler_restore_alternate_file', 0)
 
 let g:vimfiler_execute_file_list =
       \ get(g:, 'vimfiler_execute_file_list', {})
