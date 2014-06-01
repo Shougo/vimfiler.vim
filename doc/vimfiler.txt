@@ -382,6 +382,13 @@ g:vimfiler_min_cache_files
 
 		Default value is 100.
 
+					*g:vimfiler_restore_alternate_file*
+g:vimfiler_restore_alternate_file
+		Option to restore alternate file after open action. The
+		vimfiler buffer becomes the alternate file by default.
+
+		Default value is 0.
+
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
 				*g:unite_kind_file_delete_file_command*
