@@ -47,7 +47,7 @@ execute 'syntax match   vimfilerNormalFile'
       \ '''^\s*\%('.s:leaf_icon.'\)\?'.
       \ s:file_icon.' .*'' contains=vimfilerNonMark oneline'
 
-execute 'syntax match   vimfilerOpendFile'
+execute 'syntax match   vimfilerOpenedFile'
       \ '''^\s*\%('.s:leaf_icon.'\)\?'.
       \ s:opened_icon.' .*'' contains=vimfilerNonMark oneline'
 execute 'syntax match   vimfilerClosedFile'
@@ -88,7 +88,7 @@ highlight def link vimfilerNonMark Special
 highlight def link vimfilerMarkedFile Type
 highlight def link vimfilerDirectory Preproc
 
-highlight def link vimfilerOpendFile Preproc
+highlight def link vimfilerOpenedFile Preproc
 highlight def link vimfilerClosedFile Preproc
 highlight def link vimfilerROFile Comment
 

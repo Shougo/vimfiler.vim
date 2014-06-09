@@ -289,7 +289,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   let start = max_len + 1
   let syntaxes = [
             \ [vimfiler#util#wcswidth(
-            \  g:vimfiler_tree_opened_icon), 'vimfilerOpendFile'],
+            \  g:vimfiler_tree_opened_icon), 'vimfilerOpenedFile'],
             \ [vimfiler#util#wcswidth(
             \  g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
             \ [vimfiler#util#wcswidth(
@@ -301,7 +301,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
     " Optimize if columns are same.
     let syntaxes = [[vimfiler#util#wcswidth(
             \  g:vimfiler_file_icon),
-            \  'vimfilerNormalFile,vimfilerOpendFile,'.
+            \  'vimfilerNormalFile,vimfilerOpenedFile,'.
             \  'vimfilerClosedFile,vimfilerROFile']]
   endif
   for column in columns
