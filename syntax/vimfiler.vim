@@ -61,9 +61,13 @@ execute 'syntax match   vimfilerMarkedFile'
       \ '''^\s*\%('  . s:leaf_icon .'\)\?'
       \ . s:marked_file_icon . ' .*$'''
 
+execute 'syntax match   vimfilerLeaf'
+      \ '''^\s*'  . s:leaf_icon . ''' contained'
+
 execute 'syntax match   vimfilerNonMark'
       \ '''^\s*\%('.s:leaf_icon.'\)\?\%('.s:opened_icon.'\|'
-      \ .s:closed_icon.'\|'.s:ro_file_icon.'\|'.s:file_icon.'\) '' contained'
+      \ .s:closed_icon.'\|'.s:ro_file_icon.'\|'.s:file_icon.'\) ''
+      \ contained contains=vimfilerLeaf'
 
 unlet s:opened_icon
 unlet s:closed_icon
@@ -86,11 +90,12 @@ highlight def link vimfilerMask Statement
 
 highlight def link vimfilerNonMark Special
 highlight def link vimfilerMarkedFile Type
-highlight def link vimfilerDirectory Preproc
 
+highlight def link vimfilerDirectory Preproc
 highlight def link vimfilerOpenedFile Preproc
 highlight def link vimfilerClosedFile Preproc
 highlight def link vimfilerROFile Comment
+highlight def link vimfilerLeaf Special
 
 let b:current_syntax = 'vimfiler'
 
