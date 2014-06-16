@@ -30,3 +30,16 @@ vimfiler standard operations
 vimfiler explorer feature(like NERDTree)
 ----------------------------------------
 ![Vimfiler explorer](https://f.cloud.github.com/assets/214488/657685/95011fc4-d571-11e2-9934-159196cf9e59.gif)
+
+## What are some of the advantages vs other file browsers?
+
+Some VimFiler advantages/differences are:
+
+- Integration with [unite](https://github.com/Shougo/unite.vim)
+- Integration with [vimshell](https://github.com/Shougo/vimshell.vim)
+- Many customization options
+- External sources(for example, [unite-ssh](https://github.com/Shougo/unite-ssh))
+- More options(see |vimfiler-options|)
+- Fast(if you use |if_lua| enabled Vim)
+- Column customization
+- Double screen file explorer
