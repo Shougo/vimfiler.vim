@@ -35,7 +35,7 @@ vimfiler explorer feature(like NERDTree)
 
 Some VimFiler advantages/differences are:
 
-- Integration with [unite.vim](https://github.com/Shougo/unite.vim)
+- Integration with [unite](https://github.com/Shougo/unite.vim)
 - Integration with [vimshell](https://github.com/Shougo/vimshell.vim)
 - Many customization options
 - External sources(for example, [unite-ssh](https://github.com/Shougo/unite-ssh))
