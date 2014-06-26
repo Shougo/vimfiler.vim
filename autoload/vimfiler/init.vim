@@ -551,6 +551,8 @@ function! vimfiler#init#_default_settings() "{{{
           \ call vimfiler#handler#_event_bufwin_leave(expand('<abuf>'))
     autocmd CursorMoved <buffer>
           \ call vimfiler#handler#_event_cursor_moved()
+    autocmd CursorHold,FocusGained <buffer>
+          \ call vimfiler#view#_force_redraw_all_vimfiler()
     autocmd VimResized <buffer>
           \ call vimfiler#view#_redraw_all_vimfiler()
   augroup end"}}}
