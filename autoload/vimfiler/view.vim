@@ -405,6 +405,12 @@ function! vimfiler#view#_get_max_len(files) "{{{
 
   return max([max([winwidth(0), &winwidth]) - padding, 10])
 endfunction"}}}
+function! vimfiler#view#_define_syntax() "{{{
+  for column in filter(
+        \ copy(b:vimfiler.columns), "get(v:val, 'syntax', '') != ''")
+    call column.define_syntax(b:vimfiler.context)
+  endfor
+endfunction"}}}
 
 function! s:check_tree(files) "{{{
   let level = 0

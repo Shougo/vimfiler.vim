@@ -100,13 +100,7 @@ highlight def link vimfilerLeaf Special
 let b:current_syntax = 'vimfiler'
 
 if exists('b:vimfiler') && !empty(b:vimfiler.syntaxes)
-  " Redraw syntax.
-  for s:column in filter(
-        \ copy(b:vimfiler.columns), "get(v:val, 'syntax', '') != ''")
-    call s:column.define_syntax(b:vimfiler.context)
-  endfor
-  unlet! s:column
-
+  call vimfiler#view#_define_syntax()
   call vimfiler#view#_redraw_screen()
 endif
 
