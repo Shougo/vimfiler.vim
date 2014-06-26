@@ -101,9 +101,9 @@ let b:current_syntax = 'vimfiler'
 
 if exists('b:vimfiler') && !empty(b:vimfiler.syntaxes)
   " Redraw syntax.
-  for column in filter(
+  for l:column in filter(
         \ copy(b:vimfiler.columns), "get(v:val, 'syntax', '') != ''")
-    call column.define_syntax(b:vimfiler.context)
+    call l:column.define_syntax(b:vimfiler.context)
   endfor
 
   call vimfiler#view#_redraw_screen()
