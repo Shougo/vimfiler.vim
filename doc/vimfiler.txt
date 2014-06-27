@@ -299,8 +299,8 @@ g:vimfiler_data_directory			*g:vimfiler_data_directory*
 		vimfiler itself or its sources.  If the directory doesn't
 		exist the directory will be automatically generated.
 		
-		Default value is expand('~/.cache/vimfiler'); the absolute
-		path of it.
+		Default value is $XDG_CACHE_DIR/vimfiler or
+		expand("~/.cache/vimfiler"); the absolute path of it.
 
 g:vimfiler_enable_auto_cd			*g:vimfiler_enable_auto_cd*
 		This variable controls whether vimfiler change Vim current
