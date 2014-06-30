@@ -348,7 +348,6 @@ function! vimfiler#mappings#do_switch_action(action) "{{{
 endfunction"}}}
 
 function! vimfiler#mappings#do_files_action(action, files, ...) "{{{
-  let cursor_linenr = get(a:000, 0, line('.'))
   let vimfiler = vimfiler#get_current_vimfiler()
 
   " Execute action.
@@ -1402,8 +1401,6 @@ function! s:copy() "{{{
     let dest_dir .= another.current_dir
   endif
 
-  let old_files = copy(vimfiler#get_current_vimfiler().current_files)
-
   " Execute copy.
   call unite#mappings#do_action('vimfiler__copy', marked_files, {
         \ 'action__directory' : dest_dir,
@@ -1474,8 +1471,6 @@ function! s:rename() "{{{
 endfunction"}}}
 function! s:make_directory() "{{{
   let directory = vimfiler#get_file_directory()
-  let old_files =
-        \ copy(vimfiler#get_current_vimfiler().current_files)
 
   " Don't quit.
   let context = vimfiler#get_context()

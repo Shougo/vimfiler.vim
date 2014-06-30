@@ -155,10 +155,6 @@ function! vimfiler#helper#_get_cd_path(dir) "{{{
 endfunction"}}}
 
 function! vimfiler#helper#_complete(arglead, cmdline, cursorpos) "{{{
-  let ret = vimfiler#parse_path(join(split(a:cmdline)[1:]))
-  let source_name = ret[0]
-  let source_args = ret[1:]
-
   let _ = []
 
   " Option names completion.

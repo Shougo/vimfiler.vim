@@ -7,21 +7,21 @@ set cpo&vim
 
 Context functions
   It tests sort functions.
-    let candidates = []
-    for i in range(1, 100)
-      call add(candidates, { 'vimfiler__filename' : 'foo'.i.'.txt'.i })
+    let g:candidates = []
+    for g:i in range(1, 100)
+      call add(g:candidates, { 'vimfiler__filename' : 'foo'.i.'.txt'.i })
     endfor
 
     " Benchmark.
-    let start = reltime()
-    call vimfiler#helper#_sort_human(copy(candidates), 0)
-    echomsg reltimestr(reltime(start))
-    let start = reltime()
-    call vimfiler#helper#_sort_human(copy(candidates), 1)
-    echomsg reltimestr(reltime(start))
+    let g:start = reltime()
+    call vimfiler#helper#_sort_human(copy(g:candidates), 0)
+    echomsg reltimestr(reltime(g:start))
+    let g:start = reltime()
+    call vimfiler#helper#_sort_human(copy(g:candidates), 1)
+    echomsg reltimestr(reltime(g:start))
 
-    ShouldEqual vimfiler#helper#_sort_human(copy(candidates), 0),
-          \ vimfiler#helper#_sort_human(copy(candidates), 1)
+    ShouldEqual vimfiler#helper#_sort_human(copy(g:candidates), 0),
+          \ vimfiler#helper#_sort_human(copy(g:candidates), 1)
   End
 End
 

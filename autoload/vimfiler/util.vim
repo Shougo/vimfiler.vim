@@ -159,14 +159,14 @@ function! vimfiler#util#set_variables(variables) "{{{
     let save_value = exists(key) ? eval(key) : ''
 
     let variables_save[key] = save_value
-    execute 'let' key '= value'
+    execute 'let' key '=' string(value)
   endfor
 
   return variables_save
 endfunction"}}}
 function! vimfiler#util#restore_variables(variables_save) "{{{
   for [key, value] in items(a:variables_save)
-    execute 'let' key '= value'
+    execute 'let' key '=' string(value)
   endfor
 endfunction"}}}
 

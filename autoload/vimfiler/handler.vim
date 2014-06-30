@@ -147,11 +147,8 @@ endfunction"}}}
 
 " Event functions.
 function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
-  let prev_winnr = winnr('#')
-
   if a:bufnr != bufnr('%') && bufwinnr(a:bufnr) > 0
     let winnr = winnr()
-    let prev_winnr = winnr
     execute bufwinnr(a:bufnr) 'wincmd w'
   endif
 
