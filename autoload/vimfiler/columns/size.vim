@@ -26,23 +26,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-if has('python3')
-  let s:python = 'python3'
-  let s:pyfile = 'py3file'
-elseif has('python')
-  let s:python = 'python'
-  let s:pyfile = 'pyfile'
-else
-  let s:python = ''
-  let s:pyfile = ''
-endif
-
-if s:pyfile != ''
-  execute s:pyfile escape(expand('<sfile>:p:h'), '\').'/../vimfiler.py'
-endif
-
-execute s:python 'vimfiler = VimFiler()'
-
 function! vimfiler#columns#size#define()
   return s:column
 endfunction"}}}
@@ -73,9 +56,9 @@ function! s:column.get(file, context) "{{{
   let size = 0
   if filesize < 0
     if a:file.action__path !~ '^\a\w\+:'
-          \ && s:python != ''
+          \ && has('lua')
           \ && getftype(a:file.action__path) !=# 'link'
-      let pattern = s:get_python_file_size(a:file.action__path)
+      let pattern = s:get_lua_file_size(a:file.action__path)
     elseif filesize == -2
       " Above 2GB?
       let pattern = '>2.00'
@@ -114,12 +97,19 @@ function! s:column.get(file, context) "{{{
 endfunction"}}}
 
 " @vimlint(EVL101, 1, l:pattern)
-function! s:get_python_file_size(filename) "{{{
-  " Use python interface.
-  execute s:python 'vim.command("let pattern = " + str('.
-        \ 'vimfiler.getsize(vim.eval('.
-        \ '"unite#util#iconv(a:filename, &encoding, \"char\")"))))'
-  return string(pattern)
+function! s:get_lua_file_size(filename) "{{{
+  lua << EOF
+do
+  local file = io.open(vim.eval('a:filename'))
+  mega = math.floor(file:seek('end') / (1024 * 1024) + 0.5)
+  file:close()
+  float = math.floor((mega%1024)*100/1024 + 0.5)
+  pattern = string.format('%2d.%02d', math.floor(mega/1024), float)
+  vim.command('let pattern = "' .. pattern .. '"')
+end
+EOF
+
+  return pattern
 endfunction"}}}
 " @vimlint(EVL101, 0, l:pattern)
 

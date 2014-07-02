@@ -19,7 +19,7 @@ http://github.com/Shougo/unite.vim
 
 Please install unite.vim Ver.3.0(or later) before use vimfiler.
 
-Note: To use 4GB(>) files in vimfiler, vimfiler require +python interface.
+Note: To use 2GB(>) files in vimfiler, vimfiler require +lua interface.
 
 ## Screen shots
 
