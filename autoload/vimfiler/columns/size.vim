@@ -26,6 +26,23 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+if has('python3')
+  let s:python = 'python3'
+  let s:pyfile = 'py3file'
+elseif has('python')
+  let s:python = 'python'
+  let s:pyfile = 'pyfile'
+else
+  let s:python = ''
+  let s:pyfile = ''
+endif
+
+if s:pyfile != ''
+  execute s:pyfile escape(expand('<sfile>:p:h'), '\').'/../vimfiler.py'
+endif
+
+execute s:python 'vimfiler = VimFiler()'
+
 function! vimfiler#columns#size#define()
   return s:column
 endfunction"}}}
@@ -53,9 +70,10 @@ function! s:column.get(file, context) "{{{
 
   " Get human file size.
   let filesize = a:file.vimfiler__filesize
+  let size = 0
   if filesize < 0
-    if a:file.action__path !~ '^\a\w\+:' &&
-          \ (has('python3') || has('python'))
+    if a:file.action__path !~ '^\a\w\+:'
+          \ && s:python != ''
           \ && getftype(a:file.action__path) !=# 'link'
       let pattern = s:get_python_file_size(a:file.action__path)
     elseif filesize == -2
@@ -92,32 +110,18 @@ function! s:column.get(file, context) "{{{
           \ printf('%2d.%01d', digit, float/10)
   endif
 
-  return pattern.suffix
+  return pattern . suffix
 endfunction"}}}
 
+" @vimlint(EVL101, 1, l:pattern)
 function! s:get_python_file_size(filename) "{{{
   " Use python interface.
-execute (has('python3') ? 'python3' : 'python') ' <<END'
-import os.path
-import vim
-try:
-  filesize = os.path.getsize(vim.eval(\
-  'unite#util#iconv(a:filename, &encoding, "char")'))
-except:
-  filesize = -1
-
-if filesize < 0:
-  pattern = ''
-else:
-  mega = filesize / 1024 / 1024
-  float = int((mega%1024)*100/1024)
-  pattern = '%2d.%02d' % (mega/1024, float)
-
-vim.command("let pattern = '%s'" % pattern)
-END
-
-  return pattern
+  execute s:python 'vim.command("let pattern = " + str('.
+        \ 'vimfiler.getsize(vim.eval('.
+        \ '"unite#util#iconv(a:filename, &encoding, \"char\")"))))'
+  return string(pattern)
 endfunction"}}}
+" @vimlint(EVL101, 0, l:pattern)
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
