@@ -74,6 +74,7 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
   else
     sandbox let files = eval(s:Cache.readfile(
           \ cache_dir, b:vimfiler.current_dir)[0])
+    let files = vimfiler#helper#_sort_files(files)
   endif
 
   " Use matcher_glob.
