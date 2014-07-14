@@ -101,10 +101,15 @@ function! s:get_lua_file_size(filename) "{{{
   lua << EOF
 do
   local file = io.open(vim.eval('a:filename'))
-  mega = math.floor(file:seek('end') / (1024 * 1024) + 0.5)
-  file:close()
-  float = math.floor((mega%1024)*100/1024 + 0.5)
-  pattern = string.format('%2d.%02d', math.floor(mega/1024), float)
+  local pattern
+  if file ~= nil then
+    local mega = math.floor(file:seek('end') / (1024 * 1024) + 0.5)
+    local float = math.floor((mega%1024)*100/1024 + 0.5)
+    pattern = string.format('%2d.%02d', math.floor(mega/1024), float)
+    file:close()
+  else
+    pattern = ''
+  end
   vim.command('let pattern = "' .. pattern .. '"')
 end
 EOF
