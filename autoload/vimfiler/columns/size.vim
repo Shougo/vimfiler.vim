@@ -100,7 +100,7 @@ endfunction"}}}
 function! s:get_lua_file_size(filename) "{{{
   lua << EOF
 do
-  local file = io.open(vim.eval('a:filename'))
+  local file = io.open(vim.eval('iconv(a:filename, &encoding, "char")'))
   local pattern
   if file ~= nil then
     local mega = math.floor(file:seek('end') / (1024 * 1024) + 0.5)
