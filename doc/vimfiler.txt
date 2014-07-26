@@ -387,7 +387,7 @@ g:vimfiler_restore_alternate_file
 		Option to restore alternate file after open action. The
 		vimfiler buffer becomes the alternate file by default.
 
-		Default value is 0.
+		Default value is 1.
 
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
