@@ -214,12 +214,12 @@ function! vimfiler#helper#_get_file_directory(...) "{{{
   if empty(file)
     let directory = vimfiler#get_current_vimfiler().current_dir
   else
-    let directory = file.action__directory
+    let directory = unite#helper#get_candidate_directory(file)
 
     if file.vimfiler__is_directory
           \ && !file.vimfiler__is_opened
       let directory = vimfiler#util#substitute_path_separator(
-            \ fnamemodify(file.action__directory, ':h'))
+            \ fnamemodify(directory, ':h'))
     endif
   endif
 

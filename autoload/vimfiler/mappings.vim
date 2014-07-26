@@ -1779,7 +1779,7 @@ function! s:get_action_current_dir(files) "{{{
     let current_dir = b:vimfiler.source . ':' . current_dir
   endif
   if len(a:files) == 1
-    let current_dir = a:files[0].action__directory
+    let current_dir = unite#helper#get_candidate_directory(a:files[0])
     if a:files[0].vimfiler__is_directory
       let current_dir = vimfiler#util#substitute_path_separator(
             \   fnamemodify(current_dir, ':h'))
