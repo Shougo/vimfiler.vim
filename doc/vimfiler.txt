@@ -385,7 +385,7 @@ g:vimfiler_min_cache_files
 					*g:vimfiler_restore_alternate_file*
 g:vimfiler_restore_alternate_file
 		Option to restore alternate file after open action. The
-		vimfiler buffer becomes the alternate file by default.
+		vimfiler buffer does not become the alternate file by default.
 
 		Default value is 1.
 
