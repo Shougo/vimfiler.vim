@@ -259,6 +259,8 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
     " Change current directory.
     call vimfiler#mappings#_change_vim_current_dir()
   endif
+
+  call vimfiler#mappings#cd(b:vimfiler.current_dir)
 endfunction"}}}
 function! vimfiler#init#_vimfiler_file(path, lines, dict) "{{{1
   " Set current unite.
