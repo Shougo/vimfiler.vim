@@ -95,8 +95,6 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
   call vimfiler#view#_redraw_screen()
 endfunction"}}}
 function! vimfiler#view#_redraw_screen(...) "{{{
-  let is_all = get(a:000, 0, 0)
-
   let is_switch = &filetype !=# 'vimfiler'
   let save_winnr = winnr()
   if is_switch
