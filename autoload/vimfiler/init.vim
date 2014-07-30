@@ -188,6 +188,7 @@ function! vimfiler#init#_context(context) "{{{
   if context.tab
     " Force create new vimfiler buffer.
     let context.create = 1
+    let context.alternate_buffer = -1
   endif
 
   return context
@@ -406,7 +407,9 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
   let search_path = fnamemodify(bufname('%'), ':p')
 
   let context = vimfiler#initialize_context(a:context)
-  let context.alternate_buffer = bufnr('%')
+  if !context.tab
+    let context.alternate_buffer = bufnr('%')
+  endif
 
   if bufwinnr(a:bufnr) < 0
     if context.split
