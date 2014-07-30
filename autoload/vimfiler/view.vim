@@ -26,9 +26,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let g:vimfiler_draw_files_limit =
-      \ get(g:, 'vimfiler_draw_files_limit', 0)
-
 let g:vimfiler_min_cache_files =
       \ get(g:, 'vimfiler_min_cache_files', 100)
 
@@ -139,9 +136,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
 
   let b:vimfiler.winwidth = (winwidth(0)+1)/2*2
 
-  let b:vimfiler.current_files = (is_all || g:vimfiler_draw_files_limit <= 0) ?
-        \ b:vimfiler.all_files : b:vimfiler.all_files[ :
-        \      max([g:vimfiler_draw_files_limit, winheight(0) * 2]) - 1]
+  let b:vimfiler.current_files = b:vimfiler.all_files
 
   setlocal modifiable
 
