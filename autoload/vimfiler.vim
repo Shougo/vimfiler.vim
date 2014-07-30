@@ -44,8 +44,6 @@ endif"}}}
 " Variables "{{{
 let s:current_vimfiler = {}
 
-let s:vimfiler_current_histories = []
-
 let s:vimfiler_options = [
       \ '-buffer-name=', '-no-quit', '-quit', '-toggle', '-create',
       \ '-simple', '-double', '-split', '-horizontal', '-direction=',
@@ -197,6 +195,9 @@ function! vimfiler#initialize_context(context) "{{{
   return vimfiler#init#_context(a:context)
 endfunction"}}}
 function! vimfiler#get_histories() "{{{
+  if !exists('s:vimfiler_current_histories')
+    let s:vimfiler_current_histories = []
+  endif
   return copy(s:vimfiler_current_histories)
 endfunction"}}}
 function! vimfiler#set_histories(histories) "{{{
