@@ -505,7 +505,7 @@ function! s:create_vimfiler_buffer(path, context) "{{{
   endif
 
   if context.tab
-    tabnew
+    noautocmd tabnew
   endif
 
   " Save swapfile option.
