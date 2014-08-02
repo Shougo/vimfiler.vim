@@ -118,7 +118,7 @@ function! vimfiler#init#_command(default, args) "{{{
     let arg = substitute(arg, '\\\( \)', '\1', 'g')
 
     let arg_key = substitute(arg, '=\zs.*$', '', '')
-    let matched_list = filter(copy(vimfiler#get_options()),
+    let matched_list = filter(copy(vimfiler#variables#options()),
           \  'v:val ==# arg_key')
     for option in matched_list
       let key = substitute(substitute(option, '-', '_', 'g'),
@@ -136,34 +136,7 @@ function! vimfiler#init#_command(default, args) "{{{
   call vimfiler#init#_start(join(args), options)
 endfunction"}}}
 function! vimfiler#init#_context(context) "{{{
-  let default_context = {
-    \ 'buffer_name' : 'default',
-    \ 'no_quit' : 0,
-    \ 'quit' : 0,
-    \ 'toggle' : 0,
-    \ 'create' : 0,
-    \ 'simple' : 0,
-    \ 'double' : 0,
-    \ 'split' : 0,
-    \ 'status' : 0,
-    \ 'horizontal' : 0,
-    \ 'winheight' : 0,
-    \ 'winwidth' : 0,
-    \ 'winminwidth' : 0,
-    \ 'direction' : g:vimfiler_split_rule,
-    \ 'auto_cd' : g:vimfiler_enable_auto_cd,
-    \ 'explorer' : 0,
-    \ 'reverse' : 0,
-    \ 'project' : 0,
-    \ 'find' : 0,
-    \ 'tab' : 0,
-    \ 'alternate_buffer' : bufnr('%'),
-    \ 'no_focus' : 0,
-    \ 'columns' : g:vimfiler_default_columns,
-    \ 'vimfiler__prev_bufnr' : bufnr('%'),
-    \ 'vimfiler__winfixwidth' : &l:winfixwidth,
-    \ 'vimfiler__winfixheight' : &l:winfixheight,
-    \ }
+  let default_context = vimfiler#variables#default_context()
 
   if get(a:context, 'explorer', 0)
     " Change default value.

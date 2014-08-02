@@ -162,7 +162,7 @@ function! vimfiler#helper#_complete(arglead, cmdline, cursorpos) "{{{
   let _ = []
 
   " Option names completion.
-  let _ +=  filter(vimfiler#get_options(),
+  let _ +=  filter(vimfiler#variables#options(),
         \ 'stridx(v:val, a:arglead) == 0')
 
   " Source path completion.
