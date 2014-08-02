@@ -1242,7 +1242,8 @@ function! vimfiler#mappings#create_another_vimfiler() "{{{
   let line = line('.')
 
   " Create another vimfiler.
-  let context = deepcopy(vimfiler#get_context())
+  let original_context = deepcopy(vimfiler#get_context())
+  let context = deepcopy(original_context)
   if context.split || context.explorer
     " Note: Horizontal automatically.
     let context.horizontal = 1
@@ -1261,6 +1262,10 @@ function! vimfiler#mappings#create_another_vimfiler() "{{{
   call vimfiler#start(
         \ current_vimfiler.source.':'.
         \ current_vimfiler.current_dir, context)
+
+  " Restore split option.
+  let b:vimfiler.context.split = original_context.split
+
   call cursor(line, 0)
   call vimfiler#helper#_set_cursor()
 
@@ -1280,8 +1285,9 @@ function! vimfiler#mappings#switch_another_vimfiler(...) "{{{
   else
     " Open another vimfiler buffer.
     let current_vimfiler = vimfiler#get_current_vimfiler()
+    let original_context = deepcopy(vimfiler#get_context())
 
-    let context = deepcopy(vimfiler#get_context())
+    let context = deepcopy(original_context)
     let context.split = 1
     let context.double = 0
     let context.direction = 'belowright'
@@ -1293,6 +1299,9 @@ function! vimfiler#mappings#switch_another_vimfiler(...) "{{{
     call vimfiler#init#_switch_vimfiler(
           \ current_vimfiler.another_vimfiler_bufnr,
           \ context, directory)
+
+    " Restore split option.
+    let b:vimfiler.context.split = original_context.split
   endif
 endfunction"}}}
 function! s:sync_with_current_vimfiler() "{{{
