@@ -961,6 +961,10 @@ parameters for an option.  You need to escape spaces with "\".
 		No the focus on the vimfiler buffer after opening a vimfiler
 		buffer.
 
+						*vimfiler-options-invisible*
+		-invisible
+		Search inivisible vimfiler buffer.
+
 ==============================================================================
 COLUMNS						*vimfiler-columns*
 

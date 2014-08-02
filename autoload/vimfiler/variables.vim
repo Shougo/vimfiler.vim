@@ -104,6 +104,7 @@ function! s:initialize_default_options() "{{{
         \ 'tab' : 0,
         \ 'alternate_buffer' : bufnr('%'),
         \ 'focus' : 1,
+        \ 'invisible' : 0,
         \ 'columns' : g:vimfiler_default_columns,
         \ 'vimfiler__prev_bufnr' : bufnr('%'),
         \ 'vimfiler__winfixwidth' : &l:winfixwidth,
