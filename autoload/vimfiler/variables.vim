@@ -26,6 +26,15 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Global options definition. "{{{
+let g:vimfiler_default_columns =
+      \ get(g:, 'vimfiler_default_columns', 'type:size:time')
+let g:vimfiler_split_rule =
+      \ get(g:, 'vimfiler_split_rule', 'topleft')
+let g:vimfiler_enable_auto_cd =
+      \ get(g:, 'vimfiler_enable_auto_cd', 0)
+"}}}
+
 function! vimfiler#variables#get_clipboard() "{{{
   if !exists('s:clipboard')
     let s:clipboard = {'operation' : '', 'files' : []}
@@ -84,9 +93,9 @@ function! s:initialize_default_options() "{{{
         \ 'split' : 0,
         \ 'status' : 0,
         \ 'horizontal' : 0,
-        \ 'winheight' : 0,
-        \ 'winwidth' : 0,
-        \ 'winminwidth' : 0,
+        \ 'winheight' : -1,
+        \ 'winwidth' : -1,
+        \ 'winminwidth' : -1,
         \ 'direction' : g:vimfiler_split_rule,
         \ 'auto_cd' : g:vimfiler_enable_auto_cd,
         \ 'explorer' : 0,

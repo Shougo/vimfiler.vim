@@ -37,8 +37,6 @@ let g:vimfiler_sort_type =
       \ get(g:, 'vimfiler_sort_type', 'filename')
 let g:vimfiler_directory_display_top =
       \ get(g:, 'vimfiler_directory_display_top', 1)
-let g:vimfiler_split_rule =
-      \ get(g:, 'vimfiler_split_rule', 'topleft')
 let g:vimfiler_max_directories_history =
       \ get(g:, 'vimfiler_max_directories_history', 50)
 let g:vimfiler_safe_mode_by_default =
@@ -61,12 +59,8 @@ let g:vimfiler_readonly_file_icon =
       \ get(g:, 'vimfiler_readonly_file_icon', 'X')
 let g:vimfiler_marked_file_icon =
       \ get(g:, 'vimfiler_marked_file_icon', '*')
-let g:vimfiler_enable_auto_cd =
-      \ get(g:, 'vimfiler_enable_auto_cd', 0)
 let g:vimfiler_quick_look_command =
       \ get(g:, 'vimfiler_quick_look_command', '')
-let g:vimfiler_default_columns =
-      \ get(g:, 'vimfiler_default_columns', 'type:size:time')
 let g:vimfiler_explorer_columns =
       \ get(g:, 'vimfiler_explorer_columns', 'type')
 let g:vimfiler_ignore_pattern =
@@ -219,7 +213,7 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
     wincmd p
   endif
 
-  if a:context.winwidth != 0
+  if a:context.winwidth >= 0
     execute 'vertical resize' a:context.winwidth
   endif
 
