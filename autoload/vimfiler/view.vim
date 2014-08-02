@@ -212,13 +212,16 @@ function! s:redraw_prompt() "{{{
     return
   endif
 
-  let mask = !b:vimfiler.is_visible_ignore_files
-        \ && b:vimfiler.current_mask == '' ?
+  let mask = (!b:vimfiler.is_visible_ignore_files
+        \      && b:vimfiler.current_mask == '') ?
         \ '' : '[' . (b:vimfiler.is_visible_ignore_files ? '.:' : '')
         \       . b:vimfiler.current_mask . ']'
 
-  let prefix = (b:vimfiler.is_safe_mode ? '[safe] ' : '') .
-        \ (b:vimfiler.source ==# 'file' ? '' : b:vimfiler.source.':')
+  let sort = ' <' . b:vimfiler.local_sort_type . '>'
+
+  let safe = (b:vimfiler.is_safe_mode) ? ' *safe*' : ''
+
+  let prefix = (b:vimfiler.source ==# 'file') ? '' : b:vimfiler.source.':'
 
   let dir = b:vimfiler.current_dir
   if b:vimfiler.source ==# 'file'
@@ -235,7 +238,7 @@ function! s:redraw_prompt() "{{{
   if dir !~ '/$'
     let dir .= '/'
   endif
-  let b:vimfiler.status = prefix .  dir . mask
+  let b:vimfiler.status = prefix .  dir . mask . sort . safe
 
   let context = vimfiler#get_context()
 
