@@ -188,7 +188,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
     return
   endif
 
-  if a:context.split || a:context.no_quit || a:context.explorer
+  if a:context.split || !a:context.quit || a:context.explorer
     " Change default mapping.
     nmap <buffer> <TAB> <Plug>(vimfiler_switch_to_other_window)
   else
@@ -339,7 +339,7 @@ function! vimfiler#mappings#do_switch_action(action) "{{{
   call s:switch()
 
   let context = vimfiler#get_context()
-  if !context.no_quit && buflisted(context.alternate_buffer)
+  if context.quit && buflisted(context.alternate_buffer)
       \ && g:vimfiler_restore_alternate_file
     execute 'buffer' context.alternate_buffer
   endif
@@ -545,7 +545,7 @@ endfunction"}}}
 
 function! s:switch() "{{{
   let context = vimfiler#get_context()
-  if !context.no_quit
+  if context.quit
     return
   endif
 

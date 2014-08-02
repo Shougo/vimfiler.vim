@@ -84,8 +84,7 @@ endfunction"}}}
 function! s:initialize_default_options() "{{{
   let s:default_context = {
         \ 'buffer_name' : 'default',
-        \ 'no_quit' : 0,
-        \ 'quit' : 0,
+        \ 'quit' : 1,
         \ 'toggle' : 0,
         \ 'create' : 0,
         \ 'simple' : 0,
@@ -104,7 +103,7 @@ function! s:initialize_default_options() "{{{
         \ 'find' : 0,
         \ 'tab' : 0,
         \ 'alternate_buffer' : bufnr('%'),
-        \ 'no_focus' : 0,
+        \ 'focus' : 1,
         \ 'columns' : g:vimfiler_default_columns,
         \ 'vimfiler__prev_bufnr' : bufnr('%'),
         \ 'vimfiler__winfixwidth' : &l:winfixwidth,

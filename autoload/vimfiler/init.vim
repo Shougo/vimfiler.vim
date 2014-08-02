@@ -138,7 +138,7 @@ function! vimfiler#init#_context(context) "{{{
     let default_context.split = 1
     let default_context.simple = 1
     let default_context.toggle = 1
-    let default_context.no_quit = 1
+    let default_context.quit = 0
     let default_context.winwidth = 35
     let default_context.columns = g:vimfiler_explorer_columns
   endif
@@ -427,7 +427,7 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
 
   call vimfiler#view#_force_redraw_all_vimfiler()
 
-  if context.no_focus
+  if !context.focus
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
@@ -504,7 +504,7 @@ function! s:create_vimfiler_buffer(path, context) "{{{
           \ search_path), '/$', '', ''))
   endif
 
-  if context.no_focus
+  if !context.focus
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
