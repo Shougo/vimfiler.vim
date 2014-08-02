@@ -97,15 +97,6 @@ function! vimfiler#set_context(context) "{{{
 
   return old_context
 endfunction"}}}
-function! vimfiler#get_options() "{{{
-  return [
-      \ '-buffer-name=', '-no-quit', '-quit', '-toggle', '-create',
-      \ '-simple', '-double', '-split', '-horizontal', '-direction=',
-      \ '-winheight=', '-winwidth=', '-winminwidth=', '-auto-cd', '-explorer',
-      \ '-reverse', '-project', '-columns=', '-status', '-find', '-tab',
-      \ '-no-focus',
-      \]
-endfunction"}}}
 function! vimfiler#start(path, ...) "{{{
   return call('vimfiler#init#_start', [a:path] + a:000)
 endfunction"}}}

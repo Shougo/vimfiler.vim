@@ -145,6 +145,12 @@ function! vimfiler#init#_context(context) "{{{
 
   let context = extend(default_context, a:context)
 
+  " Generic no.
+  for option in map(filter(items(context),
+        \ "stridx(v:val[0], 'no_') == 0 && v:val[1]"), 'v:val[0]')
+    let context[option[3:]] = 0
+  endfor
+
   if !has_key(context, 'profile_name')
     let context.profile_name = context.buffer_name
   endif
@@ -360,6 +366,7 @@ function! vimfiler#init#_start(path, ...) "{{{
             \ && vimfiler.context.profile_name ==# context.profile_name
             \ && (!exists('t:unite_buffer_dictionary')
             \      || has_key(t:unite_buffer_dictionary, bufnr))
+            \ && (!context.invisible || bufwinnr(a:bufnr) < 0)
         call vimfiler#init#_switch_vimfiler(bufnr, context, path)
         return
       endif
