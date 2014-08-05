@@ -366,7 +366,7 @@ function! vimfiler#init#_start(path, ...) "{{{
             \ && vimfiler.context.profile_name ==# context.profile_name
             \ && (!exists('t:unite_buffer_dictionary')
             \      || has_key(t:unite_buffer_dictionary, bufnr))
-            \ && (!context.invisible || bufwinnr(a:bufnr) < 0)
+            \ && (!context.invisible || bufwinnr(bufnr) < 0)
         call vimfiler#init#_switch_vimfiler(bufnr, context, path)
         return
       endif
