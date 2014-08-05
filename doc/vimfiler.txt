@@ -865,8 +865,8 @@ parameters for an option.  You need to escape spaces with "\".
 		-no-quit
 		Doesn't close the vimfiler buffer after firing an action.
 
-						*vimfiler-options-quit*
-		-quit
+						*vimfiler-options-force-quit*
+		-force-quit
 		Close the vimfiler buffer after firing an action.
 
 						*vimfiler-options-winwidth*

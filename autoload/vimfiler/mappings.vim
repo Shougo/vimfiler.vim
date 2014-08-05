@@ -326,7 +326,7 @@ function! vimfiler#mappings#do_action(action, ...) "{{{
 
   call s:clear_mark_all_lines()
 
-  if vimfiler.context.quit
+  if vimfiler.context.force_quit
     call s:exit(vimfiler)
   endif
 
@@ -385,10 +385,6 @@ function! vimfiler#mappings#do_dir_action(action, directory, ...) "{{{
   endif
 
   call s:clear_mark_all_lines()
-
-  if vimfiler.context.quit
-    call s:exit(vimfiler)
-  endif
 
   " Execute action.
   call unite#mappings#do_action(a:action, files, context)

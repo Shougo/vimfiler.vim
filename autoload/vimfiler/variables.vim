@@ -85,6 +85,7 @@ function! s:initialize_default_options() "{{{
   let s:default_context = {
         \ 'buffer_name' : 'default',
         \ 'quit' : 1,
+        \ 'force_quit' : 0,
         \ 'toggle' : 0,
         \ 'create' : 0,
         \ 'simple' : 0,
