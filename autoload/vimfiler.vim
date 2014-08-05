@@ -164,7 +164,8 @@ function! vimfiler#get_filetype(file) "{{{
   return vimfiler#init#_get_filetype(a:file)
 endfunction"}}}
 function! vimfiler#exists_another_vimfiler() "{{{
-  return bufnr('%') != b:vimfiler.another_vimfiler_bufnr
+  return exists('b:vimfiler')
+        \ && bufnr('%') != b:vimfiler.another_vimfiler_bufnr
         \ && getbufvar(b:vimfiler.another_vimfiler_bufnr,
         \         '&filetype') ==# 'vimfiler'
         \ && bufloaded(b:vimfiler.another_vimfiler_bufnr) > 0
