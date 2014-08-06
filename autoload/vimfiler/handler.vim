@@ -27,9 +27,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
-  let context = vimfiler#initialize_context(get(a:000, 0, {}))
-  let path = get(context, 'path',
-        \ vimfiler#util#substitute_path_separator(expand('<afile>')))
+  let user_context = get(a:000, 0, {})
+  let context = vimfiler#initialize_context(user_context)
+  let path = vimfiler#util#substitute_path_separator(
+        \ get(user_context, 'path', expand('<afile>')))
 
   if filereadable(path)
     call vimfiler#util#print_error(
