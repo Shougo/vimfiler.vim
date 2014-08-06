@@ -31,7 +31,7 @@ function! vimfiler#exrename#create_buffer(files) "{{{
   call vimfiler#redraw_screen()
   let prefix = vimfiler#util#is_windows() ?
         \ '[exrename] - ' : '*exrename* - '
-  edit `=prefix . b:vimfiler.context.buffer_name`
+  execute 'edit' fnameescape(prefix . b:vimfiler.context.buffer_name)
 
   setlocal buftype=acwrite
   setlocal noswapfile
