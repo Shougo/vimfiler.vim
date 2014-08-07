@@ -481,7 +481,15 @@ Normal mode key mappings.
 
 				*<Plug>(vimfiler_mark_similar_lines)*
 <Plug>(vimfiler_mark_similar_lines)
-		Mark similar files with cursor file.
+		Mark files similar to the cursor file.  You can consider a
+		line to be similar when you can find both the file name and the
+		extension in that line.  For example, use this when you want to
+		mark files `foo1.txt`, `foo2_tmp.txt`, `foo35.txt.bak` but not
+		`foo.md` or `bar1.txt` etc.
+
+		More precisely, for those who know regex, it replaces the
+		non-|identifier| characters in the file name with the regular
+		expression `.\+` and looks for files that match.
 
 				*<Plug>(vimfiler_clear_mark_all_lines)*
 <Plug>(vimfiler_clear_mark_all_lines)
