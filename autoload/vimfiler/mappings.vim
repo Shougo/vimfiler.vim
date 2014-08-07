@@ -206,7 +206,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
 
   " Toggle marks in all lines.
   nmap <buffer> * <Plug>(vimfiler_toggle_mark_all_lines)
-  nmap <buffer> & <Plug>(vimfiler_mark_similar_lines)
+  nmap <buffer> # <Plug>(vimfiler_mark_similar_lines)
   " Clear marks in all lines.
   nmap <buffer> U <Plug>(vimfiler_clear_mark_all_lines)
 
