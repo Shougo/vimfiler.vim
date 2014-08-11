@@ -62,7 +62,7 @@ function! vimfiler#variables#default_context() "{{{
     call s:initialize_default_options()
   endif
 
-  return s:default_context
+  return deepcopy(s:default_context)
 endfunction"}}}
 
 function! vimfiler#variables#options() "{{{
@@ -78,7 +78,7 @@ function! vimfiler#variables#options() "{{{
           \ "v:val[-1:] != '='"), "'-no' . v:val")
   endif
 
-  return s:options
+  return deepcopy(s:options)
 endfunction"}}}
 
 function! s:initialize_default_options() "{{{
