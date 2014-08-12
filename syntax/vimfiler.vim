@@ -29,6 +29,8 @@ elseif exists('b:current_syntax')
   finish
 endif
 
+call vimfiler#init#_initialize()
+
 " Initialize icon patterns."{{{
 let s:leaf_icon = vimfiler#util#escape_pattern(
       \ g:vimfiler_tree_leaf_icon)

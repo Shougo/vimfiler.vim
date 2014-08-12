@@ -105,6 +105,9 @@ let s:manager = vimfiler#util#get_vital().import('Vim.Buffer')
 
 let s:loaded_columns = {}
 
+function! vimfiler#init#_initialize() "{{{
+  " Dummy initialize
+endfunction"}}}
 function! vimfiler#init#_command(default, args) "{{{
   let args = []
   let options = a:default
