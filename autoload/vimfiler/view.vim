@@ -137,6 +137,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
   let b:vimfiler.current_files = b:vimfiler.all_files
 
   setlocal modifiable
+  setlocal noreadonly
 
   try
     let last_line = line('.')
@@ -155,6 +156,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
           \ vimfiler#view#_get_print_lines(b:vimfiler.current_files))
   finally
     setlocal nomodifiable
+    setlocal readonly
   endtry
 
   let index = index(b:vimfiler.current_files, current_file)
