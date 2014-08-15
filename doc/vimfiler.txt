@@ -730,8 +730,8 @@ Normal mode key mappings.
 		disabled.
 
 <Plug>(vimfiler_toggle_simple_mode)	*<Plug>(vimfiler_toggle_simple_mode)*
-		Toggles simple mode. In simple mode, displayed information is
-		simple.
+		Toggles simple mode. VimFiler shows less information than
+		usual in vimfiler-simple-mode.
 
 <Plug>(vimfiler_pushd)				*<Plug>(vimfiler_pushd)*
 		Pushes current directory(and another vimfiler current
