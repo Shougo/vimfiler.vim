@@ -897,7 +897,7 @@ parameters for an option.  You need to escape spaces with "\".
 						*vimfiler-options-toggle*
 		-toggle
 		Close vimfiler buffer window if this vimfiler buffer name
-		window is exists.
+		window exists.
 		Note: If you set |vimfiler-options-find|, this feature is
 		disabled.
 
