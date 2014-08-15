@@ -714,8 +714,15 @@ function! s:execute() "{{{
         \ s:cd_file_directory() : s:execute_vimfiler_associated()
 endfunction"}}}
 function! s:execute_vimfiler_associated() "{{{
-  call unite#start(['vimfiler/execute'],
-        \ { 'immediately' : 1, 'buffer_name' : 'vimfiler/execute', 'script' : 1 })
+  call unite#start(['vimfiler/execute'], {
+        \ 'immediately' : 1,
+        \ 'buffer_name' : 'vimfiler/execute',
+        \ 'script' : 1
+        \ })
+  let vimfiler = vimfiler#get_current_vimfiler()
+  if vimfiler.context.force_quit
+    call s:exit(vimfiler)
+  endif
 endfunction"}}}
 function! s:execute_system_associated() "{{{
   let marked_files = vimfiler#get_marked_files()
