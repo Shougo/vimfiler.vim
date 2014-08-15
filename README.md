@@ -31,6 +31,10 @@ vimfiler explorer feature(like NERDTree)
 ----------------------------------------
 ![Vimfiler explorer](https://f.cloud.github.com/assets/214488/657685/95011fc4-d571-11e2-9934-159196cf9e59.gif)
 
+vimfiler dark theme
+----------------------------
+![Vimfiler dark theme](https://cloud.githubusercontent.com/assets/147918/3933094/412cc0e0-2478-11e4-902e-63b658f04d81.png)
+
 ## What are some of the advantages vs other file browsers?
 
 Some VimFiler advantages/differences are:
