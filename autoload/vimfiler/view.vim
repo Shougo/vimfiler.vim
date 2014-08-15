@@ -247,33 +247,38 @@ function! s:redraw_prompt() "{{{
 
   " Append up directory.
   let modifiable_save = &l:modifiable
+  let readonly_save = &l:readonly
   setlocal modifiable
+  setlocal noreadonly
 
-  if getline(b:vimfiler.prompt_linenr) != '..'
-    if line('$') == 1
-      " Note: Dirty Hack for open file.
-      call append(1, '')
-      call setline(2, '..')
-      silent delete _
-    else
-      call setline(1, '..')
+  try
+    if getline(b:vimfiler.prompt_linenr) != '..'
+      if line('$') == 1
+        " Note: Dirty Hack for open file.
+        call append(1, '')
+        call setline(2, '..')
+        silent delete _
+      else
+        call setline(1, '..')
+      endif
     endif
-  endif
 
-  if context.status || context.explorer
-    if getline(1) == '..'
-      call append(0, '[in]: ' . b:vimfiler.status)
-    else
-      call setline(1, '[in]: ' . b:vimfiler.status)
+    if context.status || context.explorer
+      if getline(1) == '..'
+        call append(0, '[in]: ' . b:vimfiler.status)
+      else
+        call setline(1, '[in]: ' . b:vimfiler.status)
+      endif
     endif
-  endif
 
-  if context.explorer
-    " Delete prompt
-    silent 1,2delete _
-  endif
-
-  let &l:modifiable = modifiable_save
+    if context.explorer
+      " Delete prompt
+      silent 1,2delete _
+    endif
+  finally
+    let &l:modifiable = modifiable_save
+    let &l:readonly = readonly_save
+  endtry
 endfunction"}}}
 function! vimfiler#view#_get_print_lines(files) "{{{
   " Clear previous syntax.

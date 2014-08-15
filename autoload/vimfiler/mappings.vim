@@ -605,9 +605,11 @@ function! s:toggle_mark_current_line(...) "{{{
 
   try
     setlocal modifiable
+    setlocal noreadonly
     call setline('.', vimfiler#view#_get_print_lines([file]))
   finally
     setlocal nomodifiable
+    setlocal readonly
   endtry
 
   let map = get(a:000, 0, '')
@@ -639,9 +641,11 @@ function! s:mark_current_line() "{{{
 
   try
     setlocal modifiable
+    setlocal noreadonly
     call setline('.', vimfiler#view#_get_print_lines([file]))
   finally
     setlocal nomodifiable
+    setlocal readonly
   endtry
 endfunction"}}}
 function! s:toggle_mark_all_lines() "{{{
@@ -1026,9 +1030,11 @@ function! s:unexpand_tree() "{{{
   let cursor_file.vimfiler__is_opened = 0
   try
     setlocal modifiable
+    setlocal noreadonly
     call setline('.', vimfiler#view#_get_print_lines([cursor_file]))
   finally
     setlocal nomodifiable
+    setlocal readonly
   endtry
 
   " Unexpand tree.
