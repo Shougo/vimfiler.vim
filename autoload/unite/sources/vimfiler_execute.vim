@@ -38,11 +38,21 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context) "{{{
+  let winnr = winnr()
+  try
+    execute a:context.vimfiler__winnr.'wincmd w'
+
+    if &filetype !=# 'vimfiler'
+      return []
+    endif
+
+    let a:context.source__file = vimfiler#get_file(line('.'))
+  finally
+    execute winnr.'wincmd w'
+  endtry
   if &filetype !=# 'vimfiler'
     return
   endif
-
-  let a:context.source__file = vimfiler#get_file(line('.'))
 endfunction"}}}
 
 function! s:source.gather_candidates(args, context) "{{{

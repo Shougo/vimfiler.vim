@@ -718,10 +718,13 @@ function! s:execute() "{{{
         \ s:cd_file_directory() : s:execute_vimfiler_associated()
 endfunction"}}}
 function! s:execute_vimfiler_associated() "{{{
+  let bufnr = bufnr('%')
+  call s:switch()
   call unite#start(['vimfiler/execute'], {
         \ 'immediately' : 1,
         \ 'buffer_name' : 'vimfiler/execute',
-        \ 'script' : 1
+        \ 'script' : 1,
+        \ 'vimfiler__winnr' : bufwinnr(bufnr),
         \ })
   let vimfiler = vimfiler#get_current_vimfiler()
   if vimfiler.context.force_quit
