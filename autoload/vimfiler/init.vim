@@ -473,7 +473,6 @@ function! s:create_vimfiler_buffer(path, context) "{{{
   let bufname = prefix . postfix
 
   " Set buffer_name.
-  let context.profile_name = context.buffer_name
   let context.buffer_name = bufname
 
   if context.split
@@ -482,7 +481,7 @@ function! s:create_vimfiler_buffer(path, context) "{{{
   endif
 
   if context.tab
-    noautocmd tabnew
+    tabnew
   endif
 
   " Save swapfile option.
