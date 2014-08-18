@@ -168,14 +168,14 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
     endif
 
     let context = vimfiler#get_context()
-    if context.winwidth >= 0
+    if context.winwidth > 0
       execute 'vertical resize' context.winwidth
 
       let context.vimfiler__winfixwidth = &l:winfixwidth
       if context.split
         setlocal winfixwidth
       endif
-    elseif context.winheight >= 0
+    elseif context.winheight > 0
       execute 'resize' context.winheight
       if line('.') < winheight(0)
         normal! zb
