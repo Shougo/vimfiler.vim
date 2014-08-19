@@ -222,7 +222,7 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
     wincmd p
   endif
 
-  if a:context.winwidth >= 0
+  if a:context.winwidth > 0
     execute 'vertical resize' a:context.winwidth
   endif
 

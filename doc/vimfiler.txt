@@ -880,6 +880,7 @@ parameters for an option.  You need to escape spaces with "\".
 						*vimfiler-options-winwidth*
 		-winwidth={window-width}
 		Specifies the width of a vimfiler buffer.
+		Note: If this option is 0, auto resize feature is disabled.
 
 						*vimfiler-options-winminwidth*
 		-winminwidth={window-width}
@@ -888,6 +889,7 @@ parameters for an option.  You need to escape spaces with "\".
 						*vimfiler-options-winheight*
 		-winheight={window-height}
 		Specifies the height of a vimfiler buffer.
+		Note: If this option is 0, auto resize feature is disabled.
 
 						*vimfiler-options-direction*
 		-direction={direction}

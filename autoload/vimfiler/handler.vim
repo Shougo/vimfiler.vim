@@ -211,9 +211,9 @@ function! vimfiler#handler#_event_bufwin_leave(bufnr) "{{{
 
   " Restore winfix.
   let context = vimfiler.context
-  if context.winwidth >= 0 && context.split
+  if context.winwidth > 0 && context.split
     let &l:winfixwidth = context.vimfiler__winfixwidth
-  elseif context.winheight >= 0 && context.split
+  elseif context.winheight > 0 && context.split
     let &l:winfixheight = context.vimfiler__winfixheight
   endif
 endfunction"}}}
