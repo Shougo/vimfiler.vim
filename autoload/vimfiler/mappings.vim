@@ -340,7 +340,8 @@ function! vimfiler#mappings#do_switch_action(action) "{{{
 
   let context = vimfiler#get_context()
   if context.quit && buflisted(context.alternate_buffer)
-      \ && g:vimfiler_restore_alternate_file
+        \ && getbufvar(context.alternate_buffer, '&filetype') !=# 'vimfiler'
+        \ && g:vimfiler_restore_alternate_file
     execute 'buffer' context.alternate_buffer
   endif
 
