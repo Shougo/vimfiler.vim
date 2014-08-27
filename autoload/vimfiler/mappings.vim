@@ -326,10 +326,6 @@ function! vimfiler#mappings#do_action(action, ...) "{{{
 
   call s:clear_mark_all_lines()
 
-  if vimfiler.context.force_quit
-    call s:exit(vimfiler)
-  endif
-
   return vimfiler#mappings#do_files_action(
         \ a:action, marked_files, cursor_linenr)
 endfunction"}}}
@@ -350,6 +346,10 @@ endfunction"}}}
 
 function! vimfiler#mappings#do_files_action(action, files, ...) "{{{
   let vimfiler = vimfiler#get_current_vimfiler()
+
+  if vimfiler.context.force_quit
+    call s:exit(vimfiler)
+  endif
 
   " Execute action.
   let current_dir = vimfiler.current_dir
@@ -386,6 +386,10 @@ function! vimfiler#mappings#do_dir_action(action, directory, ...) "{{{
   endif
 
   call s:clear_mark_all_lines()
+
+  if vimfiler.context.force_quit
+    call s:exit(vimfiler)
+  endif
 
   " Execute action.
   call unite#mappings#do_action(a:action, files, context)
