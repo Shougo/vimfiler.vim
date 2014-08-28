@@ -313,7 +313,6 @@ endfunction"}}}
 
 function! vimfiler#mappings#do_action(action, ...) "{{{
   let cursor_linenr = get(a:000, 0, line('.'))
-  let vimfiler = vimfiler#get_current_vimfiler()
   let marked_files = vimfiler#get_marked_files()
   if empty(marked_files)
     let file = vimfiler#get_file(cursor_linenr)
