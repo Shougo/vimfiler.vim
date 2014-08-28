@@ -323,8 +323,7 @@ function! vimfiler#mappings#do_action(action, ...) "{{{
     let marked_files = [ file ]
   endif
 
-  return vimfiler#mappings#do_files_action(
-        \ a:action, marked_files, cursor_linenr)
+  return vimfiler#mappings#do_files_action(a:action, marked_files)
 endfunction"}}}
 
 function! vimfiler#mappings#do_switch_action(action) "{{{
