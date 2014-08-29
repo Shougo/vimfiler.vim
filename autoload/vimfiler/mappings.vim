@@ -1532,7 +1532,7 @@ function! s:clipboard_paste() "{{{
   let dest_dir = vimfiler#get_file_directory()
 
   " Execute file operation.
-  call vimfiler#mappings#do_files(
+  call vimfiler#mappings#do_files_action(
         \ 'vimfiler__' . clipboard.operation,
         \ clipboard.files, {
         \ 'action__directory' : dest_dir,
