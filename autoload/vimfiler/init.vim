@@ -385,6 +385,11 @@ function! vimfiler#init#_start(path, ...) "{{{
   call s:create_vimfiler_buffer(path, context)
 endfunction"}}}
 function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
+  if a:bufnr < 0
+    call s:create_vimfiler_buffer(a:directory, a:context)
+    return
+  endif
+
   let search_path = fnamemodify(bufname('%'), ':p')
 
   let context = vimfiler#initialize_context(a:context)
