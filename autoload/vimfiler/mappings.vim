@@ -351,9 +351,7 @@ function! vimfiler#mappings#do_files_action(action, files, ...) "{{{
 
   call s:clear_mark_all_lines()
 
-  if vimfiler.context.force_quit
-    call s:exit(vimfiler)
-  endif
+  call s:check_force_quit(vimfiler, a:action)
 
   " Execute action.
   call unite#mappings#do_action(a:action, a:files, context)
@@ -388,9 +386,7 @@ function! vimfiler#mappings#do_dir_action(action, directory, ...) "{{{
 
   call s:clear_mark_all_lines()
 
-  if vimfiler.context.force_quit
-    call s:exit(vimfiler)
-  endif
+  call s:check_force_quit(vimfiler, a:action)
 
   " Execute action.
   call unite#mappings#do_action(a:action, files, context)
@@ -733,9 +729,7 @@ function! s:execute_vimfiler_associated() "{{{
         \ 'vimfiler__winnr' : bufwinnr(bufnr),
         \ })
   let vimfiler = vimfiler#get_current_vimfiler()
-  if vimfiler.context.force_quit
-    call s:exit(vimfiler)
-  endif
+  call s:check_force_quit(vimfiler, '')
 endfunction"}}}
 function! s:execute_system_associated() "{{{
   if empty(vimfiler#get_marked_files())
@@ -1802,6 +1796,16 @@ function! s:get_abbr_length(parent, child) "{{{
         \ repeat(' ', a:parent.vimfiler__nest_level
         \  * g:vimfiler_tree_indentation) .
         \ a:parent.vimfiler__abbr.a:child.vimfiler__abbr) + 5
+endfunction"}}}
+
+function! s:check_force_quit(vimfiler, action) "{{{
+  if a:vimfiler.context.force_quit
+        \ && index([
+        \  'vimfiler__move', 'vimfiler__copy', 'vimfiler__delete',
+        \  'vimfiler__rename', 'vimfiler__mkdir',
+        \ ], a:action) < 0
+    call s:exit(a:vimfiler)
+  endif
 endfunction"}}}
 
 " vim: foldmethod=marker
