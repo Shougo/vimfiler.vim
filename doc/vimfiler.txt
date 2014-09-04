@@ -179,6 +179,26 @@ vimfiler#get_status_string()			 *vimfiler#get_status_string()*
 		Returns vimfiler status string. It is useful to custom
 		statusline.
 
+						*vimfiler#custom#profile()*
+vimfiler#custom#profile({profile-name}, {option-name}, {value})
+		Set {profile-name} specialized {option-name} to {value}.
+
+		The options below are available:
+
+		context				(Dictionary)
+		Specify default {context} value in vimfiler buffer.
+		You can customize the context in the vimfiler buffer.
+		Note: If you want to change default context, you should use
+		"default" profile name.
+		Valid key context is in |vimfiler-options|.  However, "-" is
+		substituted to "_", and "-" prefix is removed.
+
+		Example:
+>
+		call vimfiler#custom#profile('default', 'context', {
+		\   'explorer' : 1
+		\ })
+
 ------------------------------------------------------------------------------
 VARIABLES 					*vimfiler-variables*
 
