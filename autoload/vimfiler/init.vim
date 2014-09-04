@@ -146,6 +146,15 @@ function! vimfiler#init#_context(context) "{{{
     let default_context.columns = g:vimfiler_explorer_columns
   endif
 
+  let profile_name = get(a:context, 'profile_name',
+        \ get(a:context, 'buffer_name', 'default'))
+
+  if profile_name !=# 'default'
+    " Overwrite default_context by profile context.
+    call extend(default_context,
+          \ unite#custom#get_profile(profile_name, 'context'))
+  endif
+
   let context = extend(default_context, a:context)
 
   " Generic no.
@@ -154,9 +163,7 @@ function! vimfiler#init#_context(context) "{{{
     let context[option[3:]] = 0
   endfor
 
-  if !has_key(context, 'profile_name')
-    let context.profile_name = context.buffer_name
-  endif
+  let context.profile_name = profile_name
   if context.toggle && context.find
     " Disable toggle feature.
     let context.toggle = 0
