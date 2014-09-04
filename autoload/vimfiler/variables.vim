@@ -29,10 +29,6 @@ set cpo&vim
 " Global options definition. "{{{
 let g:vimfiler_default_columns =
       \ get(g:, 'vimfiler_default_columns', 'type:size:time')
-let g:vimfiler_split_rule =
-      \ get(g:, 'vimfiler_split_rule', 'topleft')
-let g:vimfiler_enable_auto_cd =
-      \ get(g:, 'vimfiler_enable_auto_cd', 0)
 "}}}
 
 function! vimfiler#variables#get_clipboard() "{{{
@@ -96,8 +92,8 @@ function! s:initialize_default_options() "{{{
         \ 'winheight' : -1,
         \ 'winwidth' : -1,
         \ 'winminwidth' : -1,
-        \ 'direction' : g:vimfiler_split_rule,
-        \ 'auto_cd' : g:vimfiler_enable_auto_cd,
+        \ 'direction' : 'topleft',
+        \ 'auto_cd' : 0,
         \ 'explorer' : 0,
         \ 'reverse' : 0,
         \ 'project' : 0,
@@ -106,11 +102,20 @@ function! s:initialize_default_options() "{{{
         \ 'alternate_buffer' : bufnr('%'),
         \ 'focus' : 1,
         \ 'invisible' : 0,
-        \ 'columns' : g:vimfiler_default_columns,
+        \ 'columns' : 'type:size:time',
         \ 'vimfiler__prev_bufnr' : bufnr('%'),
         \ 'vimfiler__winfixwidth' : &l:winfixwidth,
         \ 'vimfiler__winfixheight' : &l:winfixheight,
         \ }
+
+  " For compatibility(deprecated variables)
+  for [context, var] in filter([
+        \ ['direction', 'g:vimfiler_split_rule'],
+        \ ['auto_cd', 'g:vimfiler_enable_auto_cd'],
+        \ ['columns', 'g:vimfiler_default_columns'],
+        \ ], "exists(v:val[1])")
+    let s:default_context[context] = {var}
+  endfor
 endfunction"}}}
 
 let &cpo = s:save_cpo
