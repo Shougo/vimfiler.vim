@@ -32,7 +32,7 @@ function! vimfiler#custom#get() "{{{
     let s:custom.profiles = {}
   endif
 
-  return s:custom.profiles
+  return s:custom
 endfunction"}}}
 
 function! vimfiler#custom#profile(profile_name, option_name, value) "{{{

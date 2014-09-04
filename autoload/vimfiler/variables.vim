@@ -103,6 +103,7 @@ function! s:initialize_default_options() "{{{
         \ 'focus' : 1,
         \ 'invisible' : 0,
         \ 'columns' : 'type:size:time',
+        \ 'safe' : 1,
         \ 'vimfiler__prev_bufnr' : bufnr('%'),
         \ 'vimfiler__winfixwidth' : &l:winfixwidth,
         \ 'vimfiler__winfixheight' : &l:winfixheight,
@@ -113,6 +114,7 @@ function! s:initialize_default_options() "{{{
         \ ['direction', 'g:vimfiler_split_rule'],
         \ ['auto_cd', 'g:vimfiler_enable_auto_cd'],
         \ ['columns', 'g:vimfiler_default_columns'],
+        \ ['safe', 'g:vimfiler_safe_mode_by_default'],
         \ ], "exists(v:val[1])")
     let s:default_context[context] = {var}
   endfor

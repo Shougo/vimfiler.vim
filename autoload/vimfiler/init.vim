@@ -133,7 +133,8 @@ function! vimfiler#init#_command(default, args) "{{{
   call vimfiler#init#_start(join(args), options)
 endfunction"}}}
 function! vimfiler#init#_context(context) "{{{
-  let default_context = vimfiler#variables#default_context()
+  let default_context = extend(copy(vimfiler#variables#default_context()),
+        \ vimfiler#custom#get_profile('default', 'context'))
 
   if get(a:context, 'explorer', 0)
     " Change default value.
@@ -203,7 +204,7 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
 
   let b:vimfiler.global_sort_type = g:vimfiler_sort_type
   let b:vimfiler.local_sort_type = g:vimfiler_sort_type
-  let b:vimfiler.is_safe_mode = g:vimfiler_safe_mode_by_default
+  let b:vimfiler.is_safe_mode = a:context.safe
   let b:vimfiler.winwidth = winwidth(0)
   let b:vimfiler.another_vimfiler_bufnr = -1
   let b:vimfiler.prompt_linenr =

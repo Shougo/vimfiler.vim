@@ -316,12 +316,6 @@ g:vimfiler_max_directories_history	*g:vimfiler_max_directories_history*
 		
 		Default value is 50.
 
-g:vimfiler_safe_mode_by_default		*g:vimfiler_safe_mode_by_default*
-		This variable controls vimfiler enter safe mode by default. In
-		safe mode, dangerous command is disabled.
-		
-		Default value is 1.
-
 					*g:vimfiler_restore_alternate_file*
 g:vimfiler_restore_alternate_file
 		Option to restore alternate file after open action. The
@@ -460,6 +454,12 @@ g:vimfiler_enable_auto_cd			*g:vimfiler_enable_auto_cd*
 
 g:vimfiler_default_columns			*g:vimfiler_default_columns*
 		This variable controls default vimfiler columns.
+		Note: This variable is deprecated.  Please use
+		|vimfiler#custom#profile()| instead.
+
+g:vimfiler_safe_mode_by_default		*g:vimfiler_safe_mode_by_default*
+		This variable controls vimfiler enter safe mode by default. In
+		safe mode, dangerous command is disabled.
 		Note: This variable is deprecated.  Please use
 		|vimfiler#custom#profile()| instead.
 
@@ -995,6 +995,10 @@ parameters for an option.  You need to escape spaces with "\".
 		-invisible
 		Search inivisible vimfiler buffer.
 
+						*vimfiler-options-safe*
+		-safe
+		Safe mode is default.
+
 ==============================================================================
 COLUMNS						*vimfiler-columns*
 
@@ -1020,7 +1024,9 @@ EXAMPLES					*vimfiler-examples*
 	let g:vimfiler_as_default_explorer = 1
 	
 	" Enable file operation commands.
-	"let g:vimfiler_safe_mode_by_default = 0
+	"call vimfiler#custom#profile('default', 'context', {
+	"      \ 'safe' : 0,
+	"      \ })
 	
 	" Like Textmate icons.
 	let g:vimfiler_tree_leaf_icon = ' '
