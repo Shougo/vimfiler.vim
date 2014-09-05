@@ -71,10 +71,10 @@ function! s:source.gather_candidates(args, context) "{{{
     let dict = { 'word' : command }
 
     if command ==# 'vim'
-      " Edit with vim.
-      let dict.kind = 'file'
-      let dict.action__path =
-            \ a:context.source__file.action__path
+        call unite#print_error(printf(
+              \ '[vimfiler/execute] You cannot edit "%s" by vimfiler/execute.',
+              \ a:context.source__file.action__path))
+        return []
     elseif !executable(command)
         call unite#print_error(printf(
               \ '[vimfiler/execute] Command "%s" is not executable file.', command))

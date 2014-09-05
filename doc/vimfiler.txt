@@ -213,7 +213,7 @@ g:vimfiler_as_default_explorer		*g:vimfiler_as_default_explorer*
 g:vimfiler_execute_file_list			*g:vimfiler_execute_file_list*
 		This variable controls vimfiler execute.
 		The key is extension. The value is command name or
-		command name list. If value is "vim", edit file.
+		command name list.
 		If the key is "_", it will be default command name.
 
 g:vimfiler_extensions				*g:vimfiler_extensions*
@@ -1019,9 +1019,8 @@ time		File time stamp.
 ==============================================================================
 EXAMPLES					*vimfiler-examples*
 >
-	call vimfiler#set_execute_file('vim', 'vim')
 	call vimfiler#set_execute_file('txt', 'notepad')
-	call vimfiler#set_execute_file('c', ['vim', 'notepad'])
+	call vimfiler#set_execute_file('c', ['gvim', 'notepad'])
 	
 	" Edit file by tabedit.
 	"let g:vimfiler_edit_action = 'tabopen'
