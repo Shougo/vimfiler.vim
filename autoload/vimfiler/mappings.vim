@@ -1626,6 +1626,13 @@ endfunction"}}}
 function! s:cd_file_directory() "{{{
   " Change directory.
   call vimfiler#mappings#cd(vimfiler#get_filename())
+
+  if vimfiler#get_context().auto_expand
+        \ && b:vimfiler.all_files_len == 1
+        \ && b:vimfiler.all_files[0].vimfiler__is_directory
+    " Cd recursive
+    call s:cd_file_directory()
+  endif
 endfunction"}}}
 function! s:cd_input_directory() "{{{
   let vimfiler = vimfiler#get_current_vimfiler()

@@ -1001,8 +1001,8 @@ parameters for an option.  You need to escape spaces with "\".
 
 						*vimfiler-options-auto-expand*
 		-auto-expand
-		Expand the directories automatically if the directories have
-		only single directory.
+		Expand or cd the directories automatically if the directories
+		have only single directory.
 
 ==============================================================================
 COLUMNS						*vimfiler-columns*
