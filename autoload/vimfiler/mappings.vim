@@ -83,7 +83,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_popup_shell)
         \ :<C-u>call <SID>popup_shell()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_file)
-        \ :<C-u>call vimfiler#mappings#do_switch_action(g:vimfiler_edit_action)<CR>
+        \ :<C-u>call vimfiler#mappings#do_switch_action(
+        \   b:vimfiler.context.edit_action)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_split_edit_file)
         \ :<C-u>call <SID>split_edit_file()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_edit_binary_file)
@@ -101,7 +102,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_help)
         \ :<C-u>call <SID>help()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_preview_file)
-        \ :<C-u>call vimfiler#mappings#do_action(g:vimfiler_preview_action)<CR>
+        \ :<C-u>call vimfiler#mappings#do_action(
+        \  b:vimfiler.context.preview_action)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_current_vimfiler)
         \ :<C-u>call <SID>sync_with_current_vimfiler()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_sync_with_another_vimfiler)
@@ -1344,7 +1346,8 @@ function! s:open_file_in_another_vimfiler() "{{{
   call s:switch_to_other_window()
 
   if len(files) > 1 || !files[0].vimfiler__is_directory
-    call vimfiler#mappings#do_files_action(g:vimfiler_edit_action, files)
+    call vimfiler#mappings#do_files_action(
+          \ vimfiler#get_context().edit_action, files)
   else
     call vimfiler#mappings#cd(files[0].action__path)
   endif
@@ -1373,7 +1376,7 @@ function! s:split_edit_file() "{{{
         \ (context.winwidth > 0) ?
         \ &columns / 2 :
         \ &columns - context.winwidth
-  call vimfiler#mappings#do_action(g:vimfiler_split_action)
+  call vimfiler#mappings#do_action(context.split_action)
 
   " Resize.
   execute 'vertical resize'

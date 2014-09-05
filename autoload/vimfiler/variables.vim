@@ -101,6 +101,9 @@ function! s:initialize_default_options() "{{{
         \ 'explorer_columns' : 'type',
         \ 'safe' : 1,
         \ 'auto_expand' : 0,
+        \ 'edit_action' : 'open',
+        \ 'split_action' : 'right',
+        \ 'preview_action' : 'preview',
         \ 'vimfiler__prev_bufnr' : bufnr('%'),
         \ 'vimfiler__winfixwidth' : &l:winfixwidth,
         \ 'vimfiler__winfixheight' : &l:winfixheight,
@@ -113,6 +116,9 @@ function! s:initialize_default_options() "{{{
         \ ['columns', 'g:vimfiler_default_columns'],
         \ ['explorer_columns', 'g:vimfiler_explorer_columns'],
         \ ['safe', 'g:vimfiler_safe_mode_by_default'],
+        \ ['split_action', 'g:vimfiler_split_action'],
+        \ ['edit_action', 'g:vimfiler_edit_action'],
+        \ ['preview_action', 'g:vimfiler_preview_action'],
         \ ], "exists(v:val[1])")
     let s:default_context[context] = {var}
   endfor

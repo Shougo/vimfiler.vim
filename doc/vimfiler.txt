@@ -348,21 +348,6 @@ g:vimfiler_time_format				*g:vimfiler_time_format*
 		
 		Default value is "%y/%m/%d %H:%M".
 
-g:vimfiler_split_action				*g:vimfiler_split_action*
-		This variable controls vimfiler split action in |unite|.
-		
-		Default value is "right".
-
-g:vimfiler_edit_action				*g:vimfiler_edit_action*
-		This variable controls vimfiler edit action in |unite|.
-		
-		Default value is "open".
-
-g:vimfiler_preview_action			*g:vimfiler_preview_action*
-		This variable controls vimfiler preview action in |unite|.
-		
-		Default value is "preview".
-
 g:vimfiler_sort_type				*g:vimfiler_sort_type*
 		This variable controls default vimfiler sort type.
 		
@@ -460,6 +445,21 @@ g:vimfiler_explorer_columns			 *g:vimfiler_explorer_columns*
 g:vimfiler_safe_mode_by_default		*g:vimfiler_safe_mode_by_default*
 		This variable controls vimfiler enter safe mode by default. In
 		safe mode, dangerous command is disabled.
+		Note: This variable is deprecated.  Please use
+		|vimfiler#custom#profile()| instead.
+
+g:vimfiler_edit_action				*g:vimfiler_edit_action*
+		This variable controls vimfiler edit action in |unite|.
+		Note: This variable is deprecated.  Please use
+		|vimfiler#custom#profile()| instead.
+
+g:vimfiler_split_action				*g:vimfiler_split_action*
+		This variable controls vimfiler split action in |unite|.
+		Note: This variable is deprecated.  Please use
+		|vimfiler#custom#profile()| instead.
+
+g:vimfiler_preview_action			*g:vimfiler_preview_action*
+		This variable controls vimfiler preview action in |unite|.
 		Note: This variable is deprecated.  Please use
 		|vimfiler#custom#profile()| instead.
 
@@ -1007,6 +1007,20 @@ parameters for an option.  You need to escape spaces with "\".
 		-auto-expand
 		Expand or cd the directories automatically if the directories
 		have only single directory.
+
+						*vimfiler-options-edit-action*
+		-edit-action={action}
+		Specify edit unite action. If omit it, "open" will be used.
+
+						*vimfiler-options-split-action*
+		-split-action={action}
+		Specify split edit unite action. If omit it, "right" will be
+		used.
+
+					*vimfiler-options-preview-action*
+		-preview-action={action}
+		Specify preview unite action. If omit it, "preview" will be
+		used.
 
 ==============================================================================
 COLUMNS						*vimfiler-columns*

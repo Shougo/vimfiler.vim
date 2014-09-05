@@ -27,12 +27,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Global options definition. "{{{
-let g:vimfiler_split_action =
-      \ get(g:, 'vimfiler_split_action', 'right')
-let g:vimfiler_edit_action =
-      \ get(g:, 'vimfiler_edit_action', 'open')
-let g:vimfiler_preview_action =
-      \ get(g:, 'vimfiler_preview_action', 'preview')
 let g:vimfiler_sort_type =
       \ get(g:, 'vimfiler_sort_type', 'filename')
 let g:vimfiler_directory_display_top =
