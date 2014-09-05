@@ -882,18 +882,18 @@ function! s:expand_tree(is_recursive) "{{{
   endif
 
   if !a:is_recursive && !b:vimfiler.is_visible_ignore_files
-    call filter(files, 'v:val.vimfiler__filename !~ ''' . g:vimfiler_ignore_pattern . '''')
+    call filter(files, 'v:val.vimfiler__filename !~ '''
+          \   . g:vimfiler_ignore_pattern . '''')
   endif
 
   let index = vimfiler#get_file_index(line('.'))
   let index_orig =
         \ vimfiler#get_original_file_index(line('.'))
 
-  " let is_fold = !a:is_recursive && len(files) == 1
-  "       \ && files[0].vimfiler__is_directory
-  "       \ && s:get_abbr_length(cursor_file, files[0])
-  "       \         < vimfiler#view#_get_max_len([])
-  let is_fold = 0
+  let is_fold = vimfiler#get_context().auto_expand
+        \ && !a:is_recursive && len(files) == 1
+        \ && files[0].vimfiler__is_directory
+        \ && s:get_abbr_length(cursor_file, files[0])
   if is_fold
     " Open in cursor directory.
     let opened_file = files[0]

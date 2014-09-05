@@ -104,6 +104,7 @@ function! s:initialize_default_options() "{{{
         \ 'invisible' : 0,
         \ 'columns' : 'type:size:time',
         \ 'safe' : 1,
+        \ 'auto_expand' : 0,
         \ 'vimfiler__prev_bufnr' : bufnr('%'),
         \ 'vimfiler__winfixwidth' : &l:winfixwidth,
         \ 'vimfiler__winfixheight' : &l:winfixheight,

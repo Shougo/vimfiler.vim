@@ -999,6 +999,11 @@ parameters for an option.  You need to escape spaces with "\".
 		-safe
 		Safe mode is default.
 
+						*vimfiler-options-auto-expand*
+		-auto-expand
+		Expand the directories automatically if the directories have
+		only single directory.
+
 ==============================================================================
 COLUMNS						*vimfiler-columns*
 
