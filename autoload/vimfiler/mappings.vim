@@ -890,32 +890,19 @@ function! s:expand_tree(is_recursive) "{{{
   let index_orig =
         \ vimfiler#get_original_file_index(line('.'))
 
-  let is_fold = vimfiler#get_context().auto_expand
+  call extend(b:vimfiler.all_files, files, index+1)
+  call extend(b:vimfiler.current_files, files, index+1)
+  call extend(b:vimfiler.original_files, original_files, index_orig+1)
+  let b:vimfiler.all_files_len += len(files)
+
+  if vimfiler#get_context().auto_expand
         \ && !a:is_recursive && len(files) == 1
         \ && files[0].vimfiler__is_directory
-        \ && s:get_abbr_length(cursor_file, files[0])
-  if is_fold
-    " Open in cursor directory.
-    let opened_file = files[0]
-    let opened_file.vimfiler__parent =
-          \ !vimfiler#get_context().explorer &&
-          \   has_key(cursor_file, 'vimfiler__parent') ?
-          \ cursor_file.vimfiler__parent : deepcopy(cursor_file)
-    let opened_file.vimfiler__abbr =
-          \ cursor_file.vimfiler__abbr . '/' .
-          \ opened_file.vimfiler__abbr
-    let opened_file.vimfiler__nest_level = cursor_file.vimfiler__nest_level
-    for key in keys(opened_file)
-      let cursor_file[key] = opened_file[key]
-    endfor
-  else
-    call extend(b:vimfiler.all_files, files, index+1)
-    call extend(b:vimfiler.current_files, files, index+1)
-    call extend(b:vimfiler.original_files, original_files, index_orig+1)
-    let b:vimfiler.all_files_len += len(files)
-  endif
-
-  if g:vimfiler_expand_jump_to_first_child && !a:is_recursive && !is_fold
+    " Expand recursive.
+    call cursor(line('.') + 1, 0)
+    call s:expand_tree(a:is_recursive)
+  elseif g:vimfiler_expand_jump_to_first_child && !a:is_recursive
+        \ || vimfiler#get_context().auto_expand
     " Move to next line.
     call cursor(line('.') + 1, 0)
   endif
