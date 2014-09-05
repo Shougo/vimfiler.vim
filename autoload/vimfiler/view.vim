@@ -219,7 +219,7 @@ function! s:redraw_prompt() "{{{
         \ '' : '[' . (b:vimfiler.is_visible_ignore_files ? '.:' : '')
         \       . b:vimfiler.current_mask . ']'
 
-  let sort = (b:vimfiler.local_sort_type ==# g:vimfiler_sort_type) ?
+  let sort = (b:vimfiler.local_sort_type ==# b:vimfiler.global_sort_type) ?
         \ '' : ' <' . b:vimfiler.local_sort_type . '>'
 
   let safe = (b:vimfiler.is_safe_mode) ? ' *safe*' : ''

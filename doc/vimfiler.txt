@@ -348,11 +348,6 @@ g:vimfiler_time_format				*g:vimfiler_time_format*
 		
 		Default value is "%y/%m/%d %H:%M".
 
-g:vimfiler_sort_type				*g:vimfiler_sort_type*
-		This variable controls default vimfiler sort type.
-		
-		Default value is "filename".
-
 g:vimfiler_directory_display_top	*g:vimfiler_directory_display_top*
 		This variable controls vimfiler sorts directories as top.
 		
@@ -448,6 +443,11 @@ g:vimfiler_safe_mode_by_default		*g:vimfiler_safe_mode_by_default*
 		Note: This variable is deprecated.  Please use
 		|vimfiler#custom#profile()| instead.
 
+g:vimfiler_sort_type				*g:vimfiler_sort_type*
+		This variable controls default vimfiler sort type.
+		Note: This variable is deprecated.  Please use
+		|vimfiler#custom#profile()| instead.
+		
 g:vimfiler_edit_action				*g:vimfiler_edit_action*
 		This variable controls vimfiler edit action in |unite|.
 		Note: This variable is deprecated.  Please use
@@ -1008,6 +1008,10 @@ parameters for an option.  You need to escape spaces with "\".
 		-auto-expand
 		Expand or cd the directories automatically if the directories
 		have only single directory.
+
+						*vimfiler-options-sort-type*
+		-sort-type={type}
+		Default vimfiler sort type. If omit it, "filename" is used.
 
 						*vimfiler-options-edit-action*
 		-edit-action={action}

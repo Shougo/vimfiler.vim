@@ -27,8 +27,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Global options definition. "{{{
-let g:vimfiler_sort_type =
-      \ get(g:, 'vimfiler_sort_type', 'filename')
 let g:vimfiler_directory_display_top =
       \ get(g:, 'vimfiler_directory_display_top', 1)
 let g:vimfiler_max_directories_history =
@@ -194,8 +192,8 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
         \ b:vimfiler.column_names, b:vimfiler.context)
   let b:vimfiler.syntaxes = []
 
-  let b:vimfiler.global_sort_type = g:vimfiler_sort_type
-  let b:vimfiler.local_sort_type = g:vimfiler_sort_type
+  let b:vimfiler.global_sort_type = a:context.sort_type
+  let b:vimfiler.local_sort_type = a:context.sort_type
   let b:vimfiler.is_safe_mode = a:context.safe
   let b:vimfiler.winwidth = winwidth(0)
   let b:vimfiler.another_vimfiler_bufnr = -1
