@@ -628,11 +628,12 @@ Normal mode key mappings.
 		Executes |:VimShellPop|or |:shell|.
 
 <Plug>(vimfiler_edit_file)			*<Plug>(vimfiler_edit_file)*
-		Edits cursor file. This mapping use |g:vimfiler_edit_action|.
+		Edits cursor file. This mapping use
+		|vimfiler-options-edit-action|.
 
 <Plug>(vimfiler_split_edit_file)	*<Plug>(vimfiler_split_edit_file)*
 		Splits buffer and edit cursor file. This mapping use
-		|g:vimfiler_edit_action|.
+		|vimfiler-options-split-action|.
 
 <Plug>(vimfiler_edit_binary_file)	*<Plug>(vimfiler_edit_binary_file)*
 		Edits binary file by |vinarise|.
@@ -674,7 +675,7 @@ Normal mode key mappings.
 
 <Plug>(vimfiler_preview_file)		*<Plug>(vimfiler_preview_file)*
 		Previews current file. This mapping use
-		|g:vimfiler_preview_action|.
+		|vimfiler-options-preview-action|.
 
 				*<Plug>(vimfiler_sync_with_current_vimfiler)*
 <Plug>(vimfiler_sync_with_current_vimfiler)
@@ -1040,14 +1041,13 @@ EXAMPLES					*vimfiler-examples*
 	call vimfiler#set_execute_file('txt', 'notepad')
 	call vimfiler#set_execute_file('c', ['gvim', 'notepad'])
 	
-	" Edit file by tabedit.
-	"let g:vimfiler_edit_action = 'tabopen'
-	
 	let g:vimfiler_as_default_explorer = 1
 	
 	" Enable file operation commands.
+	" Edit file by tabedit.
 	"call vimfiler#custom#profile('default', 'context', {
 	"      \ 'safe' : 0,
+	"      \ 'edit_action' : 'tabedit',
 	"      \ })
 	
 	" Like Textmate icons.
