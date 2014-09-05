@@ -323,12 +323,6 @@ g:vimfiler_restore_alternate_file
 
 		Default value is 1.
 
-g:vimfiler_explorer_columns			 *g:vimfiler_explorer_columns*
-		This variable controls default vimfiler columns in explorer
-		mode.
-		
-		Default value is "type".
-
 					*g:vimfiler_expand_jump_to_first_child*
 g:vimfiler_expand_jump_to_first_child			 
 		This variable controls if you jump to the first child when you
@@ -454,6 +448,12 @@ g:vimfiler_enable_auto_cd			*g:vimfiler_enable_auto_cd*
 
 g:vimfiler_default_columns			*g:vimfiler_default_columns*
 		This variable controls default vimfiler columns.
+		Note: This variable is deprecated.  Please use
+		|vimfiler#custom#profile()| instead.
+
+g:vimfiler_explorer_columns			 *g:vimfiler_explorer_columns*
+		This variable controls default vimfiler columns in explorer
+		mode.
 		Note: This variable is deprecated.  Please use
 		|vimfiler#custom#profile()| instead.
 
@@ -971,6 +971,10 @@ parameters for an option.  You need to escape spaces with "\".
 		-columns={columns1:columns2:...}
 		Specify vimfiler columns. If omit it,
 		"type:size:time" will be used.
+
+					*vimfiler-options-explorer-columns*
+		-explorer-columns={columns1:columns2:...}
+		Specify vimfiler columns. If omit it, "type" will be used.
 
 						*vimfiler-options-status*
 		-status

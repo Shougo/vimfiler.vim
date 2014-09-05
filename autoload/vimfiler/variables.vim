@@ -26,11 +26,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Global options definition. "{{{
-let g:vimfiler_default_columns =
-      \ get(g:, 'vimfiler_default_columns', 'type:size:time')
-"}}}
-
 function! vimfiler#variables#get_clipboard() "{{{
   if !exists('s:clipboard')
     let s:clipboard = {'operation' : '', 'files' : []}
@@ -103,6 +98,7 @@ function! s:initialize_default_options() "{{{
         \ 'focus' : 1,
         \ 'invisible' : 0,
         \ 'columns' : 'type:size:time',
+        \ 'explorer_columns' : 'type',
         \ 'safe' : 1,
         \ 'auto_expand' : 0,
         \ 'vimfiler__prev_bufnr' : bufnr('%'),
@@ -115,6 +111,7 @@ function! s:initialize_default_options() "{{{
         \ ['direction', 'g:vimfiler_split_rule'],
         \ ['auto_cd', 'g:vimfiler_enable_auto_cd'],
         \ ['columns', 'g:vimfiler_default_columns'],
+        \ ['explorer_columns', 'g:vimfiler_explorer_columns'],
         \ ['safe', 'g:vimfiler_safe_mode_by_default'],
         \ ], "exists(v:val[1])")
     let s:default_context[context] = {var}
