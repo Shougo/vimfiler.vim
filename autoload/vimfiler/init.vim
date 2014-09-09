@@ -129,12 +129,13 @@ function! vimfiler#init#_context(context) "{{{
   if get(a:context, 'explorer', 0)
     " Change default value.
     let default_context.buffer_name = 'explorer'
+    let default_context.profile_name = 'explorer'
     let default_context.split = 1
     let default_context.simple = 1
     let default_context.toggle = 1
     let default_context.quit = 0
     let default_context.winwidth = 35
-    let default_context.columns = g:vimfiler_explorer_columns
+    let default_context.columns = default_context.explorer_columns
   endif
 
   let profile_name = get(a:context, 'profile_name',
@@ -473,14 +474,11 @@ function! s:create_vimfiler_buffer(path, context) "{{{
 
   " Create new buffer name.
   let prefix = 'vimfiler:'
-  let prefix .= context.profile_name
+  let prefix .= context.buffer_name
 
   let postfix = vimfiler#init#_get_postfix(prefix, 1)
 
   let bufname = prefix . postfix
-
-  " Set buffer_name.
-  let context.buffer_name = bufname
 
   if context.split
     execute context.direction

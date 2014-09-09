@@ -227,7 +227,7 @@ function! vimfiler#util#get_vimfiler_winnr(buffer_name) "{{{
         \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'vimfiler'")
     let buffer_context = getbufvar(
           \ winbufnr(winnr), 'vimfiler').context
-    if buffer_context.profile_name ==# a:buffer_name
+    if buffer_context.buffer_name ==# a:buffer_name
       return winnr
     endif
   endfor
