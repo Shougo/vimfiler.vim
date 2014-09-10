@@ -566,7 +566,14 @@ function! s:switch() "{{{
     if exists('g:loaded_choosewin')
           \ || hasmapto('<Plug>(choosewin)', 'n')
       " Use vim-choosewin.
-      let choice = choosewin#start(windows, {'noop' : 1})
+      let pos = getpos('.')
+      try
+        let choice = choosewin#start(windows, {'noop' : 1})
+      finally
+        " Note: choosewin with overlay move cursor.
+        call setpos('.', pos)
+      endtry
+
       if !empty(choice)
         let [tabnr, winnr] = choice
       endif
