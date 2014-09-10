@@ -263,17 +263,12 @@ function! s:redraw_prompt() "{{{
       endif
     endif
 
-    if context.status || context.explorer
+    if context.status
       if getline(1) == '..'
         call append(0, '[in]: ' . b:vimfiler.status)
       else
         call setline(1, '[in]: ' . b:vimfiler.status)
       endif
-    endif
-
-    if context.explorer
-      " Delete prompt
-      silent 1,2delete _
     endif
   finally
     let &l:modifiable = modifiable_save
