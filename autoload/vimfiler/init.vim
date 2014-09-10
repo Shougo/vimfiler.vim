@@ -131,7 +131,6 @@ function! vimfiler#init#_context(context) "{{{
     let default_context.buffer_name = 'explorer'
     let default_context.profile_name = 'explorer'
     let default_context.split = 1
-    let default_context.simple = 1
     let default_context.parent = 0
     let default_context.toggle = 1
     let default_context.quit = 0

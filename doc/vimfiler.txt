@@ -976,11 +976,9 @@ parameters for an option.  You need to escape spaces with "\".
 
 					*vimfiler-options-explorer-columns*
 		-explorer-columns={columns1:columns2:...}
-		Specify vimfiler columns. If omit it, "type" will be used.
-		Note: To change the columns, you must disable
-		|vimfiler-options-simple|. >
-		:VimFiler -explorer-columns=type:size:time -no-simple
-<
+		Specify vimfiler columns in explorer mode. If omit it, "" will
+		be used.
+
 						*vimfiler-options-status*
 		-status
 		Display status line in vimfiler buffer.

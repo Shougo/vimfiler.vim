@@ -99,7 +99,7 @@ function! s:initialize_default_options() "{{{
         \ 'focus' : 1,
         \ 'invisible' : 0,
         \ 'columns' : 'type:size:time',
-        \ 'explorer_columns' : 'type',
+        \ 'explorer_columns' : '',
         \ 'safe' : 1,
         \ 'auto_expand' : 0,
         \ 'sort_type' : 'filename',
