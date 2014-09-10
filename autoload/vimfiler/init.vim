@@ -132,6 +132,7 @@ function! vimfiler#init#_context(context) "{{{
     let default_context.profile_name = 'explorer'
     let default_context.split = 1
     let default_context.simple = 1
+    let default_context.parent = 0
     let default_context.toggle = 1
     let default_context.quit = 0
     let default_context.winwidth = 35
@@ -201,7 +202,7 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.winwidth = winwidth(0)
   let b:vimfiler.another_vimfiler_bufnr = -1
   let b:vimfiler.prompt_linenr =
-        \ (b:vimfiler.context.status)   ?  2 : 1
+        \ b:vimfiler.context.status + b:vimfiler.context.parent
   let b:vimfiler.all_files_len = 0
   let b:vimfiler.status = ''
   let b:vimfiler.statusline =
@@ -414,7 +415,7 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
   let b:vimfiler.context = extend(b:vimfiler.context, context)
   call vimfiler#set_current_vimfiler(b:vimfiler)
   let b:vimfiler.prompt_linenr =
-        \ (b:vimfiler.context.status)   ?  2 : 1
+        \ b:vimfiler.context.status + b:vimfiler.context.parent
 
   let directory = vimfiler#util#substitute_path_separator(
         \ a:directory)

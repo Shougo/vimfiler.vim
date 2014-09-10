@@ -83,6 +83,7 @@ function! s:initialize_default_options() "{{{
         \ 'double' : 0,
         \ 'split' : 0,
         \ 'status' : 0,
+        \ 'parent' : 1,
         \ 'horizontal' : 0,
         \ 'winheight' : -1,
         \ 'winwidth' : -1,
