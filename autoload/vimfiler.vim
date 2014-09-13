@@ -68,6 +68,10 @@ function! vimfiler#do_action(action) "{{{
   return printf(":\<C-u>call vimfiler#mappings#do_action(%s)\<CR>",
         \             string(a:action))
 endfunction"}}}
+function! vimfiler#do_switch_action(action) "{{{
+  return printf(":\<C-u>call vimfiler#mappings#do_switch_action(%s)\<CR>",
+        \             string(a:action))
+endfunction"}}}
 function! vimfiler#smart_cursor_map(directory_map, file_map) "{{{
   return vimfiler#mappings#smart_cursor_map(a:directory_map, a:file_map)
 endfunction"}}}
