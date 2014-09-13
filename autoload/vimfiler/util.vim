@@ -170,6 +170,25 @@ function! vimfiler#util#restore_variables(variables_save) "{{{
   endfor
 endfunction"}}}
 
+function! vimfiler#util#hide_buffer() "{{{
+  let bufnr = bufnr('%')
+
+  let context = vimfiler#get_context()
+
+  if vimfiler#winnr_another_vimfiler() > 0
+    " Hide another vimfiler.
+    let bufnr = b:vimfiler.another_vimfiler_bufnr
+    close!
+    execute bufwinnr(bufnr).'wincmd w'
+    call vimfiler#util#hide_buffer()
+  elseif winnr('$') != 1 &&
+        \ (context.split || context.toggle)
+    close!
+    execute context.vimfiler__prev_winnr . 'wincmd w'
+  else
+    call vimfiler#util#alternate_buffer()
+  endif
+endfunction"}}}
 function! vimfiler#util#alternate_buffer() "{{{
   let context = vimfiler#get_context()
 
@@ -195,22 +214,10 @@ function! vimfiler#util#alternate_buffer() "{{{
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! vimfiler#util#delete_buffer(...) "{{{
-  let context = vimfiler#get_context()
   let delete_bufnr = get(a:000, 0, bufnr('%'))
 
-  if winnr('$') != 1 && (context.split || context.toggle
-        \ || vimfiler#exists_another_vimfiler())
-    " Move to delete buffer window.
-    let current_bufnr = winbufnr(winnr())
-    try
-      execute bufwinnr(delete_bufnr).'wincmd w'
-      close
-    finally
-      execute bufwinnr(current_bufnr).'wincmd w'
-    endtry
-  else
-    call vimfiler#util#alternate_buffer()
-  endif
+  call vimfiler#util#hide_buffer()
+
   silent execute 'bwipeout!' delete_bufnr
 endfunction"}}}
 function! s:buflisted(bufnr) "{{{

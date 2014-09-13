@@ -94,7 +94,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_shell_command)
         \ :<C-u>call <SID>execute_shell_command()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_hide)
-        \ :<C-u>call <SID>hide()<CR>
+        \ :<C-u>call vimfiler#util#hide_buffer()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_exit)
         \ :<C-u>call <SID>exit(b:vimfiler)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_close)
@@ -1188,24 +1188,6 @@ function! s:execute_shell_command() "{{{
         \ 'vimfiler__shellcmd', {
         \ 'vimfiler__command' : command,
         \})
-endfunction"}}}
-function! s:hide() "{{{
-  let bufnr = bufnr('%')
-
-  let context = vimfiler#get_context()
-
-  if vimfiler#winnr_another_vimfiler() > 0
-    " Hide another vimfiler.
-    let bufnr = b:vimfiler.another_vimfiler_bufnr
-    close
-    execute bufwinnr(bufnr).'wincmd w'
-    call s:hide()
-  elseif winnr('$') != 1 &&
-        \ (context.split || context.toggle)
-    close
-  else
-    call vimfiler#util#alternate_buffer()
-  endif
 endfunction"}}}
 function! s:exit(vimfiler) "{{{
   let another_bufnr = a:vimfiler.another_vimfiler_bufnr

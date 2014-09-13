@@ -396,6 +396,7 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
   if !context.tab
     let context.alternate_buffer = bufnr('%')
   endif
+  let context.vimfiler__prev_winnr = winnr()
 
   if bufwinnr(a:bufnr) < 0
     if context.split
@@ -449,7 +450,7 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
-      execute bufwinnr(a:context.vimfiler__prev_bufnr).'wincmd w'
+      execute bufwinnr(a:context.alternate_buffer).'wincmd w'
     endif
   endif
 endfunction"}}}
@@ -522,7 +523,7 @@ function! s:create_vimfiler_buffer(path, context) "{{{
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
-      execute bufwinnr(a:context.vimfiler__prev_bufnr).'wincmd w'
+      execute bufwinnr(a:context.alternate_buffer).'wincmd w'
     endif
   endif
 endfunction"}}}
