@@ -175,7 +175,8 @@ function! vimfiler#exists_another_vimfiler() "{{{
         \ && bufloaded(b:vimfiler.another_vimfiler_bufnr) > 0
 endfunction"}}}
 function! vimfiler#winnr_another_vimfiler() "{{{
-  return winnr() == bufwinnr(b:vimfiler.another_vimfiler_bufnr) ?
+  return (!exists('b:vimfiler')
+        \ || winnr() == bufwinnr(b:vimfiler.another_vimfiler_bufnr)) ?
         \ -1 : bufwinnr(b:vimfiler.another_vimfiler_bufnr)
 endfunction"}}}
 function! vimfiler#get_another_vimfiler() "{{{
