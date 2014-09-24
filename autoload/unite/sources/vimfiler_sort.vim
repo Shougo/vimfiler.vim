@@ -99,7 +99,7 @@ function! s:action_table.sort.func(candidate) "{{{
       call s:Cache.writefile(cache_dir, path, [b:vimfiler.local_sort_type])
     endif
 
-    call vimfiler#force_redraw_screen()
+    call vimfiler#force_redraw_screen(1)
   endif
 endfunction"}}}
 
