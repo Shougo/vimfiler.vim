@@ -119,8 +119,8 @@ function! vimfiler#helper#_get_cd_path(dir) "{{{
       let dir = fnamemodify(substitute(current_dir, '[/\\]$', '', ''), ':h')
     endif
 
-    if dir =~ '//$'
-      return current_dir
+    if dir == '//'
+      return current_dir . '/home'
     endif
 
   elseif dir == '/'
