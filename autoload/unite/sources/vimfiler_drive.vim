@@ -32,7 +32,7 @@ let g:vimfiler_detect_drives =
       \     'H:/', 'I:/', 'J:/', 'K:/', 'L:/', 'M:/', 'N:/',
       \     'O:/', 'P:/', 'Q:/', 'R:/', 'S:/', 'T:/', 'U:/',
       \     'V:/', 'W:/', 'X:/', 'Y:/', 'Z:/'
-      \ ] : [])
+      \ ] : [expand('~'), expand('~/Downloads/')])
 
 function! unite#sources#vimfiler_drive#define() "{{{
   return s:source

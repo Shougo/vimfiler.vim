@@ -228,7 +228,8 @@ g:vimfiler_detect_drives			*g:vimfiler_detect_drives*
 		This variable controls vimfiler uses drives
 		 when |<Plug>(vimfiler_switch_to_drive)|.
 		
-		Default value is refer to plugin/vimfiler.vim.
+		Default value is refer to
+		autoload/unite/sources/vimfiler_drive.vim.
 
 g:vimfiler_data_directory			*g:vimfiler_data_directory*
 		Specifies directories for configurations internally used in
