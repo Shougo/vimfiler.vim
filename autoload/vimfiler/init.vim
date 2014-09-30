@@ -371,8 +371,8 @@ function! vimfiler#init#_start(path, ...) "{{{
       let vimfiler = getbufvar(bufnr, 'vimfiler')
       if type(vimfiler) == type({})
             \ && vimfiler.context.profile_name ==# context.profile_name
-            \ && (!exists('t:unite_buffer_dictionary')
-            \      || has_key(t:unite_buffer_dictionary, bufnr))
+            \ && (!exists('t:tabpagebuffer')
+            \      || has_key(t:tabpagebuffer, bufnr))
             \ && (!context.invisible || bufwinnr(bufnr) < 0)
         call vimfiler#init#_switch_vimfiler(bufnr, context, path)
         return

@@ -221,8 +221,8 @@ function! vimfiler#util#delete_buffer(...) "{{{
   silent execute 'bwipeout!' delete_bufnr
 endfunction"}}}
 function! s:buflisted(bufnr) "{{{
-  return exists('t:unite_buffer_dictionary') ?
-        \ has_key(t:unite_buffer_dictionary, a:bufnr) && buflisted(a:bufnr) :
+  return exists('t:tabpagebuffer') ?
+        \ has_key(t:tabpagebuffer, a:bufnr) && buflisted(a:bufnr) :
         \ buflisted(a:bufnr)
 endfunction"}}}
 
