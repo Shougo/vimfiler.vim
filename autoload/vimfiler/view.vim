@@ -252,7 +252,8 @@ function! s:redraw_prompt() "{{{
   setlocal noreadonly
 
   try
-    if context.parent && getline(b:vimfiler.prompt_linenr) != '..'
+    if (context.parent || empty(b:vimfiler.current_files))
+          \ && getline(b:vimfiler.prompt_linenr) != '..'
       if line('$') == 1
         " Note: Dirty Hack for open file.
         call append(1, '')
