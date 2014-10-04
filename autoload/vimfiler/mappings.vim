@@ -1669,7 +1669,7 @@ function! s:quick_look() "{{{
 
   let command = vimproc#util#iconv(
         \ g:vimfiler_quick_look_command . ' ' .
-        \   file.action__path, &encoding, 'char')
+        \   vimproc#shellescape(file.action__path), &encoding, 'char')
 
   try
     call vimproc#system_gui(command)
