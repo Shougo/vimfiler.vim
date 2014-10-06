@@ -572,9 +572,6 @@ function! s:buffer_default_settings() "{{{
   setlocal nomodifiable
   setlocal nomodified
 
-  if has('netbeans_intg') || has('sun_workshop')
-    setlocal noautochdir
-  endif
   if exists('&colorcolumn')
     setlocal colorcolumn=
   endif
