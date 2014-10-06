@@ -410,6 +410,8 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     execute bufwinnr(a:bufnr).'wincmd w'
   endif
 
+  call s:buffer_default_settings()
+  doautocmd FileType vimfiler
   call vimfiler#handler#_event_bufwin_enter(a:bufnr)
 
   let b:vimfiler.context = extend(b:vimfiler.context, context)
