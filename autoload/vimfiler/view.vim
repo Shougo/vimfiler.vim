@@ -403,7 +403,7 @@ function! vimfiler#view#_get_max_len(files) "{{{
     silent execute 'sign unplace buffer='.bufnr('%')
   endif
 
-  return max([max([winwidth(0), &winwidth]) - padding, 10])
+  return max([winwidth(0) - padding, 10])
 endfunction"}}}
 function! vimfiler#view#_define_syntax() "{{{
   for column in filter(
