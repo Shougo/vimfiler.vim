@@ -341,6 +341,16 @@ function! vimfiler#init#_start(path, ...) "{{{
     return
   endif
 
+  " Detect autochdir option. "{{{
+  if exists('+autochdir') && &autochdir
+    call vimfiler#util#print_error(
+          \ '[vimfiler] Detected autochdir!')
+    call vimfiler#util#print_error(
+          \ '[vimfiler] vimfiler don''t work if you set autochdir option.')
+    return
+  endif
+  "}}}
+
   let path = a:path
   if vimfiler#util#is_win_path(path)
     let path = vimfiler#util#substitute_path_separator(
@@ -561,6 +571,7 @@ function! s:buffer_default_settings() "{{{
   setlocal nowrap
   setlocal nomodifiable
   setlocal nomodified
+
   if has('netbeans_intg') || has('sun_workshop')
     setlocal noautochdir
   endif
