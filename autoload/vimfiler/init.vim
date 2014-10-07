@@ -420,8 +420,8 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     execute bufwinnr(a:bufnr).'wincmd w'
   endif
 
+  " Set window local options
   call s:buffer_default_settings()
-  doautocmd FileType vimfiler
   call vimfiler#handler#_event_bufwin_enter(a:bufnr)
 
   let b:vimfiler.context = extend(b:vimfiler.context, context)
@@ -565,12 +565,12 @@ function! s:buffer_default_settings() "{{{
   setlocal nowrap
   setlocal nospell
   setlocal bufhidden=hide
-  setlocal nolist
   setlocal foldcolumn=0
   setlocal nofoldenable
   setlocal nowrap
   setlocal nomodifiable
   setlocal nomodified
+  setlocal nolist
 
   if exists('&colorcolumn')
     setlocal colorcolumn=
