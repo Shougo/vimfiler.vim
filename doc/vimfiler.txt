@@ -1303,11 +1303,6 @@ A:
 >
 	:VimFilerExplorer -find
 <
-Q: I cannot open the file not contained ":" if enabled
-g:vimfiler_as_default_explorer.
-
-A: It is feature now.
-
 Q: I set "let g:vimfiler_as_default_explorer = 1", but it opens netrw instead
 of vimfiler.
 https://github.com/Shougo/vimfiler.vim/issues/125

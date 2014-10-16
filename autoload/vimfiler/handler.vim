@@ -33,14 +33,13 @@ function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
         \ get(user_context, 'path', expand('<afile>')))
 
   if filereadable(path)
-    call vimfiler#util#print_error(
-          \ '[vimfiler] You cannot open the file not contained ":"(see FAQ).')
-    return
+    let source_name = 'file'
+    let source_args = [path]
+  else
+    let ret = vimfiler#parse_path(path)
+    let source_name = ret[0]
+    let source_args = ret[1:]
   endif
-
-  let ret = vimfiler#parse_path(path)
-  let source_name = ret[0]
-  let source_args = ret[1:]
 
   return s:on_{a:event_name}(source_name, source_args, context)
 endfunction
