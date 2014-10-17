@@ -1,6 +1,6 @@
 *vimfiler.txt*	Powerful file explorer implemented by Vim script
 
-Version: 4.1
+Version: 4.2
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
