@@ -581,7 +581,10 @@ Normal mode key mappings.
 		Note: This mappings is disabled in vimfiler safe mode.
 
 <Plug>(vimfiler_cd_or_edit)			*<Plug>(vimfiler_cd_or_edit)*
-		Edit cursor file or change directory.
+		Change cursor directory or edit cursor file.
+
+<Plug>(vimfiler_expand_or_edit) 	*<Plug>(vimfiler_expand_or_edit)*
+		Expand cursor directory or edit cursor file.
 
 				*<Plug>(vimfiler_execute_system_associated)*
 <Plug>(vimfiler_execute_system_associated)
@@ -830,6 +833,7 @@ r			<Plug>(vimfiler_rename_file)
 K			<Plug>(vimfiler_make_directory)
 N			<Plug>(vimfiler_new_file)
 <Enter>			<Plug>(vimfiler_cd_or_edit)
+o			<Plug>(vimfiler_expand_or_edit)
 l			<Plug>(vimfiler_smart_l)
 x			<Plug>(vimfiler_execute_system_associated)
 h			<Plug>(vimfiler_smart_h)
@@ -852,8 +856,8 @@ Q			<Plug>(vimfiler_exit)
 -			<Plug>(vimfiler_close)
 g?			<Plug>(vimfiler_help)
 v			<Plug>(vimfiler_preview_file)
-o			<Plug>(vimfiler_sync_with_current_vimfiler)
-O			<Plug>(vimfiler_open_file_in_another_vimfiler)
+O			<Plug>(vimfiler_sync_with_current_vimfiler)
+go			<Plug>(vimfiler_open_file_in_another_vimfiler)
 <C-g>			<Plug>(vimfiler_print_filename)
 g<C-g>			<Plug>(vimfiler_toggle_maximize_window)
 yy			<Plug>(vimfiler_yank_full_path)

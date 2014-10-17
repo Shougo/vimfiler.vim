@@ -241,6 +241,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
 
   " Execute or change directory.
   nmap <buffer> <Enter> <Plug>(vimfiler_cd_or_edit)
+  nmap <buffer> o <Plug>(vimfiler_expand_or_edit)
   nmap <buffer> l <Plug>(vimfiler_smart_l)
 
   nmap <buffer> x
@@ -280,8 +281,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nmap <buffer> !       <Plug>(vimfiler_execute_shell_command)
   nmap <buffer> g?      <Plug>(vimfiler_help)
   nmap <buffer> v       <Plug>(vimfiler_preview_file)
-  nmap <buffer> o       <Plug>(vimfiler_sync_with_current_vimfiler)
-  nmap <buffer> O       <Plug>(vimfiler_open_file_in_another_vimfiler)
+  nmap <buffer> O       <Plug>(vimfiler_sync_with_current_vimfiler)
+  nmap <buffer> go       <Plug>(vimfiler_open_file_in_another_vimfiler)
   nmap <buffer> <C-g>   <Plug>(vimfiler_print_filename)
   nmap <buffer> g<C-g>  <Plug>(vimfiler_toggle_maximize_window)
   nmap <buffer> yy      <Plug>(vimfiler_yank_full_path)
