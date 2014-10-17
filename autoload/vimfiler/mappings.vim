@@ -58,6 +58,10 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ vimfiler#mappings#smart_cursor_map(
         \  "\<Plug>(vimfiler_cd_file)",
         \  "\<Plug>(vimfiler_execute_vimfiler_associated)")
+  nmap <buffer><silent><expr> <Plug>(vimfiler_cd_or_edit)
+        \ vimfiler#mappings#smart_cursor_map(
+        \  "\<Plug>(vimfiler_cd_file)",
+        \  "\<Plug>(vimfiler_edit_file)")
   nmap <buffer> <Plug>(vimfiler_execute_file)
         \ <Plug>(vimfiler_execute_system_associated)
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_system_associated)
