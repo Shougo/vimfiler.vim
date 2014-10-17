@@ -155,13 +155,13 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   if a:context.explorer
     nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
           \ ":\<C-u>call \<SID>unexpand_tree()\<CR>"
-    nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
-          \ ":\<C-u>call \<SID>expand_tree(0)\<CR>"
+    nmap <buffer><silent> <Plug>(vimfiler_smart_l)
+          \ <Plug>(vimfiler_expand_or_edit)
   else
-    nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
-          \ ":\<C-u>call vimfiler#mappings#cd('..')\<CR>"
-    nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_l)
-          \ ":\<C-u>call \<SID>execute()\<CR>"
+    nmap <buffer><silent> <Plug>(vimfiler_smart_h)
+          \ <Plug>(vimfiler_switch_to_parent_directory)
+    nmap <buffer><silent> <Plug>(vimfiler_smart_l)
+          \ <Plug>(vimfiler_cd_or_edit)
   endif
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_cursor_top)
         \ (vimfiler#get_file_offset()+1).'Gzb'
@@ -725,13 +725,6 @@ function! s:clear_mark_all_lines() "{{{
   endfor
 
   call vimfiler#redraw_screen()
-endfunction"}}}
-function! s:execute() "{{{
-  let filename = vimfiler#get_filename()
-  let file = vimfiler#get_file()
-  return  filename == '..' || empty(file)
-        \ || file.vimfiler__is_directory ?
-        \ s:cd_file_directory() : s:execute_vimfiler_associated()
 endfunction"}}}
 function! s:execute_vimfiler_associated() "{{{
   let bufnr = bufnr('%')
