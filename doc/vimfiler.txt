@@ -580,9 +580,8 @@ Normal mode key mappings.
 		http://www.vim.org/scripts/script.php?script_id=1721
 		Note: This mappings is disabled in vimfiler safe mode.
 
-<Plug>(vimfiler_execute)			*<Plug>(vimfiler_execute)*
-		Executes cursor file with |g:vimfiler_execute_file_list|
-		command.  If cursor file is directory, change directory.
+<Plug>(vimfiler_cd_or_edit)			*<Plug>(vimfiler_cd_or_edit)*
+		Edit cursor file or change directory.
 
 				*<Plug>(vimfiler_execute_system_associated)*
 <Plug>(vimfiler_execute_system_associated)
@@ -830,7 +829,7 @@ Cp			<Plug>(vimfiler_clipboard_paste)
 r			<Plug>(vimfiler_rename_file)
 K			<Plug>(vimfiler_make_directory)
 N			<Plug>(vimfiler_new_file)
-<Enter>			<Plug>(vimfiler_execute)
+<Enter>			<Plug>(vimfiler_cd_or_edit)
 l			<Plug>(vimfiler_smart_l)
 x			<Plug>(vimfiler_execute_system_associated)
 h			<Plug>(vimfiler_smart_h)

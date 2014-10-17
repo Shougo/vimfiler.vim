@@ -54,10 +54,14 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>clear_mark_all_lines()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_mark_current_line)
         \ :<C-u>call <SID>mark_current_line()<CR>
-  nmap <buffer><silent><expr> <Plug>(vimfiler_execute)
+  nmap <buffer><silent><expr> <Plug>(vimfiler_cd_or_edit)
         \ vimfiler#mappings#smart_cursor_map(
         \  "\<Plug>(vimfiler_cd_file)",
-        \  "\<Plug>(vimfiler_execute_vimfiler_associated)")
+        \  "\<Plug>(vimfiler_edit_file)")
+  nmap <buffer><silent><expr> <Plug>(vimfiler_expand_or_edit)
+        \ vimfiler#mappings#smart_cursor_map(
+        \  "\<Plug>(vimfiler_expand_tree)",
+        \  "\<Plug>(vimfiler_edit_file)")
   nmap <buffer> <Plug>(vimfiler_execute_file)
         \ <Plug>(vimfiler_execute_system_associated)
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_system_associated)
@@ -236,7 +240,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nmap <buffer> Cp <Plug>(vimfiler_clipboard_paste)
 
   " Execute or change directory.
-  nmap <buffer> <Enter> <Plug>(vimfiler_execute)
+  nmap <buffer> <Enter> <Plug>(vimfiler_cd_or_edit)
   nmap <buffer> l <Plug>(vimfiler_smart_l)
 
   nmap <buffer> x
