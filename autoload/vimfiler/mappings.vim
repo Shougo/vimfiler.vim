@@ -58,6 +58,10 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ vimfiler#mappings#smart_cursor_map(
         \  "\<Plug>(vimfiler_cd_file)",
         \  "\<Plug>(vimfiler_execute_vimfiler_associated)")
+  nmap <buffer><silent><expr> <Plug>(vimfiler_cd_or_edit)
+        \ vimfiler#mappings#smart_cursor_map(
+        \  "\<Plug>(vimfiler_cd_file)",
+        \  "\<Plug>(vimfiler_edit_file)")
   nmap <buffer> <Plug>(vimfiler_execute_file)
         \ <Plug>(vimfiler_execute_system_associated)
   nnoremap <buffer><silent> <Plug>(vimfiler_execute_system_associated)
@@ -260,6 +264,11 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nmap <buffer> E <Plug>(vimfiler_split_edit_file)
   nmap <buffer> B <Plug>(vimfiler_edit_binary_file)
 
+  " Open dir/file.
+  nmap <buffer> o <Plug>(vimfiler_cd_or_edit)
+  nmap <buffer> O <Plug>(vimfiler_open_file_in_another_vimfiler)
+  nmap <buffer> go <Plug>(vimfiler_sync_with_current_vimfiler)
+
   " Choose action.
   nmap <buffer> a <Plug>(vimfiler_choose_action)
 
@@ -276,8 +285,6 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nmap <buffer> ! <Plug>(vimfiler_execute_shell_command)
   nmap <buffer> ? <Plug>(vimfiler_help)
   nmap <buffer> v <Plug>(vimfiler_preview_file)
-  nmap <buffer> o <Plug>(vimfiler_sync_with_current_vimfiler)
-  nmap <buffer> O <Plug>(vimfiler_open_file_in_another_vimfiler)
   nmap <buffer> <C-g> <Plug>(vimfiler_print_filename)
   nmap <buffer> g<C-g> <Plug>(vimfiler_toggle_maximize_window)
   nmap <buffer> yy <Plug>(vimfiler_yank_full_path)
