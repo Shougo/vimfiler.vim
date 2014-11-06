@@ -54,6 +54,7 @@ function! s:source.gather_candidates(args, context) "{{{
     elseif !unite#util#is_windows()
       let s:drives += split(glob('/mnt/*'), '\n')
             \ + split(glob('/media/*'), '\n')
+            \ + split(glob('/media/' . $USER . '/*'), '\n')
     endif
     call filter(s:drives, 'isdirectory(v:val)')
 
