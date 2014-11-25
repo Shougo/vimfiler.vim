@@ -555,7 +555,7 @@ function! vimfiler#init#_default_settings() "{{{
           \ call vimfiler#handler#_event_cursor_moved()
     autocmd FocusGained <buffer>
           \ call vimfiler#view#_force_redraw_all_vimfiler()
-    autocmd VimResized <buffer>
+    autocmd WinEnter,VimResized <buffer>
           \ call vimfiler#view#_redraw_all_vimfiler()
   augroup end"}}}
 endfunction"}}}
