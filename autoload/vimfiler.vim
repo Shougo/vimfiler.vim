@@ -86,6 +86,7 @@ function! vimfiler#get_current_vimfiler() "{{{
 endfunction"}}}
 function! vimfiler#set_current_vimfiler(vimfiler) "{{{
   let s:current_vimfiler = a:vimfiler
+  call unite#set_current_unite(a:vimfiler.unite)
 endfunction"}}}
 function! vimfiler#get_context() "{{{
   return vimfiler#get_current_vimfiler().context
