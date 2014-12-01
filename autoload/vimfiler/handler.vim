@@ -159,8 +159,6 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
       return
     endif
 
-    call vimfiler#set_current_vimfiler(b:vimfiler)
-
     let vimfiler = vimfiler#get_current_vimfiler()
     if !has_key(vimfiler, 'context')
       return
