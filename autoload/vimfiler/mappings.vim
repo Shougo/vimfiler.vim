@@ -196,128 +196,193 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
 
   if a:context.split || !a:context.quit || a:context.explorer
     " Change default mapping.
-    nmap <buffer><nowait> <TAB>
-          \ <Plug>(vimfiler_switch_to_other_window)
+    execute s:nowait_nmap() '<Tab>'
+          \ '<Plug>(vimfiler_switch_to_other_window)'
   else
-    nmap <buffer><nowait> <TAB>
-          \ <Plug>(vimfiler_switch_to_another_vimfiler)
+    execute s:nowait_nmap() '<Tab>'
+          \ '<Plug>(vimfiler_switch_to_another_vimfiler)'
   endif
-  nmap <buffer><nowait> j <Plug>(vimfiler_loop_cursor_down)
-  nmap <buffer><nowait> k <Plug>(vimfiler_loop_cursor_up)
+  execute s:nowait_nmap() 'j'
+        \ '<Plug>(vimfiler_loop_cursor_down)'
+  execute s:nowait_nmap() 'k'
+        \ '<Plug>(vimfiler_loop_cursor_up)'
 
   " Toggle mark.
-  nmap <buffer><nowait> <C-l>
-        \ <Plug>(vimfiler_redraw_screen)
-  nmap <buffer><nowait> <Space>
-        \ <Plug>(vimfiler_toggle_mark_current_line)
-  nmap <buffer><nowait> <S-LeftMouse>
-        \ <Plug>(vimfiler_toggle_mark_current_line)
-  nmap <buffer><nowait> <S-Space>
-        \ <Plug>(vimfiler_toggle_mark_current_line_up)
-  vmap <buffer><nowait> <Space>
+  execute s:nowait_nmap() '<C-l>'
+        \ '<Plug>(vimfiler_redraw_screen)'
+  execute s:nowait_nmap() '<Space>'
+        \ '<Plug>(vimfiler_toggle_mark_current_line)'
+  execute s:nowait_nmap() '<S-LeftMouse>'
+        \ '<Plug>(vimfiler_toggle_mark_current_line)'
+  execute s:nowait_nmap() '<S-Space>'
+        \ '<Plug>(vimfiler_toggle_mark_current_line_up)'
+  vmap <buffer> <Space>
         \ <Plug>(vimfiler_toggle_mark_selected_lines)
 
   " Toggle marks in all lines.
-  nmap <buffer><nowait> * <Plug>(vimfiler_toggle_mark_all_lines)
-  nmap <buffer><nowait> # <Plug>(vimfiler_mark_similar_lines)
+  execute s:nowait_nmap() '*'
+        \ '<Plug>(vimfiler_toggle_mark_all_lines)'
+  execute s:nowait_nmap() '#'
+        \ '<Plug>(vimfiler_mark_similar_lines)'
   " Clear marks in all lines.
-  nmap <buffer><nowait> U <Plug>(vimfiler_clear_mark_all_lines)
+  execute s:nowait_nmap() 'U'
+        \ '<Plug>(vimfiler_clear_mark_all_lines)'
 
   " Copy files.
-  nmap <buffer><nowait> c <Plug>(vimfiler_copy_file)
-  nmap <buffer><nowait> Cc <Plug>(vimfiler_clipboard_copy_file)
+  execute s:nowait_nmap() 'c'
+        \ '<Plug>(vimfiler_copy_file)'
+  execute s:nowait_nmap() 'Cc'
+        \ '<Plug>(vimfiler_clipboard_copy_file)'
 
   " Move files.
-  nmap <buffer><nowait> m <Plug>(vimfiler_move_file)
-  nmap <buffer><nowait> Cm <Plug>(vimfiler_clipboard_move_file)
+  execute s:nowait_nmap() 'm'
+        \ '<Plug>(vimfiler_move_file)'
+  execute s:nowait_nmap() 'Cm'
+        \ '<Plug>(vimfiler_clipboard_move_file)'
 
   " Delete files.
-  nmap <buffer><nowait> d <Plug>(vimfiler_delete_file)
+  execute s:nowait_nmap() 'd'
+        \ '<Plug>(vimfiler_delete_file)'
 
   " Rename.
-  nmap <buffer><nowait> r <Plug>(vimfiler_rename_file)
+  execute s:nowait_nmap() 'r'
+        \ '<Plug>(vimfiler_rename_file)'
 
   " Make directory.
-  nmap <buffer><nowait> K <Plug>(vimfiler_make_directory)
+  execute s:nowait_nmap() 'K'
+        \ '<Plug>(vimfiler_make_directory)'
 
   " New file.
-  nmap <buffer><nowait> N <Plug>(vimfiler_new_file)
+  execute s:nowait_nmap() 'N'
+        \ '<Plug>(vimfiler_new_file)'
 
   " Paste.
-  nmap <buffer><nowait> Cp <Plug>(vimfiler_clipboard_paste)
+  execute s:nowait_nmap() 'Cp'
+        \ '<Plug>(vimfiler_clipboard_paste)'
 
   " Execute or change directory.
-  nmap <buffer><nowait> <Enter> <Plug>(vimfiler_cd_or_edit)
-  nmap <buffer><nowait> o <Plug>(vimfiler_expand_or_edit)
-  nmap <buffer><nowait> l <Plug>(vimfiler_smart_l)
+  execute s:nowait_nmap() '<Enter>'
+        \ '<Plug>(vimfiler_cd_or_edit)'
+  execute s:nowait_nmap() 'o'
+        \ '<Plug>(vimfiler_expand_or_edit)'
+  execute s:nowait_nmap() 'l'
+        \ '<Plug>(vimfiler_smart_l)'
 
-  nmap <buffer><nowait> x
-        \ <Plug>(vimfiler_execute_system_associated)
+  execute s:nowait_nmap() 'x'
+        \ '<Plug>(vimfiler_execute_system_associated)'
 
   " Move to directory.
-  nmap <buffer><nowait> h <Plug>(vimfiler_smart_h)
-  nmap <buffer><nowait> L <Plug>(vimfiler_switch_to_drive)
-  nmap <buffer><nowait> ~ <Plug>(vimfiler_switch_to_home_directory)
-  nmap <buffer><nowait> \ <Plug>(vimfiler_switch_to_root_directory)
-  nmap <buffer><nowait> & <Plug>(vimfiler_switch_to_project_directory)
-  nmap <buffer><nowait> <C-j> <Plug>(vimfiler_switch_to_history_directory)
-  nmap <buffer><nowait> <BS> <Plug>(vimfiler_switch_to_parent_directory)
+  execute s:nowait_nmap() 'h'
+        \ '<Plug>(vimfiler_smart_h)'
+  execute s:nowait_nmap() 'L'
+        \ '<Plug>(vimfiler_switch_to_drive)'
+  execute s:nowait_nmap() '~'
+        \ '<Plug>(vimfiler_switch_to_home_directory)'
+  execute s:nowait_nmap() '\'
+        \ '<Plug>(vimfiler_switch_to_root_directory)'
+  execute s:nowait_nmap() '&'
+        \ '<Plug>(vimfiler_switch_to_project_directory)'
+  execute s:nowait_nmap() '<C-j>'
+        \ '<Plug>(vimfiler_switch_to_history_directory)'
+  execute s:nowait_nmap() '<BS>'
+        \ '<Plug>(vimfiler_switch_to_parent_directory)'
 
-  nmap <buffer><nowait> gv <Plug>(vimfiler_execute_new_gvim)
-  nmap <buffer><nowait> . <Plug>(vimfiler_toggle_visible_ignore_files)
-  nmap <buffer><nowait> H <Plug>(vimfiler_popup_shell)
+  execute s:nowait_nmap() 'gv'
+        \ '<Plug>(vimfiler_execute_new_gvim)'
+  execute s:nowait_nmap() '.'
+        \ '<Plug>(vimfiler_toggle_visible_ignore_files)'
+  execute s:nowait_nmap() 'H'
+        \ '<Plug>(vimfiler_popup_shell)'
 
   " Edit file.
-  nmap <buffer><nowait> e <Plug>(vimfiler_edit_file)
-  nmap <buffer><nowait> E <Plug>(vimfiler_split_edit_file)
-  nmap <buffer><nowait> B <Plug>(vimfiler_edit_binary_file)
+  execute s:nowait_nmap() 'e'
+        \ '<Plug>(vimfiler_edit_file)'
+  execute s:nowait_nmap() 'E'
+        \ '<Plug>(vimfiler_split_edit_file)'
+  execute s:nowait_nmap() 'B'
+        \ '<Plug>(vimfiler_edit_binary_file)'
 
   " Choose action.
-  nmap <buffer><nowait> a <Plug>(vimfiler_choose_action)
+  execute s:nowait_nmap() 'a'
+        \ '<Plug>(vimfiler_choose_action)'
 
   " Hide vimfiler.
-  nmap <buffer><nowait> q <Plug>(vimfiler_hide)
+  execute s:nowait_nmap() 'q'
+        \ '<Plug>(vimfiler_hide)'
   " Exit vimfiler.
-  nmap <buffer><nowait> Q <Plug>(vimfiler_exit)
+  execute s:nowait_nmap() 'Q'
+        \ '<Plug>(vimfiler_exit)'
   " Close vimfiler.
-  nmap <buffer><nowait> - <Plug>(vimfiler_close)
+  execute s:nowait_nmap() '-'
+        \ '<Plug>(vimfiler_close)'
 
-  nmap <buffer><nowait> ge
-        \ <Plug>(vimfiler_execute_external_filer)
-  nmap <buffer><nowait> <RightMouse>
-        \ <Plug>(vimfiler_execute_external_filer)
+  execute s:nowait_nmap() 'ge'
+        \ '<Plug>(vimfiler_execute_external_filer)'
+  execute s:nowait_nmap() '<RightMouse>'
+        \ '<Plug>(vimfiler_execute_external_filer)'
 
-  nmap <buffer><nowait> !       <Plug>(vimfiler_execute_shell_command)
-  nmap <buffer><nowait> g?      <Plug>(vimfiler_help)
-  nmap <buffer><nowait> v       <Plug>(vimfiler_preview_file)
-  nmap <buffer><nowait> O       <Plug>(vimfiler_sync_with_current_vimfiler)
-  nmap <buffer><nowait> go       <Plug>(vimfiler_open_file_in_another_vimfiler)
-  nmap <buffer><nowait> <C-g>   <Plug>(vimfiler_print_filename)
-  nmap <buffer><nowait> g<C-g>  <Plug>(vimfiler_toggle_maximize_window)
-  nmap <buffer><nowait> yy      <Plug>(vimfiler_yank_full_path)
-  nmap <buffer><nowait> M       <Plug>(vimfiler_set_current_mask)
-  nmap <buffer><nowait> gr      <Plug>(vimfiler_grep)
-  nmap <buffer><nowait> gf      <Plug>(vimfiler_find)
-  nmap <buffer><nowait> S       <Plug>(vimfiler_select_sort_type)
-  nmap <buffer><nowait> <C-v>   <Plug>(vimfiler_switch_vim_buffer_mode)
-  nmap <buffer><nowait> gc      <Plug>(vimfiler_cd_vim_current_dir)
-  nmap <buffer><nowait> gs      <Plug>(vimfiler_toggle_safe_mode)
-  nmap <buffer><nowait> gS      <Plug>(vimfiler_toggle_simple_mode)
-  nmap <buffer><nowait> gg      <Plug>(vimfiler_cursor_top)
-  nmap <buffer><nowait> G       <Plug>(vimfiler_cursor_bottom)
-  nmap <buffer><nowait> t       <Plug>(vimfiler_expand_tree)
-  nmap <buffer><nowait> T       <Plug>(vimfiler_expand_tree_recursive)
-  nmap <buffer><nowait> I       <Plug>(vimfiler_cd_input_directory)
-  nmap <buffer><nowait> <2-LeftMouse>
-        \ <Plug>(vimfiler_double_click)
+  execute s:nowait_nmap() '!'
+        \ '<Plug>(vimfiler_execute_shell_command)'
+  execute s:nowait_nmap() 'g?'
+        \ '<Plug>(vimfiler_help)'
+  execute s:nowait_nmap() 'v'
+        \ '<Plug>(vimfiler_preview_file)'
+  execute s:nowait_nmap() 'O'
+        \ '<Plug>(vimfiler_sync_with_current_vimfiler)'
+  execute s:nowait_nmap() 'go'
+        \ '<Plug>(vimfiler_open_file_in_another_vimfiler)'
+  execute s:nowait_nmap() '<C-g>'
+        \ '<Plug>(vimfiler_print_filename)'
+  execute s:nowait_nmap() 'g<C-g>'
+        \ '<Plug>(vimfiler_toggle_maximize_window)'
+  execute s:nowait_nmap() 'yy'
+        \ '<Plug>(vimfiler_yank_full_path)'
+  execute s:nowait_nmap() 'M'
+        \ '<Plug>(vimfiler_set_current_mask)'
+  execute s:nowait_nmap() 'gr'
+        \ '<Plug>(vimfiler_grep)'
+  execute s:nowait_nmap() 'gf'
+        \ '<Plug>(vimfiler_find)'
+  execute s:nowait_nmap() 'S'
+        \ '<Plug>(vimfiler_select_sort_type)'
+  execute s:nowait_nmap() '<C-v>'
+        \ '<Plug>(vimfiler_switch_vim_buffer_mode)'
+  execute s:nowait_nmap() 'gc'
+        \ '<Plug>(vimfiler_cd_vim_current_dir)'
+  execute s:nowait_nmap() 'gs'
+        \ '<Plug>(vimfiler_toggle_safe_mode)'
+  execute s:nowait_nmap() 'gS'
+        \ '<Plug>(vimfiler_toggle_simple_mode)'
+  execute s:nowait_nmap() 'gg'
+        \ '<Plug>(vimfiler_cursor_top)'
+  execute s:nowait_nmap() 'G'
+        \ '<Plug>(vimfiler_cursor_bottom)'
+  execute s:nowait_nmap() 't'
+        \ '<Plug>(vimfiler_expand_tree)'
+  execute s:nowait_nmap() 'T'
+        \ '<Plug>(vimfiler_expand_tree_recursive)'
+  execute s:nowait_nmap() 'I'
+        \ '<Plug>(vimfiler_cd_input_directory)'
+  execute s:nowait_nmap() '<2-LeftMouse>'
+        \ '<Plug>(vimfiler_double_click)'
 
   " pushd/popd
-  nmap <buffer><nowait> Y <Plug>(vimfiler_pushd)
-  nmap <buffer><nowait> P <Plug>(vimfiler_popd)
+  execute s:nowait_nmap() 'Y'
+        \ '<Plug>(vimfiler_pushd)'
+  execute s:nowait_nmap() 'P'
+        \ '<Plug>(vimfiler_popd)'
 
-  nmap <buffer><nowait> gj <Plug>(vimfiler_jump_last_child)
-  nmap <buffer><nowait> gk <Plug>(vimfiler_jump_first_child)
+  execute s:nowait_nmap() 'gj'
+        \ '<Plug>(vimfiler_jump_last_child)'
+  execute s:nowait_nmap() 'gk'
+        \ '<Plug>(vimfiler_jump_first_child)'
 endfunction"}}}
+
+function! s:nowait_nmap() "{{{
+  return 'nmap <buffer>'
+        \ . ((v:version > 703 || (v:version == 703 && has('patch1261'))) ?
+        \ '<nowait>' : '')
+endfunction "}}}
 
 function! vimfiler#mappings#smart_cursor_map(directory_map, file_map) "{{{
   let filename = vimfiler#get_filename()
