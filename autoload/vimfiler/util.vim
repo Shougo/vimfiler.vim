@@ -70,9 +70,6 @@ endfunction
 function! vimfiler#util#strwidthpart_reverse(...)
   return call(s:get_prelude().strwidthpart_reverse, a:000)
 endfunction
-function! vimfiler#util#wcswidth(...)
-  return call(s:get_prelude().wcswidth, a:000)
-endfunction
 function! vimfiler#util#is_windows(...)
   return s:is_windows
 endfunction

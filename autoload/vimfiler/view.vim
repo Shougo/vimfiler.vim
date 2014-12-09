@@ -234,7 +234,7 @@ function! s:redraw_prompt() "{{{
     endif
   endif
 
-  if vimfiler#util#wcswidth(prefix.dir) > winwidth(0)
+  if strwidth(prefix.dir) > winwidth(0)
     let dir = fnamemodify(substitute(dir, '/$', '', ''), ':t')
   endif
 
@@ -289,19 +289,14 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   " Column region.
   let start = max_len + 1
   let syntaxes = [
-            \ [vimfiler#util#wcswidth(
-            \  g:vimfiler_tree_opened_icon), 'vimfilerOpenedFile'],
-            \ [vimfiler#util#wcswidth(
-            \  g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
-            \ [vimfiler#util#wcswidth(
-            \  g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
-            \ [vimfiler#util#wcswidth(
-            \  g:vimfiler_file_icon), 'vimfilerNormalFile']]
+            \ [strwidth(g:vimfiler_tree_opened_icon), 'vimfilerOpenedFile'],
+            \ [strwidth(g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
+            \ [strwidth(g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
+            \ [strwidth(g:vimfiler_file_icon), 'vimfilerNormalFile']]
   if empty(filter(copy(syntaxes), 'v:val[0] != '.
-        \ vimfiler#util#wcswidth(g:vimfiler_file_icon)))
+        \ strwidth(g:vimfiler_file_icon)))
     " Optimize if columns are same.
-    let syntaxes = [[vimfiler#util#wcswidth(
-            \  g:vimfiler_file_icon),
+    let syntaxes = [[strwidth(g:vimfiler_file_icon),
             \  'vimfilerNormalFile,vimfilerOpenedFile,'.
             \  'vimfilerClosedFile,vimfilerROFile']]
   endif
@@ -355,7 +350,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
       let line = vimfiler#util#truncate_smart(
             \ line, max_len, max_len/2, '..')
     else
-      let line .= repeat(' ', max_len - vimfiler#util#wcswidth(line))
+      let line .= repeat(' ', max_len - strwidth(line))
     endif
 
     for column in columns

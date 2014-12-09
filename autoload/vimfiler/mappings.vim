@@ -1851,8 +1851,7 @@ function! s:get_action_current_dir(files) "{{{
 endfunction"}}}
 
 function! s:get_abbr_length(parent, child) "{{{
-  return vimfiler#util#wcswidth(
-        \ repeat(' ', a:parent.vimfiler__nest_level
+  return strwidth(repeat(' ', a:parent.vimfiler__nest_level
         \  * g:vimfiler_tree_indentation) .
         \ a:parent.vimfiler__abbr.a:child.vimfiler__abbr) + 5
 endfunction"}}}
