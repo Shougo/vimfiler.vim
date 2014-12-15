@@ -25,7 +25,7 @@
 
 if exists('g:loaded_vimfiler')
   finish
-elseif v:version < 702
+elseif v:version < 703
   echomsg 'vimfiler does not work this version of Vim "' . v:version . '".'
   finish
 endif
