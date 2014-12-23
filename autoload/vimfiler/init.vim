@@ -377,7 +377,7 @@ function! vimfiler#init#_start(path, ...) "{{{
     " Search vimfiler buffer.
     for bufnr in filter(insert(range(1, bufnr('$')), bufnr('%')),
           \ "bufloaded(v:val) &&
-          \ getbufvar(v:val, '&filetype') ==# 'vimfiler'")
+          \ getbufvar(v:val, '&filetype') =~# 'vimfiler'")
       let vimfiler = getbufvar(bufnr, 'vimfiler')
       if type(vimfiler) == type({})
             \ && vimfiler.context.buffer_name ==# context.buffer_name
