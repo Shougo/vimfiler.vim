@@ -228,7 +228,7 @@ function! vimfiler#util#convert2list(expr) "{{{
 endfunction"}}}
 function! vimfiler#util#get_vimfiler_winnr(buffer_name) "{{{
   for winnr in filter(range(1, winnr('$')),
-        \ "getbufvar(winbufnr(v:val), '&filetype') ==# 'vimfiler'")
+        \ "getbufvar(winbufnr(v:val), '&filetype') =~# 'vimfiler'")
     let buffer_context = getbufvar(
           \ winbufnr(winnr), 'vimfiler').context
     if buffer_context.buffer_name ==# a:buffer_name
