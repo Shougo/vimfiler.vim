@@ -289,14 +289,16 @@ function! vimfiler#view#_get_print_lines(files) "{{{
   " Column region.
   let start = max_len + 1
   let syntaxes = [
-            \ [strwidth(g:vimfiler_tree_opened_icon), 'vimfilerOpenedFile'],
-            \ [strwidth(g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
-            \ [strwidth(g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
-            \ [strwidth(g:vimfiler_file_icon), 'vimfilerNormalFile']]
+            \ [len(g:vimfiler_tree_opened_icon), 'vimfilerOpenedFile'],
+            \ [len(g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
+            \ [len(g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
+            \ [len(g:vimfiler_file_icon), 'vimfilerNormalFile'],
+            \ [len(g:vimfiler_marked_file_icon), 'vimfilerMarkedFile'],
+            \ ]
   if empty(filter(copy(syntaxes), 'v:val[0] != '.
         \ strwidth(g:vimfiler_file_icon)))
     " Optimize if columns are same.
-    let syntaxes = [[strwidth(g:vimfiler_file_icon),
+    let syntaxes = [[len(g:vimfiler_file_icon),
             \  'vimfilerNormalFile,vimfilerOpenedFile,'.
             \  'vimfilerClosedFile,vimfilerROFile']]
   endif
@@ -304,10 +306,8 @@ function! vimfiler#view#_get_print_lines(files) "{{{
     if get(column, 'syntax', '') != '' && max_len > 0
       for [offset, syntax] in syntaxes
         execute 'syntax region' column.syntax 'start=''\%'.(start+offset).
-              \ (v:version >= 703 ? 'v' : 'c').
-              \ ''' end=''\%'.(start + column.vimfiler__length+offset).
-              \ (v:version >= 703 ? 'v' : 'c').
-              \ ''' contained keepend containedin=vimfilerMarkedFile,'.syntax
+              \ 'c'' end=''\%'.(start + column.vimfiler__length+offset).
+              \ 'c'' contained keepend containedin='.syntax
       endfor
 
       call add(b:vimfiler.syntaxes, column.syntax)

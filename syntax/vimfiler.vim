@@ -49,6 +49,10 @@ execute 'syntax match   vimfilerNormalFile'
       \ '''^\s*\%('.s:leaf_icon.'\)\?'.
       \ s:file_icon.' .*'' contains=vimfilerNonMark oneline'
 
+execute 'syntax match   vimfilerMarkedFile'
+      \ '''^\s*\%('  . s:leaf_icon .'\)\?'
+      \ . s:marked_file_icon . ' .*$'' contains=vimfilerNonMark oneline'
+
 execute 'syntax match   vimfilerOpenedFile'
       \ '''^\s*\%('.s:leaf_icon.'\)\?'.
       \ s:opened_icon.' .*'' contains=vimfilerNonMark oneline'
@@ -58,10 +62,6 @@ execute 'syntax match   vimfilerClosedFile'
 execute 'syntax match   vimfilerROFile'
       \ '''^\s*\%('.s:leaf_icon.'\)\?'.
       \ s:ro_file_icon.' .*'' contains=vimfilerNonMark oneline'
-
-execute 'syntax match   vimfilerMarkedFile'
-      \ '''^\s*\%('  . s:leaf_icon .'\)\?'
-      \ . s:marked_file_icon . ' .*$'''
 
 execute 'syntax match   vimfilerLeaf'
       \ '''^\s*'  . s:leaf_icon . ''' contained'
