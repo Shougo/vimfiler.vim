@@ -286,35 +286,9 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
   let max_len = vimfiler#view#_get_max_len(a:files)
 
-  " Column region.
-  let start = max_len + 1
-  let syntaxes = [
-            \ [len(g:vimfiler_tree_opened_icon), 'vimfilerOpenedFile'],
-            \ [len(g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
-            \ [len(g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
-            \ [len(g:vimfiler_file_icon), 'vimfilerNormalFile'],
-            \ [len(g:vimfiler_marked_file_icon), 'vimfilerMarkedFile'],
-            \ ]
-  if empty(filter(copy(syntaxes), 'v:val[0] != '.
-        \ strwidth(g:vimfiler_file_icon)))
-    " Optimize if columns are same.
-    let syntaxes = [[len(g:vimfiler_file_icon),
-            \  'vimfilerNormalFile,vimfilerOpenedFile,'.
-            \  'vimfilerClosedFile,vimfilerROFile']]
-  endif
-  for column in columns
-    if get(column, 'syntax', '') != '' && max_len > 0
-      for [offset, syntax] in syntaxes
-        execute 'syntax region' column.syntax 'start=''\%'.(start+offset).
-              \ 'c'' end=''\%'.(start + column.vimfiler__length+offset).
-              \ 'c'' contained keepend containedin='.syntax
-      endfor
+  call s:define_filename_regions(max_len)
 
-      call add(b:vimfiler.syntaxes, column.syntax)
-    endif
-
-    let start += column.vimfiler__length + 1
-  endfor
+  call s:define_column_regions(max_len, columns)
 
   " Print files.
   let lines = []
@@ -419,6 +393,66 @@ function! s:check_tree(files) "{{{
   endfor
 
   return _
+endfunction"}}}
+function! s:define_filename_regions(max_len) abort "{{{
+  let leaf_icon = vimfiler#util#escape_pattern(
+        \ g:vimfiler_tree_leaf_icon)
+  let file_icon = vimfiler#util#escape_pattern(
+        \ g:vimfiler_file_icon)
+  let marked_file_icon = vimfiler#util#escape_pattern(
+        \ g:vimfiler_marked_file_icon)
+  let opened_icon = vimfiler#util#escape_pattern(
+        \ g:vimfiler_tree_opened_icon)
+  let closed_icon = vimfiler#util#escape_pattern(
+        \ g:vimfiler_tree_closed_icon)
+  let ro_file_icon = vimfiler#util#escape_pattern(
+        \ g:vimfiler_readonly_file_icon)
+
+  " Filename regions.
+  for [icon, syntax] in [
+        \ [file_icon, 'vimfilerNormalFile'],
+        \ [marked_file_icon, 'vimfilerMarkedFile'],
+        \ [opened_icon, 'vimfilerOpenedFile'],
+        \ [closed_icon, 'vimfilerClosedFile'],
+        \ [ro_file_icon, 'vimfilerROFile'],
+        \ ]
+    execute 'syntax region   '.syntax.
+          \ ' start=''^\s*\%('.leaf_icon.'\)\?'.
+          \ icon . ''' end=''\%'.a:max_len .
+          \ 'v'' contains=vimfilerNonMark'
+    call add(b:vimfiler.syntaxes, syntax)
+  endfor
+endfunction"}}}
+function! s:define_column_regions(max_len, columns) abort "{{{
+  " Column regions.
+  let start = a:max_len + 1
+  let syntaxes = [
+            \ [strwidth(g:vimfiler_tree_opened_icon), 'vimfilerOpenedFile'],
+            \ [strwidth(g:vimfiler_tree_closed_icon), 'vimfilerClosedFile'],
+            \ [strwidth(g:vimfiler_readonly_file_icon), 'vimfilerROFile'],
+            \ [strwidth(g:vimfiler_file_icon), 'vimfilerNormalFile'],
+            \ [strwidth(g:vimfiler_marked_file_icon), 'vimfilerMarkedFile'],
+            \ ]
+  if empty(filter(copy(syntaxes), 'v:val[0] != '.
+        \ strwidth(g:vimfiler_file_icon)))
+    " Optimize if columns are same.
+    let syntaxes = [[strwidth(g:vimfiler_file_icon),
+            \  'vimfilerNormalFile,vimfilerOpenedFile,'.
+            \  'vimfilerClosedFile,vimfilerROFile']]
+  endif
+  for column in a:columns
+    if get(column, 'syntax', '') != '' && a:max_len > 0
+      for [offset, syntax] in syntaxes
+        execute 'syntax region' column.syntax 'start=''\%'.(start+offset).
+              \ 'v'' end=''\%'.(start + column.vimfiler__length+offset).
+              \ 'v'' keepend containedin=' . syntax
+      endfor
+
+      call add(b:vimfiler.syntaxes, column.syntax)
+    endif
+
+    let start += column.vimfiler__length + 1
+  endfor
 endfunction"}}}
 
 let &cpo = s:save_cpo
