@@ -419,7 +419,7 @@ function! s:define_filename_regions(max_len) abort "{{{
     execute 'syntax region   '.syntax.
           \ ' start=''^\s*\%('.leaf_icon.'\)\?'.
           \ icon . ''' end=''\%'.a:max_len .
-          \ 'v'' contains=vimfilerNonMark'
+          \ 'v'' oneline contains=vimfilerNonMark'
     call add(b:vimfiler.syntaxes, syntax)
   endfor
 endfunction"}}}
@@ -445,7 +445,7 @@ function! s:define_column_regions(max_len, columns) abort "{{{
       for [offset, syntax] in syntaxes
         execute 'syntax region' column.syntax 'start=''\%'.(start+offset).
               \ 'v'' end=''\%'.(start + column.vimfiler__length+offset).
-              \ 'v'' keepend containedin=' . syntax
+              \ 'v'' keepend oneline containedin=' . syntax
       endfor
 
       call add(b:vimfiler.syntaxes, column.syntax)
