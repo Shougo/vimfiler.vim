@@ -114,6 +114,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
     return
   endif
 
+  let savedView = winsaveview()
   let current_file = vimfiler#get_file()
 
   let b:vimfiler.all_files =
@@ -172,6 +173,8 @@ function! vimfiler#view#_redraw_screen(...) "{{{
   if last_line != line('.') || (line('$') - line('.')) <= winheight(0)
     call vimfiler#helper#_set_cursor()
   endif
+
+  call winrestview(savedView)
 
   if is_switch
     execute save_winnr . 'wincmd w'
