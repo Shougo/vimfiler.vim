@@ -417,8 +417,8 @@ function! s:define_filename_regions(max_len) abort "{{{
         \ [ro_file_icon, 'vimfilerROFile'],
         \ ]
     execute 'syntax region   '.syntax.
-          \ ' start=''^\s*\%('.leaf_icon.'\)\?'.
-          \ icon . ''' end=''\%'.a:max_len .
+          \ ' start=''\%#=1^\s*\%('.leaf_icon.'\)\?'.
+          \ icon . ''' end=''\%#=1\%'.a:max_len .
           \ 'v'' oneline contains=vimfilerNonMark'
     call add(b:vimfiler.syntaxes, syntax)
   endfor
