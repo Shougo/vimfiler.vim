@@ -139,6 +139,8 @@ function! vimfiler#view#_redraw_screen(...) "{{{
   setlocal modifiable
   setlocal noreadonly
 
+  let savedView = winsaveview()
+
   try
     let last_line = line('.')
 
@@ -159,6 +161,8 @@ function! vimfiler#view#_redraw_screen(...) "{{{
     setlocal readonly
   endtry
 
+  call winrestview(savedView)
+
   let index = index(b:vimfiler.current_files, current_file)
   if index >= 0
     call cursor(vimfiler#get_line_number(index), 0)
@@ -167,10 +171,6 @@ function! vimfiler#view#_redraw_screen(...) "{{{
     call cursor(b:vimfiler.prompt_linenr+1, 0)
   else
     call cursor(last_line, 0)
-  endif
-
-  if last_line != line('.') || (line('$') - line('.')) <= winheight(0)
-    call vimfiler#helper#_set_cursor()
   endif
 
   if is_switch
