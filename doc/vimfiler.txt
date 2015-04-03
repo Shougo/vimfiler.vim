@@ -131,6 +131,26 @@ COMMANDS 					*vimfiler-commands*
 :VimFilerClose {buffer-name}			*:VimFilerClose*
 		Close vimfiler buffer named {buffer-name}.
 
+:Edit [[{source-name}:]{path}]			*:Edit*
+		|:edit| with vimfiler arguments completion.
+		Note: It is available if |g:vimfiler_define_wrapper_commands|
+		is non zero.
+
+:Write [[{source-name}:]{path}]			*:Write*
+		|:write| with vimfiler arguments completion.
+		Note: It is available if |g:vimfiler_define_wrapper_commands|
+		is non zero.
+
+:Source [[{source-name}:]{path}]		*:Source*
+		|:source| with vimfiler arguments completion.
+		Note: It is available if |g:vimfiler_define_wrapper_commands|
+		is non zero.
+
+:Read [[{source-name}:]{path}]			*:Read*
+		|:read| with vimfiler arguments completion.
+		Note: It is available if |g:vimfiler_define_wrapper_commands|
+		is non zero.
+
 ------------------------------------------------------------------------------
 FUNCTIONS					*vimfiler-functions*
 
@@ -207,6 +227,13 @@ g:vimfiler_as_default_explorer		*g:vimfiler_as_default_explorer*
 		If this variable is true, Vim use vimfiler as file manager
 		instead of |netrw|. Note: This variable disables |netrw|
 		explorer function.
+		
+		Default value is 0.
+
+					*g:vimfiler_define_wrapper_commands*
+g:vimfiler_define_wrapper_commands
+		If this variable is true, vimfiler will define wrapper
+		commands(|:Edit|, |:Write|, |:Source|, |:Read|).
 		
 		Default value is 0.
 
