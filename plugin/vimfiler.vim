@@ -109,6 +109,7 @@ function! s:browse_check(path) "{{{
   if bufnr != expand('<abuf>')
     if (!&l:hidden && &l:modified)
           \ || (&l:hidden && &l:bufhidden =~# 'unload\|delete\|wipe')
+          \ || !isdirectory(a:path)
       " Cannot switch
       return
     endif
