@@ -102,19 +102,8 @@ endif
 function! s:browse_check(path) "{{{
   if !g:vimfiler_as_default_explorer
         \ || a:path == ''
+        \ || bufnr('%') != expand('<abuf>')
     return
-  endif
-
-  let bufnr = bufnr('%')
-  if bufnr != expand('<abuf>')
-    if (!&l:hidden && &l:modified)
-          \ || (&l:hidden && &l:bufhidden =~# 'unload\|delete\|wipe')
-          \ || !isdirectory(bufname(expand('<abuf>')))
-      " Cannot switch
-      return
-    endif
-
-    execute expand('<abuf>').'buffer'
   endif
 
   " Disable netrw.
@@ -134,10 +123,6 @@ function! s:browse_check(path) "{{{
 
   if isdirectory(vimfiler#util#expand(path))
     call vimfiler#handler#_event_handler('BufReadCmd')
-  endif
-
-  if bufnr != expand('<abuf>')
-    execute expand('<abuf>').'buffer'
   endif
 endfunction"}}}
 
