@@ -190,8 +190,6 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
         call vimfiler#view#_redraw_screen()
       endif
     endif
-
-    call s:restore_statusline()
   finally
     if exists('winnr')
       execute winnr.'wincmd w'
@@ -233,17 +231,6 @@ function! vimfiler#handler#_event_cursor_moved() "{{{
   finally
     setlocal nomodifiable
   endtry
-endfunction"}}}
-
-function! s:restore_statusline()  "{{{
-  if &filetype !=# 'vimfiler' || !g:vimfiler_force_overwrite_statusline
-    return
-  endif
-
-  if &l:statusline != b:vimfiler.statusline
-    " Restore statusline.
-    let &l:statusline = b:vimfiler.statusline
-  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo
