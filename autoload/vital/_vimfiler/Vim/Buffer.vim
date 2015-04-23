@@ -1,20 +1,26 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:_vital_loaded(V)
+function! s:_vital_loaded(V) abort
   let s:V = a:V
   let s:P = s:V.import('Prelude')
 endfunction
 
-function! s:_vital_depends()
+function! s:_vital_depends() abort
   return ['Prelude']
 endfunction
 
-function! s:is_cmdwin()
-  return bufname('%') ==# '[Command Line]'
-endfunction
+if exists('*getcmdwintype')
+  function! s:is_cmdwin() abort
+    return getcmdwintype() !=# ''
+  endfunction
+else
+  function! s:is_cmdwin() abort
+    return bufname('%') ==# '[Command Line]'
+  endfunction
+endif
 
-function! s:open(buffer, opener)
+function! s:open(buffer, opener) abort
   let save_wildignore = &wildignore
   let &wildignore = ''
   try
@@ -42,17 +48,45 @@ function! s:open(buffer, opener)
   return loaded
 endfunction
 
-" Get selected text in visual mode.
-function! s:get_selected_text()
-    let save_z = getreg('z', 1)
-    let save_z_type = getregtype('z')
+function! s:get_selected_text(...) abort
+  echohl WarningMsg
+  echom "[WARN] s:get_selected_text() is deprecated. Use 's:get_last_selected()'."
+  echohl None
+  return call('s:get_last_selected', a:000)
+endfunction
 
+" Get the last selected text in visual mode
+" without using |gv| to avoid |textlock|.
+" NOTE:
+" * This function uses |gv| only when using |CTRL-V|
+"   because |gv| is the only way to get selected text
+"   when using <C-v>$ .
+"   Please see #192 for the details.
+" * If you don't care about |textlock|,
+"   you can use simple version of this function.
+"   https://github.com/vim-jp/vital.vim/commit/39aae80f3839fdbeebd838ff14d87327a6b889a9
+function! s:get_last_selected() abort
+  if visualmode() ==# "\<C-v>"
+    let save = getreg('"', 1)
+    let save_type = getregtype('"')
     try
-        normal! gv"zy
-        return @z
+      normal! gv""y
+      return @"
     finally
-        call setreg('z', save_z, save_z_type)
+      call setreg('"', save, save_type)
     endtry
+  else
+    let [begin, end] = [getpos("'<"), getpos("'>")]
+    let lastchar = matchstr(getline(end[1])[end[2]-1 :], '.')
+    if begin[1] ==# end[1]
+      let lines = [getline(begin[1])[begin[2]-1 : end[2]-2]]
+    else
+      let lines = [getline(begin[1])[begin[2]-1 :]]
+      \         + (end[1] - begin[1] <# 2 ? [] : getline(begin[1]+1, end[1]-1))
+      \         + [getline(end[1])[: end[2]-2]]
+    endif
+    return join(lines, "\n") . lastchar . (visualmode() ==# "V" ? "\n" : "")
+  endif
 endfunction
 
 

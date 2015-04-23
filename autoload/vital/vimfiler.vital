@@ -1,5 +1,5 @@
 vimfiler
-450727f
+bb1d9cb
 
 Prelude
 Data.List
@@ -7,3 +7,4 @@ Process
 System.Cache
 Vim.Buffer
 Vim.Message
+Data.String
