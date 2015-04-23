@@ -55,20 +55,20 @@ function! s:get_process() "{{{
   endif
   return s:Process
 endfunction"}}}
+function! s:get_string() "{{{
+  if !exists('s:String')
+    let s:String = vimfiler#util#get_vital().import('String')
+  endif
+  return s:Process
+endfunction"}}}
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
 
 function! vimfiler#util#truncate_smart(...)
-  return call(s:get_prelude().truncate_skipping, a:000)
+  return call(s:get_string().truncate_skipping, a:000)
 endfunction
 function! vimfiler#util#truncate(...)
-  return call(s:get_prelude().truncate, a:000)
-endfunction
-function! vimfiler#util#strwidthpart(...)
-  return call(s:get_prelude().strwidthpart, a:000)
-endfunction
-function! vimfiler#util#strwidthpart_reverse(...)
-  return call(s:get_prelude().strwidthpart_reverse, a:000)
+  return call(s:get_string().truncate, a:000)
 endfunction
 function! vimfiler#util#is_windows(...)
   return s:is_windows
