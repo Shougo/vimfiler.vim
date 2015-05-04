@@ -1083,7 +1083,7 @@ EXAMPLES					*vimfiler-examples*
 	" Edit file by tabedit.
 	"call vimfiler#custom#profile('default', 'context', {
 	"      \ 'safe' : 0,
-	"      \ 'edit_action' : 'tabedit',
+	"      \ 'edit_action' : 'tabopen',
 	"      \ })
 	
 	" Like Textmate icons.
