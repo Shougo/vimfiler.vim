@@ -57,9 +57,9 @@ function! s:get_process() "{{{
 endfunction"}}}
 function! s:get_string() "{{{
   if !exists('s:String')
-    let s:String = vimfiler#util#get_vital().import('String')
+    let s:String = vimfiler#util#get_vital().import('Data.String')
   endif
-  return s:Process
+  return s:String
 endfunction"}}}
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
