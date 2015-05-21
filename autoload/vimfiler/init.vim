@@ -222,9 +222,7 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
     wincmd p
   endif
 
-  if a:context.winwidth > 0
-    execute 'vertical resize' a:context.winwidth
-  endif
+  call vimfiler#handler#_event_bufwin_enter(bufnr('%'))
 
   call vimfiler#view#_define_syntax()
   call vimfiler#view#_force_redraw_all_vimfiler()
@@ -382,9 +380,7 @@ function! vimfiler#init#_start(path, ...) "{{{
       let vimfiler = getbufvar(bufnr, 'vimfiler')
       if type(vimfiler) == type({})
             \ && vimfiler.context.buffer_name ==# context.buffer_name
-            \ && ((context.buffer_name !=# 'default'
-            \         && context.buffer_name !=# 'explorer')
-            \      || !exists('t:tabpagebuffer')
+            \ && (!exists('t:tabpagebuffer')
             \      || has_key(t:tabpagebuffer, bufnr))
             \ && (!context.invisible || bufwinnr(bufnr) < 0)
         call vimfiler#init#_switch_vimfiler(bufnr, context, path)
@@ -425,7 +421,6 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
 
   " Set window local options
   call s:buffer_default_settings()
-  call vimfiler#handler#_event_bufwin_enter(a:bufnr)
 
   let b:vimfiler.context = extend(b:vimfiler.context, context)
   call vimfiler#set_current_vimfiler(b:vimfiler)
@@ -434,6 +429,8 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
 
   let directory = vimfiler#util#substitute_path_separator(
         \ a:directory)
+
+  call vimfiler#handler#_event_bufwin_enter(a:bufnr)
 
   " Set current directory.
   if directory != ''
