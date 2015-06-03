@@ -214,6 +214,10 @@ function! vimfiler#handler#_event_bufwin_leave(bufnr) "{{{
 endfunction"}}}
 
 function! vimfiler#handler#_event_cursor_moved() "{{{
+  if !exists('b:vimfiler')
+    return
+  endif
+
   if line('.') <= line('$') / 2 ||
         \ b:vimfiler.all_files_len == len(b:vimfiler.current_files)
     return
