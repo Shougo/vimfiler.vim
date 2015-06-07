@@ -1442,6 +1442,12 @@ function! s:split_edit_file() "{{{
   " Resize.
   execute 'vertical resize'
         \ (winnr('$') == 1 ? winwidth : winwidth/(winnr('$') - 1))
+  " Unset winfixwidth/winfixheight which was specified in
+  " vimfiler#handler#_event_bufwin_enter() to fix #14
+  if context.split
+    setlocal nowinfixwidth
+    setlocal nowinfixheight
+  endif
 endfunction"}}}
 
 " File operations.
