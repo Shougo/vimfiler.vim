@@ -178,8 +178,8 @@ function! vimfiler#util#hide_buffer() "{{{
     close!
     execute bufwinnr(bufnr).'wincmd w'
     call vimfiler#util#hide_buffer()
-  elseif winnr('$') != 1 &&
-        \ (context.split || context.toggle)
+  elseif winnr('$') != 1 && exists('b:vimfiler')
+        \ && (context.split || context.toggle)
     close!
     execute context.vimfiler__prev_winnr . 'wincmd w'
   else
