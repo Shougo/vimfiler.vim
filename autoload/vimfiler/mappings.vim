@@ -410,7 +410,8 @@ function! vimfiler#mappings#do_switch_action(action) "{{{
   call s:switch()
 
   let context = vimfiler#get_context()
-  if context.quit && buflisted(context.alternate_buffer)
+  if !context.force_quit
+        \ && context.quit && buflisted(context.alternate_buffer)
         \ && getbufvar(context.alternate_buffer, '&filetype') !=# 'vimfiler'
         \ && g:vimfiler_restore_alternate_file
     execute 'buffer' context.alternate_buffer
@@ -1260,6 +1261,10 @@ function! s:execute_shell_command() "{{{
         \})
 endfunction"}}}
 function! s:exit(vimfiler) "{{{
+  if !buflisted(a:vimfiler.bufnr)
+    return
+  endif
+
   let another_bufnr = a:vimfiler.another_vimfiler_bufnr
   call vimfiler#util#delete_buffer(a:vimfiler.bufnr)
 
