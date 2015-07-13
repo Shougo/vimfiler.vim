@@ -94,6 +94,7 @@ function! s:action_table.sort.func(candidate) "{{{
       call s:Cache.deletefile(cache_dir, path)
     endif
   else
+    let b:vimfiler.global_sort_type = a:candidate.action__sort
     let b:vimfiler.local_sort_type = a:candidate.action__sort
     if s:Cache.filereadable(cache_dir, path) && !vimfiler#util#is_sudo()
       call s:Cache.writefile(cache_dir, path, [b:vimfiler.local_sort_type])
