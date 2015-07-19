@@ -17,6 +17,22 @@ function! s:suite.sort()
 
   call s:assert.equals(vimfiler#helper#_sort_human(copy(candidates), 0),
         \ vimfiler#helper#_sort_human(copy(candidates), 1))
+
+  let candidates = []
+  call add(candidates, { 'vimfiler__filename' : 'foo1.txt' })
+  call add(candidates, { 'vimfiler__filename' : 'foo10.txt' })
+  call add(candidates, { 'vimfiler__filename' : 'foo2.txt' })
+
+  call s:assert.equals(vimfiler#helper#_sort_human(copy(candidates), 0), [
+        \ { 'vimfiler__filename' : 'foo1.txt' },
+        \ { 'vimfiler__filename' : 'foo2.txt' },
+        \ { 'vimfiler__filename' : 'foo10.txt' }
+        \ ])
+  call s:assert.equals(vimfiler#helper#_sort_human(copy(candidates), 1), [
+        \ { 'vimfiler__filename' : 'foo1.txt' },
+        \ { 'vimfiler__filename' : 'foo2.txt' },
+        \ { 'vimfiler__filename' : 'foo10.txt' }
+        \ ])
 endfunction
 
 " vim:foldmethod=marker:fen:
