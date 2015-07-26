@@ -414,7 +414,7 @@ function! vimfiler#mappings#do_switch_action(action) "{{{
         \ && context.quit && buflisted(context.alternate_buffer)
         \ && getbufvar(context.alternate_buffer, '&filetype') !=# 'vimfiler'
         \ && g:vimfiler_restore_alternate_file
-    execute 'buffer' context.alternate_buffer
+    silent! execute 'buffer' context.alternate_buffer
   endif
 
   call vimfiler#mappings#do_action(a:action, current_linenr)
