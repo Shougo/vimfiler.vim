@@ -1261,7 +1261,7 @@ function! s:execute_shell_command() "{{{
         \})
 endfunction"}}}
 function! s:exit(vimfiler) "{{{
-  if !buflisted(a:vimfiler.bufnr)
+  if !bufexists(a:vimfiler.bufnr)
     return
   endif
 
