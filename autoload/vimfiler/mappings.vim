@@ -150,14 +150,15 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>pushd()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_popd)
         \ :<C-u>call <SID>popd()<CR>
+
+  nmap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
+        \ (<SID>check_opened() ?
+        \ "\<Plug>(vimfiler_unexpand_tree)" :
+        \ "\<Plug>(vimfiler_switch_to_parent_directory)")
   if a:context.explorer
-    nnoremap <buffer><silent><expr> <Plug>(vimfiler_smart_h)
-          \ ":\<C-u>call \<SID>unexpand_tree()\<CR>"
     nmap <buffer><silent> <Plug>(vimfiler_smart_l)
           \ <Plug>(vimfiler_expand_or_edit)
   else
-    nmap <buffer><silent> <Plug>(vimfiler_smart_h)
-          \ <Plug>(vimfiler_switch_to_parent_directory)
     nmap <buffer><silent> <Plug>(vimfiler_smart_l)
           \ <Plug>(vimfiler_cd_or_edit)
   endif
@@ -167,6 +168,8 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
         \ :<C-u>call <SID>cursor_bottom()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree)
         \ :<C-u>call <SID>toggle_tree(0)<CR>
+  nnoremap <buffer><silent> <Plug>(vimfiler_unexpand_tree)
+        \ :<C-u>call <SID>unexpand_tree()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree_recursive)
         \ :<C-u>call <SID>toggle_tree(1)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_cd_input_directory)
@@ -1869,6 +1872,11 @@ function! s:check_force_quit(vimfiler, action) "{{{
         \ ], a:action) < 0
     call s:exit(a:vimfiler)
   endif
+endfunction"}}}
+
+function! s:check_opened() "{{{
+  return get(vimfiler#get_file(), 'vimfiler__is_opened', 0)
+        \ || get(vimfiler#get_file(), 'vimfiler__nest_level', 0) > 0
 endfunction"}}}
 
 " vim: foldmethod=marker

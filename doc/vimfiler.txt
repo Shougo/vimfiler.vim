@@ -764,8 +764,8 @@ Normal mode key mappings.
 		Chooses |unite| action in selected files.
 
 <Plug>(vimfiler_smart_h)			*<Plug>(vimfiler_smart_h)*
-		Switches to parent directory.
-		If enabled "explorer" option, it will unexpand directory tree.
+		If directory tree is opened, it will unexpand directory tree.
+		Else switches to parent directory.
 
 <Plug>(vimfiler_smart_l)			*<Plug>(vimfiler_smart_l)*
 		Switches to cursor directory or edit cursor file.
