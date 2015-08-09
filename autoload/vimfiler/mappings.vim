@@ -1870,7 +1870,7 @@ function! s:check_force_quit(vimfiler, action) "{{{
         \  'vimfiler__move', 'vimfiler__copy', 'vimfiler__delete',
         \  'vimfiler__rename', 'vimfiler__mkdir',
         \ ], a:action) < 0
-    call s:exit(a:vimfiler)
+    call s:close()
   endif
 endfunction"}}}
 
