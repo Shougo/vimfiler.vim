@@ -405,6 +405,7 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
   if !context.tab
     let context.alternate_buffer = bufnr('%')
   endif
+  let context.vimfiler__prev_bufnr = bufnr('%')
   let context.vimfiler__prev_winnr = winnr()
 
   if bufwinnr(a:bufnr) < 0
