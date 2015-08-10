@@ -77,6 +77,7 @@ function! s:initialize_default_options() "{{{
         \ 'buffer_name' : 'default',
         \ 'quit' : 1,
         \ 'force_quit' : 0,
+        \ 'force_hide' : 0,
         \ 'toggle' : 0,
         \ 'create' : 0,
         \ 'simple' : 0,

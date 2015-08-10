@@ -923,6 +923,10 @@ parameters for an option.  You need to escape spaces with "\".
 
 						*vimfiler-options-force-quit*
 		-force-quit
+		Exit the vimfiler buffer after firing an action.
+
+						*vimfiler-options-force-hide*
+		-force-hide
 		Close the vimfiler buffer after firing an action.
 
 						*vimfiler-options-winwidth*
