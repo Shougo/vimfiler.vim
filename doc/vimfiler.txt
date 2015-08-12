@@ -34,6 +34,7 @@ Interface		|vimfiler-interface|
   Key mappings		  |vimfiler-key-mappings|
   Options		  |vimfiler-options|
 Columns			|vimfiler-columns|
+Filters			|vimfiler-filters|
 Examples		|vimfiler-examples|
 Unite sources		|vimfiler-unite-sources|
 Create source		|vimfiler-create-source|
@@ -380,6 +381,11 @@ g:vimfiler_directory_display_top	*g:vimfiler_directory_display_top*
 		This variable controls vimfiler sorts directories as top.
 		
 		Default value is 1.
+
+g:vimfiler_ignore_filters			*g:vimfiler_ignore_filters*
+		This variable controls vimfiler ignore filters.
+
+		Default value is ['matcher_ignore_pattern'].
 
 SOURCES VARIABLES 				*vimfiler-sources-variables*
 
@@ -1074,6 +1080,13 @@ size		File size.
 
 						*vimfiler-column-time*
 time		File time stamp.
+
+==============================================================================
+FILTERS						*vimfiler-filters*
+
+					*vimfiler-filter-matcher_ignore_pattern*
+matcher_ignore_pattern		Ignores |g:vimfiler_ignore_pattern| pattern
+				matched files.
 
 ==============================================================================
 EXAMPLES					*vimfiler-examples*

@@ -965,10 +965,8 @@ function! s:expand_tree(is_recursive) "{{{
   endif
 
   if !a:is_recursive && !b:vimfiler.is_visible_ignore_files
-    for pattern in vimfiler#util#convert2list(
-          \ g:vimfiler_ignore_pattern)
-      call filter(files, 'v:val.vimfiler__filename !~ pattern')
-    endfor
+    let files = vimfiler#helper#_call_filters(
+          \ files, vimfiler#get_context())
   endif
 
   let index = vimfiler#get_file_index(line('.'))

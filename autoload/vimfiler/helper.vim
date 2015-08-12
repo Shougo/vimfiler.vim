@@ -243,12 +243,20 @@ function! vimfiler#helper#_get_buffer_directory(bufnr) "{{{
   return dir
 endfunction"}}}
 
-function! vimfiler#helper#_set_cursor()
+function! vimfiler#helper#_set_cursor() "{{{
   let pos = getpos('.')
   execute 'normal!' (line('.') <= winheight(0) ? 'zb' :
         \ line('$') - line('.') > winheight(0) ? 'zz' : line('$').'zb')
   call setpos('.', pos)
-endfunction
+endfunction"}}}
+
+function! vimfiler#helper#_call_filters(files, context) "{{{
+  let files = a:files
+  for filter in b:vimfiler.filters
+    let files = filter.filter(files, a:context)
+  endfor
+  return files
+endfunction"}}}
 
 function! s:sort(files, type) "{{{
   let ignorecase_save = &ignorecase

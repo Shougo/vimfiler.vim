@@ -59,6 +59,8 @@ let g:vimfiler_expand_jump_to_first_child =
       \ get(g:, 'vimfiler_expand_jump_to_first_child', 1)
 let g:vimfiler_restore_alternate_file =
       \ get(g:, 'vimfiler_restore_alternate_file', 1)
+let g:vimfiler_ignore_filters =
+      \ get(g:, 'vimfiler_ignore_filters', ['matcher_ignore_pattern'])
 
 let g:vimfiler_execute_file_list =
       \ get(g:, 'vimfiler_execute_file_list', {})
@@ -94,6 +96,7 @@ endif
 let s:manager = vimfiler#util#get_vital().import('Vim.Buffer')
 
 let s:loaded_columns = {}
+let s:loaded_filters = {}
 
 function! vimfiler#init#_initialize() "{{{
   " Dummy initialize
@@ -194,6 +197,8 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
   let b:vimfiler.columns = vimfiler#init#_columns(
         \ b:vimfiler.column_names, b:vimfiler.context)
   let b:vimfiler.syntaxes = []
+  let b:vimfiler.filters = vimfiler#init#_filters(
+        \ g:vimfiler_ignore_filters, b:vimfiler.context)
 
   let b:vimfiler.global_sort_type = a:context.sort_type
   let b:vimfiler.local_sort_type = a:context.sort_type
@@ -328,6 +333,32 @@ function! vimfiler#init#_columns(columns, context) "{{{
   endfor
 
   return columns
+endfunction"}}}
+function! vimfiler#init#_filters(filters, context) "{{{
+  let filters = []
+
+  for column in a:filters
+    if !has_key(s:loaded_filters, column)
+      let name = substitute(column, '^[^/_]\+\zs[/_].*$', '', '')
+
+      for define in map(split(globpath(&runtimepath,
+            \ 'autoload/vimfiler/filters/'.name.'*.vim'), '\n'),
+            \ "vimfiler#filters#{fnamemodify(v:val, ':t:r')}#define()")
+        for dict in vimfiler#util#convert2list(define)
+          if !empty(dict) && !has_key(s:loaded_filters, dict.name)
+            let s:loaded_filters[dict.name] = dict
+          endif
+        endfor
+        unlet define
+      endfor
+    endif
+
+    if has_key(s:loaded_filters, column)
+      call add(filters, s:loaded_filters[column])
+    endif
+  endfor
+
+  return filters
 endfunction"}}}
 
 function! vimfiler#init#_start(path, ...) "{{{

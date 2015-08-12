@@ -121,11 +121,8 @@ function! vimfiler#view#_redraw_screen(...) "{{{
         \ copy(b:vimfiler.original_files),
         \ { 'input' : b:vimfiler.current_mask })
   if !b:vimfiler.is_visible_ignore_files
-    for pattern in vimfiler#util#convert2list(
-          \ g:vimfiler_ignore_pattern)
-      call filter(b:vimfiler.all_files,
-            \  "v:val.vimfiler__filename !~? pattern")
-    endfor
+    let b:vimfiler.all_files = vimfiler#helper#_call_filters(
+          \ b:vimfiler.all_files, vimfiler#get_context())
     let b:vimfiler.all_files =
           \ s:check_tree(b:vimfiler.all_files)
   endif
