@@ -1,5 +1,5 @@
 "=============================================================================
-" FILE: matcher_ignore_pattern.vim
+" FILE: matcher_ignore_wildignore.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
@@ -26,20 +26,19 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! vimfiler#filters#matcher_ignore_pattern#define()
+function! vimfiler#filters#matcher_ignore_wildignore#define()
   return s:filter
 endfunction"}}}
 
 let s:filter = {
-      \ 'name' : 'matcher_ignore_pattern',
-      \ 'description' : 'ignore g:vimfiler_ignore_pattern matched files',
+      \ 'name' : 'matcher_ignore_wildignore',
+      \ 'description' : 'ignore wildignore matched files',
       \ }
 
 function! s:filter.filter(files, context) "{{{
-  for pattern in vimfiler#util#convert2list(
-        \ g:vimfiler_ignore_pattern)
+  for pattern in unite#filters#globs2vim_patterns(split(&wildignore, ','))
     call filter(a:files,
-          \  "v:val.vimfiler__filename !~? pattern")
+          \  "v:val.action__path !~? pattern")
   endfor
   return a:files
 endfunction"}}}

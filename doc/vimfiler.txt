@@ -1084,9 +1084,12 @@ time		File time stamp.
 ==============================================================================
 FILTERS						*vimfiler-filters*
 
-					*vimfiler-filter-matcher_ignore_pattern*
+				*vimfiler-filter-matcher_ignore_pattern*
 matcher_ignore_pattern		Ignores |g:vimfiler_ignore_pattern| pattern
 				matched files.
+
+				*vimfiler-filter-matcher_ignore_wildignore*
+matcher_ignore_wildignore	Ignores 'wildignore' pattern matched files.
 
 ==============================================================================
 EXAMPLES					*vimfiler-examples*
