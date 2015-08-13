@@ -1091,6 +1091,11 @@ matcher_ignore_pattern		Ignores |g:vimfiler_ignore_pattern| pattern
 				*vimfiler-filter-matcher_ignore_wildignore*
 matcher_ignore_wildignore	Ignores 'wildignore' pattern matched files.
 
+				*vimfiler-filter-matcher_ignore_files*
+matcher_ignore_files	Ignores the files in project ignore
+			files(".agignore", ".gitignore", ".hgignore").
+			Note:  It is slow filter.
+
 ==============================================================================
 EXAMPLES					*vimfiler-examples*
 >
