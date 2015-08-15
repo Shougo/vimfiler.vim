@@ -52,7 +52,7 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
     if !empty(unite#loaded_sources_list()) && a:source_name !=# 'file'
       " File not found.
       call vimfiler#util#print_error(
-            \ printf('[vimfiler] Can''t open "%s".', join(a:source_args, ':')))
+            \ printf('Can''t open "%s".', join(a:source_args, ':')))
     endif
 
     doautocmd BufRead
@@ -72,7 +72,7 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
     call vimfiler#init#_vimfiler_file(
           \ a:source_args, info[0], info[1])
   else
-    call vimfiler#util#print_error('[vimfiler] Unknown filetype.')
+    call vimfiler#util#print_error('Unknown filetype.')
   endif
 
   if bufnr('%') != bufnr
@@ -102,7 +102,7 @@ function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
     if !empty(unite#loaded_sources_list()) && a:source_name !=# 'file'
       " File not found.
       call vimfiler#util#print_error(
-            \ printf('[vimfiler] Can''t open "%s".', join(a:source_args, ':')))
+            \ printf('Can''t open "%s".', join(a:source_args, ':')))
     endif
 
     return
@@ -111,7 +111,7 @@ function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
 
   if type !=# 'file'
     call vimfiler#util#print_error(
-          \ printf('[vimfiler] "%s" is not a file.', join(a:source_args, ':')))
+          \ printf('"%s" is not a file.', join(a:source_args, ':')))
     return
   endif
 

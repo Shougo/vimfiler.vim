@@ -76,8 +76,9 @@ endfunction
 function! vimfiler#util#is_win_path(path)
   return a:path =~ '^\a\?:' || a:path =~ '^\\\\[^\\]\+\\'
 endfunction
-function! vimfiler#util#print_error(...)
-  return call(s:get_message().error, a:000)
+function! vimfiler#util#print_error(msg)
+  let msg = '[vimfiler] ' . a:msg
+  return call(s:get_message().error, [msg])
 endfunction
 function! vimfiler#util#escape_file_searching(...)
   return call(s:get_prelude().escape_file_searching, a:000)

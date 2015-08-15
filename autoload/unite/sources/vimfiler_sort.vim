@@ -79,7 +79,7 @@ let s:action_table.sort = {
       \ }
 function! s:action_table.sort.func(candidate) "{{{
   if &filetype != 'vimfiler'
-    call unite#print_error('[vimfiler] Current vimfiler is not found.')
+    call unite#print_error('Current vimfiler is not found.')
     return
   endif
 

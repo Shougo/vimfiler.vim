@@ -1217,7 +1217,7 @@ function! s:edit_binary_file() "{{{
 
   if !exists(':Vinarise')
     call vimfiler#util#print_error(
-          \ '[vimfiler] vinarise is not found. Please install it.')
+          \ 'vinarise is not found. Please install it.')
     return
   endif
 
@@ -1583,7 +1583,7 @@ endfunction"}}}
 function! s:clipboard_paste() "{{{
   let clipboard = vimfiler#variables#get_clipboard()
   if empty(clipboard.files)
-    call vimfiler#util#print_error('[vimfiler] Clipboard is empty.')
+    call vimfiler#util#print_error('Clipboard is empty.')
     return
   endif
 
@@ -1654,7 +1654,7 @@ function! vimfiler#mappings#_change_vim_current_dir() "{{{
   let vimfiler = vimfiler#get_current_vimfiler()
   if vimfiler.source !=# 'file'
     call vimfiler#util#print_error(
-          \ '[vimfiler] Invalid operation in not file source.')
+          \ 'Invalid operation in not file source.')
     return
   endif
 
@@ -1667,7 +1667,7 @@ endfunction"}}}
 function! s:grep() "{{{
   if !vimfiler#util#has_vimproc()
     call vimfiler#util#print_error(
-          \ '[vimfiler] Sorry, vimproc is not installed. '.
+          \ 'Sorry, vimproc is not installed. '.
           \ 'This mapping use vimproc.')
     return
   endif
@@ -1685,7 +1685,7 @@ endfunction"}}}
 function! s:find() "{{{
   if !vimfiler#util#has_vimproc()
     call vimfiler#util#print_error(
-          \ '[vimfiler] Sorry, vimproc is not installed. '.
+          \ 'Sorry, vimproc is not installed. '.
           \ 'This mapping use vimproc.')
     return
   endif
@@ -1738,7 +1738,7 @@ endfunction"}}}
 function! s:quick_look() "{{{
   if !vimfiler#util#has_vimproc()
     call vimfiler#util#print_error(
-          \ '[vimfiler] vimproc is needed for this feature.')
+          \ 'vimproc is needed for this feature.')
     return
   endif
 
@@ -1755,7 +1755,7 @@ function! s:quick_look() "{{{
     call vimproc#system_gui(command)
   catch /vimproc#get_command_name: /
     call vimfiler#util#print_error(
-          \ '[vimfiler] g:vimfiler_quick_look_command "'.
+          \ 'g:vimfiler_quick_look_command "'.
           \ g:vimfiler_quick_look_command.'" is not executable.')
     return
   endtry
@@ -1815,7 +1815,7 @@ function! s:unmapping_file_operations() "{{{
 endfunction"}}}
 function! s:disable_operation() "{{{
   call vimfiler#util#print_error(
-        \ '[vimfiler] In safe mode, this operation is disabled.')
+        \ 'In safe mode, this operation is disabled.')
 endfunction"}}}
 
 function! s:toggle_simple_mode() "{{{

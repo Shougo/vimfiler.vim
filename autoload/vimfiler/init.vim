@@ -364,18 +364,18 @@ endfunction"}}}
 function! vimfiler#init#_start(path, ...) "{{{
   if vimfiler#util#is_cmdwin()
     call vimfiler#util#print_error(
-          \ '[vimfiler] Command line buffer is detected!')
+          \ 'Command line buffer is detected!')
     call vimfiler#util#print_error(
-          \ '[vimfiler] Please close command line buffer.')
+          \ 'Please close command line buffer.')
     return
   endif
 
   " Detect autochdir option. "{{{
   if exists('+autochdir') && &autochdir
     call vimfiler#util#print_error(
-          \ '[vimfiler] Detected autochdir!')
+          \ 'Detected autochdir!')
     call vimfiler#util#print_error(
-          \ '[vimfiler] vimfiler don''t work if you set autochdir option.')
+          \ 'vimfiler don''t work if you set autochdir option.')
     return
   endif
   "}}}
