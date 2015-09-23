@@ -1868,7 +1868,7 @@ function! s:check_force_quit(vimfiler, action) "{{{
   if (a:vimfiler.context.force_quit || a:vimfiler.context.force_hide)
         \ && index([
         \  'vimfiler__move', 'vimfiler__copy', 'vimfiler__delete',
-        \  'vimfiler__rename', 'vimfiler__mkdir',
+        \  'vimfiler__rename', 'vimfiler__mkdir', 'vimfiler__newfile',
         \ ], a:action) < 0
     if a:vimfiler.context.force_quit
       call s:exit(a:vimfiler)
