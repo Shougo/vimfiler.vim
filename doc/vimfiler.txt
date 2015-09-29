@@ -39,6 +39,7 @@ Examples		|vimfiler-examples|
 Unite sources		|vimfiler-unite-sources|
 Create source		|vimfiler-create-source|
 Create kind		|vimfiler-create-kind|
+Extensions		|vimfiler-extensions|
 FAQ			|vimfiler-faq|
 
 ==============================================================================
@@ -1223,6 +1224,13 @@ Below "vimfiler__" prefixed actions are used for vimfiler.
 	vimfiler__execute	Execute files with associated program.
 	vimfiler__external_filer
 				Execute files with external file explorer.
+
+==============================================================================
+EXTENSIONS					*vimfiler-extensions*
+
+vimfiler-prompt:
+	https://github.com/romgrk/vimfiler-prompt
+	It navigates vimfiler buffer with auto completion.
 
 ==============================================================================
 FAQ						*vimfiler-faq*
