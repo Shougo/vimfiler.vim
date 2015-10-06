@@ -366,7 +366,11 @@ function! vimfiler#view#_get_max_len(files) "{{{
     silent execute 'sign unplace buffer='.bufnr('%')
   endif
 
-  return max([winwidth(0) - padding, 10])
+  let max_len = max([winwidth(0) - padding, 10])
+  if b:vimfiler.context.fnamewidth > 0
+    let max_len = min([max_len, b:vimfiler.context.fnamewidth])
+  endif
+  return max_len
 endfunction"}}}
 function! vimfiler#view#_define_syntax() "{{{
   for column in filter(

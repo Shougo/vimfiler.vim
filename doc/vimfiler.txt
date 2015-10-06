@@ -950,6 +950,11 @@ parameters for an option.  You need to escape spaces with "\".
 		Specifies the height of a vimfiler buffer.
 		Note: If this option is 0, auto resize feature is disabled.
 
+						*vimfiler-options-fnamewidth*
+		-fnamewidth={filename-width}
+		Specifies the filename width of a vimfiler buffer.
+		Note: If this option is less than equal 0, it is disabled.
+
 						*vimfiler-options-direction*
 		-direction={direction}
 		Defines split position rule. The default value is "topleft".

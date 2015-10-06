@@ -107,6 +107,7 @@ function! s:initialize_default_options() "{{{
         \ 'edit_action' : 'open',
         \ 'split_action' : 'right',
         \ 'preview_action' : 'preview',
+        \ 'fnamewidth' : -1,
         \ 'vimfiler__prev_bufnr' : bufnr('%'),
         \ 'vimfiler__prev_winnr' : winnr(),
         \ 'vimfiler__winfixwidth' : &l:winfixwidth,
