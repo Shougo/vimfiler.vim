@@ -62,12 +62,14 @@ function! s:common_head(strs) abort
   return pat == '' ? '' : matchstr(strs[-1], '\C^\%[' . pat . ']')
 endfunction
 
+" @vimlint(EVL101, 1, l:_)
 " Split to two elements of List. ([left, right])
 " e.g.: s:split3('neocomplcache', 'compl') returns ['neo', 'compl', 'cache']
 function! s:split_leftright(expr, pattern) abort
   let [left, _, right] = s:split3(a:expr, a:pattern)
   return [left, right]
 endfunction
+" @vimlint(EVL101, 0, l:pattern)
 
 function! s:split3(expr, pattern) abort
   let ERROR = ['', '', '']
