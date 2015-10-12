@@ -69,7 +69,7 @@ function! s:split_leftright(expr, pattern) abort
   let [left, _, right] = s:split3(a:expr, a:pattern)
   return [left, right]
 endfunction
-" @vimlint(EVL101, 0, l:pattern)
+" @vimlint(EVL101, 0, l:_)
 
 function! s:split3(expr, pattern) abort
   let ERROR = ['', '', '']
