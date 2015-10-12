@@ -1,4 +1,5 @@
-" Utilities for output cache.
+" Note:
+"   This module is deprecated. Use a new `Syste.Cache` instead.
 
 let s:save_cpo = &cpo
 set cpo&vim

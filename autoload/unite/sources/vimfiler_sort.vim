@@ -30,7 +30,7 @@ function! unite#sources#vimfiler_sort#define() "{{{
   return s:source
 endfunction"}}}
 
-let s:Cache = vimfiler#util#get_vital().import('System.Cache')
+let s:Cache = vimfiler#util#get_vital().import('System.Cache.Deprecated')
 
 let s:source = {
       \ 'name' : 'vimfiler/sort',

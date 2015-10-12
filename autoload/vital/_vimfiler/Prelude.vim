@@ -68,12 +68,9 @@ function! s:is_dict(Value) abort
   return type(a:Value) ==# s:__TYPE_DICT
 endfunction
 
-function! s:truncate_smart(str, max, footer_width, separator) abort
-  echoerr 'Prelude.truncate_smart() is obsolete. Use its truncate_skipping() instead; they are equivalent.'
-  return s:truncate_skipping(a:str, a:max, a:footer_width, a:separator)
-endfunction
-
 function! s:truncate_skipping(str, max, footer_width, separator) abort
+  call s:_warn_deprecated("truncate_skipping", "Data.String.truncate_skipping")
+
   let width = s:wcswidth(a:str)
   if width <= a:max
     let ret = a:str
@@ -89,6 +86,8 @@ endfunction
 function! s:truncate(str, width) abort
   " Original function is from mattn.
   " http://github.com/mattn/googlereader-vim/tree/master
+
+  call s:_warn_deprecated("truncate", "Data.String.truncate")
 
   if a:str =~# '^[\x00-\x7f]*$'
     return len(a:str) < a:width ?
@@ -110,6 +109,8 @@ function! s:truncate(str, width) abort
 endfunction
 
 function! s:strwidthpart(str, width) abort
+  call s:_warn_deprecated("strwidthpart", "Data.String.strwidthpart")
+
   if a:width <= 0
     return ''
   endif
@@ -124,6 +125,8 @@ function! s:strwidthpart(str, width) abort
   return ret
 endfunction
 function! s:strwidthpart_reverse(str, width) abort
+  call s:_warn_deprecated("strwidthpart_reverse", "Data.String.strwidthpart_reverse")
+
   if a:width <= 0
     return ''
   endif
@@ -141,10 +144,13 @@ endfunction
 if v:version >= 703
   " Use builtin function.
   function! s:wcswidth(str) abort
+    call s:_warn_deprecated("wcswidth", "Data.String.wcswidth")
     return strwidth(a:str)
   endfunction
 else
   function! s:wcswidth(str) abort
+    call s:_warn_deprecated("wcswidth", "Data.String.wcswidth")
+
     if a:str =~# '^[\x00-\x7f]*$'
       return strlen(a:str)
     end
@@ -209,9 +215,13 @@ function! s:is_unix() abort
   return s:is_unix
 endfunction
 
-function! s:_deprecated2(fname) abort
-  echomsg printf("Vital.Prelude.%s is deprecated!",
-        \ a:fname)
+function! s:_warn_deprecated(name, alternative) abort
+  try
+    echohl Error
+    echomsg "Prelude." . a:name . " is deprecated!  Please use " . a:alternative . " instead."
+  finally
+    echohl None
+  endtry
 endfunction
 
 function! s:smart_execute_command(action, word) abort
@@ -243,13 +253,13 @@ endfunction
 function! s:input_helper(funcname, args) abort
   let success = 0
   if inputsave() !=# success
-    throw 'inputsave() failed'
+    throw 'vital: Prelude: inputsave() failed'
   endif
   try
     return call(a:funcname, a:args)
   finally
     if inputrestore() !=# success
-      throw 'inputrestore() failed'
+      throw 'vital: Prelude: inputrestore() failed'
     endif
   endtry
 endfunction
@@ -258,16 +268,6 @@ function! s:set_default(var, val) abort
   if !exists(a:var) || type({a:var}) != type(a:val)
     let {a:var} = a:val
   endif
-endfunction
-
-function! s:set_dictionary_helper(variable, keys, pattern) abort
-  call s:_deprecated2('set_dictionary_helper')
-
-  for key in split(a:keys, '\s*,\s*')
-    if !has_key(a:variable, key)
-      let a:variable[key] = a:pattern
-    endif
-  endfor
 endfunction
 
 function! s:substitute_path_separator(path) abort

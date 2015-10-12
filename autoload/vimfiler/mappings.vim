@@ -25,7 +25,7 @@
 
 scriptencoding utf-8
 
-let s:Cache = vimfiler#util#get_vital().import('System.Cache')
+let s:Cache = vimfiler#util#get_vital().import('System.Cache.Deprecated')
 
 function! s:SID_PREFIX()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')

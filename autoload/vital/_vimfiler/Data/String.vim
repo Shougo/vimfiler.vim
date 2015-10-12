@@ -40,6 +40,15 @@ function! s:reverse(str) abort
   return join(reverse(split(a:str, '.\zs')), '')
 endfunction
 
+function! s:starts_with(str, prefix) abort
+  return stridx(a:str, a:prefix) == 0
+endfunction
+
+function! s:ends_with(str, suffix) abort
+  let idx = strridx(a:str, a:suffix)
+  return 0 <= idx && idx + len(a:suffix) == len(a:str)
+endfunction
+
 function! s:common_head(strs) abort
   if empty(a:strs)
     return ''
@@ -154,15 +163,15 @@ endfunction "}}}
 " NOTE _concat() is just a copy of Data.List.concat().
 " FIXME don't repeat yourself
 function! s:_split_by_wcswidth_once(body, x) abort
-  let fst = s:P.strwidthpart(a:body, a:x)
-  let snd = s:P.strwidthpart_reverse(a:body, s:P.wcswidth(a:body) - s:P.wcswidth(fst))
+  let fst = s:strwidthpart(a:body, a:x)
+  let snd = s:strwidthpart_reverse(a:body, s:wcswidth(a:body) - s:wcswidth(fst))
   return [fst, snd]
 endfunction
 
 function! s:_split_by_wcswidth(body, x) abort
   let memo = []
   let body = a:body
-  while s:P.wcswidth(body) > a:x
+  while s:wcswidth(body) > a:x
     let [tmp, body] = s:_split_by_wcswidth_once(body, a:x)
     call add(memo, tmp)
   endwhile
@@ -172,6 +181,14 @@ endfunction
 
 function! s:trim(str) abort
   return matchstr(a:str,'^\s*\zs.\{-}\ze\s*$')
+endfunction
+
+function! s:trim_start(str) abort
+  return matchstr(a:str,'^\s*\zs.\{-}$')
+endfunction
+
+function! s:trim_end(str) abort
+  return matchstr(a:str,'^.\{-}\ze\s*$')
 endfunction
 
 function! s:wrap(str,...) abort

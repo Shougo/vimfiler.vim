@@ -29,7 +29,7 @@ set cpo&vim
 let g:vimfiler_min_cache_files =
       \ get(g:, 'vimfiler_min_cache_files', 100)
 
-let s:Cache = vimfiler#util#get_vital().import('System.Cache')
+let s:Cache = vimfiler#util#get_vital().import('System.Cache.Deprecated')
 
 function! vimfiler#view#_force_redraw_screen(...) "{{{
   let is_manualed = get(a:000, 0, 0)
