@@ -36,8 +36,8 @@ let s:filter = {
       \ }
 
 function! s:filter.filter(files, context) "{{{
-  for pattern in vimfiler#util#convert2list(
-        \ g:vimfiler_ignore_pattern)
+  for pattern in filter(vimfiler#util#convert2list(
+        \ g:vimfiler_ignore_pattern), "v:val != ''")
     call filter(a:files,
           \  "v:val.vimfiler__filename !~? pattern")
   endfor

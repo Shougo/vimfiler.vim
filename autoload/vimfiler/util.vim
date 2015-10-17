@@ -230,7 +230,7 @@ function! s:buflisted(bufnr) "{{{
 endfunction"}}}
 
 function! vimfiler#util#convert2list(expr) "{{{
-  return type(a:expr) ==# type([]) ? a:expr : [a:expr]
+  return type(a:expr) ==# type([]) ? copy(a:expr) : [a:expr]
 endfunction"}}}
 function! vimfiler#util#get_vimfiler_winnr(buffer_name) "{{{
   for winnr in filter(range(1, winnr('$')),
