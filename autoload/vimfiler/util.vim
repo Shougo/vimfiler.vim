@@ -183,16 +183,14 @@ function! vimfiler#util#hide_buffer(...) "{{{
   elseif winnr('$') != 1 && (context.split || context.toggle)
     call vimfiler#util#winclose(bufwinnr(bufnr))
   else
-    call vimfiler#util#alternate_buffer()
+    call vimfiler#util#alternate_buffer(context)
   endif
 endfunction"}}}
-function! vimfiler#util#alternate_buffer() "{{{
-  let context = vimfiler#get_context()
-
-  if s:buflisted(context.alternate_buffer)
-        \ && getbufvar(context.alternate_buffer, '&filetype') !=# 'vimfiler'
+function! vimfiler#util#alternate_buffer(context) "{{{
+  if s:buflisted(a:context.alternate_buffer)
+        \ && getbufvar(a:context.alternate_buffer, '&filetype') !=# 'vimfiler'
         \ && g:vimfiler_restore_alternate_file
-    execute 'buffer' context.alternate_buffer
+    execute 'buffer' a:context.alternate_buffer
     return
   endif
 

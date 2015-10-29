@@ -65,7 +65,7 @@ function! vimfiler#set_extensions(kind, exts) "{{{
   endfor
 endfunction"}}}
 function! vimfiler#do_action(action) "{{{
-  return printf(":\<C-u>call vimfiler#mappings#do_action(%s)\<CR>",
+  return printf(":\<C-u>call vimfiler#mappings#do_action(b:vimfiler,%s)\<CR>",
         \             string(a:action))
 endfunction"}}}
 function! vimfiler#do_switch_action(action) "{{{
@@ -81,27 +81,6 @@ endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions. "{{{
-function! vimfiler#get_current_vimfiler() "{{{
-  return exists('b:vimfiler') ? b:vimfiler : s:current_vimfiler
-endfunction"}}}
-function! vimfiler#set_current_vimfiler(vimfiler) "{{{
-  let s:current_vimfiler = a:vimfiler
-  call unite#set_current_unite(a:vimfiler.unite)
-endfunction"}}}
-function! vimfiler#get_context() "{{{
-  return vimfiler#get_current_vimfiler().context
-endfunction"}}}
-function! vimfiler#set_context(context) "{{{
-  let old_context = vimfiler#get_context()
-
-  if exists('b:vimfiler')
-    let b:vimfiler.context = a:context
-  else
-    let s:current_vimfiler.context = a:context
-  endif
-
-  return old_context
-endfunction"}}}
 function! vimfiler#start(path, ...) "{{{
   return call('vimfiler#init#_start', [a:path] + a:000)
 endfunction"}}}
@@ -115,15 +94,15 @@ endfunction"}}}
 function! vimfiler#redraw_screen() "{{{
   return vimfiler#view#_redraw_screen()
 endfunction"}}}
-function! vimfiler#get_marked_files() "{{{
-  return filter(copy(b:vimfiler.current_files),
+function! vimfiler#get_marked_files(vimfiler) "{{{
+  return filter(copy(a:vimfiler.current_files),
         \ 'v:val.vimfiler__is_marked')
 endfunction"}}}
-function! vimfiler#get_marked_filenames() "{{{
-  return map(vimfiler#get_marked_files(), 'v:val.action__path')
+function! vimfiler#get_marked_filenames(vimfiler) "{{{
+  return map(vimfiler#get_marked_files(a:vimfiler), 'v:val.action__path')
 endfunction"}}}
 function! vimfiler#get_escaped_marked_files() "{{{
-  return map(vimfiler#get_marked_filenames(),
+  return map(vimfiler#get_marked_filenames(b:vimfiler),
         \ '"\"" . v:val . "\""')
 endfunction"}}}
 function! vimfiler#get_filename(...) "{{{

@@ -79,8 +79,6 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
     " Restore window.
     execute bufwinnr(bufnr).'wincmd w'
   endif
-
-  call vimfiler#set_current_vimfiler(b:vimfiler)
 endfunction"}}}
 
 function! s:on_BufWriteCmd(source_name, source_args, context)  "{{{1

@@ -98,16 +98,8 @@ function! vimfiler#view#_redraw_screen(...) "{{{
   let is_switch = &filetype !=# 'vimfiler'
   let save_winnr = winnr()
   if is_switch
-    " Switch vimfiler.
-    let vimfiler = vimfiler#get_current_vimfiler()
-
-    let winnr = bufwinnr(vimfiler.bufnr)
-    if winnr < 0
-      " Not vimfiler window.
-      return
-    endif
-
-    execute winnr . 'wincmd w'
+    " Not vimfiler window.
+    return
   endif
 
   if !has_key(b:vimfiler, 'original_files')
@@ -122,7 +114,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
         \ { 'input' : b:vimfiler.current_mask })
   if !b:vimfiler.is_visible_ignore_files
     let b:vimfiler.all_files = vimfiler#helper#_call_filters(
-          \ b:vimfiler.all_files, vimfiler#get_context())
+          \ b:vimfiler.all_files, b:vimfiler.context)
     let b:vimfiler.all_files =
           \ s:check_tree(b:vimfiler.all_files)
   endif
@@ -237,7 +229,7 @@ function! s:redraw_prompt() "{{{
   endif
   let b:vimfiler.status = prefix .  dir . mask . sort . safe
 
-  let context = vimfiler#get_context()
+  let context = b:vimfiler.context
 
   " Append up directory.
   let modifiable_save = &l:modifiable
