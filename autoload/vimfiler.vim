@@ -101,8 +101,8 @@ endfunction"}}}
 function! vimfiler#get_marked_filenames(vimfiler) "{{{
   return map(vimfiler#get_marked_files(a:vimfiler), 'v:val.action__path')
 endfunction"}}}
-function! vimfiler#get_escaped_marked_files() "{{{
-  return map(vimfiler#get_marked_filenames(b:vimfiler),
+function! vimfiler#get_escaped_marked_files(vimfiler) "{{{
+  return map(vimfiler#get_marked_filenames(vimfiler),
         \ '"\"" . v:val . "\""')
 endfunction"}}}
 function! vimfiler#get_filename(...) "{{{

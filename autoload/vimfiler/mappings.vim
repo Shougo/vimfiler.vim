@@ -1201,7 +1201,7 @@ endfunction"}}}
 function! s:popup_shell() "{{{
   call vimfiler#mappings#do_current_dir_action(
         \ b:vimfiler, 'vimfiler__shell', {
-        \ 'vimfiler__files' : vimfiler#get_escaped_marked_files(),
+        \ 'vimfiler__files' : vimfiler#get_escaped_marked_files(b:vimfiler),
         \})
 endfunction"}}}
 function! s:edit_binary_file() "{{{
@@ -1240,11 +1240,11 @@ function! s:execute_shell_command() "{{{
   if special == '*'
     let command = substitute(command,
         \'\s\+\zs[*]\ze\%([;|[:space:]]\|$\)',
-        \ join(vimfiler#get_escaped_marked_files()), 'g')
+        \ join(vimfiler#get_escaped_marked_files(b:vimfiler)), 'g')
   elseif !empty(marked_files)
     let base_command = command
     let command = ''
-    for file in vimfiler#get_escaped_marked_files()
+    for file in vimfiler#get_escaped_marked_files(b:vimfiler)
       if special == '?'
         let command .= substitute(base_command,
               \'\s\+\zs[?]\ze\%([;|[:space:]]\|$\)', file, 'g') . '; '
