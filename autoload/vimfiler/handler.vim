@@ -159,12 +159,12 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
       return
     endif
 
-    let vimfiler = vimfiler#get_current_vimfiler()
+    let vimfiler = b:vimfiler
     if !has_key(vimfiler, 'context')
       return
     endif
 
-    let context = vimfiler#get_context()
+    let context = b:vimfiler.context
     if context.winwidth > 0
       execute 'vertical resize' context.winwidth
 

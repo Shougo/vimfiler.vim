@@ -742,7 +742,7 @@ function! s:mark_current_line() "{{{
   endtry
 endfunction"}}}
 function! s:toggle_mark_all_lines() "{{{
-  for file in vimfiler#get_current_vimfiler().all_files
+  for file in b:vimfiler.all_files
     let file.vimfiler__is_marked = !file.vimfiler__is_marked
     let file.vimfiler__marked_time = localtime()
   endfor
@@ -772,8 +772,7 @@ function! s:mark_similar_lines() "{{{
   endwhile
 
   let pattern = join(idents, '.\+')
-  for file in filter(copy(
-        \ vimfiler#get_current_vimfiler().current_files),
+  for file in filter(copy(b:vimfiler.current_files),
         \ 'v:val.vimfiler__filename =~# pattern')
     let file.vimfiler__is_marked = 1
     let file.vimfiler__marked_time = localtime()
@@ -797,13 +796,14 @@ function! s:toggle_mark_lines(start, end) "{{{
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:clear_mark_all_lines() "{{{
-  for file in vimfiler#get_current_vimfiler().current_files
+  for file in b:vimfiler.current_files
     let file.vimfiler__is_marked = 0
   endfor
 
   call vimfiler#redraw_screen()
 endfunction"}}}
 function! s:execute_vimfiler_associated() "{{{
+  let vimfiler = b:vimfiler
   let bufnr = bufnr('%')
   call s:switch()
   call unite#start(['vimfiler/execute'], {
@@ -812,7 +812,6 @@ function! s:execute_vimfiler_associated() "{{{
         \ 'script' : 1,
         \ 'vimfiler__winnr' : bufwinnr(bufnr),
         \ })
-  let vimfiler = vimfiler#get_current_vimfiler()
   call s:check_force_quit(vimfiler, '')
 endfunction"}}}
 function! s:execute_system_associated() "{{{
@@ -863,7 +862,7 @@ function! s:yank_full_path() "{{{
     " Use cursor filename.
     let filename = vimfiler#get_filename()
     if filename == '..' || empty(vimfiler#get_file())
-      let filename = vimfiler#get_current_vimfiler().current_dir
+      let filename = b:vimfiler.current_dir
     else
       let filename = vimfiler#get_file().action__path
     endif
@@ -1296,7 +1295,7 @@ function! s:close(vimfiler) "{{{
   endif
 endfunction"}}}
 function! vimfiler#mappings#create_another_vimfiler() "{{{
-  let current_vimfiler = vimfiler#get_current_vimfiler()
+  let current_vimfiler = b:vimfiler
   let current_bufnr = bufnr('%')
   let line = line('.')
 
@@ -1343,7 +1342,7 @@ function! vimfiler#mappings#switch_another_vimfiler(...) "{{{
     endif
   else
     " Open another vimfiler buffer.
-    let current_vimfiler = vimfiler#get_current_vimfiler()
+    let current_vimfiler = b:vimfiler
     let original_context = deepcopy(vimfiler#get_context())
 
     let context = deepcopy(original_context)
@@ -1432,8 +1431,7 @@ function! s:choose_action() "{{{
   endif
 
   call unite#mappings#_choose_action(marked_files, {
-        \ 'vimfiler__current_directory' :
-        \   vimfiler#get_current_vimfiler().current_dir,
+        \ 'vimfiler__current_directory' : b:vimfiler.current_dir,
         \ })
 endfunction"}}}
 function! s:split_edit_file() "{{{
@@ -1649,7 +1647,7 @@ function! s:execute_external_filer() "{{{
   endif
 endfunction"}}}
 function! vimfiler#mappings#_change_vim_current_dir() "{{{
-  let vimfiler = vimfiler#get_current_vimfiler()
+  let vimfiler = b:vimfiler
   if vimfiler.source !=# 'file'
     call vimfiler#util#print_error(
           \ 'Invalid operation in not file source.')
@@ -1706,7 +1704,7 @@ function! s:cd_file_directory() "{{{
   endif
 endfunction"}}}
 function! s:cd_input_directory() "{{{
-  let vimfiler = vimfiler#get_current_vimfiler()
+  let vimfiler = b:vimfiler
   let current_dir = vimfiler.current_dir
   let dir = input('[in]: ',
         \ vimfiler.source . ':'. current_dir,

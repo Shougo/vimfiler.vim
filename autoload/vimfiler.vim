@@ -116,7 +116,7 @@ function! vimfiler#redraw_screen() "{{{
   return vimfiler#view#_redraw_screen()
 endfunction"}}}
 function! vimfiler#get_marked_files() "{{{
-  return filter(copy(vimfiler#get_current_vimfiler().current_files),
+  return filter(copy(b:vimfiler.current_files),
         \ 'v:val.vimfiler__is_marked')
 endfunction"}}}
 function! vimfiler#get_marked_filenames() "{{{
@@ -135,10 +135,9 @@ function! vimfiler#get_filename(...) "{{{
 endfunction"}}}
 function! vimfiler#get_file(...) "{{{
   let line_num = get(a:000, 0, line('.'))
-  let vimfiler = vimfiler#get_current_vimfiler()
   let index = vimfiler#get_file_index(line_num)
   return index < 0 ? {} :
-        \ get(vimfiler.current_files, index, {})
+        \ get(b:vimfiler.current_files, index, {})
 endfunction"}}}
 function! vimfiler#get_file_directory(...) "{{{
   return call('vimfiler#helper#_get_file_directory', a:000)
@@ -153,8 +152,7 @@ function! vimfiler#get_line_number(index) "{{{
   return a:index + vimfiler#get_file_offset() + 1
 endfunction"}}}
 function! vimfiler#get_file_offset() "{{{
-  let vimfiler = vimfiler#get_current_vimfiler()
-  return vimfiler.prompt_linenr
+  return b:vimfiler.prompt_linenr
 endfunction"}}}
 function! vimfiler#force_redraw_all_vimfiler(...) "{{{
   return call('vimfiler#view#_force_redraw_all_vimfiler', a:000)
