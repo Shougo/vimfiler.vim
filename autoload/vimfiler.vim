@@ -110,18 +110,19 @@ function! vimfiler#get_filename(...) "{{{
   return getline(line_num) == '..' ? '..' :
    \ (line_num < b:vimfiler.prompt_linenr ||
    \  empty(b:vimfiler.current_files)) ? '' :
-   \ b:vimfiler.current_files[vimfiler#get_file_index(line_num)].action__path
+   \ b:vimfiler.current_files[
+   \    vimfiler#get_file_index(b:vimfiler, line_num)].action__path
 endfunction"}}}
 function! vimfiler#get_file(...) "{{{
   let line_num = get(a:000, 0, line('.'))
-  let index = vimfiler#get_file_index(line_num)
+  let index = vimfiler#get_file_index(b:vimfiler, line_num)
   return index < 0 ? {} :
         \ get(b:vimfiler.current_files, index, {})
 endfunction"}}}
 function! vimfiler#get_file_directory(...) "{{{
   return call('vimfiler#helper#_get_file_directory', a:000)
 endfunction"}}}
-function! vimfiler#get_file_index(line_num) "{{{
+function! vimfiler#get_file_index(vimfiler, line_num) "{{{
   return a:line_num - vimfiler#get_file_offset() - 1
 endfunction"}}}
 function! vimfiler#get_original_file_index(line_num) "{{{

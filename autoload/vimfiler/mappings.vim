@@ -963,7 +963,7 @@ function! s:expand_tree(is_recursive) "{{{
           \ files, b:vimfiler.context)
   endif
 
-  let index = vimfiler#get_file_index(line('.'))
+  let index = vimfiler#get_file_index(b:vimfiler, line('.'))
   let index_orig =
         \ vimfiler#get_original_file_index(line('.'))
 
@@ -1104,7 +1104,7 @@ function! s:unexpand_tree() "{{{
   let nestlevel = cursor_file.vimfiler__nest_level
 
   " Search children.
-  let index = vimfiler#get_file_index(line('.'))
+  let index = vimfiler#get_file_index(b:vimfiler, line('.'))
   let end = index
   for cursor_file in b:vimfiler.current_files[index+1 :]
     if cursor_file.vimfiler__nest_level <= nestlevel
