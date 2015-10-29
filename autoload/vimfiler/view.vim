@@ -154,7 +154,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
 
   let index = index(b:vimfiler.current_files, current_file)
   if index >= 0
-    call cursor(vimfiler#get_line_number(index), 0)
+    call cursor(vimfiler#get_line_number(b:vimfiler, index), 0)
   else
     call cursor(last_line, 0)
   endif

@@ -35,7 +35,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   " Plugin keymappings "{{{
   nnoremap <buffer><expr> <Plug>(vimfiler_loop_cursor_down)
         \ (line('.') == line('$'))?
-        \  (vimfiler#get_file_offset()+1).'Gzb' : 'j'
+        \  (vimfiler#get_file_offset(b:vimfiler)+1).'Gzb' : 'j'
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_loop_cursor_up)
         \ (line('.') == 1)? ":call \<SID>cursor_bottom()\<CR>" : 'k'
   nnoremap <buffer><silent> <Plug>(vimfiler_redraw_screen)
@@ -163,7 +163,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
           \ <Plug>(vimfiler_cd_or_edit)
   endif
   nnoremap <buffer><silent><expr> <Plug>(vimfiler_cursor_top)
-        \ (vimfiler#get_file_offset()+1).'Gzb'
+        \ (vimfiler#get_file_offset(b:vimfiler)+1).'Gzb'
   nnoremap <buffer><silent> <Plug>(vimfiler_cursor_bottom)
         \ :<C-u>call <SID>cursor_bottom()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_expand_tree)
@@ -553,7 +553,7 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir) "{{{
       if path ==#
             \ b:vimfiler.source.':'.a:previous_current_dir
             \ || path ==# a:previous_current_dir
-        call cursor(vimfiler#get_line_number(num), 1)
+        call cursor(vimfiler#get_line_number(b:vimfiler, num), 1)
         break
       endif
 
@@ -562,7 +562,7 @@ function! s:restore_cursor(dir, fullpath, save_pos, previous_current_dir) "{{{
   elseif has_key(b:vimfiler.directory_cursor_pos, a:fullpath)
     call setpos('.', b:vimfiler.directory_cursor_pos[a:fullpath])
   else
-    call cursor(vimfiler#get_file_offset()+1, 0)
+    call cursor(vimfiler#get_file_offset(b:vimfiler)+1, 0)
   endif
 
   call vimfiler#helper#_set_cursor()

@@ -123,16 +123,16 @@ function! vimfiler#get_file_directory(...) "{{{
   return call('vimfiler#helper#_get_file_directory', a:000)
 endfunction"}}}
 function! vimfiler#get_file_index(vimfiler, line_num) "{{{
-  return a:line_num - vimfiler#get_file_offset() - 1
+  return a:line_num - vimfiler#get_file_offset(a:vimfiler) - 1
 endfunction"}}}
 function! vimfiler#get_original_file_index(line_num) "{{{
   return index(b:vimfiler.original_files, vimfiler#get_file(a:line_num))
 endfunction"}}}
-function! vimfiler#get_line_number(index) "{{{
-  return a:index + vimfiler#get_file_offset() + 1
+function! vimfiler#get_line_number(vimfiler, index) "{{{
+  return a:index + vimfiler#get_file_offset(a:vimfiler) + 1
 endfunction"}}}
-function! vimfiler#get_file_offset() "{{{
-  return b:vimfiler.prompt_linenr
+function! vimfiler#get_file_offset(vimfiler) "{{{
+  return a:vimfiler.prompt_linenr
 endfunction"}}}
 function! vimfiler#force_redraw_all_vimfiler(...) "{{{
   return call('vimfiler#view#_force_redraw_all_vimfiler', a:000)
