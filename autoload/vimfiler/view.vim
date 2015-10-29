@@ -95,9 +95,7 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
   call vimfiler#view#_redraw_screen()
 endfunction"}}}
 function! vimfiler#view#_redraw_screen(...) "{{{
-  let is_switch = &filetype !=# 'vimfiler'
-  let save_winnr = winnr()
-  if is_switch
+  if &filetype !=# 'vimfiler'
     " Not vimfiler window.
     return
   endif
@@ -157,10 +155,6 @@ function! vimfiler#view#_redraw_screen(...) "{{{
     call cursor(vimfiler#get_line_number(b:vimfiler, index), 0)
   else
     call cursor(last_line, 0)
-  endif
-
-  if is_switch
-    call vimfiler#util#winclose(save_winnr, b:vimfiler.context)
   endif
 endfunction"}}}
 function! vimfiler#view#_force_redraw_all_vimfiler(...) "{{{
