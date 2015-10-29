@@ -160,7 +160,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
   endif
 
   if is_switch
-    execute save_winnr . 'wincmd w'
+    call vimfiler#util#winclose(save_winnr, b:vimfiler.context)
   endif
 endfunction"}}}
 function! vimfiler#view#_force_redraw_all_vimfiler(...) "{{{
@@ -172,28 +172,27 @@ function! vimfiler#view#_force_redraw_all_vimfiler(...) "{{{
     " Search vimfiler window.
     for winnr in filter(range(1, winnr('$')),
           \ "getwinvar(v:val, '&filetype') ==# 'vimfiler'")
-      execute winnr . 'wincmd w'
+      call vimfiler#util#winmove(winnr)
       call vimfiler#view#_force_redraw_screen(is_manualed)
     endfor
   finally
-    execute current_nr . 'wincmd w'
+    call vimfiler#util#winmove(current_nr)
   endtry
 endfunction"}}}
 function! vimfiler#view#_redraw_all_vimfiler() "{{{
   let current_nr = winnr()
-  let bufnr = 1
-  while bufnr <= winnr('$')
+  let winnr = 1
+  while winnr <= winnr('$')
     " Search vimfiler window.
-    if getwinvar(bufnr, '&filetype') ==# 'vimfiler'
-
-      execute bufnr . 'wincmd w'
+    if getwinvar(winnr, '&filetype') ==# 'vimfiler'
+      call vimfiler#util#winclose(
+            \ winnr, getbufvar(winbufnr(winnr), 'vimfiler').context)
       call vimfiler#view#_redraw_screen()
     endif
-
     let bufnr += 1
   endwhile
 
-  execute current_nr . 'wincmd w'
+  call vimfiler#util#winmove(current_nr)
 endfunction"}}}
 function! s:redraw_prompt() "{{{
   if &filetype !=# 'vimfiler'

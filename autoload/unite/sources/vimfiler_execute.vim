@@ -40,7 +40,7 @@ let s:source = {
 function! s:source.hooks.on_init(args, context) "{{{
   let winnr = winnr()
   try
-    execute a:context.vimfiler__winnr.'wincmd w'
+    call vimfiler#util#winmove(a:context.vimfiler__winnr)
 
     if &filetype !=# 'vimfiler'
       return []
@@ -48,7 +48,7 @@ function! s:source.hooks.on_init(args, context) "{{{
 
     let a:context.source__file = vimfiler#get_file(b:vimfiler, line('.'))
   finally
-    execute winnr.'wincmd w'
+    call vimfiler#util#winmove(winnr)
   endtry
   if &filetype !=# 'vimfiler'
     return

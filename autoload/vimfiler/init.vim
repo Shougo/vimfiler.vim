@@ -447,7 +447,7 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     execute 'buffer' . a:bufnr
   else
     " Move to vimfiler window.
-    execute bufwinnr(a:bufnr).'wincmd w'
+    call vimfiler#util#winmove(bufwinnr(a:bufnr))
   endif
 
   " Set window local options
@@ -492,7 +492,8 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
-      execute bufwinnr(a:context.alternate_buffer).'wincmd w'
+      call vimfiler#util#winmove(
+            \ bufwinnr(a:context.alternate_buffer))
     endif
   endif
 endfunction"}}}
@@ -566,7 +567,8 @@ function! s:create_vimfiler_buffer(path, context) "{{{
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
-      execute bufwinnr(a:context.alternate_buffer).'wincmd w'
+      call vimfiler#util#winmove(
+            \ bufwinnr(a:context.alternate_buffer))
     endif
   endif
 endfunction"}}}

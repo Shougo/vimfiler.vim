@@ -77,7 +77,7 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
 
   if bufnr('%') != bufnr
     " Restore window.
-    execute bufwinnr(bufnr).'wincmd w'
+    call vimfiler#util#winmove(bufwinnr(bufnr))
   endif
 endfunction"}}}
 
@@ -147,7 +147,7 @@ endfunction"}}}
 function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
   if a:bufnr != bufnr('%') && bufwinnr(a:bufnr) > 0
     let winnr = winnr()
-    execute bufwinnr(a:bufnr) 'wincmd w'
+    call vimfiler#util#winmove(bufwinnr(a:bufnr))
   endif
 
   try
@@ -190,7 +190,7 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
     endif
   finally
     if exists('winnr')
-      execute winnr.'wincmd w'
+      call vimfiler#util#winmove(winnr)
     endif
   endtry
 endfunction"}}}

@@ -1279,14 +1279,10 @@ function! s:close(vimfiler) "{{{
 
   if vimfiler#winnr_another_vimfiler() > 0
     " Close current vimfiler.
-    let bufnr = a:vimfiler.another_vimfiler_bufnr
-    close
-    execute bufwinnr(bufnr).'wincmd w'
-    call vimfiler#redraw_screen()
+    call vimfiler#util#winclose(winnr(), context)
+    call vimfiler#force_redraw_all_vimfiler()
   elseif winnr('$') != 1 && (context.split || context.toggle)
-    call vimfiler#util#winmove(
-          \ bufwinnr(a:vimfiler.bufnr))
-    close
+    call vimfiler#util#winclose(bufwinnr(a:vimfiler.bufnr), context)
   else
     call vimfiler#util#alternate_buffer(context)
   endif
