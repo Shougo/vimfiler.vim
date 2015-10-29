@@ -409,6 +409,7 @@ function! vimfiler#mappings#do_action(action, ...) "{{{
 endfunction"}}}
 
 function! vimfiler#mappings#do_switch_action(action) "{{{
+  let vimfiler = b:vimfiler
   let current_linenr = line('.')
   call s:switch()
 
@@ -630,7 +631,7 @@ function! s:switch() "{{{
     return
   endif
 
-  let vimfiler = vimfiler#get_current_vimfiler()
+  let vimfiler = b:vimfiler
 
   call vimfiler#set_current_vimfiler(vimfiler)
 
@@ -1277,19 +1278,18 @@ function! s:exit(vimfiler) "{{{
     call vimfiler#util#delete_buffer(another_bufnr)
   endif
 endfunction"}}}
-function! s:close() "{{{
-  let bufnr = bufnr('%')
-
-  let context = vimfiler#get_context()
+function! s:close(vimfiler) "{{{
+  let context = a:vimfiler.context
 
   if vimfiler#winnr_another_vimfiler() > 0
     " Close current vimfiler.
-    let bufnr = b:vimfiler.another_vimfiler_bufnr
+    let bufnr = a:vimfiler.another_vimfiler_bufnr
     close
     execute bufwinnr(bufnr).'wincmd w'
     call vimfiler#redraw_screen()
-  elseif winnr('$') != 1 &&
-        \ (context.split || context.toggle)
+  elseif winnr('$') != 1 && (context.split || context.toggle)
+    call vimfiler#util#winmove(
+          \ bufwinnr(a:vimfiler.bufnr))
     close
   else
     call vimfiler#util#alternate_buffer()
@@ -1873,7 +1873,7 @@ function! s:check_force_quit(vimfiler, action) "{{{
     if a:vimfiler.context.force_quit
       call s:exit(a:vimfiler)
     else
-      call s:close()
+      call vimfiler#util#hide_buffer(a:vimfiler.bufnr)
     endif
   endif
 endfunction"}}}

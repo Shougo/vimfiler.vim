@@ -168,26 +168,20 @@ function! vimfiler#util#restore_variables(variables_save) "{{{
   endfor
 endfunction"}}}
 
-function! vimfiler#util#hide_buffer() "{{{
-  let bufnr = bufnr('%')
+function! vimfiler#util#hide_buffer(...) "{{{
+  let bufnr = get(a:000, 0, bufnr('%'))
 
-  let context = vimfiler#get_context()
+  let vimfiler = getbufvar(bufnr, 'vimfiler')
+  let context = vimfiler.context
 
   if vimfiler#winnr_another_vimfiler() > 0
     " Hide another vimfiler.
-    let bufnr = b:vimfiler.another_vimfiler_bufnr
+    let bufnr = vimfiler.another_vimfiler_bufnr
     close!
     execute bufwinnr(bufnr).'wincmd w'
     call vimfiler#util#hide_buffer()
-  elseif winnr('$') != 1 && exists('b:vimfiler')
-        \ && (context.split || context.toggle)
-    close!
-    if winbufnr(context.vimfiler__prev_winnr)
-          \ != context.vimfiler__prev_bufnr
-      execute bufwinnr(context.vimfiler__prev_bufnr) . 'wincmd w'
-    else
-      execute context.vimfiler__prev_winnr . 'wincmd w'
-    endif
+  elseif winnr('$') != 1 && (context.split || context.toggle)
+    call vimfiler#util#winclose(bufwinnr(bufnr))
   else
     call vimfiler#util#alternate_buffer()
   endif
@@ -217,11 +211,11 @@ function! vimfiler#util#alternate_buffer() "{{{
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction"}}}
 function! vimfiler#util#delete_buffer(...) "{{{
-  let delete_bufnr = get(a:000, 0, bufnr('%'))
+  let bufnr = get(a:000, 0, bufnr('%'))
 
-  call vimfiler#util#hide_buffer()
+  call vimfiler#util#hide_buffer(bufnr)
 
-  silent execute 'bwipeout!' delete_bufnr
+  silent execute 'bwipeout!' bufnr
 endfunction"}}}
 function! s:buflisted(bufnr) "{{{
   return exists('t:tabpagebuffer') ?
@@ -249,6 +243,18 @@ function! vimfiler#util#is_sudo() "{{{
   return $SUDO_USER != '' && $USER !=# $SUDO_USER
         \ && $HOME !=# expand('~'.$USER)
         \ && $HOME ==# expand('~'.$SUDO_USER)
+endfunction"}}}
+
+function! vimfiler#util#winmove(winnr) "{{{
+  if a:winnr > 0
+    silent execute a:winnr.'wincmd w'
+  endif
+endfunction"}}}
+function! vimfiler#util#winclose(winnr) "{{{
+  let prev_winnr = (winnr() < a:winnr) ? winnr() : winnr() - 1
+  call vimfiler#util#winmove(a:winnr)
+  close!
+  call vimfiler#util#winmove(prev_winnr)
 endfunction"}}}
 
 let &cpo = s:save_cpo
