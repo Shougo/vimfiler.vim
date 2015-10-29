@@ -106,7 +106,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
     return
   endif
 
-  let current_file = vimfiler#get_file()
+  let current_file = vimfiler#get_file(b:vimfiler)
 
   let b:vimfiler.all_files =
         \ unite#filters#matcher_vimfiler_mask#define().filter(

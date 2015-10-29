@@ -113,11 +113,11 @@ function! vimfiler#get_filename(...) "{{{
    \ b:vimfiler.current_files[
    \    vimfiler#get_file_index(b:vimfiler, line_num)].action__path
 endfunction"}}}
-function! vimfiler#get_file(...) "{{{
+function! vimfiler#get_file(vimfiler, ...) "{{{
   let line_num = get(a:000, 0, line('.'))
-  let index = vimfiler#get_file_index(b:vimfiler, line_num)
+  let index = vimfiler#get_file_index(a:vimfiler, line_num)
   return index < 0 ? {} :
-        \ get(b:vimfiler.current_files, index, {})
+        \ get(a:vimfiler.current_files, index, {})
 endfunction"}}}
 function! vimfiler#get_file_directory(...) "{{{
   return call('vimfiler#helper#_get_file_directory', a:000)
@@ -126,7 +126,8 @@ function! vimfiler#get_file_index(vimfiler, line_num) "{{{
   return a:line_num - vimfiler#get_file_offset(a:vimfiler) - 1
 endfunction"}}}
 function! vimfiler#get_original_file_index(line_num) "{{{
-  return index(b:vimfiler.original_files, vimfiler#get_file(a:line_num))
+  return index(b:vimfiler.original_files,
+        \ vimfiler#get_file(b:vimfiler, a:line_num))
 endfunction"}}}
 function! vimfiler#get_line_number(vimfiler, index) "{{{
   return a:index + vimfiler#get_file_offset(a:vimfiler) + 1

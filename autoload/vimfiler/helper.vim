@@ -210,7 +210,7 @@ endfunction"}}}
 function! vimfiler#helper#_get_file_directory(...) "{{{
   let line_num = get(a:000, 0, line('.'))
 
-  let file = vimfiler#get_file(line_num)
+  let file = vimfiler#get_file(b:vimfiler, line_num)
   if empty(file)
     let directory = b:vimfiler.current_dir
   else

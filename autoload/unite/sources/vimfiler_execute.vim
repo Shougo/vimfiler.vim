@@ -46,7 +46,7 @@ function! s:source.hooks.on_init(args, context) "{{{
       return []
     endif
 
-    let a:context.source__file = vimfiler#get_file(line('.'))
+    let a:context.source__file = vimfiler#get_file(b:vimfiler, line('.'))
   finally
     execute winnr.'wincmd w'
   endtry
