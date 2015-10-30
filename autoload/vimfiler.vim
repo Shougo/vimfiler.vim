@@ -102,7 +102,7 @@ function! vimfiler#get_marked_filenames(vimfiler) "{{{
   return map(vimfiler#get_marked_files(a:vimfiler), 'v:val.action__path')
 endfunction"}}}
 function! vimfiler#get_escaped_marked_files(vimfiler) "{{{
-  return map(vimfiler#get_marked_filenames(vimfiler),
+  return map(vimfiler#get_marked_filenames(a:vimfiler),
         \ '"\"" . v:val . "\""')
 endfunction"}}}
 function! vimfiler#get_filename(...) "{{{

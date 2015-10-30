@@ -183,7 +183,7 @@ function! vimfiler#view#_redraw_all_vimfiler() "{{{
             \ winnr, getbufvar(winbufnr(winnr), 'vimfiler').context)
       call vimfiler#view#_redraw_screen()
     endif
-    let bufnr += 1
+    let winnr += 1
   endwhile
 
   call vimfiler#util#winmove(current_nr)

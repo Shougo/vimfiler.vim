@@ -627,8 +627,6 @@ function! s:switch() "{{{
     return
   endif
 
-  let vimfiler = b:vimfiler
-
   let windows = unite#helper#get_choose_windows()
   if empty(windows)
     rightbelow vnew
