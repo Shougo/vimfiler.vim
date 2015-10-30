@@ -608,7 +608,7 @@ function! vimfiler#mappings#close(buffer_name) "{{{
   let quit_winnr = vimfiler#util#get_vimfiler_winnr(a:buffer_name)
   if quit_winnr > 0
     " Hide unite buffer.
-    silent execute quit_winnr 'wincmd w'
+    call vimfiler#util#winmove(quit_winnr)
 
     if winnr('$') != 1
       close
@@ -633,7 +633,7 @@ function! s:switch() "{{{
   if empty(windows)
     rightbelow vnew
   elseif len(windows) == 1
-    execute windows[0].'wincmd w'
+    call vimfiler#util#winmove(windows[0])
   else
     let alt_winnr = winnr('#')
     let [tabnr, winnr] = [tabpagenr(), winnr()]
@@ -671,7 +671,7 @@ function! s:switch() "{{{
     if winnr == 0 || (winnr == old_winnr && tabnr == old_tabnr)
       rightbelow vnew
     else
-      execute winnr.'wincmd w'
+      call vimfiler#util#winmove(winnr)
     endif
   endif
 
@@ -1270,7 +1270,7 @@ function! s:exit(vimfiler) "{{{
 
   if another_bufnr > 0
     " Exit another vimfiler.
-    execute bufwinnr(another_bufnr).'wincmd w'
+    call vimfiler#util#winmove(bufwinnr(another_bufnr))
     call vimfiler#util#delete_buffer(another_bufnr)
   endif
 endfunction"}}}
@@ -1327,7 +1327,7 @@ function! vimfiler#mappings#switch_another_vimfiler(...) "{{{
   let directory = get(a:000, 0, '')
   if vimfiler#winnr_another_vimfiler() > 0
     " Switch to another vimfiler window.
-    execute vimfiler#winnr_another_vimfiler().'wincmd w'
+    call vimfiler#util#winmove(vimfiler#winnr_another_vimfiler())
     if directory != ''
       " Change current directory.
       call vimfiler#mappings#cd(directory)
