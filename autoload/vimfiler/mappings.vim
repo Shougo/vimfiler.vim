@@ -1548,8 +1548,6 @@ endfunction"}}}
 function! s:new_file() "{{{
   let directory = vimfiler#get_file_directory()
 
-  call s:switch()
-
   call vimfiler#mappings#do_dir_action('vimfiler__newfile', directory)
 endfunction"}}}
 function! s:clipboard_copy() "{{{
