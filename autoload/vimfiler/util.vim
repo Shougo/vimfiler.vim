@@ -190,6 +190,7 @@ function! vimfiler#util#alternate_buffer(context) "{{{
         \ && getbufvar(a:context.alternate_buffer, '&filetype') !=# 'vimfiler'
         \ && g:vimfiler_restore_alternate_file
     execute 'buffer' a:context.alternate_buffer
+    keepjumps call winrestview(a:context.prev_winsaveview)
     return
   endif
 

@@ -432,13 +432,15 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
   let search_path = fnamemodify(bufname('%'), ':p')
 
   let context = vimfiler#initialize_context(a:context)
-  if !context.tab
-    let context.alternate_buffer = bufnr('%')
-  endif
   let context.vimfiler__prev_bufnr = bufnr('%')
   let context.vimfiler__prev_winnr = winnr()
 
   if bufwinnr(a:bufnr) < 0
+    if !context.tab
+      let context.alternate_buffer = bufnr('%')
+      let context.prev_winsaveview = winsaveview()
+    endif
+
     if context.split
       execute context.direction
             \ (context.horizontal ? 'split' : 'vsplit')
@@ -494,6 +496,7 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     else
       call vimfiler#util#winmove(
             \ bufwinnr(a:context.alternate_buffer))
+      keepjumps call winrestview(a:context.prev_winsaveview)
     endif
   endif
 endfunction"}}}
