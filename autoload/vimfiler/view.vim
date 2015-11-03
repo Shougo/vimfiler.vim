@@ -175,18 +175,16 @@ function! vimfiler#view#_force_redraw_all_vimfiler(...) "{{{
 endfunction"}}}
 function! vimfiler#view#_redraw_all_vimfiler() "{{{
   let current_nr = winnr()
-  let winnr = 1
-  while winnr <= winnr('$')
+  try
     " Search vimfiler window.
-    if getwinvar(winnr, '&filetype') ==# 'vimfiler'
-      call vimfiler#util#winclose(
-            \ winnr, getbufvar(winbufnr(winnr), 'vimfiler').context)
+    for winnr in filter(range(1, winnr('$')),
+          \ "getwinvar(v:val, '&filetype') ==# 'vimfiler'")
+      call vimfiler#util#winmove(winnr)
       call vimfiler#view#_redraw_screen()
-    endif
-    let winnr += 1
-  endwhile
-
-  call vimfiler#util#winmove(current_nr)
+    endfor
+  finally
+    call vimfiler#util#winmove(current_nr)
+  endtry
 endfunction"}}}
 function! s:redraw_prompt() "{{{
   if &filetype !=# 'vimfiler'
