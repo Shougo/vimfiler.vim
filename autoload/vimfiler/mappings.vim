@@ -672,11 +672,6 @@ function! s:switch() "{{{
       call vimfiler#util#winmove(winnr)
     endif
   endif
-
-  if context.auto_cd
-    " Change current directory.
-    call vimfiler#mappings#_change_vim_current_dir()
-  endif
 endfunction"}}}
 function! s:toggle_mark_current_line(...) "{{{
   let file = vimfiler#get_file(b:vimfiler)
