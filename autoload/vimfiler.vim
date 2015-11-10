@@ -65,7 +65,7 @@ function! vimfiler#set_extensions(kind, exts) "{{{
   endfor
 endfunction"}}}
 function! vimfiler#do_action(action) "{{{
-  return printf(":\<C-u>call vimfiler#mappings#do_action(%s)\<CR>",
+  return printf(":\<C-u>call vimfiler#mappings#do_action(b:vimfiler,%s)\<CR>",
         \             string(a:action))
 endfunction"}}}
 function! vimfiler#do_switch_action(action) "{{{
@@ -81,27 +81,6 @@ endfunction"}}}
 "}}}
 
 " vimfiler plugin utility functions. "{{{
-function! vimfiler#get_current_vimfiler() "{{{
-  return exists('b:vimfiler') ? b:vimfiler : s:current_vimfiler
-endfunction"}}}
-function! vimfiler#set_current_vimfiler(vimfiler) "{{{
-  let s:current_vimfiler = a:vimfiler
-  call unite#set_current_unite(a:vimfiler.unite)
-endfunction"}}}
-function! vimfiler#get_context() "{{{
-  return vimfiler#get_current_vimfiler().context
-endfunction"}}}
-function! vimfiler#set_context(context) "{{{
-  let old_context = vimfiler#get_context()
-
-  if exists('b:vimfiler')
-    let b:vimfiler.context = a:context
-  else
-    let s:current_vimfiler.context = a:context
-  endif
-
-  return old_context
-endfunction"}}}
 function! vimfiler#start(path, ...) "{{{
   return call('vimfiler#init#_start', [a:path] + a:000)
 endfunction"}}}
@@ -115,15 +94,15 @@ endfunction"}}}
 function! vimfiler#redraw_screen() "{{{
   return vimfiler#view#_redraw_screen()
 endfunction"}}}
-function! vimfiler#get_marked_files() "{{{
-  return filter(copy(vimfiler#get_current_vimfiler().current_files),
+function! vimfiler#get_marked_files(vimfiler) "{{{
+  return filter(copy(a:vimfiler.current_files),
         \ 'v:val.vimfiler__is_marked')
 endfunction"}}}
-function! vimfiler#get_marked_filenames() "{{{
-  return map(vimfiler#get_marked_files(), 'v:val.action__path')
+function! vimfiler#get_marked_filenames(vimfiler) "{{{
+  return map(vimfiler#get_marked_files(a:vimfiler), 'v:val.action__path')
 endfunction"}}}
-function! vimfiler#get_escaped_marked_files() "{{{
-  return map(vimfiler#get_marked_filenames(),
+function! vimfiler#get_escaped_marked_files(vimfiler) "{{{
+  return map(vimfiler#get_marked_filenames(a:vimfiler),
         \ '"\"" . v:val . "\""')
 endfunction"}}}
 function! vimfiler#get_filename(...) "{{{
@@ -131,30 +110,30 @@ function! vimfiler#get_filename(...) "{{{
   return getline(line_num) == '..' ? '..' :
    \ (line_num < b:vimfiler.prompt_linenr ||
    \  empty(b:vimfiler.current_files)) ? '' :
-   \ b:vimfiler.current_files[vimfiler#get_file_index(line_num)].action__path
+   \ b:vimfiler.current_files[
+   \    vimfiler#get_file_index(b:vimfiler, line_num)].action__path
 endfunction"}}}
-function! vimfiler#get_file(...) "{{{
+function! vimfiler#get_file(vimfiler, ...) "{{{
   let line_num = get(a:000, 0, line('.'))
-  let vimfiler = vimfiler#get_current_vimfiler()
-  let index = vimfiler#get_file_index(line_num)
+  let index = vimfiler#get_file_index(a:vimfiler, line_num)
   return index < 0 ? {} :
-        \ get(vimfiler.current_files, index, {})
+        \ get(a:vimfiler.current_files, index, {})
 endfunction"}}}
 function! vimfiler#get_file_directory(...) "{{{
   return call('vimfiler#helper#_get_file_directory', a:000)
 endfunction"}}}
-function! vimfiler#get_file_index(line_num) "{{{
-  return a:line_num - vimfiler#get_file_offset() - 1
+function! vimfiler#get_file_index(vimfiler, line_num) "{{{
+  return a:line_num - vimfiler#get_file_offset(a:vimfiler) - 1
 endfunction"}}}
 function! vimfiler#get_original_file_index(line_num) "{{{
-  return index(b:vimfiler.original_files, vimfiler#get_file(a:line_num))
+  return index(b:vimfiler.original_files,
+        \ vimfiler#get_file(b:vimfiler, a:line_num))
 endfunction"}}}
-function! vimfiler#get_line_number(index) "{{{
-  return a:index + vimfiler#get_file_offset() + 1
+function! vimfiler#get_line_number(vimfiler, index) "{{{
+  return a:index + vimfiler#get_file_offset(a:vimfiler) + 1
 endfunction"}}}
-function! vimfiler#get_file_offset() "{{{
-  let vimfiler = vimfiler#get_current_vimfiler()
-  return vimfiler.prompt_linenr
+function! vimfiler#get_file_offset(vimfiler) "{{{
+  return a:vimfiler.prompt_linenr
 endfunction"}}}
 function! vimfiler#force_redraw_all_vimfiler(...) "{{{
   return call('vimfiler#view#_force_redraw_all_vimfiler', a:000)

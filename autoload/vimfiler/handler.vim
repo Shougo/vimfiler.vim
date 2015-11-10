@@ -77,10 +77,8 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
 
   if bufnr('%') != bufnr
     " Restore window.
-    execute bufwinnr(bufnr).'wincmd w'
+    call vimfiler#util#winmove(bufwinnr(bufnr))
   endif
-
-  call vimfiler#set_current_vimfiler(b:vimfiler)
 endfunction"}}}
 
 function! s:on_BufWriteCmd(source_name, source_args, context)  "{{{1
@@ -149,7 +147,7 @@ endfunction"}}}
 function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
   if a:bufnr != bufnr('%') && bufwinnr(a:bufnr) > 0
     let winnr = winnr()
-    execute bufwinnr(a:bufnr) 'wincmd w'
+    call vimfiler#util#winmove(bufwinnr(a:bufnr))
   endif
 
   try
@@ -159,12 +157,12 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
       return
     endif
 
-    let vimfiler = vimfiler#get_current_vimfiler()
+    let vimfiler = b:vimfiler
     if !has_key(vimfiler, 'context')
       return
     endif
 
-    let context = vimfiler#get_context()
+    let context = b:vimfiler.context
     if context.winwidth > 0
       execute 'vertical resize' context.winwidth
 
@@ -192,7 +190,7 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
     endif
   finally
     if exists('winnr')
-      execute winnr.'wincmd w'
+      call vimfiler#util#winmove(winnr)
     endif
   endtry
 endfunction"}}}

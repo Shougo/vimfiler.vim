@@ -97,6 +97,7 @@ function! s:initialize_default_options() "{{{
         \ 'find' : 0,
         \ 'tab' : 0,
         \ 'alternate_buffer' : bufnr('%'),
+        \ 'prev_winsaveview' : winsaveview(),
         \ 'focus' : 1,
         \ 'invisible' : 0,
         \ 'columns' : 'type:size:time',

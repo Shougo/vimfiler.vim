@@ -176,23 +176,21 @@ function! vimfiler#util#hide_buffer(...) "{{{
 
   if vimfiler#winnr_another_vimfiler() > 0
     " Hide another vimfiler.
-    let bufnr = vimfiler.another_vimfiler_bufnr
-    close!
-    execute bufwinnr(bufnr).'wincmd w'
+    call vimfiler#util#winclose(
+          \ bufwinnr(vimfiler.another_vimfiler_bufnr), context)
     call vimfiler#util#hide_buffer()
   elseif winnr('$') != 1 && (context.split || context.toggle)
-    call vimfiler#util#winclose(bufwinnr(bufnr))
+    call vimfiler#util#winclose(bufwinnr(bufnr), context)
   else
-    call vimfiler#util#alternate_buffer()
+    call vimfiler#util#alternate_buffer(context)
   endif
 endfunction"}}}
-function! vimfiler#util#alternate_buffer() "{{{
-  let context = vimfiler#get_context()
-
-  if s:buflisted(context.alternate_buffer)
-        \ && getbufvar(context.alternate_buffer, '&filetype') !=# 'vimfiler'
+function! vimfiler#util#alternate_buffer(context) "{{{
+  if s:buflisted(a:context.alternate_buffer)
+        \ && getbufvar(a:context.alternate_buffer, '&filetype') !=# 'vimfiler'
         \ && g:vimfiler_restore_alternate_file
-    execute 'buffer' context.alternate_buffer
+    execute 'buffer' a:context.alternate_buffer
+    keepjumps call winrestview(a:context.prev_winsaveview)
     return
   endif
 
@@ -250,11 +248,15 @@ function! vimfiler#util#winmove(winnr) "{{{
     silent execute a:winnr.'wincmd w'
   endif
 endfunction"}}}
-function! vimfiler#util#winclose(winnr) "{{{
-  let prev_winnr = (winnr() < a:winnr) ? winnr() : winnr() - 1
-  call vimfiler#util#winmove(a:winnr)
-  close!
-  call vimfiler#util#winmove(prev_winnr)
+function! vimfiler#util#winclose(winnr, context) "{{{
+  if winnr('$') != 1
+    let prev_winnr = (winnr() < a:winnr) ? winnr() : winnr() - 1
+    call vimfiler#util#winmove(a:winnr)
+    close!
+    call vimfiler#util#winmove(prev_winnr)
+  else
+    call vimfiler#util#alternate_buffer(a:context)
+  endif
 endfunction"}}}
 
 let &cpo = s:save_cpo

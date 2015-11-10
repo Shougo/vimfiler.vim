@@ -214,7 +214,6 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
         \ . '%{vimfiler#get_status_string()}'
         \ . "\ %=%{exists('b:vimfiler') ? printf('%4d/%d',line('.'),
         \    b:vimfiler.prompt_linenr+b:vimfiler.all_files_len) : ''}"
-  call vimfiler#set_current_vimfiler(b:vimfiler)
 
   call vimfiler#default_settings()
   call vimfiler#mappings#define_default_mappings(a:context)
@@ -433,13 +432,15 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
   let search_path = fnamemodify(bufname('%'), ':p')
 
   let context = vimfiler#initialize_context(a:context)
-  if !context.tab
-    let context.alternate_buffer = bufnr('%')
-  endif
   let context.vimfiler__prev_bufnr = bufnr('%')
   let context.vimfiler__prev_winnr = winnr()
 
   if bufwinnr(a:bufnr) < 0
+    if !context.tab
+      let context.alternate_buffer = bufnr('%')
+      let context.prev_winsaveview = winsaveview()
+    endif
+
     if context.split
       execute context.direction
             \ (context.horizontal ? 'split' : 'vsplit')
@@ -448,14 +449,13 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     execute 'buffer' . a:bufnr
   else
     " Move to vimfiler window.
-    execute bufwinnr(a:bufnr).'wincmd w'
+    call vimfiler#util#winmove(bufwinnr(a:bufnr))
   endif
 
   " Set window local options
   call s:buffer_default_settings()
 
   let b:vimfiler.context = extend(b:vimfiler.context, context)
-  call vimfiler#set_current_vimfiler(b:vimfiler)
   let b:vimfiler.prompt_linenr =
         \ b:vimfiler.context.status + b:vimfiler.context.parent
 
@@ -494,7 +494,9 @@ function! vimfiler#init#_switch_vimfiler(bufnr, context, directory) "{{{
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
-      execute bufwinnr(a:context.alternate_buffer).'wincmd w'
+      call vimfiler#util#winmove(
+            \ bufwinnr(a:context.alternate_buffer))
+      keepjumps call winrestview(a:context.prev_winsaveview)
     endif
   endif
 endfunction"}}}
@@ -568,7 +570,8 @@ function! s:create_vimfiler_buffer(path, context) "{{{
     if winbufnr(winnr('#')) > 0
       wincmd p
     else
-      execute bufwinnr(a:context.alternate_buffer).'wincmd w'
+      call vimfiler#util#winmove(
+            \ bufwinnr(a:context.alternate_buffer))
     endif
   endif
 endfunction"}}}
@@ -614,7 +617,7 @@ function! s:buffer_default_settings() "{{{
     setlocal concealcursor=nvc
   endif
 
-  if vimfiler#get_context().explorer
+  if b:vimfiler.context.explorer
     setlocal nobuflisted
   endif
 endfunction"}}}
