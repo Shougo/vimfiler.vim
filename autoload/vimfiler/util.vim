@@ -250,7 +250,8 @@ function! vimfiler#util#winmove(winnr) "{{{
 endfunction"}}}
 function! vimfiler#util#winclose(winnr, context) "{{{
   if winnr('$') != 1
-    let prev_winnr = (winnr() < a:winnr) ? winnr() : winnr() - 1
+    let winnr = (winnr() == a:winnr) ? winnr('#') : winnr()
+    let prev_winnr = (winnr < a:winnr) ? winnr : winnr - 1
     call vimfiler#util#winmove(a:winnr)
     close!
     call vimfiler#util#winmove(prev_winnr)
