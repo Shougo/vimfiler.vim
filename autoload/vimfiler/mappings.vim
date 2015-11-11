@@ -100,7 +100,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_exit)
         \ :<C-u>call <SID>exit(b:vimfiler)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_close)
-        \ :<C-u>call <SID>close()<CR>
+        \ :<C-u>call <SID>close(b:vimfiler)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_help)
         \ :<C-u>call <SID>help()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_preview_file)
