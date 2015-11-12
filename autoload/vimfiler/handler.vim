@@ -162,6 +162,10 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
       return
     endif
 
+    if g:vimfiler_force_overwrite_statusline
+      let &l:statusline = b:vimfiler.statusline
+    endif
+
     let context = b:vimfiler.context
     if context.winwidth > 0
       execute 'vertical resize' context.winwidth
