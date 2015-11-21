@@ -1505,21 +1505,22 @@ function! s:delete() "{{{
         \  vimfiler#get_marked_files(b:vimfiler)))
 endfunction"}}}
 function! s:rename() "{{{
-  if !empty(vimfiler#get_marked_filenames(b:vimfiler))
+  let vimfiler = b:vimfiler
+  if !empty(vimfiler#get_marked_filenames(vimfiler))
     " Extended rename.
     call vimfiler#exrename#create_buffer(
-          \ vimfiler#get_marked_files(b:vimfiler))
-    call s:clear_mark_all_lines(b:vimfiler)
+          \ vimfiler#get_marked_files(vimfiler))
+    call s:clear_mark_all_lines(vimfiler)
     return
   endif
 
-  let file = vimfiler#get_file(b:vimfiler)
+  let file = vimfiler#get_file(vimfiler)
   if empty(file)
     return
   endif
 
   call vimfiler#mappings#do_files_action(
-        \ b:vimfiler,
+        \ vimfiler,
         \ 'vimfiler__rename', [file], {
         \ 'vimfiler__current_directory' :
         \       s:get_action_current_dir([file]),
