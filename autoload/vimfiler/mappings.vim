@@ -628,6 +628,8 @@ function! s:switch() "{{{
   endif
 
   let windows = unite#helper#get_choose_windows()
+  let windows = filter(windows, "getwinvar(v:val, '&filetype') !=# 'qf'")
+
   if empty(windows)
     rightbelow vnew
   elseif len(windows) == 1
