@@ -627,6 +627,8 @@ function! s:switch() "{{{
     return
   endif
 
+  let prev_bufnr = bufnr('%')
+
   let windows = filter(unite#helper#get_choose_windows(),
         \ "getwinvar(v:val, '&filetype') !=# 'qf'")
 
@@ -674,6 +676,8 @@ function! s:switch() "{{{
       call vimfiler#util#winmove(winnr)
     endif
   endif
+
+  call vimfiler#handler#_event_bufwin_enter(prev_bufnr)
 endfunction"}}}
 function! s:toggle_mark_current_line(...) "{{{
   let file = vimfiler#get_file(b:vimfiler)
