@@ -75,14 +75,6 @@ command! -nargs=? -complete=customlist,vimfiler#complete VimFilerExplorer
 command! -nargs=1 VimFilerClose call vimfiler#mappings#close(<q-args>)
 
 augroup vimfiler
-  autocmd BufReadCmd ??*:{*,*/*}
-        \ call vimfiler#handler#_event_handler('BufReadCmd')
-  autocmd BufWriteCmd ??*:{*,*/*}
-        \ call vimfiler#handler#_event_handler('BufWriteCmd')
-  autocmd FileAppendCmd ??*:{*,*/*}
-        \ call vimfiler#handler#_event_handler('FileAppendCmd')
-  autocmd FileReadCmd ??*:{*,*/*}
-        \ call vimfiler#handler#_event_handler('FileReadCmd')
   autocmd BufEnter,VimEnter,BufNew,BufWinEnter,BufRead,BufCreate
         \ * call s:browse_check(expand('<amatch>'))
 augroup END
