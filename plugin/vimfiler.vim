@@ -53,26 +53,26 @@ nnoremap <silent> <Plug>(vimfiler_simple)
       \ :<C-u>VimFilerSimple<CR>
 "}}}
 
-command! -nargs=? -complete=customlist,vimfiler#complete VimFiler
+command! -nargs=? -bar -complete=customlist,vimfiler#complete VimFiler
       \ call vimfiler#init#_command({}, <q-args>)
-command! -nargs=? -complete=customlist,vimfiler#complete VimFilerDouble
+command! -nargs=? -bar -complete=customlist,vimfiler#complete VimFilerDouble
       \ call vimfiler#init#_command({ 'double' : 1 }, <q-args>)
-command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCurrentDir
+command! -nargs=? -bar -complete=customlist,vimfiler#complete VimFilerCurrentDir
       \ call vimfiler#init#_command({}, <q-args> . ' ' . getcwd())
-command! -nargs=? -complete=customlist,vimfiler#complete VimFilerBufferDir
+command! -nargs=? -bar -complete=customlist,vimfiler#complete VimFilerBufferDir
       \ call vimfiler#init#_command({}, <q-args> . ' ' .
       \ vimfiler#helper#_get_buffer_directory(bufnr('%')))
-command! -nargs=? -complete=customlist,vimfiler#complete VimFilerCreate
+command! -nargs=? -bar -complete=customlist,vimfiler#complete VimFilerCreate
       \ call vimfiler#init#_command({ 'create' : 1 }, <q-args>)
-command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSimple
+command! -nargs=? -bar -complete=customlist,vimfiler#complete VimFilerSimple
       \ call vimfiler#init#_command({ 'simple' : 1, 'split' : 1, 'create' : 1 }, <q-args>)
-command! -nargs=? -complete=customlist,vimfiler#complete VimFilerSplit
+command! -nargs=? -bar -complete=customlist,vimfiler#complete VimFilerSplit
       \ call vimfiler#init#_command({ 'split' : 1, }, <q-args>)
-command! -nargs=? -complete=customlist,vimfiler#complete VimFilerTab
+command! -nargs=? -bar -complete=customlist,vimfiler#complete VimFilerTab
       \ call vimfiler#init#_command({ 'tab' : 1 }, <q-args>)
-command! -nargs=? -complete=customlist,vimfiler#complete VimFilerExplorer
+command! -nargs=? -bar -complete=customlist,vimfiler#complete VimFilerExplorer
       \ call vimfiler#init#_command({ 'explorer' : 1, }, <q-args>)
-command! -nargs=1 VimFilerClose call vimfiler#mappings#close(<q-args>)
+command! -nargs=1 -bar VimFilerClose call vimfiler#mappings#close(<q-args>)
 
 augroup vimfiler
   autocmd BufEnter,VimEnter,BufNew,BufWinEnter,BufRead,BufCreate
