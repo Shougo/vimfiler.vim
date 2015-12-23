@@ -620,6 +620,10 @@ function! s:buffer_default_settings() "{{{
   if b:vimfiler.context.explorer
     setlocal nobuflisted
   endif
+
+  if g:vimfiler_force_overwrite_statusline
+    let &l:statusline = b:vimfiler.statusline
+  endif
 endfunction"}}}
 
 function! vimfiler#init#_get_postfix(prefix, is_create) "{{{
