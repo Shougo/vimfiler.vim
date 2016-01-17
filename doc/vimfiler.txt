@@ -75,8 +75,11 @@ COMMANDS 					*vimfiler-commands*
 						*:VimFiler*
 :VimFiler [{options}...] [[{source-name}:]{path}]
 		Runs vimfiler. This command reuses a buffer if a vimfiler
-		buffer already exists. If you omit {path}, vimfiler opens
-		current directory. [[{source-name}:]{path}] arg is same as
+		buffer already exists.  If you omit {path} and a vimfiler
+		buffer do not exist, vimfiler opens current directory.  If you
+		omit {path} and a vimfiler buffer already exists, vimfiler
+		does not change the vimfiler current directory.
+		[[{source-name}:]{path}] arg is same as
 		|:Unite|.  But you omit source name, "file" source will be
 		used.  If {path} is directory, browse in {path} directory
 		files.  If {path} is file, edit {path} file.
