@@ -51,7 +51,7 @@ function! vimfiler#mappings#define_default_mappings(context) "{{{
   nnoremap <buffer><silent> <Plug>(vimfiler_mark_similar_lines)
         \ :<C-u>call <SID>mark_similar_lines()<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_clear_mark_all_lines)
-        \ :<C-u>call <SID>clear_mark_all_lines()<CR>
+        \ :<C-u>call <SID>clear_mark_all_lines(b:vimfiler)<CR>
   nnoremap <buffer><silent> <Plug>(vimfiler_mark_current_line)
         \ :<C-u>call <SID>mark_current_line()<CR>
   nmap <buffer><silent><expr> <Plug>(vimfiler_cd_or_edit)
