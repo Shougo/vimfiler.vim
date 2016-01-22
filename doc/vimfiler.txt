@@ -830,7 +830,7 @@ Normal mode key mappings.
 
 Visual mode key mappings.
 
-				*<Plug>(vimfiler_toggle_selected_lines)*
+				*<Plug>(vimfiler_toggle_mark_selected_lines)*
 <Plug>(vimfiler_toggle_mark_selected_lines)
 		Toggles marks in selected lines.
 
