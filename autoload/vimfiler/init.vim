@@ -402,7 +402,7 @@ function! vimfiler#init#_start(path, ...) "{{{
     let path = vimfiler#util#path2project_directory(path)
   endif
 
-  if !context.create
+  if !context.create && path !~ ':'
     " Search vimfiler buffer.
     for bufnr in filter(insert(range(1, bufnr('$')), bufnr('%')),
           \ "bufloaded(v:val) &&
