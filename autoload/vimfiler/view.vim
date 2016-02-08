@@ -31,7 +31,7 @@ let g:vimfiler_min_cache_files =
 
 let s:Cache = vimfiler#util#get_vital().import('System.Cache.Deprecated')
 
-function! vimfiler#view#_force_redraw_screen(...) "{{{
+function! vimfiler#view#_force_redraw_screen(...) abort "{{{
   let is_manualed = get(a:000, 0, 0)
 
   let old_original_files = {}
@@ -94,7 +94,7 @@ function! vimfiler#view#_force_redraw_screen(...) "{{{
 
   call vimfiler#view#_redraw_screen()
 endfunction"}}}
-function! vimfiler#view#_redraw_screen(...) "{{{
+function! vimfiler#view#_redraw_screen(...) abort "{{{
   if &filetype !=# 'vimfiler'
     " Not vimfiler window.
     return
@@ -157,7 +157,7 @@ function! vimfiler#view#_redraw_screen(...) "{{{
     call cursor(last_line, 0)
   endif
 endfunction"}}}
-function! vimfiler#view#_force_redraw_all_vimfiler(...) "{{{
+function! vimfiler#view#_force_redraw_all_vimfiler(...) abort "{{{
   let is_manualed = get(a:000, 0, 0)
 
   let current_nr = winnr()
@@ -173,7 +173,7 @@ function! vimfiler#view#_force_redraw_all_vimfiler(...) "{{{
     call vimfiler#util#winmove(current_nr)
   endtry
 endfunction"}}}
-function! vimfiler#view#_redraw_all_vimfiler() "{{{
+function! vimfiler#view#_redraw_all_vimfiler() abort "{{{
   let current_nr = winnr()
   try
     " Search vimfiler window.
@@ -186,7 +186,7 @@ function! vimfiler#view#_redraw_all_vimfiler() "{{{
     call vimfiler#util#winmove(current_nr)
   endtry
 endfunction"}}}
-function! s:redraw_prompt() "{{{
+function! s:redraw_prompt() abort "{{{
   if &filetype !=# 'vimfiler'
     return
   endif
@@ -253,7 +253,7 @@ function! s:redraw_prompt() "{{{
     let &l:readonly = readonly_save
   endtry
 endfunction"}}}
-function! vimfiler#view#_get_print_lines(files) "{{{
+function! vimfiler#view#_get_print_lines(files) abort "{{{
   " Clear previous syntax.
   for syntax in b:vimfiler.syntaxes
     silent! execute 'syntax clear' syntax
@@ -322,7 +322,7 @@ function! vimfiler#view#_get_print_lines(files) "{{{
 
   return lines
 endfunction"}}}
-function! vimfiler#view#_get_max_len(files) "{{{
+function! vimfiler#view#_get_max_len(files) abort "{{{
   let columns = (b:vimfiler.context.simple) ? [] : b:vimfiler.columns
 
   for column in columns
@@ -355,14 +355,14 @@ function! vimfiler#view#_get_max_len(files) "{{{
   endif
   return max_len
 endfunction"}}}
-function! vimfiler#view#_define_syntax() "{{{
+function! vimfiler#view#_define_syntax() abort "{{{
   for column in filter(
         \ copy(b:vimfiler.columns), "get(v:val, 'syntax', '') != ''")
     call column.define_syntax(b:vimfiler.context)
   endfor
 endfunction"}}}
 
-function! s:check_tree(files) "{{{
+function! s:check_tree(files) abort "{{{
   let level = 0
   let _ = []
   for file in a:files

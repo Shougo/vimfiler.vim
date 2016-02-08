@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! vimfiler#columns#time#define()
+function! vimfiler#columns#time#define() abort
   return s:column
 endfunction"}}}
 
@@ -36,11 +36,11 @@ let s:column = {
       \ 'syntax' : 'vimfilerColumn__Time',
       \ }
 
-function! s:column.length(files, context) "{{{
+function! s:column.length(files, context) abort "{{{
   return len(strftime(g:vimfiler_time_format, 0)) + 1
 endfunction"}}}
 
-function! s:column.define_syntax(context) "{{{
+function! s:column.define_syntax(context) abort "{{{
   syntax match   vimfilerColumn__TimeNormal
         \ '#[^#]\+' contained
         \ containedin=vimfilerColumn__Time
@@ -66,7 +66,7 @@ function! s:column.define_syntax(context) "{{{
   highlight def link vimfilerColumn__TimeIgnore Ignore
 endfunction"}}}
 
-function! s:column.get(file, context) "{{{
+function! s:column.get(file, context) abort "{{{
   let datemark = s:get_datemark(a:file)
   return (a:file.vimfiler__filetime =~ '^-\?\d\+$' ?
         \  (a:file.vimfiler__filetime == -1 ? '' :
@@ -74,7 +74,7 @@ function! s:column.get(file, context) "{{{
         \ : datemark . a:file.vimfiler__filetime)
 endfunction"}}}
 
-function! s:get_datemark(file) "{{{
+function! s:get_datemark(file) abort "{{{
   if a:file.vimfiler__filetime !~ '^\d\+$'
     return '~'
   endif

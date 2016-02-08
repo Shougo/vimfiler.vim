@@ -3,7 +3,7 @@
 "   Original 'exrename.vim' has been moved into 'unite.vim'
 "   This 'exrename.vim' exists for backward-compatibility
 "
-function! s:post_rename_callback(exrename)
+function! s:post_rename_callback(exrename) abort
   call vimfiler#force_redraw_all_vimfiler()
 endfunction
 

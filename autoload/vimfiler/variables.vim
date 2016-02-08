@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! vimfiler#variables#get_clipboard() "{{{
+function! vimfiler#variables#get_clipboard() abort "{{{
   if !exists('s:clipboard')
     let s:clipboard = {'operation' : '', 'files' : []}
   endif
@@ -34,7 +34,7 @@ function! vimfiler#variables#get_clipboard() "{{{
   return s:clipboard
 endfunction"}}}
 
-function! vimfiler#variables#get_data_directory() "{{{
+function! vimfiler#variables#get_data_directory() abort "{{{
   let g:vimfiler_data_directory =
         \ substitute(fnamemodify(get(
         \   g:, 'vimfiler_data_directory',
@@ -48,7 +48,7 @@ function! vimfiler#variables#get_data_directory() "{{{
   return g:vimfiler_data_directory
 endfunction"}}}
 
-function! vimfiler#variables#default_context() "{{{
+function! vimfiler#variables#default_context() abort "{{{
   if !exists('s:default_context')
     call s:initialize_default_options()
   endif
@@ -56,7 +56,7 @@ function! vimfiler#variables#default_context() "{{{
   return deepcopy(s:default_context)
 endfunction"}}}
 
-function! vimfiler#variables#options() "{{{
+function! vimfiler#variables#options() abort "{{{
   if !exists('s:options')
     let s:options = map(filter(items(vimfiler#variables#default_context()),
           \ "v:val[0] !~ '^vimfiler__'"),
@@ -72,7 +72,7 @@ function! vimfiler#variables#options() "{{{
   return deepcopy(s:options)
 endfunction"}}}
 
-function! s:initialize_default_options() "{{{
+function! s:initialize_default_options() abort "{{{
   let s:default_context = {
         \ 'buffer_name' : 'default',
         \ 'quit' : 1,

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! vimfiler#custom#get() "{{{
+function! vimfiler#custom#get() abort "{{{
   if !exists('s:custom')
     let s:custom = {}
     let s:custom.profiles = {}
@@ -35,7 +35,7 @@ function! vimfiler#custom#get() "{{{
   return s:custom
 endfunction"}}}
 
-function! vimfiler#custom#profile(profile_name, option_name, value) "{{{
+function! vimfiler#custom#profile(profile_name, option_name, value) abort "{{{
   let custom = vimfiler#custom#get()
   let profile_name =
         \ has_key(custom.profiles, a:profile_name) ?
@@ -49,7 +49,7 @@ function! vimfiler#custom#profile(profile_name, option_name, value) "{{{
     let custom.profiles[key][a:option_name] = a:value
   endfor
 endfunction"}}}
-function! vimfiler#custom#get_profile(profile_name, option_name) "{{{
+function! vimfiler#custom#get_profile(profile_name, option_name) abort "{{{
   let custom = vimfiler#custom#get()
   let profile_name =
         \ has_key(custom.profiles, a:profile_name) ?
@@ -62,7 +62,7 @@ function! vimfiler#custom#get_profile(profile_name, option_name) "{{{
   return custom.profiles[profile_name][a:option_name]
 endfunction"}}}
 
-function! s:init_profile() "{{{
+function! s:init_profile() abort "{{{
   return {
         \ 'context' : {},
         \ }

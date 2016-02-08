@@ -34,7 +34,7 @@ let g:vimfiler_detect_drives =
       \     'V:/', 'W:/', 'X:/', 'Y:/', 'Z:/'
       \ ] : [expand('~'), expand('~/Downloads/')])
 
-function! unite#sources#vimfiler_drive#define() "{{{
+function! unite#sources#vimfiler_drive#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -45,7 +45,7 @@ let s:source = {
       \ 'is_listed' : 0,
       \ }
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   if !exists('s:drives') || a:context.is_redraw
     " Detect mounted drive.
     let s:drives = copy(g:vimfiler_detect_drives)

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#vimfiler_mask#define() "{{{
+function! unite#sources#vimfiler_mask#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -40,7 +40,7 @@ let s:source = {
       \ 'filters' : [ 'matcher_vimfiler/mask' ],
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   if &filetype !=# 'vimfiler'
     return
   endif
@@ -52,7 +52,7 @@ function! s:source.hooks.on_init(args, context) "{{{
         \ '[vimfiler/mask] Current mask: ' . a:context.source__mask)
 endfunction"}}}
 
-function! s:source.change_candidates(args, context) "{{{
+function! s:source.change_candidates(args, context) abort "{{{
   if !has_key(a:context, 'source__mask')
     return []
   endif
@@ -77,7 +77,7 @@ let s:action_table = {}
 let s:action_table.change = {
       \ 'description' : 'change current mask',
       \ }
-function! s:action_table.change.func(candidate) "{{{
+function! s:action_table.change.func(candidate) abort "{{{
   let b:vimfiler.current_mask = unite#get_context().input
   call vimfiler#redraw_screen()
 endfunction"}}}

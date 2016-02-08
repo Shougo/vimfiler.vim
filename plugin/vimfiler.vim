@@ -91,7 +91,7 @@ if g:vimfiler_define_wrapper_commands
         \ VimFilerWrite  <line1>,<line2>write<bang> <args>
 endif
 
-function! s:browse_check(path) "{{{
+function! s:browse_check(path) abort "{{{
   if !g:vimfiler_as_default_explorer
         \ || a:path == ''
         \ || bufnr('%') != expand('<abuf>')

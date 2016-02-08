@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! vimfiler#filters#matcher_ignore_wildignore#define()
+function! vimfiler#filters#matcher_ignore_wildignore#define() abort
   return s:filter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:filter = {
       \ 'description' : 'ignore wildignore matched files',
       \ }
 
-function! s:filter.filter(files, context) "{{{
+function! s:filter.filter(files, context) abort "{{{
   for pattern in unite#filters#globs2vim_patterns(split(&wildignore, ','))
     call filter(a:files,
           \  "v:val.action__path !~? pattern")

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! vimfiler#columns#size#define()
+function! vimfiler#columns#size#define() abort
   return s:column
 endfunction"}}}
 
@@ -36,17 +36,17 @@ let s:column = {
       \ 'syntax' : 'vimfilerColumn__Size',
       \ }
 
-function! s:column.length(files, context) "{{{
+function! s:column.length(files, context) abort "{{{
   return 6
 endfunction"}}}
 
-function! s:column.define_syntax(context) "{{{
+function! s:column.define_syntax(context) abort "{{{
   syntax match   vimfilerColumn__SizeLine
         \ '.*' contained containedin=vimfilerColumn__Size
   highlight def link vimfilerColumn__SizeLine Constant
 endfunction"}}}
 
-function! s:column.get(file, context) "{{{
+function! s:column.get(file, context) abort "{{{
   if a:file.vimfiler__is_directory
     return '      '
   endif
@@ -97,7 +97,7 @@ function! s:column.get(file, context) "{{{
 endfunction"}}}
 
 " @vimlint(EVL101, 1, l:pattern)
-function! s:get_lua_file_size(filename) "{{{
+function! s:get_lua_file_size(filename) abort "{{{
   lua << EOF
 do
   local file = io.open(vim.eval('iconv(a:filename, &encoding, "char")'))

@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! vimfiler#filters#matcher_ignore_files#define()
+function! vimfiler#filters#matcher_ignore_files#define() abort
   return s:filter
 endfunction"}}}
 
@@ -35,7 +35,7 @@ let s:filter = {
       \ 'description' : 'ignore project ignore files',
       \ }
 
-function! s:filter.filter(files, context) "{{{
+function! s:filter.filter(files, context) abort "{{{
   let path = b:vimfiler.current_dir
   let project = unite#util#path2project_directory(path) . '/'
 

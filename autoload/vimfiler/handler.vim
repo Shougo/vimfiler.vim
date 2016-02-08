@@ -117,13 +117,13 @@ function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
 endfunction"}}}
 
 
-function! s:on_FileWriteCmd(source_name, source_args, context)  "{{{
+function! s:on_FileWriteCmd(source_name, source_args, context) abort  "{{{
   " FileWriteCmd is published by :write or other commands with partial range
   " such as 1,2 where 2 < line('$').
   return s:write(a:source_name, a:source_args, line("'["), line("']"), 'FileWriteCmd')
 endfunction"}}}
 
-function! s:write(source_name, source_args, line1, line2, event_name)  "{{{
+function! s:write(source_name, source_args, line1, line2, event_name) abort  "{{{
   if !exists('b:vimfiler') || !has_key(b:vimfiler, 'current_file') || !&l:modified
     return
   endif
@@ -144,7 +144,7 @@ function! s:write(source_name, source_args, line1, line2, event_name)  "{{{
 endfunction"}}}
 
 " Event functions.
-function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
+function! vimfiler#handler#_event_bufwin_enter(bufnr) abort "{{{
   if a:bufnr != bufnr('%') && bufwinnr(a:bufnr) > 0
     let winnr = winnr()
     call vimfiler#util#winmove(bufwinnr(a:bufnr))
@@ -195,7 +195,7 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) "{{{
   endtry
 endfunction"}}}
 
-function! vimfiler#handler#_event_bufwin_leave(bufnr) "{{{
+function! vimfiler#handler#_event_bufwin_leave(bufnr) abort "{{{
   let vimfiler = getbufvar(str2nr(a:bufnr), 'vimfiler')
 
   if type(vimfiler) != type({})
@@ -211,7 +211,7 @@ function! vimfiler#handler#_event_bufwin_leave(bufnr) "{{{
   endif
 endfunction"}}}
 
-function! vimfiler#handler#_event_cursor_moved() "{{{
+function! vimfiler#handler#_event_cursor_moved() abort "{{{
   if !exists('b:vimfiler')
     return
   endif

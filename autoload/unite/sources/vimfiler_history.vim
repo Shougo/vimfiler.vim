@@ -26,7 +26,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#sources#vimfiler_history#define() "{{{
+function! unite#sources#vimfiler_history#define() abort "{{{
   return s:source
 endfunction"}}}
 
@@ -39,13 +39,13 @@ let s:source = {
       \ 'is_listed' : 0,
       \ }
 
-function! s:source.hooks.on_init(args, context) "{{{
+function! s:source.hooks.on_init(args, context) abort "{{{
   if &filetype !=# 'vimfiler'
     return
   endif
 endfunction"}}}
 
-function! s:source.gather_candidates(args, context) "{{{
+function! s:source.gather_candidates(args, context) abort "{{{
   let num = 0
   let candidates = []
   for [bufname, history] in reverse(vimfiler#get_histories())
@@ -75,7 +75,7 @@ let s:action_table.delete = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:action_table.delete.func(candidates) "{{{
+function! s:action_table.delete.func(candidates) abort "{{{
   let histories = vimfiler#get_histories()
   for candidate in sort(a:candidates, 's:compare')
     call remove(histories, candidate.action__nr)
@@ -88,7 +88,7 @@ let s:source.action_table['*'] = s:action_table
 unlet! s:action_table
 "}}}
 
-function! s:compare(candidate_a, candidate_b) "{{{
+function! s:compare(candidate_a, candidate_b) abort "{{{
   return a:candidate_b.action__nr - a:candidate_a.action__nr
 endfunction"}}}
 

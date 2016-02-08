@@ -1,7 +1,7 @@
 let s:suite = themis#suite('parser')
 let s:assert = themis#helper('assert')
 
-function! s:suite.sort()
+function! s:suite.sort() abort
   let candidates = []
   for i in range(1, 100)
     call add(candidates, { 'vimfiler__filename' : 'foo'.i.'.txt'.i })
