@@ -271,6 +271,8 @@ function! vimfiler#mappings#define_default_mappings(context) abort "{{{
 
   execute s:nowait_nmap() 'x'
         \ '<Plug>(vimfiler_execute_system_associated)'
+  execute s:nowait_nmap() 'X'
+        \ '<Plug>(vimfiler_execute_vimfiler_associated)'
 
   " Move to directory.
   execute s:nowait_nmap() 'h'
