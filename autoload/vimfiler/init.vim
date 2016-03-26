@@ -93,7 +93,7 @@ if !has_key(g:vimfiler_extensions, 'multimedia')
 endif
 "}}}
 
-let s:manager = vimfiler#util#get_vital().import('Vim.Buffer')
+let s:manager = vimfiler#util#get_vital_buffer()
 
 let s:loaded_columns = {}
 let s:loaded_filters = {}
