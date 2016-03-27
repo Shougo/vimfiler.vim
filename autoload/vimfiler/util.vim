@@ -95,7 +95,7 @@ function! vimfiler#util#escape_file_searching(...) abort
   return call(s:get_prelude().escape_file_searching, a:000)
 endfunction
 function! vimfiler#util#escape_pattern(...) abort
-  return call(s:get_prelude().escape_pattern, a:000)
+  return call(s:get_string().escape_pattern, a:000)
 endfunction
 function! vimfiler#util#set_default(...) abort
   return call(s:get_prelude().set_default, a:000)
