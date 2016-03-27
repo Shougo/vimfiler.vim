@@ -28,7 +28,7 @@ set cpo&vim
 
 function! vimfiler#util#get_vital() abort "{{{
   if !exists('s:V')
-    let s:V = vital#of('vimfiler')
+    let s:V = vital#vimfiler#of()
   endif
   return s:V
 endfunction"}}}
