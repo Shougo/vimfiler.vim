@@ -37,7 +37,6 @@ function! vimfiler#util#get_vital_cache() abort "{{{
     let s:Cache = vimfiler#util#get_vital().import('System.Cache.Deprecated')
   endif
   return s:Cache
-  return vimfiler#util#get_vital().import('Vim.Buffer')
 endfunction"}}}
 function! vimfiler#util#get_vital_buffer() abort "{{{
   return vimfiler#util#get_vital().import('Vim.Buffer')
