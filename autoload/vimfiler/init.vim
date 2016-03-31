@@ -61,6 +61,8 @@ let g:vimfiler_restore_alternate_file =
       \ get(g:, 'vimfiler_restore_alternate_file', 1)
 let g:vimfiler_ignore_filters =
       \ get(g:, 'vimfiler_ignore_filters', ['matcher_ignore_pattern'])
+let g:vimfiler_ignore_autochdir =
+      \ get(g:, 'vimfiler_ignore_autochdir', 0)
 
 let g:vimfiler_execute_file_list =
       \ get(g:, 'vimfiler_execute_file_list', {})
@@ -370,7 +372,7 @@ function! vimfiler#init#_start(path, ...) abort "{{{
   endif
 
   " Detect autochdir option. "{{{
-  if exists('+autochdir') && &autochdir
+  if exists('+autochdir') && &autochdir && !g:vimfiler_ignore_autochdir
     call vimfiler#util#print_error(
           \ 'Detected autochdir!')
     call vimfiler#util#print_error(
