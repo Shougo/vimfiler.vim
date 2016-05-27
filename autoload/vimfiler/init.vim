@@ -623,6 +623,7 @@ function! s:buffer_default_settings() abort "{{{
 
   if g:vimfiler_force_overwrite_statusline
         \ && &l:statusline !=# b:vimfiler.statusline
+    let &l:statusline = b:vimfiler.statusline
   endif
 endfunction"}}}
 
