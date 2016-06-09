@@ -1274,7 +1274,7 @@ Q: I want to close one vimfile window in double mode.
 A: <Plug>(vimfiler_hide) closes both vimfiler windows. You can use
 <Plug>(vimfiler_close) instead of it:
 >
-	autocmd FileType vimfiler nmap q <buffer> <Plug>(vimfiler_close)
+	autocmd FileType vimfiler nmap <buffer> q <Plug>(vimfiler_close)
 <
 
 Q: I want to put trashbox instead of "rm" command.
