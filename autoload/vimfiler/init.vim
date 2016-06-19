@@ -613,7 +613,9 @@ function! s:buffer_default_settings() abort "{{{
   endif
 
   if has('conceal')
-    setlocal conceallevel=3
+    if &l:conceallevel < 2
+      setlocal conceallevel=2
+    endif
     setlocal concealcursor=nvc
   endif
 
