@@ -402,7 +402,7 @@ function! vimfiler#init#_start(path, ...) abort "{{{
     let path = vimfiler#util#path2project_directory(path)
   endif
 
-  if !context.create
+  if !context.create && (path !~ ':' || path =~ '/$')
     " Search vimfiler buffer.
     for bufnr in filter(insert(range(1, bufnr('$')), bufnr('%')),
           \ "bufloaded(v:val) &&
@@ -523,6 +523,9 @@ function! s:create_vimfiler_buffer(path, context) abort "{{{
   " Create new buffer name.
   let prefix = 'vimfiler:'
   let prefix .= context.buffer_name
+  if a:path =~ ':' && a:path !~ '/$'
+    let prefix .= '@' . a:path
+  endif
 
   let postfix = vimfiler#init#_get_postfix(prefix, 1)
 
