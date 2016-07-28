@@ -402,23 +402,36 @@ function! vimfiler#init#_start(path, ...) abort "{{{
     let path = vimfiler#util#path2project_directory(path)
   endif
 
-  if !context.create && (path !~ ':' || path =~ '/$')
-    " Search vimfiler buffer.
-    for bufnr in filter(insert(range(1, bufnr('$')), bufnr('%')),
-          \ "bufloaded(v:val) &&
-          \ getbufvar(v:val, '&filetype') =~# 'vimfiler'")
-      let vimfiler = getbufvar(bufnr, 'vimfiler')
-      if type(vimfiler) == type({})
-            \ && vimfiler.context.buffer_name ==# context.buffer_name
-            \ && (!exists('t:tabpagebuffer')
-            \      || has_key(t:tabpagebuffer, bufnr))
-            \ && (!context.invisible || bufwinnr(bufnr) < 0)
-        call vimfiler#init#_switch_vimfiler(bufnr, context, path)
-        return
-      endif
+  if !context.create
+    if filereadable(path)
+      let source_name = 'file'
+      let source_args = [path]
+    else
+      let ret = vimfiler#parse_path(path)
+      let source_name = ret[0]
+      let source_args = ret[1:]
+    endif
+    let ret = unite#vimfiler_check_filetype(
+          \ [insert(source_args, source_name)])
 
-      unlet vimfiler
-    endfor
+    if empty(ret) && ret[0] ==# 'directory'
+      " Search vimfiler buffer.
+      for bufnr in filter(insert(range(1, bufnr('$')), bufnr('%')),
+            \ "bufloaded(v:val) &&
+            \ getbufvar(v:val, '&filetype') =~# 'vimfiler'")
+        let vimfiler = getbufvar(bufnr, 'vimfiler')
+        if type(vimfiler) == type({})
+              \ && vimfiler.context.buffer_name ==# context.buffer_name
+              \ && (!exists('t:tabpagebuffer')
+              \      || has_key(t:tabpagebuffer, bufnr))
+              \ && (!context.invisible || bufwinnr(bufnr) < 0)
+          call vimfiler#init#_switch_vimfiler(bufnr, context, path)
+          return
+        endif
+
+        unlet vimfiler
+      endfor
+    endif
   endif
 
   call s:create_vimfiler_buffer(path, context)
