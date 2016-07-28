@@ -97,6 +97,8 @@ function! vimfiler#helper#_get_cd_path(dir) abort "{{{
     let ret = vimfiler#parse_path(dir)
     let b:vimfiler.source = ret[0]
     let dir = join(ret[1:], ':')
+  elseif a:dir !=# b:vimfiler.current_dir
+    let b:vimfiler.source = 'file'
   endif
 
   let current_dir = b:vimfiler.current_dir
