@@ -414,7 +414,7 @@ function! vimfiler#init#_start(path, ...) abort "{{{
     let ret = unite#vimfiler_check_filetype(
           \ [insert(source_args, source_name)])
 
-    if (empty(ret) && ret[0] ==# 'directory') || context.find
+    if empty(ret) || ret[0] ==# 'directory' || context.find
       " Search vimfiler buffer.
       for bufnr in filter(insert(range(1, bufnr('$')), bufnr('%')),
             \ "bufloaded(v:val) &&
