@@ -106,16 +106,16 @@ COMMANDS 					*vimfiler-commands*
 		buffer.
 
 :VimFilerSimple [{options}...] [{path}]		*:VimFilerSimple*
-		Equivalent to |:VimFiler| except that it creates a simple vimfiler
-		buffer.
+		Equivalent to |:VimFiler| except that it creates a simple
+		vimfiler buffer.
 
 :VimFilerSplit [{options}...] [{path}]		*:VimFilerSplit*
-		Equivalent to |:VimFiler| except that it creates a vimfiler buffer
-		and split the window.
+		Equivalent to |:VimFiler| except that it creates a vimfiler
+		buffer and split the window.
 
 :VimFilerTab [{options}...] [{path}]		*:VimFilerTab*
-		Equivalent to |:VimFiler| except that it creates a vimfiler buffer
-		and create a tab.
+		Equivalent to |:VimFiler| except that it creates a vimfiler
+		buffer and create a tab.
 
 :VimFilerDouble [{options}...] [{path}]		*:VimFilerDouble*
 		Equivalent to |:VimFiler| except that it creates double vimfiler
