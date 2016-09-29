@@ -631,8 +631,7 @@ function! s:switch() abort "{{{
 
   let prev_bufnr = bufnr('%')
 
-  let windows = filter(unite#helper#get_choose_windows(),
-        \ "getwinvar(v:val, '&filetype') !=# 'qf'")
+  let windows = unite#helper#get_choose_windows()
 
   if empty(windows)
     rightbelow vnew
