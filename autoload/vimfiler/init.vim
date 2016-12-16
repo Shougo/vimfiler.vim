@@ -564,7 +564,7 @@ function! s:create_vimfiler_buffer(path, context) abort "{{{
   endtry
 
   if !loaded
-    call vimshell#echo_error(
+    call vimfiler#echo_error(
           \ '[vimfiler] Failed to open Buffer "'. bufname .'".')
     return
   endif
