@@ -232,6 +232,8 @@ function! vimfiler#helper#_get_buffer_directory(bufnr) abort "{{{
     let dir = getbufvar(a:bufnr, 'vimshell').current_dir
   elseif filetype ==# 'vinarise'
     let dir = getbufvar(a:bufnr, 'vinarise').current_dir
+  elseif filetype ==# 'deol'
+    let dir = t:deol.cwd
   else
     let path = vimfiler#util#substitute_path_separator(bufname(a:bufnr))
     let dir = vimfiler#util#path2directory(path)
