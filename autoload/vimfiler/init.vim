@@ -597,9 +597,9 @@ function! vimfiler#init#_default_settings() abort "{{{
 
   " Set autocommands.
   augroup vimfiler "{{{
-    autocmd BufEnter,WinEnter,BufWinEnter <buffer>
+    autocmd BufEnter,WinEnter <buffer>
           \ call vimfiler#handler#_event_bufwin_enter(expand('<abuf>'))
-    autocmd BufLeave,WinLeave,BufWinLeave <buffer>
+    autocmd BufLeave,WinLeave <buffer>
           \ call vimfiler#handler#_event_bufwin_leave(expand('<abuf>'))
     autocmd CursorMoved <buffer>
           \ call vimfiler#handler#_event_cursor_moved()
