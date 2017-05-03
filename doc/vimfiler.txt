@@ -1259,8 +1259,8 @@ files(arguments) were specified
 Q: To close Vim if the only window left open is a vimfiler buffer(But I don't
 recommend)
 >
-	autocmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') |
-	\ q | endif
+	autocmd BufEnter * if (!has('vim_starting') && winnr('$') == 1
+	\ && &filetype ==# 'vimfiler') | quit | endif
 <
 Q: I want to use UNC path in vimfiler.
 A: You must use // path to open UNC path in Windows:
