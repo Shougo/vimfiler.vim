@@ -984,7 +984,9 @@ function! s:expand_tree(is_recursive) abort "{{{
     call cursor(line('.') + 1, 0)
   endif
 
+  let savedView = winsaveview()
   call vimfiler#view#_redraw_screen()
+  call winrestview(savedView)
 endfunction"}}}
 function! vimfiler#mappings#expand_tree_rec(file, ...) abort "{{{
   if get(a:file, 'vimfiler__ftype', '') ==# 'link'
@@ -1133,9 +1135,10 @@ function! s:unexpand_tree() abort "{{{
           \ + b:vimfiler.current_files[end+1 :]
     let b:vimfiler.original_files = b:vimfiler.original_files[: index_orig]
           \ + b:vimfiler.original_files[end_orig+1 :]
-    let pos = getpos('.')
+
+    let savedView = winsaveview()
     call vimfiler#view#_redraw_screen()
-    call setpos('.', pos)
+    call winrestview(savedView)
   endif
 endfunction"}}}
 function! s:jump_child(is_first) abort "{{{
