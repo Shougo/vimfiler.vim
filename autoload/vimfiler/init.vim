@@ -422,8 +422,7 @@ function! vimfiler#init#_start(path, ...) abort "{{{
         let vimfiler = getbufvar(bufnr, 'vimfiler')
         if type(vimfiler) == type({})
               \ && vimfiler.context.buffer_name ==# context.buffer_name
-              \ && (!exists('t:tabpagebuffer')
-              \      || has_key(t:tabpagebuffer, bufnr))
+              \ && (exists('t:vimfiler') && has_key(t:vimfiler, bufnr))
               \ && (!context.invisible || bufwinnr(bufnr) < 0)
           call vimfiler#init#_switch_vimfiler(bufnr, context, path)
           return
@@ -562,6 +561,11 @@ function! s:create_vimfiler_buffer(path, context) abort "{{{
   finally
     let &g:swapfile = swapfile_save
   endtry
+
+  if !exists('t:vimfiler')
+    let t:vimfiler = {}
+  endif
+  let t:vimfiler[bufnr('%')] = 1
 
   if !loaded
     call vimfiler#echo_error(

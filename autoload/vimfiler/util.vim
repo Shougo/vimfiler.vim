@@ -226,8 +226,8 @@ function! vimfiler#util#delete_buffer(...) abort "{{{
   silent execute 'bwipeout!' bufnr
 endfunction"}}}
 function! s:buflisted(bufnr) abort "{{{
-  return exists('t:tabpagebuffer') ?
-        \ has_key(t:tabpagebuffer, a:bufnr) && buflisted(a:bufnr) :
+  return exists('t:vimfiler') ?
+        \ has_key(t:vimfiler, a:bufnr) && buflisted(a:bufnr) :
         \ buflisted(a:bufnr)
 endfunction"}}}
 
