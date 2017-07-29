@@ -555,6 +555,12 @@ function! s:create_vimfiler_buffer(path, context) abort "{{{
   " Save swapfile option.
   let swapfile_save = &swapfile
 
+  if !exists('t:vimfiler')
+    let t:vimfiler = {}
+  endif
+  " Save alternate buffer.
+  let t:vimfiler[bufnr('%')] = 1
+
   try
     set noswapfile
     let loaded = s:manager.open(bufname, 'silent edit')
@@ -562,9 +568,6 @@ function! s:create_vimfiler_buffer(path, context) abort "{{{
     let &g:swapfile = swapfile_save
   endtry
 
-  if !exists('t:vimfiler')
-    let t:vimfiler = {}
-  endif
   let t:vimfiler[bufnr('%')] = 1
 
   if !loaded
