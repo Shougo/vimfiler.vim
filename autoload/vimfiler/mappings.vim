@@ -290,8 +290,6 @@ function! vimfiler#mappings#define_default_mappings(context) abort "{{{
   execute s:nowait_nmap() '<BS>'
         \ '<Plug>(vimfiler_switch_to_parent_directory)'
 
-  execute s:nowait_nmap() 'gv'
-        \ '<Plug>(vimfiler_execute_new_gvim)'
   execute s:nowait_nmap() '.'
         \ '<Plug>(vimfiler_toggle_visible_ignore_files)'
   execute s:nowait_nmap() 'H'
