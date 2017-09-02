@@ -220,6 +220,14 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
 
   set filetype=vimfiler
 
+  if a:context.split && has('vim_starting')
+    execute a:context.direction
+          \ (a:context.horizontal ? 'split' : 'vsplit')
+
+    enew
+    wincmd p
+  endif
+
   if b:vimfiler.context.double
     " Create another vimfiler.
     call vimfiler#mappings#create_another_vimfiler()
