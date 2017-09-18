@@ -220,7 +220,7 @@ function! vimfiler#init#_vimfiler_directory(directory, context) "{{{1
 
   set filetype=vimfiler
 
-  if a:context.split && has('vim_starting') && !a:context.explorer
+  if a:context.split && has('vim_starting') && isdirectory(bufname('%'))
     execute a:context.direction
           \ (a:context.horizontal ? 'split' : 'vsplit')
 
