@@ -23,12 +23,9 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
 function! vimfiler#columns#type#define() abort
   return s:column
-endfunction"}}}
+endfunction
 
 let s:column = {
       \ 'name' : 'type',
@@ -36,11 +33,11 @@ let s:column = {
       \ 'syntax' : 'vimfilerColumn__Type',
       \ }
 
-function! s:column.length(files, context) abort "{{{
+function! s:column.length(files, context) abort
   return 3
-endfunction"}}}
+endfunction
 
-function! s:column.define_syntax(context) abort "{{{
+function! s:column.define_syntax(context) abort
   syntax match   vimfilerColumn__TypeText       '\[T\]'
         \ contained containedin=vimfilerColumn__Type
   syntax match   vimfilerColumn__TypeImage      '\[I\]'
@@ -66,9 +63,9 @@ function! s:column.define_syntax(context) abort "{{{
   highlight def link vimfilerColumn__TypeDirectory Preproc
   highlight def link vimfilerColumn__TypeSystem Comment
   highlight def link vimfilerColumn__TypeLink Comment
-endfunction"}}}
+endfunction
 
-function! s:column.get(file, context) abort "{{{
+function! s:column.get(file, context) abort
   let ext = tolower(a:file.vimfiler__extension)
 
   if (vimfiler#util#is_windows() && ext ==? 'LNK')
@@ -101,9 +98,4 @@ function! s:column.get(file, context) abort "{{{
     " Others filetype.
     return '   '
   endif
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

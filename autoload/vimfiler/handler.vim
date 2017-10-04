@@ -23,10 +23,7 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
+function! vimfiler#handler#_event_handler(event_name, ...)
   let user_context = get(a:000, 0, {})
   let context = vimfiler#initialize_context(user_context)
   let path = vimfiler#util#substitute_path_separator(
@@ -44,7 +41,7 @@ function! vimfiler#handler#_event_handler(event_name, ...)  "{{{1
   return s:on_{a:event_name}(source_name, source_args, context)
 endfunction
 
-function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
+function! s:on_BufReadCmd(source_name, source_args, context)
   " Check path.
   let ret = unite#vimfiler_check_filetype(
         \ [insert(a:source_args, a:source_name)])
@@ -79,20 +76,20 @@ function! s:on_BufReadCmd(source_name, source_args, context)  "{{{1
     " Restore window.
     call vimfiler#util#winmove(bufwinnr(bufnr))
   endif
-endfunction"}}}
+endfunction
 
-function! s:on_BufWriteCmd(source_name, source_args, context)  "{{{1
+function! s:on_BufWriteCmd(source_name, source_args, context)
   " BufWriteCmd is published by :write or other commands with 1,$ range.
   return s:write(a:source_name, a:source_args, 1, line('$'), 'BufWriteCmd')
-endfunction"}}}
+endfunction
 
 
-function! s:on_FileAppendCmd(source_name, source_args, context)  "{{{1
+function! s:on_FileAppendCmd(source_name, source_args, context)
   " FileAppendCmd is published by :write or other commands with >>.
   return s:write(a:source_name, a:source_args, line("'["), line("']"), 'FileAppendCmd')
-endfunction"}}}
+endfunction
 
-function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
+function! s:on_FileReadCmd(source_name, source_args, context)
   " Check path.
   let ret = unite#vimfiler_check_filetype(
         \ [insert(a:source_args, a:source_name)])
@@ -114,16 +111,16 @@ function! s:on_FileReadCmd(source_name, source_args, context)  "{{{1
   endif
 
   call append(line('.'), info[0])
-endfunction"}}}
+endfunction
 
 
-function! s:on_FileWriteCmd(source_name, source_args, context) abort  "{{{
+function! s:on_FileWriteCmd(source_name, source_args, context) abort
   " FileWriteCmd is published by :write or other commands with partial range
   " such as 1,2 where 2 < line('$').
   return s:write(a:source_name, a:source_args, line("'["), line("']"), 'FileWriteCmd')
-endfunction"}}}
+endfunction
 
-function! s:write(source_name, source_args, line1, line2, event_name) abort  "{{{
+function! s:write(source_name, source_args, line1, line2, event_name) abort
   if !exists('b:vimfiler') || !has_key(b:vimfiler, 'current_file') || !&l:modified
     return
   endif
@@ -141,10 +138,10 @@ function! s:write(source_name, source_args, line1, line2, event_name) abort  "{{
     call vimfiler#util#print_error(v:exception . ' ' . v:throwpoint)
     setlocal modified
   endtry
-endfunction"}}}
+endfunction
 
 " Event functions.
-function! vimfiler#handler#_event_bufwin_enter(bufnr) abort "{{{
+function! vimfiler#handler#_event_bufwin_enter(bufnr) abort
   if a:bufnr != bufnr('%') && bufwinnr(a:bufnr) > 0
     let winnr = winnr()
     call vimfiler#util#winmove(bufwinnr(a:bufnr))
@@ -193,9 +190,9 @@ function! vimfiler#handler#_event_bufwin_enter(bufnr) abort "{{{
       call vimfiler#util#winmove(winnr)
     endif
   endtry
-endfunction"}}}
+endfunction
 
-function! vimfiler#handler#_event_bufwin_leave(bufnr) abort "{{{
+function! vimfiler#handler#_event_bufwin_leave(bufnr) abort
   let vimfiler = getbufvar(str2nr(a:bufnr), 'vimfiler')
 
   if type(vimfiler) != type({})
@@ -209,9 +206,9 @@ function! vimfiler#handler#_event_bufwin_leave(bufnr) abort "{{{
   elseif context.winheight > 0 && context.split
     let &l:winfixheight = context.vimfiler__winfixheight
   endif
-endfunction"}}}
+endfunction
 
-function! vimfiler#handler#_event_cursor_moved() abort "{{{
+function! vimfiler#handler#_event_cursor_moved() abort
   if !exists('b:vimfiler')
     return
   endif
@@ -233,10 +230,4 @@ function! vimfiler#handler#_event_cursor_moved() abort "{{{
   finally
     setlocal nomodifiable
   endtry
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
-
+endfunction

@@ -23,12 +23,9 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
 function! vimfiler#columns#time#define() abort
   return s:column
-endfunction"}}}
+endfunction
 
 let s:column = {
       \ 'name' : 'time',
@@ -36,11 +33,11 @@ let s:column = {
       \ 'syntax' : 'vimfilerColumn__Time',
       \ }
 
-function! s:column.length(files, context) abort "{{{
+function! s:column.length(files, context) abort
   return len(strftime(g:vimfiler_time_format, 0)) + 1
-endfunction"}}}
+endfunction
 
-function! s:column.define_syntax(context) abort "{{{
+function! s:column.define_syntax(context) abort
   syntax match   vimfilerColumn__TimeNormal
         \ '#[^#]\+' contained
         \ containedin=vimfilerColumn__Time
@@ -64,17 +61,17 @@ function! s:column.define_syntax(context) abort "{{{
   highlight def link vimfilerColumn__TimeToday Statement
   highlight def link vimfilerColumn__TimeWeek Special
   highlight def link vimfilerColumn__TimeIgnore Ignore
-endfunction"}}}
+endfunction
 
-function! s:column.get(file, context) abort "{{{
+function! s:column.get(file, context) abort
   let datemark = s:get_datemark(a:file)
   return (a:file.vimfiler__filetime =~ '^-\?\d\+$' ?
         \  (a:file.vimfiler__filetime == -1 ? '' :
         \    datemark . strftime(g:vimfiler_time_format, a:file.vimfiler__filetime))
         \ : datemark . a:file.vimfiler__filetime)
-endfunction"}}}
+endfunction
 
-function! s:get_datemark(file) abort "{{{
+function! s:get_datemark(file) abort
   if a:file.vimfiler__filetime !~ '^\d\+$'
     return '~'
   endif
@@ -89,9 +86,4 @@ function! s:get_datemark(file) abort "{{{
   else
     return '~'
   endif
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

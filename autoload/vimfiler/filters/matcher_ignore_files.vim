@@ -23,19 +23,16 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
 function! vimfiler#filters#matcher_ignore_files#define() abort
   return s:filter
-endfunction"}}}
+endfunction
 
 let s:filter = {
       \ 'name' : 'matcher_ignore_files',
       \ 'description' : 'ignore project ignore files',
       \ }
 
-function! s:filter.filter(files, context) abort "{{{
+function! s:filter.filter(files, context) abort
   let path = b:vimfiler.current_dir
   let project = unite#util#path2project_directory(path) . '/'
 
@@ -49,9 +46,4 @@ function! s:filter.filter(files, context) abort "{{{
 
   return unite#filters#filter_patterns(a:files,
         \ project_ignore_patterns, project_ignore_whites)
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

@@ -23,12 +23,9 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! unite#sources#vimfiler_sort#define() abort "{{{
+function! unite#sources#vimfiler_sort#define() abort
   return s:source
-endfunction"}}}
+endfunction
 
 let s:Cache = vimfiler#util#get_vital_cache()
 
@@ -41,15 +38,15 @@ let s:source = {
       \ 'is_listed' : 0,
       \ }
 
-function! s:source.hooks.on_init(args, context) abort "{{{
+function! s:source.hooks.on_init(args, context) abort
   if &filetype !=# 'vimfiler'
     return
   endif
 
   let a:context.source__sort = b:vimfiler.local_sort_type
-endfunction"}}}
+endfunction
 
-function! s:source.gather_candidates(args, context) abort "{{{
+function! s:source.gather_candidates(args, context) abort
   if !has_key(a:context, 'source__sort')
     return []
   endif
@@ -69,15 +66,15 @@ function! s:source.gather_candidates(args, context) abort "{{{
         \ "word" : v:val,
         \ "action__sort" : v:val,
         \ }')
-endfunction"}}}
+endfunction
 
-" Actions "{{{
+" Actions
 let s:action_table = {}
 
 let s:action_table.sort = {
       \ 'description' : 'sort vimfiler items',
       \ }
-function! s:action_table.sort.func(candidate) abort "{{{
+function! s:action_table.sort.func(candidate) abort
   if &filetype != 'vimfiler'
     call unite#print_error('Current vimfiler is not found.')
     return
@@ -102,13 +99,7 @@ function! s:action_table.sort.func(candidate) abort "{{{
 
     call vimfiler#force_redraw_screen(1)
   endif
-endfunction"}}}
+endfunction
 
 let s:source.action_table['*'] = s:action_table
 unlet! s:action_table
-"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker

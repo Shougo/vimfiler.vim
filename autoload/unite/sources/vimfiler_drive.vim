@@ -23,9 +23,6 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
 let g:vimfiler_detect_drives =
       \ get(g:, 'vimfiler_detect_drives', unite#util#is_windows() ? [
       \     'A:/', 'B:/', 'C:/', 'D:/', 'E:/', 'F:/', 'G:/',
@@ -34,9 +31,9 @@ let g:vimfiler_detect_drives =
       \     'V:/', 'W:/', 'X:/', 'Y:/', 'Z:/'
       \ ] : [expand('~'), expand('~/Downloads/')])
 
-function! unite#sources#vimfiler_drive#define() abort "{{{
+function! unite#sources#vimfiler_drive#define() abort
   return s:source
-endfunction"}}}
+endfunction
 
 let s:source = {
       \ 'name' : 'vimfiler/drive',
@@ -45,7 +42,7 @@ let s:source = {
       \ 'is_listed' : 0,
       \ }
 
-function! s:source.gather_candidates(args, context) abort "{{{
+function! s:source.gather_candidates(args, context) abort
   if !exists('s:drives') || a:context.is_redraw
     " Detect mounted drive.
     let s:drives = copy(g:vimfiler_detect_drives)
@@ -74,9 +71,4 @@ function! s:source.gather_candidates(args, context) abort "{{{
         \ 'kind' : (v:val =~ '^ssh://' ?
         \     'directory/ssh' : 'directory'),
         \ }")
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

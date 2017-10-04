@@ -23,54 +23,51 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! vimfiler#util#get_vital() abort "{{{
+function! vimfiler#util#get_vital() abort
   if !exists('s:V')
     let s:V = vital#vimfiler#new()
   endif
   return s:V
-endfunction"}}}
-function! vimfiler#util#get_vital_cache() abort "{{{
+endfunction
+function! vimfiler#util#get_vital_cache() abort
   if !exists('s:Cache')
     let s:Cache = vimfiler#util#get_vital().import('System.Cache.Deprecated')
   endif
   return s:Cache
-endfunction"}}}
-function! vimfiler#util#get_vital_buffer() abort "{{{
+endfunction
+function! vimfiler#util#get_vital_buffer() abort
   return vimfiler#util#get_vital().import('Vim.Buffer')
-endfunction"}}}
-function! s:get_prelude() abort "{{{
+endfunction
+function! s:get_prelude() abort
   if !exists('s:Prelude')
     let s:Prelude = vimfiler#util#get_vital().import('Prelude')
   endif
   return s:Prelude
-endfunction"}}}
-function! s:get_list() abort "{{{
+endfunction
+function! s:get_list() abort
   if !exists('s:List')
     let s:List = vimfiler#util#get_vital().import('Data.List')
   endif
   return s:List
-endfunction"}}}
-function! s:get_message() abort "{{{
+endfunction
+function! s:get_message() abort
   if !exists('s:Message')
     let s:Message = vimfiler#util#get_vital().import('Vim.Message')
   endif
   return s:Message
-endfunction"}}}
-function! s:get_process() abort "{{{
+endfunction
+function! s:get_process() abort
   if !exists('s:Process')
     let s:Process = vimfiler#util#get_vital().import('Process')
   endif
   return s:Process
-endfunction"}}}
-function! s:get_string() abort "{{{
+endfunction
+function! s:get_string() abort
   if !exists('s:String')
     let s:String = vimfiler#util#get_vital().import('Data.String')
   endif
   return s:String
-endfunction"}}}
+endfunction
 
 let s:is_windows = has('win16') || has('win32') || has('win64')
 
@@ -133,35 +130,35 @@ function! vimfiler#util#has_lua() abort
   return has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
 endfunction
 
-function! vimfiler#util#is_cmdwin() abort "{{{
+function! vimfiler#util#is_cmdwin() abort
   return bufname('%') ==# '[Command Line]'
-endfunction"}}}
+endfunction
 
-function! vimfiler#util#expand(path) abort "{{{
+function! vimfiler#util#expand(path) abort
   return s:get_prelude().substitute_path_separator(
         \ (a:path =~ '^\~') ? substitute(a:path, '^\~', expand('~'), '') :
         \ (a:path =~ '^\$\h\w*') ? substitute(a:path,
         \               '^\$\h\w*', '\=eval(submatch(0))', '') :
         \ a:path)
-endfunction"}}}
-function! vimfiler#util#set_default_dictionary_helper(variable, keys, value) abort "{{{
+endfunction
+function! vimfiler#util#set_default_dictionary_helper(variable, keys, value) abort
   for key in split(a:keys, '\s*,\s*')
     if !has_key(a:variable, key)
       let a:variable[key] = a:value
     endif
   endfor
-endfunction"}}}
-function! vimfiler#util#set_dictionary_helper(variable, keys, value) abort "{{{
+endfunction
+function! vimfiler#util#set_dictionary_helper(variable, keys, value) abort
   for key in split(a:keys, '\s*,\s*')
     let a:variable[key] = a:value
   endfor
-endfunction"}}}
-function! vimfiler#util#resolve(filename) abort "{{{
+endfunction
+function! vimfiler#util#resolve(filename) abort
   return ((vimfiler#util#is_windows() && fnamemodify(a:filename, ':e') ==? 'LNK') || getftype(a:filename) ==# 'link') ?
         \ vimfiler#util#substitute_path_separator(resolve(a:filename)) : a:filename
-endfunction"}}}
+endfunction
 
-function! vimfiler#util#set_variables(variables) abort "{{{
+function! vimfiler#util#set_variables(variables) abort
   let variables_save = {}
   for [key, value] in items(a:variables)
     let save_value = exists(key) ? eval(key) : ''
@@ -171,14 +168,14 @@ function! vimfiler#util#set_variables(variables) abort "{{{
   endfor
 
   return variables_save
-endfunction"}}}
-function! vimfiler#util#restore_variables(variables_save) abort "{{{
+endfunction
+function! vimfiler#util#restore_variables(variables_save) abort
   for [key, value] in items(a:variables_save)
     execute 'let' key '=' string(value)
   endfor
-endfunction"}}}
+endfunction
 
-function! vimfiler#util#hide_buffer(...) abort "{{{
+function! vimfiler#util#hide_buffer(...) abort
   let bufnr = get(a:000, 0, bufnr('%'))
 
   let vimfiler = getbufvar(bufnr, 'vimfiler')
@@ -194,8 +191,8 @@ function! vimfiler#util#hide_buffer(...) abort "{{{
   else
     call vimfiler#util#alternate_buffer(context)
   endif
-endfunction"}}}
-function! vimfiler#util#alternate_buffer(context) abort "{{{
+endfunction
+function! vimfiler#util#alternate_buffer(context) abort
   if buflisted(a:context.alternate_buffer)
         \ && getbufvar(a:context.alternate_buffer, '&filetype') !=# 'vimfiler'
         \ && g:vimfiler_restore_alternate_file
@@ -217,24 +214,24 @@ function! vimfiler#util#alternate_buffer(context) abort "{{{
         \ listed_buffer[current+1] : listed_buffer[current-1])
 
   silent call vimfiler#force_redraw_all_vimfiler()
-endfunction"}}}
-function! vimfiler#util#delete_buffer(...) abort "{{{
+endfunction
+function! vimfiler#util#delete_buffer(...) abort
   let bufnr = get(a:000, 0, bufnr('%'))
 
   call vimfiler#util#hide_buffer(bufnr)
 
   silent execute 'bwipeout!' bufnr
-endfunction"}}}
-function! s:buflisted(bufnr) abort "{{{
+endfunction
+function! s:buflisted(bufnr) abort
   return exists('t:vimfiler') ?
         \ has_key(t:vimfiler, a:bufnr) && buflisted(a:bufnr) :
         \ buflisted(a:bufnr)
-endfunction"}}}
+endfunction
 
-function! vimfiler#util#convert2list(expr) abort "{{{
+function! vimfiler#util#convert2list(expr) abort
   return type(a:expr) ==# type([]) ? copy(a:expr) : [a:expr]
-endfunction"}}}
-function! vimfiler#util#get_vimfiler_winnr(buffer_name) abort "{{{
+endfunction
+function! vimfiler#util#get_vimfiler_winnr(buffer_name) abort
   for winnr in filter(range(1, winnr('$')),
         \ "getbufvar(winbufnr(v:val), '&filetype') =~# 'vimfiler'")
     let buffer_context = getbufvar(
@@ -245,20 +242,20 @@ function! vimfiler#util#get_vimfiler_winnr(buffer_name) abort "{{{
   endfor
 
   return -1
-endfunction"}}}
+endfunction
 
-function! vimfiler#util#is_sudo() abort "{{{
+function! vimfiler#util#is_sudo() abort
   return $SUDO_USER != '' && $USER !=# $SUDO_USER
         \ && $HOME !=# expand('~'.$USER)
         \ && $HOME ==# expand('~'.$SUDO_USER)
-endfunction"}}}
+endfunction
 
-function! vimfiler#util#winmove(winnr) abort "{{{
+function! vimfiler#util#winmove(winnr) abort
   if a:winnr > 0
     silent execute a:winnr.'wincmd w'
   endif
-endfunction"}}}
-function! vimfiler#util#winclose(winnr, context) abort "{{{
+endfunction
+function! vimfiler#util#winclose(winnr, context) abort
   if winnr('$') != 1
     let winnr = (winnr() == a:winnr) ? winnr('#') : winnr()
     let prev_winnr = (winnr < a:winnr) ? winnr : winnr - 1
@@ -268,9 +265,4 @@ function! vimfiler#util#winclose(winnr, context) abort "{{{
   else
     call vimfiler#util#alternate_buffer(a:context)
   endif
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

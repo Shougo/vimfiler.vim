@@ -23,12 +23,9 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! unite#sources#vimfiler_mask#define() abort "{{{
+function! unite#sources#vimfiler_mask#define() abort
   return s:source
-endfunction"}}}
+endfunction
 
 let s:source = {
       \ 'name' : 'vimfiler/mask',
@@ -40,7 +37,7 @@ let s:source = {
       \ 'filters' : [ 'matcher_vimfiler/mask' ],
       \ }
 
-function! s:source.hooks.on_init(args, context) abort "{{{
+function! s:source.hooks.on_init(args, context) abort
   if &filetype !=# 'vimfiler'
     return
   endif
@@ -50,9 +47,9 @@ function! s:source.hooks.on_init(args, context) abort "{{{
 
   call unite#print_message(
         \ '[vimfiler/mask] Current mask: ' . a:context.source__mask)
-endfunction"}}}
+endfunction
 
-function! s:source.change_candidates(args, context) abort "{{{
+function! s:source.change_candidates(args, context) abort
   if !has_key(a:context, 'source__mask')
     return []
   endif
@@ -69,24 +66,18 @@ function! s:source.change_candidates(args, context) abort "{{{
         \ 'vimfiler__is_directory' : v:val.vimfiler__is_directory,
         \ 'vimfiler__abbr' : v:val.vimfiler__abbr,
         \ }")
-endfunction"}}}
+endfunction
 
-" Actions "{{{
+" Actions
 let s:action_table = {}
 
 let s:action_table.change = {
       \ 'description' : 'change current mask',
       \ }
-function! s:action_table.change.func(candidate) abort "{{{
+function! s:action_table.change.func(candidate) abort
   let b:vimfiler.current_mask = unite#get_context().input
   call vimfiler#redraw_screen()
-endfunction"}}}
+endfunction
 
 let s:source.action_table['*'] = s:action_table
 unlet! s:action_table
-"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker

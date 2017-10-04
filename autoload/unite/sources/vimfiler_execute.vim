@@ -23,12 +23,9 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! unite#sources#vimfiler_execute#define() abort "{{{
+function! unite#sources#vimfiler_execute#define() abort
   return s:source
-endfunction"}}}
+endfunction
 
 let s:source = {
       \ 'name' : 'vimfiler/execute',
@@ -37,7 +34,7 @@ let s:source = {
       \ 'is_listed' : 0,
       \ }
 
-function! s:source.hooks.on_init(args, context) abort "{{{
+function! s:source.hooks.on_init(args, context) abort
   let winnr = winnr()
   try
     call vimfiler#util#winmove(a:context.vimfiler__winnr)
@@ -53,9 +50,9 @@ function! s:source.hooks.on_init(args, context) abort "{{{
   if &filetype !=# 'vimfiler'
     return
   endif
-endfunction"}}}
+endfunction
 
-function! s:source.gather_candidates(args, context) abort "{{{
+function! s:source.gather_candidates(args, context) abort
   if !has_key(a:context, 'source__file')
     return []
   endif
@@ -90,9 +87,4 @@ function! s:source.gather_candidates(args, context) abort "{{{
   endfor
 
   return candidates
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

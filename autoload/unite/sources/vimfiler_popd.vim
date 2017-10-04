@@ -23,14 +23,11 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! unite#sources#vimfiler_popd#define() abort "{{{
+function! unite#sources#vimfiler_popd#define() abort
   return s:source
-endfunction"}}}
+endfunction
 
-function! unite#sources#vimfiler_popd#pushd() abort "{{{
+function! unite#sources#vimfiler_popd#pushd() abort
   if &filetype !=# 'vimfiler'
     return
   endif
@@ -40,7 +37,7 @@ function! unite#sources#vimfiler_popd#pushd() abort "{{{
         \ : [b:vimfiler.current_dir]
   call insert(s:directory_stack, directories)
   echo 'Yanked directories:' string(directories)
-endfunction"}}}
+endfunction
 
 let s:directory_stack = []
 
@@ -53,7 +50,7 @@ let s:source = {
       \ 'alias_table' : { 'cd' : 'lcd' },
       \ }
 
-function! s:source.gather_candidates(args, context) abort "{{{
+function! s:source.gather_candidates(args, context) abort
   let num = 0
   let _ = []
   for stack in s:directory_stack
@@ -70,9 +67,9 @@ function! s:source.gather_candidates(args, context) abort "{{{
   endfor
 
   return _
-endfunction"}}}
+endfunction
 
-" Actions "{{{
+" Actions
 let s:action_table = {}
 
 let s:action_table.delete = {
@@ -81,21 +78,21 @@ let s:action_table.delete = {
       \ 'is_invalidate_cache' : 1,
       \ 'is_quit' : 0,
       \ }
-function! s:action_table.delete.func(candidates) abort "{{{
+function! s:action_table.delete.func(candidates) abort
   for candidate in sort(a:candidates, 's:compare')
     call remove(s:directory_stack,
           \ candidate.action__nr)
   endfor
-endfunction"}}}
+endfunction
 
-function! s:compare(candidate_a, candidate_b) abort "{{{
+function! s:compare(candidate_a, candidate_b) abort
   return a:candidate_b.action__nr - a:candidate_a.action__nr
-endfunction"}}}
+endfunction
 
 let s:action_table.cd = {
       \ 'description' : 'cd vimfiler directory from directory stack',
       \ }
-function! s:action_table.cd.func(candidate) abort "{{{
+function! s:action_table.cd.func(candidate) abort
   if &filetype != 'vimfiler'
     return
   endif
@@ -110,17 +107,12 @@ function! s:action_table.cd.func(candidate) abort "{{{
     call vimfiler#mappings#cd(stack[1])
     wincmd p
   endif
-endfunction"}}}
+endfunction
 
 let s:source.action_table['*'] = s:action_table
 unlet! s:action_table
-"}}}
 
-function! s:compare(candidate_a, candidate_b) abort "{{{
+
+function! s:compare(candidate_a, candidate_b) abort
   return a:candidate_b.action__nr - a:candidate_a.action__nr
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

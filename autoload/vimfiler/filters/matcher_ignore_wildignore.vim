@@ -23,27 +23,19 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
 function! vimfiler#filters#matcher_ignore_wildignore#define() abort
   return s:filter
-endfunction"}}}
+endfunction
 
 let s:filter = {
       \ 'name' : 'matcher_ignore_wildignore',
       \ 'description' : 'ignore wildignore matched files',
       \ }
 
-function! s:filter.filter(files, context) abort "{{{
+function! s:filter.filter(files, context) abort
   for pattern in unite#filters#globs2vim_patterns(split(&wildignore, ','))
     call filter(a:files,
           \  "v:val.action__path !~? pattern")
   endfor
   return a:files
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

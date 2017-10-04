@@ -23,28 +23,20 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
 function! vimfiler#filters#matcher_ignore_pattern#define() abort
   return s:filter
-endfunction"}}}
+endfunction
 
 let s:filter = {
       \ 'name' : 'matcher_ignore_pattern',
       \ 'description' : 'ignore g:vimfiler_ignore_pattern matched files',
       \ }
 
-function! s:filter.filter(files, context) abort "{{{
+function! s:filter.filter(files, context) abort
   for pattern in filter(vimfiler#util#convert2list(
         \ g:vimfiler_ignore_pattern), "v:val != ''")
     call filter(a:files,
           \  "v:val.vimfiler__filename !~? pattern")
   endfor
   return a:files
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

@@ -23,19 +23,16 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! vimfiler#custom#get() abort "{{{
+function! vimfiler#custom#get() abort
   if !exists('s:custom')
     let s:custom = {}
     let s:custom.profiles = {}
   endif
 
   return s:custom
-endfunction"}}}
+endfunction
 
-function! vimfiler#custom#profile(profile_name, option_name, value) abort "{{{
+function! vimfiler#custom#profile(profile_name, option_name, value) abort
   let custom = vimfiler#custom#get()
   let profile_name =
         \ has_key(custom.profiles, a:profile_name) ?
@@ -48,8 +45,8 @@ function! vimfiler#custom#profile(profile_name, option_name, value) abort "{{{
 
     let custom.profiles[key][a:option_name] = a:value
   endfor
-endfunction"}}}
-function! vimfiler#custom#get_profile(profile_name, option_name) abort "{{{
+endfunction
+function! vimfiler#custom#get_profile(profile_name, option_name) abort
   let custom = vimfiler#custom#get()
   let profile_name =
         \ has_key(custom.profiles, a:profile_name) ?
@@ -60,15 +57,10 @@ function! vimfiler#custom#get_profile(profile_name, option_name) abort "{{{
   endif
 
   return custom.profiles[profile_name][a:option_name]
-endfunction"}}}
+endfunction
 
-function! s:init_profile() abort "{{{
+function! s:init_profile() abort
   return {
         \ 'context' : {},
         \ }
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

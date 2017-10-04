@@ -23,19 +23,16 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! unite#filters#matcher_vimfiler_mask#define() abort "{{{
+function! unite#filters#matcher_vimfiler_mask#define() abort
   return s:matcher
-endfunction"}}}
+endfunction
 
 let s:matcher = {
       \ 'name' : 'matcher_vimfiler/mask',
       \ 'description' : 'vimfiler mask matcher',
       \}
 
-function! s:matcher.filter(candidates, context) abort "{{{
+function! s:matcher.filter(candidates, context) abort
   if a:context.input == ''
     return a:candidates
   endif
@@ -87,9 +84,4 @@ function! s:matcher.filter(candidates, context) abort "{{{
   endfor
 
   return candidates
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

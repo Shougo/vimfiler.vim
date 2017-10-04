@@ -23,15 +23,12 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
 let g:vimfiler_min_cache_files =
       \ get(g:, 'vimfiler_min_cache_files', 100)
 
 let s:Cache = vimfiler#util#get_vital_cache()
 
-function! vimfiler#view#_force_redraw_screen(...) abort "{{{
+function! vimfiler#view#_force_redraw_screen(...) abort
   let is_manualed = get(a:000, 0, 0)
 
   let old_original_files = {}
@@ -93,8 +90,8 @@ function! vimfiler#view#_force_redraw_screen(...) abort "{{{
   endfor
 
   call vimfiler#view#_redraw_screen()
-endfunction"}}}
-function! vimfiler#view#_redraw_screen(...) abort "{{{
+endfunction
+function! vimfiler#view#_redraw_screen(...) abort
   if &filetype !=# 'vimfiler'
     " Not vimfiler window.
     return
@@ -156,8 +153,8 @@ function! vimfiler#view#_redraw_screen(...) abort "{{{
   else
     call cursor(last_line, 0)
   endif
-endfunction"}}}
-function! vimfiler#view#_force_redraw_all_vimfiler(...) abort "{{{
+endfunction
+function! vimfiler#view#_force_redraw_all_vimfiler(...) abort
   let is_manualed = get(a:000, 0, 0)
 
   let current_nr = winnr()
@@ -172,8 +169,8 @@ function! vimfiler#view#_force_redraw_all_vimfiler(...) abort "{{{
   finally
     call vimfiler#util#winmove(current_nr)
   endtry
-endfunction"}}}
-function! vimfiler#view#_redraw_all_vimfiler() abort "{{{
+endfunction
+function! vimfiler#view#_redraw_all_vimfiler() abort
   let current_nr = winnr()
   try
     " Search vimfiler window.
@@ -185,8 +182,8 @@ function! vimfiler#view#_redraw_all_vimfiler() abort "{{{
   finally
     call vimfiler#util#winmove(current_nr)
   endtry
-endfunction"}}}
-function! s:redraw_prompt() abort "{{{
+endfunction
+function! s:redraw_prompt() abort
   if &filetype !=# 'vimfiler'
     return
   endif
@@ -252,8 +249,8 @@ function! s:redraw_prompt() abort "{{{
     let &l:modifiable = modifiable_save
     let &l:readonly = readonly_save
   endtry
-endfunction"}}}
-function! vimfiler#view#_get_print_lines(files) abort "{{{
+endfunction
+function! vimfiler#view#_get_print_lines(files) abort
   " Clear previous syntax.
   for syntax in b:vimfiler.syntaxes
     silent! execute 'syntax clear' syntax
@@ -321,8 +318,8 @@ function! vimfiler#view#_get_print_lines(files) abort "{{{
   endfor
 
   return lines
-endfunction"}}}
-function! vimfiler#view#_get_max_len(files) abort "{{{
+endfunction
+function! vimfiler#view#_get_max_len(files) abort
   let columns = (b:vimfiler.context.simple) ? [] : b:vimfiler.columns
 
   for column in columns
@@ -354,15 +351,15 @@ function! vimfiler#view#_get_max_len(files) abort "{{{
     let max_len = min([max_len, b:vimfiler.context.fnamewidth])
   endif
   return max_len
-endfunction"}}}
-function! vimfiler#view#_define_syntax() abort "{{{
+endfunction
+function! vimfiler#view#_define_syntax() abort
   for column in filter(
         \ copy(b:vimfiler.columns), "get(v:val, 'syntax', '') != ''")
     call column.define_syntax(b:vimfiler.context)
   endfor
-endfunction"}}}
+endfunction
 
-function! s:check_tree(files) abort "{{{
+function! s:check_tree(files) abort
   let level = 0
   let _ = []
   for file in a:files
@@ -374,8 +371,8 @@ function! s:check_tree(files) abort "{{{
   endfor
 
   return _
-endfunction"}}}
-function! s:define_filename_regions(max_len) abort "{{{
+endfunction
+function! s:define_filename_regions(max_len) abort
   let leaf_icon = vimfiler#util#escape_pattern(
         \ g:vimfiler_tree_leaf_icon)
   let file_icon = vimfiler#util#escape_pattern(
@@ -403,8 +400,8 @@ function! s:define_filename_regions(max_len) abort "{{{
           \ 'v'' oneline contains=vimfilerNonMark'
     call add(b:vimfiler.syntaxes, syntax)
   endfor
-endfunction"}}}
-function! s:define_column_regions(max_len, columns) abort "{{{
+endfunction
+function! s:define_column_regions(max_len, columns) abort
   " Column regions.
   let start = a:max_len + 1
   let syntaxes = [
@@ -434,9 +431,4 @@ function! s:define_column_regions(max_len, columns) abort "{{{
 
     let start += column.vimfiler__length + 1
   endfor
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction

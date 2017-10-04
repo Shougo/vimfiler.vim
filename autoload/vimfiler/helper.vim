@@ -23,10 +23,7 @@
 " }}}
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! vimfiler#helper#_get_directory_files(directory, ...) abort "{{{
+function! vimfiler#helper#_get_directory_files(directory, ...) abort
   " Save current files.
 
   let is_manualed = get(a:000, 0, 0)
@@ -52,8 +49,8 @@ function! vimfiler#helper#_get_directory_files(directory, ...) abort "{{{
   endfor
 
   return vimfiler#helper#_sort_files(current_files)
-endfunction"}}}
-function! vimfiler#helper#_sort_files(files) abort "{{{
+endfunction
+function! vimfiler#helper#_sort_files(files) abort
   let files = a:files
   let dirs = filter(copy(a:files), 'v:val.vimfiler__is_directory')
   let files = filter(copy(a:files), '!v:val.vimfiler__is_directory')
@@ -65,8 +62,8 @@ function! vimfiler#helper#_sort_files(files) abort "{{{
   endif
 
   return files
-endfunction"}}}
-function! vimfiler#helper#_parse_path(path) abort "{{{
+endfunction
+function! vimfiler#helper#_parse_path(path) abort
   let path = a:path
 
   let source_name = matchstr(path, '^\h[^:]*\ze:')
@@ -88,8 +85,8 @@ function! vimfiler#helper#_parse_path(path) abort "{{{
         \      'substitute(v:val, ''\\\(.\)'', "\\1", "g")')
 
   return insert(source_args, source_name)
-endfunction"}}}
-function! vimfiler#helper#_get_cd_path(dir) abort "{{{
+endfunction
+function! vimfiler#helper#_get_cd_path(dir) abort
   let dir = vimfiler#util#substitute_path_separator(a:dir)
 
   if dir =~ '^\h\w*:'
@@ -153,9 +150,9 @@ function! vimfiler#helper#_get_cd_path(dir) abort "{{{
   endif
 
   return fullpath
-endfunction"}}}
+endfunction
 
-function! vimfiler#helper#_complete(arglead, cmdline, cursorpos) abort "{{{
+function! vimfiler#helper#_complete(arglead, cmdline, cursorpos) abort
   let _ = []
 
   " Option names completion.
@@ -173,8 +170,8 @@ function! vimfiler#helper#_complete(arglead, cmdline, cursorpos) abort "{{{
   endif
 
   return sort(_)
-endfunction"}}}
-function! vimfiler#helper#_complete_path(arglead, cmdline, cursorpos) abort "{{{
+endfunction
+function! vimfiler#helper#_complete_path(arglead, cmdline, cursorpos) abort
   let ret = vimfiler#parse_path(a:cmdline)
   let source_name = ret[0]
   let source_args = ret[1:]
@@ -202,9 +199,9 @@ function! vimfiler#helper#_complete_path(arglead, cmdline, cursorpos) abort "{{{
   endif
 
   return sort(_)
-endfunction"}}}
+endfunction
 
-function! vimfiler#helper#_get_file_directory(...) abort "{{{
+function! vimfiler#helper#_get_file_directory(...) abort
   let line_num = get(a:000, 0, line('.'))
 
   let file = vimfiler#get_file(b:vimfiler, line_num)
@@ -221,10 +218,10 @@ function! vimfiler#helper#_get_file_directory(...) abort "{{{
   endif
 
   return directory
-endfunction"}}}
+endfunction
 
 
-function! vimfiler#helper#_get_buffer_directory(bufnr) abort "{{{
+function! vimfiler#helper#_get_buffer_directory(bufnr) abort
   let filetype = getbufvar(a:bufnr, '&filetype')
   if filetype ==# 'vimfiler'
     let dir = getbufvar(a:bufnr, 'vimfiler').current_dir
@@ -240,24 +237,24 @@ function! vimfiler#helper#_get_buffer_directory(bufnr) abort "{{{
   endif
 
   return dir
-endfunction"}}}
+endfunction
 
-function! vimfiler#helper#_set_cursor() abort "{{{
+function! vimfiler#helper#_set_cursor() abort
   let pos = getpos('.')
   execute 'normal!' (line('.') <= winheight(0) ? 'zb' :
         \ line('$') - line('.') > winheight(0) ? 'zz' : line('$').'zb')
   call setpos('.', pos)
-endfunction"}}}
+endfunction
 
-function! vimfiler#helper#_call_filters(files, context) abort "{{{
+function! vimfiler#helper#_call_filters(files, context) abort
   let files = a:files
   for filter in b:vimfiler.filters
     let files = filter.filter(files, a:context)
   endfor
   return files
-endfunction"}}}
+endfunction
 
-function! s:sort(files, type) abort "{{{
+function! s:sort(files, type) abort
   let ignorecase_save = &ignorecase
   try
     let &ignorecase = vimfiler#util#is_windows()
@@ -293,9 +290,9 @@ function! s:sort(files, type) abort "{{{
   endif
 
   return files
-endfunction"}}}
+endfunction
 
-function! vimfiler#helper#_sort_human(candidates, has_lua) abort "{{{
+function! vimfiler#helper#_sort_human(candidates, has_lua) abort
   if !a:has_lua || len(filter(copy(a:candidates),
         \ "v:val.vimfiler__filename =~ '\\d'")) >= 2
     return sort(a:candidates, 's:compare_filename')
@@ -324,9 +321,9 @@ do
 end
 EOF
   return a:candidates
-endfunction"}}}
+endfunction
 
-" Compare filename by human order. "{{{
+" Compare filename by human order.
 function! s:compare_filename(i1, i2) abort
   let words_1 = s:get_words(a:i1.vimfiler__filename)
   let words_2 = s:get_words(a:i2.vimfiler__filename)
@@ -342,18 +339,13 @@ function! s:compare_filename(i1, i2) abort
   endfor
 
   return words_1_len - words_2_len
-endfunction"}}}
+endfunction
 
-function! s:get_words(filename) abort "{{{
+function! s:get_words(filename) abort
   let words = []
   for split in split(a:filename, '\d\+\zs\ze')
     let words += split(split, '\D\zs\ze\d\+')
   endfor
 
   return map(words, "v:val =~ '^\\d\\+$' ? str2nr(v:val) : v:val")
-endfunction"}}}
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" vim: foldmethod=marker
+endfunction
