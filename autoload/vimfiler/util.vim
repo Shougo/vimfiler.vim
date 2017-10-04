@@ -196,7 +196,7 @@ function! vimfiler#util#hide_buffer(...) abort "{{{
   endif
 endfunction"}}}
 function! vimfiler#util#alternate_buffer(context) abort "{{{
-  if s:buflisted(a:context.alternate_buffer)
+  if buflisted(a:context.alternate_buffer)
         \ && getbufvar(a:context.alternate_buffer, '&filetype') !=# 'vimfiler'
         \ && g:vimfiler_restore_alternate_file
     execute 'buffer' a:context.alternate_buffer
