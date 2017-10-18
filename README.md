@@ -34,6 +34,7 @@ Explorer feature (similar to NERDTree)
 Dark theme
 ----------------------------
 ![Vimfiler dark theme](https://cloud.githubusercontent.com/assets/147918/3933094/412cc0e0-2478-11e4-902e-63b658f04d81.png)
+![another dark theme](https://user-images.githubusercontent.com/7071307/31679880-7e4d785c-b340-11e7-894e-3ea74556e491.png)
 
 ## What are some of the advantages vimfiler offers compared to other file explorers?
 
