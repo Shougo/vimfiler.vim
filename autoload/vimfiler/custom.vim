@@ -15,7 +15,7 @@ endfunction
 
 function! vimfiler#custom#profile(profile_name, option_name, value) abort
   for key in split(a:profile_name, '\s*,\s*')
-    let profile = vimfiler#custom#get_profile(a:profile_name, a:option_name)
+    let profile = vimfiler#custom#get_profile(key, a:option_name)
     call extend(profile, a:value)
   endfor
 endfunction
