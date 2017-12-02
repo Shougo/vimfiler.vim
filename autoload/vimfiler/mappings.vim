@@ -1195,9 +1195,10 @@ function! s:edit_binary_file() abort "{{{
     return
   endif
 
+  let l:filename = vimfiler#get_filename()
   call s:switch()
 
-  execute 'Vinarise' escape(vimfiler#get_filename(), ' ')
+  execute 'Vinarise' escape(l:filename, ' ')
 endfunction"}}}
 function! s:execute_shell_command() abort "{{{
   let marked_files = vimfiler#get_marked_files(b:vimfiler)
