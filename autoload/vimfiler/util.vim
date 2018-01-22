@@ -185,14 +185,18 @@ function! vimfiler#util#alternate_buffer(context) abort
   let listed_buffer = filter(range(1, bufnr('$')),
         \ "s:buflisted(v:val) &&
         \  (v:val == bufnr('%') || getbufvar(v:val, '&filetype') !=# 'vimfiler')")
-  let current = index(listed_buffer, bufnr('%'))
-  if current < 0 || len(listed_buffer) < 2
+  if empty(listed_buffer)
     enew
     return
   endif
 
-  execute 'buffer' ((current < len(listed_buffer) / 2) ?
-        \ listed_buffer[current+1] : listed_buffer[current-1])
+  let current = index(listed_buffer, bufnr('%'))
+  if current < 0
+    execute 'buffer' listed_buffer[0]
+  else
+    execute 'buffer' ((current < len(listed_buffer) / 2) ?
+          \ listed_buffer[current+1] : listed_buffer[current-1])
+  endif
 
   silent call vimfiler#force_redraw_all_vimfiler()
 endfunction
