@@ -1,6 +1,12 @@
 # vimfiler
 A powerful file explorer implemented in Vim script
 
+**Note**: Active development on vimfiler.vim has stopped. The only future
+changes will be bug fixes.
+
+Please see [Defx.nvim](https://github.com/Shougo/defx.nvim).
+https://github.com/Shougo/vimfiler.vim/issues/380
+
 ## Introduction
 vimfiler is a powerful file explorer ("filer") written in Vim script.
 
