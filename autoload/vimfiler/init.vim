@@ -355,16 +355,6 @@ function! vimfiler#init#_start(path, ...) abort
     return
   endif
 
-  " Detect autochdir option.
-  if exists('+autochdir') && &autochdir
-    call vimfiler#util#print_error(
-          \ 'Detected autochdir!')
-    call vimfiler#util#print_error(
-          \ 'vimfiler don''t work if you set autochdir option.')
-    return
-  endif
-  
-
   let path = a:path
   if vimfiler#util#is_win_path(path)
     let path = vimfiler#util#substitute_path_separator(
