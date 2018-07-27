@@ -17,7 +17,7 @@ function! vimfiler#variables#get_data_directory() abort
         \ substitute(fnamemodify(get(
         \   g:, 'vimfiler_data_directory',
         \  ($XDG_CACHE_HOME != '' ?
-        \   $XDG_CACHE_HOME . '/vimfiler' : expand('~/.cache/vimfiler'))),
+        \   $XDG_CACHE_HOME . '/vimfiler' : expand('~/.cache/vimfiler', 1))),
         \  ':p'), '\\', '/', 'g')
   if !isdirectory(g:vimfiler_data_directory) && !vimfiler#util#is_sudo()
     call mkdir(g:vimfiler_data_directory, 'p')
