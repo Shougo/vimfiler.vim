@@ -250,8 +250,7 @@ function! s:sort(files, type) abort
       let files = vimfiler#util#sort_by(
             \ a:files, 'v:val.vimfiler__extension')
     elseif a:type =~? '^f\%[ilename]$'
-      let files = vimfiler#helper#_sort_human(
-            \ a:files, vimfiler#util#has_lua())
+      let files = vimfiler#helper#_sort_human(a:files)
     elseif a:type =~? '^t\%[ime]$'
       let files = vimfiler#util#sort_by(
             \ a:files, 'v:val.vimfiler__filetime')
@@ -273,35 +272,8 @@ function! s:sort(files, type) abort
   return files
 endfunction
 
-function! vimfiler#helper#_sort_human(candidates, has_lua) abort
-  if !a:has_lua || len(filter(copy(a:candidates),
-        \ "v:val.vimfiler__filename =~ '\\d'")) >= 2
-    return sort(a:candidates, 's:compare_filename')
-  endif
-
-  " Use lua interface.
-  lua << EOF
-do
-  local ignorecase = vim.eval('&ignorecase')
-  local candidates = vim.eval('a:candidates')
-  local t = {}
-  for i = 1, #candidates do
-    t[i] = candidates[i-1]
-    if ignorecase ~= 0 then
-      t[i].vimfiler__filename = string.lower(t[i].vimfiler__filename)
-    end
-  end
-
-  table.sort(t, function(a, b)
-    return a.vimfiler__filename < b.vimfiler__filename
-  end)
-
-  for i = 0, #candidates-1 do
-    candidates[i] = t[i+1]
-  end
-end
-EOF
-  return a:candidates
+function! vimfiler#helper#_sort_human(candidates) abort
+  return sort(a:candidates, 's:compare_filename')
 endfunction
 
 " Compare filename by human order.

@@ -105,12 +105,6 @@ function! vimfiler#util#escape_file_searching(...) abort
   return call(s:get_prelude().escape_file_searching, a:000)
 endfunction
 
-function! vimfiler#util#has_lua() abort
-  " Note: Disabled if_lua feature if less than 7.3.885.
-  " Because if_lua has double free problem.
-  return has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
-endfunction
-
 function! vimfiler#util#is_cmdwin() abort
   return bufname('%') ==# '[Command Line]'
 endfunction

@@ -33,11 +33,7 @@ function! s:column.get(file, context) abort
   let filesize = a:file.vimfiler__filesize
   let size = 0
   if filesize < 0
-    if a:file.action__path !~ '^\a\w\+:'
-          \ && has('lua')
-          \ && getftype(a:file.action__path) !=# 'link'
-      let pattern = s:get_lua_file_size(a:file.action__path)
-    elseif filesize == -2
+    if filesize == -2
       " Above 2GB?
       let pattern = '>2.00'
     else
@@ -73,25 +69,3 @@ function! s:column.get(file, context) abort
 
   return pattern . suffix
 endfunction
-
-" @vimlint(EVL101, 1, l:pattern)
-function! s:get_lua_file_size(filename) abort
-  lua << EOF
-do
-  local file = io.open(vim.eval('iconv(a:filename, &encoding, "char")'))
-  local pattern
-  if file ~= nil then
-    local mega = math.floor(file:seek('end') / (1024 * 1024) + 0.5)
-    local float = math.floor((mega%1024)*100/1024 + 0.5)
-    pattern = string.format('%2d.%02d', math.floor(mega/1024), float)
-    file:close()
-  else
-    pattern = ''
-  end
-  vim.command('let pattern = "' .. pattern .. '"')
-end
-EOF
-
-  return pattern
-endfunction
-" @vimlint(EVL101, 0, l:pattern)

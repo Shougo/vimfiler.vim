@@ -24,9 +24,6 @@ explorer (instead of netrw.)
 
 Please install unite.vim 3.0 or later before you install vimfiler.
 
-Note: To use vimfiler with files larger than 2 GB,
-      vimfiler requires Vim to have Lua support (|if_lua|).
-
 ## Screenshots
 
 Common operations
@@ -49,6 +46,5 @@ Dark theme
 - External sources (for example, [unite-ssh](https://github.com/Shougo/unite-ssh))
 - vimfiler is highly customizable.
 - Many options (see |vimfiler-options|)
-- Fast (if your version of Vim has |if_lua| enabled)
 - Column customization
 - Support for more than one screen

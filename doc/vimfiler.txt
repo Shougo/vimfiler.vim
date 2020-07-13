@@ -46,8 +46,6 @@ http://github.com/Shougo/unite.vim
 
 Please install unite.vim Ver.3.0 or later before using vimfiler.
 
-Note: To use 2GB+ files in vimfiler, vimfiler requires |+lua| interface.
-
 ==============================================================================
 INTERFACE					*vimfiler-interface*
 
@@ -1337,13 +1335,11 @@ https://github.com/Shougo/unite-ssh
 
  5. More options(see |vimfiler-options|)
 
- 6. Fast(if you use |if_lua| enabled Vim).
+ 6. Column customization.
 
- 7. Column customization.
+ 7. Double screen file explorer.
 
- 8. Double screen file explorer.
-
- 9. Multi file renaming(see <Plug>(vimfiler_rename_file)).
+ 8. Multi file renaming(see <Plug>(vimfiler_rename_file)).
 
 Q: I want to use the feature like |:NERDTreeFind|.
 
