@@ -324,7 +324,7 @@ function! vimfiler#view#_get_max_len(files) abort
 
   if has('signs')
     " Delete signs.
-    silent execute 'sign unplace buffer='.bufnr('%')
+    silent execute 'sign unplace * buffer='.bufnr('%')
   endif
 
   let max_len = max([winwidth(0) - padding, 10])
